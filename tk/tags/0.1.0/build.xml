@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<!-- 
+ Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ 
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ use this file except in compliance with the License. You may obtain a copy of
+ the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ License for the specific language governing permissions and limitations under
+ the License.
+ -->
+<project name="GWT Project" default="usage">
+	<description>
+		A GWT build file which can be used for multiple projects. 
+	</description>
+	
+	<!-- need src for GWT compile and bin for javadoc -->
+	<property name="gwt.tk.lib.location" value="${basedir}/src;${basedir}/bin"/>
+	
+	<!-- properties which are different for each project -->
+	<property file="${project.dir}/project.properties"/>
+	
+	<!-- properties which are same for all projects -->
+	<property file="global.properties"/>
+	
+	<!-- fallback on default prperties if not already set -->
+	<property name="logLevel" value="INFO"/>
+	<property name="project.name" value="MyProject"/>
+	<property name="project.sourcepath" value="${project.dir}/src"/>
+	<property name="project.librarypath" value="${gwt.tk.lib.location}"/>
+	<property name="javadoc.linksource" value="false"/>
+	<property name="javadoc.doctitle" value="${project.name} API Documentation"/>
+	<property name="javadoc.windowtitle" value="${project.name}"/>
+	<property name="javadoc.bottom" value=" "/>
+	
+	<path id="gwt.classpath">
+		<pathelement location="${gwt.lib.location}/gwt-user.jar"/>
+		<pathelement location="${gwt.lib.location}/gwt-dev-windows.jar"/>
+	</path>
+	
+	<path id="project.full.classpath">
+		<pathelement path="${project.sourcepath}"/>
+		<pathelement path="${project.librarypath}"/>
+		<path refid="gwt.classpath"/>
+	</path>
+	
+	<target name="compileDeliverable">
+		<description>Compiles obfuscated code without debug statments</description>
+		<property name="deliverableDir" value="${project.dir}/export/www"/>
+		<mkdir dir="${deliverableDir}"/>
+		<delete>
+			<fileset dir="${deliverableDir}" includes="**/*"/>
+		</delete>
+		<java classname="com.google.gwt.dev.GWTCompiler" fork="true">
+			<classpath>
+				<pathelement path="${debug.stub.location}"/>
+				<path refid="project.full.classpath"/>
+			</classpath>
+			<arg value="-logLevel"/>
+			<arg value="${logLevel}"/>
+			<arg value="-out"/>
+			<arg value="${deliverableDir}"/>
+			<arg value="-style"/>
+			<arg value="OBF"/>
+			<arg value="${module.package}.${module.name}"/>
+		</java>
+	</target>
+
+	<target name="compileForDevelopment">
+		<description>Compiles with debug support and without obfuscation</description>
+		<java classname="com.google.gwt.dev.GWTCompiler" 
+				classpathref="project.full.classpath"
+				fork="true">
+			<arg value="-logLevel"/>
+			<arg value="${logLevel}"/>
+			<arg value="-out"/>
+			<arg value="${project.dir}/www"/>
+			<arg value="-style"/>
+			<arg value="PRETTY"/>
+			<arg value="${module.package}.${module.name}"/>
+		</java>
+	</target>
+
+	<target name="shell">
+		<description>Runs the hosted shell for the specified project and entry point</description>
+		<java classname="com.google.gwt.dev.GWTShell" 
+				classpathref="project.full.classpath"
+				fork="true" spawn="true">
+			<jvmarg value="-enableassertions"/>
+			<arg value="-out"/>
+			<arg value="${project.dir}/www"/>
+			<arg value="-style"/>
+			<arg value="${style}"/>
+			<arg value="${module.package}.${module.name}/${entry.point.page.name}"/>
+		</java>
+	</target>
+
+	<target name="createApplication">
+		<description>Creates a new GWT stub application with the specified properties</description>
+		<java classname="com.google.gwt.dev.ApplicationCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-out"/>
+			<arg value="${project.dir}"/>
+			<arg value="${module}.client.${entryPoint.className}"/>
+		</java>
+	</target>
+
+	<target name="usage">
+		<description>Prints usage messages for GWT tools</description>
+		<java classname="com.google.gwt.dev.GWTCompiler" 
+				 classpathref="gwt.classpath"
+				 fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+
+		<java classname="com.google.gwt.dev.GWTShell" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+
+		<java classname="com.google.gwt.dev.ApplicationCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+
+		<java classname="com.google.gwt.dev.ProjectCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+
+		<java classname="com.google.gwt.dev.JUnitCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+
+		<java classname="com.google.gwt.dev.GWTMain" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+
+		<java classname="com.google.gwt.dev.util.NetProxy" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+	</target>
+
+	<target name="initTempDir">
+		<mkdir dir="${temp.dir}"/>
+		<delete>
+			<fileset dir="${temp.dir}" includes="**/*"/>
+		</delete>
+	</target>
+
+	<target name="deleteTempDir">
+		<delete dir="${temp.dir}"/>
+	</target>
+	
+	<target name="javadoc">
+		<description>Creates javadocs for the specified project</description>
+		<property name="javadoc.dest.dir" value="${project.dir}/doc"/>
+		<mkdir dir="${javadoc.dest.dir}"/>
+		<delete>
+			<fileset dir="${javadoc.dest.dir}" includes="**/*"/>
+		</delete>
+		<javadoc 
+				access="protected" 
+				additionalparam=" -breakiterator" 
+				author="true" 
+				classpathref="project.full.classpath"
+				destdir="${javadoc.dest.dir}" 
+				doctitle="${javadoc.doctitle}"
+				excludepackagenames="**/test**"
+				header="${project.name} ${project.version}"
+				includenosourcepackages="true"
+				linksource="${javadoc.linksource}"
+				packagenames="*"
+				source="1.4"
+				sourcepath="${project.sourcepath}"
+				use="true"
+				windowtitle="${javadoc.windowtitle}">
+			<bottom>${javadoc.bottom}</bottom>
+			<link href="http://www.asquare.net/gwt/javadoc/"/>
+			<link href="http://www.junit.org/junit/javadoc/3.8.1/"/>
+			<link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
+			<link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+		</javadoc>
+	</target>
+	
+	<target name="javadocGwt" depends="initTempDir">
+		<description>Creates javadocs for the GWT user library in the standard format</description>
+		<unjar src="${gwt.lib.location}/gwt-user.jar" dest="${temp.dir}"/>
+		<mkdir dir="${gwt.doc.destination.dir}"/>
+		<delete>
+			<fileset dir="${gwt.doc.destination.dir}" includes="**/*"/>
+		</delete>
+		<javadoc 
+				access="protected" 
+				additionalparam=" -breakiterator" 
+				author="true" 
+				classpathref="gwt.classpath"
+				destdir="${gwt.doc.destination.dir}" 
+				doctitle="Google Web Toolkit (GWT) API Documentation"
+				includenosourcepackages="true"
+				linksource="true"
+				source="1.4"
+				use="true"
+				windowtitle="GWT API Documentation">
+			<bottom>
+				<![CDATA[This javadoc distribution was not produced by Google. The official documentation is <a href="http://code.google.com/webtoolkit/" target="_parent">here</a>.]]>
+			</bottom>
+			<link href="http://www.junit.org/junit/javadoc/3.8.1/"/>
+			<link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
+			<link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+			<packageset dir="${temp.dir}" defaultexcludes="yes">
+				<include name="com/google/**"/>
+			</packageset>
+		</javadoc>
+		<antcall target="deleteTempDir"/>
+	</target>
+
+</project>

@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>GWT Tk Controller Design</title>
+<LINK rel="stylesheet" href="style.css" />
+<STYLE type="text/css">
+.byline {
+  margin-left: 2em;
+  text-align: left;
+  font-family: serif;
+  font-size: smaller;
+}
+.zoomHint {
+  font-size: smaller;
+  font-style: italic;
+}
+.diagram {
+  margin-left: 2em;
+  font-size: smaller;
+}
+.diagram img {
+  border: solid 1px;
+}
+</STYLE>
+<SCRIPT type="text/javascript">
+function zoomImage(img)
+{
+	var zoomed = img.zoomed != null && img.zoomed;
+	if (zoomed)
+	{
+		// collapse
+		img.style["borderColor"] = "";
+		img.style["width"] = "";
+		img.style["height"] = "";
+		img["zoomed"] = false;
+	}
+	else
+	{
+		// expand
+		img.style["borderColor"] = "black";
+		img.style["width"] = img.getAttribute("fullwidth");
+		img.style["height"] = img.getAttribute("fullheight");
+		img["zoomed"] = true;
+	}
+}
+</SCRIPT>
+</head>
+<body>
+<DIV id="content">
+<h1>GWT Tk Controller Design</h1>
+<p class="byline"><span style="float: right; font-style: italic;">Nov
+14, 2006</span>by <a href="http://www.asquare.net">Mat Gessel</a></p>
+
+<h2>Introduction</h2>
+<p>I've been exploring a different way to handle events in GWT. In a
+nutshell, the design combines traits of Swing event handling and classic
+MVC controllers.</p>
+<p>This all began when I encountered the following problems:</p>
+<ol>
+	<li>different platforms require different event handling</li>
+	<li>event handlers need access to event objects (e.g. for
+	preventDefault() &amp; stopPropagation())</li>
+</ol>
+
+<h2>Analysis</h2>
+<h3>Browser specific event handling</h3>
+<p>In GWT, the basic recipe for accommodating browser differences is to
+delegate variations in code to "impl" classes. When you need to handle
+variations in behavior you can delegate events to the impl classes. If
+you have two widgets that require the same event handling you can create
+a class encapsulating the behavior and delegate events to it from the
+impl classes, e.g. Widget.onBrowserEvent() -&gt;
+WidgetImplMozilla.doEvent() -&gt; BehaviorImplMozilla.doEvent(). After
+coding this delegation pattern several times will want to add delegation
+support to a base class to limit code duplication.</p>
+<h3>DOM event object access</h3>
+<p>GWT event interfaces do not provide access to the event objects. I am
+unsure whether this was a design goal, or just a side-effect of keeping
+the design simple. Some classes (e.g. TextBoxBase) provide methods to
+act on the current event to address anticipated needs (e.g. cancelKey(),
+setKey()). However, GWT does not meet all the needs of users (e.g.
+canceling a "Tab" keypress on a button).</p>
+<p>Approaches to access event objects:</p>
+<ol>
+	<li>Modify the source for listener collections and listener interfaces
+	to expose the events.<br>
+	Requires continual maintenance as GWT is released.<br>
+	Limits reuse in the GWT community.</li>
+
+	<li>Subclass the widget and move listener code into onBrowserEvent().<br>
+	Results in a proliferation of classes.</li>
+
+	<li>Create duplicate listener interfaces which expose the event object;
+	subclass widgets as needed to add extended event listener support.<br>
+	Results in a proliferation of classes.<br>
+	If you need to handle additional event types on a 3rd party widget that
+	employs this approach you have to subclass again or modify the source.</li>
+
+	<li>Create a generic event listener facility which exposes the event
+	object and notifies for all event types. Rather than create a listener
+	interface with a method for every possible event, you can declare a
+	generic onBrowserEvent() handler. The widget class can ask the listener
+	which events it is interested in and only notify for those events.
+	Switching on the event type in the listener.onBrowserEvent() method can
+	be lessened by creating a separate listener for each event type.</li>
+</ol>
+
+<h2>Design</h2>
+<p>This design combines traits of Swing event handling and classic MVC
+controllers.</p>
+
+<h3>Class responsibilities</h3>
+
+<h4>Widget</h4>
+<UL>
+	<li>provides a public interface for view state (e.g. isOpen(),
+	isShowing())</li>
+	<li>creates and maintains HTML structure</li>
+	<li>handles browser structural differences by delegating to a view
+	implementation class instantiated via GWT.create()</li>
+	<li>supports listeners for high level events (e.g. PopupListener,
+	TableListener)</li>
+</UL>
+<h4>Controller</h4>
+<UL>
+	<li>responds to DOM events, cancels events</li>
+	<li>coordinates with other widgets</li>
+	<li>installs hooks for browser-specific events (e.g. onselectstart)</li>
+	<li>encapsulates browser behavioral differences (controller
+	implementation is instantiated via GWT.create())</li>
+	<li>tracks state of input operations (e.g. mouse state for drag
+	operation)</li>
+	<li>modifies data model</li>
+</UL>
+
+<p class="diagram">Structural overview <SPAN class="zoomHint">(click to
+zoom)</SPAN><br />
+<a href="images/StructuralOverview.png"> <IMG alt="Structural Overview"
+	src="images/StructuralOverview.png" width="197" height="125"
+	fullwidth="787px" fullheight="499px"
+	onclick="zoomImage(this); return false;" /></a></p>
+
+<h3>Design features and details</h3>
+<ul>
+	<li>Behavior can be tailored to each platform by instantiating
+	controllers via deferred binding (GWT.create(Class))</li>
+	<li>Multiple controllers for each widget. Logic can be separated into
+	minimal, reusable classes.</li>
+	<li>Controllers can be added and removed after the widget is
+	constructed</li>
+	<li>Subclasses can override controller creation via a factory method.
+	This avoids unnecessary instantiation if a special implementation
+	needed.</li>
+	<li>A single controller can respond to multiple events and maintain
+	state (e.g. drag operation)</li>
+	<li>Stateless controllers may be shared between widgets</li>
+	<li>Controller life cycle: Controller.plugIn() called via
+	Widget.attach(), Controller.unplug() called via Widget.detach()</li>
+	<li>Controllers can add platform-specific event hooks via
+	plugIn()/unplug() (e.g. IE6 onselectstart)</li>
+	<li>Controllers can be added/removed after Widget is attached
+	(plugIn()/unplug() will be called)</li>
+</ul>
+
+<p class="diagram">Static structure <SPAN class="zoomHint">(click to
+zoom)</SPAN><br />
+<a href="images/StaticStructure.png"> <IMG alt="Static Structure"
+	src="images/StaticStructure.png" fullwidth="806px" fullheight="1056px"
+	width="202" height="264" onclick="zoomImage(this); return false;" /></a></p>
+
+<p class="diagram">Controller instantiation <SPAN class="zoomHint">(click
+to zoom)</SPAN><br />
+<a href="images/ControllerInstantiation.png"> <IMG
+	alt="Controller Instantiation" src="images/ControllerInstantiation.png"
+	fullwidth="883px" fullheight="845px" width="221" height="211"
+	onclick="zoomImage(this); return false;" /></a></p>
+
+<p class="diagram">Controller activation <SPAN class="zoomHint">(click
+to zoom)</SPAN><br />
+<a href="images/ControllerActivation.png"> <IMG
+	alt="Controller Activation" src="images/ControllerActivation.png"
+	fullwidth="893px" fullheight="662px" width="223" height="166"
+	onclick="zoomImage(this); return false;" /></a></p>
+
+<p class="diagram">Event processing <SPAN class="zoomHint">(click to
+zoom)</SPAN><br />
+<a href="images/EventProcessing.png"> <IMG alt="Event Processing"
+	src="images/EventProcessing.png" fullwidth="854px" fullheight="374px"
+	width="216" height="94" onclick="zoomImage(this); return false;" /></a></p>
+
+<h2>Consequences</h2>
+<ul>
+	<li>As with Swing listeners, controller notification order is not
+	necessarily determinate</li>
+	<li>Composite widgets (e.g. DialogBox) have to decide whether to expose
+	subwidgets for configuration (e.g. getCaptionWidget()) or add 
+	controller accessor methods (e.g. setCaptionControllers()) to the
+	interface.</li>
+	<li>Deferred binding support necessitates default constructor;
+	controllers are initialized via plugIn()</li>
+	<li>A controller can cause the widget to be detached from the DOM,
+	which unplugs the controller mid-operation (e.g. DialogBox.hide()).
+	Controllers can work around this by detaching the widget via
+	DeferredCommand.</li>
+	<li>Widgets which wish to mix controllers and conventional event
+	listeners must do additional bookkeeping to ensure events are properly
+	sunk. This can be done in a base class or delegated to a helper class.</li>
+	<li>Widget properties on which controllers are dependent must be made
+	part of the widget interface. Controllers defined as nested member
+	classes can access private properties, but this practice limits 3rd
+	party reuse and configuration.</li>
+	<li>Widget configurability can be improved by breaking down behavior
+	into separate controllers. However, this strategy may result in
+	unacceptable memory impact if applied to widgets which are used
+	frequently (such as inputs or labels). Memory impact can be limited by
+	sharing stateless controllers.</li>
+</ul>
+
+<p class="diagram">Legacy event support <SPAN class="zoomHint">(click to
+zoom)</SPAN><br />
+<a href="images/LegacyEventSupport.png"> <IMG alt="Legacy Event Support"
+	src="images/LegacyEventSupport.png" fullwidth="701px"
+	fullheight="720px" width="175" height="180"
+	onclick="zoomImage(this); return false;" /></a></p>
+
+<h2>Looking Forward</h2>
+<H3>Controller injection</H3>
+<P>It may be possible to write a custom generator which parses
+annotations in the class doc and injects a controller into the generated
+class. Widgets would be instantiated via GWT.create(). Controllers
+typically have a default constructor.</p>
+<p>Legacy listener implementations could also be injected this way. The
+listener interface would be inherited, but not implemented (the class
+would be abstract).</P>
+
+<H2>Resources</H2>
+<p><a
+	href="http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/55bf39a4386bc7de">Discussion
+in GWT group</a></p>
+</DIV>
+</body>
+</html>

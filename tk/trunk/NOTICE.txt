@@ -1,0 +1,5 @@
+GWT Tk
+Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+
+This library contains modified source from the Google Widget Toolkit. 
+http://code.google.com/webtoolkit/

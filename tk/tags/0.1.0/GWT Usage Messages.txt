@@ -1,0 +1,67 @@
+com.google.gwt.dev.GWTCompiler
+
+GWTCompiler [-logLevel level] [-gen dir] [-out dir] [-treeLogger] [-style style] module
+where
+-logLevel    The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
+-gen         The directory into which generated files will be written for review
+-out         The directory to write output files into (defaults to current)
+-treeLogger  Logs output in a graphical tree view
+-style       Script output style: OBF[USCATED], PRETTY, or DETAILED (defaults to OBF)
+and
+module       Specifies the name of the module to compile
+
+
+com.google.gwt.dev.GWTShell
+
+GWTShell [-port port-number] [-noserver] [-logLevel level] [-gen dir] [-out dir] [-style style] [-notHeadless] [url]
+where
+-port         Runs an embedded Tomcat instance on the specified port (defaults to 8888)
+-noserver     Prevents the embedded Tomcat server from running, even if a port is specified
+-logLevel     The level of logging detail: ERROR, WARN, INFO, TRACE, DEBUG, SPAM, or ALL
+-gen          The directory into which generated files will be written for review
+-out          The directory to write output files into (defaults to current)
+-style        Script output style: OBF[USCATED], PRETTY, or DETAILED (defaults to OBF)
+-notHeadless  Causes the log window and browser windows to be displayed.  Useful for debugging.
+and
+url           Automatically launches the specified URL
+
+
+com.google.gwt.dev.ApplicationCreator
+
+ApplicationCreator [-eclipse projectName] [-out dir] [-overwrite] [-ignore] className
+where
+-eclipse    Creates a debug launch config for the named eclipse project
+-out        The directory to write output files into (defaults to current)
+-overwrite  Overwrite any existing files
+-ignore     Ignore any existing files; do not overwrite
+and
+className   The fully-qualified name of the application class to create
+
+
+com.google.gwt.dev.ProjectCreator
+
+ProjectCreator [-ant projectName] [-eclipse projectName] [-out dir] [-overwrite] [-ignore]
+where
+-ant        Generate an Ant buildfile to compile source (.ant.xml will be appended)
+-eclipse    Generate an eclipse project
+-out        The directory to write output files into (defaults to current)
+-overwrite  Overwrite any existing files
+-ignore     Ignore any existing files; do not overwrite
+
+
+com.google.gwt.dev.JUnitCreator
+
+JUnitCreator -junit pathToJUnitJar [-eclipse projectName] [-out dir] [-overwrite] [-ignore] className
+where
+-junit      Specify the path to your junit.jar (required)
+-eclipse    Creates a debug launch config for the named eclipse project
+-out        The directory to write output files into (defaults to current)
+-overwrite  Overwrite any existing files
+-ignore     Ignore any existing files; do not overwrite
+and
+className   The fully-qualified name of the test class to create
+
+
+com.google.gwt.dev.util.NetProxy
+
+Usage: NetProxy <local-port> <remote-port> [<remote-host>]

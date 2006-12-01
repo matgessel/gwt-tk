@@ -1,0 +1,157 @@
+@CHARSET "ISO-8859-1";
+
+BODY {text-align:center;}
+
+.gwt-Button {
+  border: solid #87B3FF 1px;
+  background: white;
+}
+
+/*-----------------------------------------------------*/
+.tk-Dialog {
+  background-color: white;
+  border: solid 1px #87B3FF;
+  padding: 1px;
+}
+
+.tk-Dialog .Caption {
+  background-color: rgb(195, 217, 255);
+  padding: 3px;
+  font-weight: bold;
+  font-size: smaller;
+  text-align: center;
+  cursor: default;
+}
+
+TD {
+  border: solid red 0px;
+}
+
+DIV {
+  border: solid blue 0px;
+}
+
+.tk-Dialog .gwt-Button {
+  margin: 3px;
+}
+
+.tk-DropDownPanel {
+  border: solid 2px rgb(195, 217, 255);
+}
+
+.tk-DropDownPanel-open .tk-DropDownPanelHeader {
+  border-bottom: solid 2px rgb(195, 217, 255);
+}
+
+.tk-DropDownPanelHeader {
+  padding: 2px 4px 2px 4px;
+  white-space: nowrap;
+  vertical-align: top;
+  font-size: smaller;
+  font-weight: bold;
+  background-color: rgb(195, 217, 255);
+  cursor: pointer;
+}
+
+.tk-DropDownPanelContent {
+  text-align: center;
+}
+
+/*-----------------------------------------------------*/
+.sudoku-solver {
+
+}
+
+.sudoku-SudokuGrid {
+  background-color: white;
+  border: none;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  text-align:center;
+}
+
+.sudoku-Cell {
+  border: solid gray 1px;
+  padding: 0;
+  margin: 0;
+}
+
+.sudoku-Cell-thickTop {border-top: solid gray 3px}
+.sudoku-Cell-thickBottom {border-bottom: solid gray 3px}
+.sudoku-Cell-thickLeft {border-left: solid gray 3px}
+.sudoku-Cell-thickRight {border-right: solid gray 3px}
+
+.sudoku-SudokuInput {
+  color: gray;
+  width: 1.25em;
+  height: 1.25em;
+  font-size: 1.75em;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  border-width: 0;
+}
+
+.sudoku-SudokuInput-error {color: red; border: solid red 1px;}
+
+.sudoku-SudokuInput-given {color: black;}
+
+.sudoku-ErrorDisplay {
+  border: solid red 1px;
+  background-color: #FFBBBB;
+  margin-top: 8px;
+}
+
+.sudoku-Basic *, .sudoku-Advanced * {
+  margin: 8px 4px 8px 4px;
+}
+
+.sudoku-Advanced {
+  padding: 4px;
+}
+.sudoku-advancedDD {
+  
+}
+
+.sudoku-advancedDD .tk-DropDownPanelContent * {
+  display: inline;
+}
+
+.hiddenAtStartup {display: none;}
+
+.sudoku-browseDD {
+  
+}
+
+.sudoku-browseDD .tk-DropDownPanelHeader {
+  text-align: right;
+}
+
+.sudoku-Browse {
+  border-top: none;
+  padding: 3px;
+  background: white;
+}
+
+.sudoku-Browse iframe {
+  border: none;
+  height: 25em;
+}
+
+.sudoku-Browse .tk-BorderPanel {
+  border: solid 1px #87B3FF;
+}
+
+.sudoku-BrowseLocation {
+  margin: 2px 2px 4px 2px;
+}
+
+.sudoku-BrowseLocation .gwt-TextBox {
+  border: solid 1px #87B3FF;
+  padding-left: 3px;
+}
+
+.sudoku-areYouSureDialog IMG {
+  vertical-align: bottom;
+}

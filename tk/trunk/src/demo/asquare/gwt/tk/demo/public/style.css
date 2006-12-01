@@ -1,0 +1,56 @@
+@CHARSET "ISO-8859-1";
+
+BODY {
+  background-image: url(grid.gif);
+  text-align: center;
+  border: solid red 1px;
+}
+
+table {
+  border: 1px solid green;
+}
+
+.gwt-Button {
+  border: solid #87B3FF 1px;
+  background: white;
+}
+
+/*-----------------------------------------------------*/
+.tk-ModalDialog {
+  border: 1px solid black;
+  background-color: white;
+  background-image: url(grid.gif);
+  padding: 0px;
+}
+
+.tk-ModalDialog * {
+  padding: 5px;
+  margin: 5px;
+  text-align: center;
+}
+
+.tk-ModalDialog .Caption {
+  font-family: sans-serif;
+  font-size: 90%;
+  font-weight: bold;
+  background-color: rgb(195, 217, 255);
+  background-image: url(grid.gif);
+  padding: 3px;
+  margin: 1px;
+  cursor: default;
+}
+
+.tk-ModalDialog .Content {
+  padding: 8px 8px 0 8px;
+  vertical-align: middle;
+  width: 250px;
+  height: 100px;
+}
+
+.tk-ModalDialog .Content * {
+  margin-bottom: 8px;
+}
+
+.tk-ModalDialog-glassPane {
+  background-image: url("Gray20.png");
+}
