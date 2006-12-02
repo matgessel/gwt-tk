@@ -1,0 +1,182 @@
+body {
+  background-color: white;
+  color: black;
+  font-family: Arial, sans-serif;
+/*  margin: 20px;*/
+}
+
+h1, h2, h3, h4 {
+  margin-top: 0px;
+}
+
+a {
+  color: darkblue;
+}
+
+a:visited {
+  color: darkblue;
+}
+
+code {
+  background: #EEEEEE;
+}
+
+.gwt-TabPanel {
+}
+
+.gwt-TabPanelBottom {
+  border: 1px solid #87B3FF;
+  border-top: none;
+  padding: 4px;
+}
+
+.gwt-TabBar {
+ font-size: smaller; 
+ background-color: #C3D9FF;
+}
+
+.gwt-TabBarFirst {
+  height: 100%;
+  border-bottom: 1px solid #87B3FF;
+  padding-left: 3px;
+}
+
+.gwt-TabBarRest {
+  border-bottom: 1px solid #87B3FF;
+  padding-right: 3px;
+}
+
+.gwt-TabBarItem {
+  border-top: 1px solid #C3D9FF;
+  border-bottom: 1px solid #87B3FF;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.gwt-TabBarItem-selected {
+  font-weight: bold;
+  background-color: #E8EEF7;
+  border-top: 1px solid #87B3FF;
+  border-left: 1px solid #87B3FF;
+  border-right: 1px solid #87B3FF;
+  border-bottom: 1px solid #E8EEF7;
+  cursor: default;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+  background-color: #C3D9FF;
+}
+
+/* -------------------------------------------------------------------------- */
+
+.tk-DropDownPanel {
+  margin: 4px;
+}
+
+.tk-DropDownPanelHeader {
+  padding: 8px;
+  text-align: center;
+  font-size: smaller;
+  font-weight: bold;
+  background-color: rgb(195, 217, 255);
+  cursor: pointer;
+}
+
+.tk-DropDownPanelContent {
+  padding: 8px;
+  background: white;
+  text-align: center;
+  background-color: white;
+}
+
+.tk-SimpleHyperLink {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* -------------------------------------------------------------------------- */
+
+#main {
+  border: 8px solid #C3D9FF;
+  background-color: #E8EEF7;
+}
+
+#dropDown-left .tk-DropDownPanel {
+  border: solid 4px  rgb(195, 217, 255);
+}
+
+#dropDown-left .tk-DropDownPanelHeader {
+  text-align: left;
+  background-position: left;
+  background-repeat: no-repeat;
+  padding: 0px;
+  padding-left: 16px;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+#dropDown-left .tk-DropDownPanel-open .tk-DropDownPanelHeader {
+  background-image: url(opentriangle.gif);
+  border-bottom: solid 4px  rgb(195, 217, 255);
+}
+
+#dropDown-left .tk-DropDownPanel-closed .tk-DropDownPanelHeader {
+  background-image: url(triangle.gif);
+}
+
+#dropDown-1 {
+  margin-bottom: 8px;
+}
+
+#dropDown-3 {
+  background: white;
+}
+
+#dropDown-3 .tk-DropDownPanelContent {
+  background: none;
+}
+
+#dropDown-3 .tk-DropDownPanelHeader  {
+  float: left;
+}
+
+#dropDown-4.tk-DropDownPanel-closed {
+  display: none;
+}
+
+#debug-doc {
+  background: white;
+}
+
+#debug-doc, #debug-controls, #debug-widgets {
+  margin: 4px;
+  padding: 8px;
+}
+
+#debug-controls, #debug-widgets {
+  border: solid 1px #87B3FF;
+}
+
+#debug-controls P {
+  margin-bottom: 0.5em;
+  margin-top: 0px;
+}
+
+#misc {
+  
+}
+
+#misc .division {
+  margin: 4px;
+}
+
+#misc .header {
+  background-color: white;
+  padding: 4px;
+  margin-bottom: 8px;
+}
+
+#misc .example {
+  border: solid 1px #87B3FF;
+  padding: 4px;
+}
