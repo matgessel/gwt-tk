@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache-entry>
+	<rebind-decision in="com.google.gwt.user.client.ui.impl.TextBoxImpl" out="com.google.gwt.user.client.ui.impl.TextBoxImplIE6"/>
+	<rebind-decision in="com.google.gwt.user.client.ui.impl.FocusImpl" out="com.google.gwt.user.client.ui.impl.FocusImpl"/>
+	<rebind-decision in="asquare.gwt.debug.client.BrowserInfo" out="asquare.gwt.debug.client.impl.BrowserInfoIE6"/>
+	<rebind-decision in="asquare.gwt.tk.client.ui.behavior.PreventSelectionController" out="asquare.gwt.tk.client.ui.behavior.impl.PreventSelectionControllerIE6"/>
+	<rebind-decision in="com.google.gwt.user.client.impl.HistoryImpl" out="com.google.gwt.user.client.impl.HistoryImplIE6"/>
+	<rebind-decision in="com.google.gwt.user.client.impl.DOMImpl" out="com.google.gwt.user.client.impl.DOMImplIE6Patched"/>
+	<rebind-decision in="asquare.gwt.tk.client.ui.behavior.GlassPanelController" out="asquare.gwt.tk.client.ui.behavior.impl.GlassPanelControllerIE6"/>
+	<rebind-decision in="com.google.gwt.user.client.ui.impl.PopupImpl" out="com.google.gwt.user.client.ui.impl.PopupImplIE6"/>
+	<rebind-decision in="asquare.gwt.tk.client.util.impl.DomUtilImpl" out="asquare.gwt.tk.client.util.impl.DomUtilImpl"/>
+	<rebind-decision in="com.google.gwt.user.client.impl.DOMExtensionImpl" out="com.google.gwt.user.client.impl.DOMExtensionImpl"/>
+	<rebind-decision in="com.google.gwt.user.client.ui.impl.FormPanelImpl" out="com.google.gwt.user.client.ui.impl.FormPanelImplIE6"/>
+	<rebind-decision in="asquare.gwt.tk.client.ui.behavior.TabFocusController" out="asquare.gwt.tk.client.ui.behavior.impl.TabFocusControllerStandard"/>
+	<rebind-decision in="asquare.gwt.tkdemo.client.Demo" out="asquare.gwt.tkdemo.client.Demo"/>
+</cache-entry>
