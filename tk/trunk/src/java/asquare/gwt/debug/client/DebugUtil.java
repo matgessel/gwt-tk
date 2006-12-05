@@ -248,21 +248,21 @@ public class DebugUtil
 	{
 		String tagName = getTagName(element);
 		String id = DOM.getAttribute(element, "id");
-		String classNames = DOM.getAttribute(element, "class");
+		String classNames = DOM.getAttribute(element, "className");
 		String description = null;
 		
-		if (tagName.equalsIgnoreCase("div") || tagName.equalsIgnoreCase("span"))
+		if ("div".equalsIgnoreCase(tagName) || "span".equalsIgnoreCase(tagName))
 		{
-			if (id != null)
+			if (id != null && ! "".equals(id))
 			{
 				description = id;
 			}
-			else if (classNames != null)
+			else if (classNames != null && ! "".equals(classNames))
 			{
 				description = classNames;
 			}
 		}
-		else if(tagName.equalsIgnoreCase("button"))
+		else if (tagName.equalsIgnoreCase("button"))
 		{
 			description = DOM.getAttribute(element, "value");
 		}
