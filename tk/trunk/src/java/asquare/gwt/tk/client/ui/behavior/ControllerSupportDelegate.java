@@ -20,6 +20,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -41,6 +42,21 @@ public class ControllerSupportDelegate implements ControllerSupport
 	public ControllerSupportDelegate(Widget widget)
 	{
 		m_widget = widget;
+		m_legacyEventBits = DOM.getEventsSunk(widget.getElement());
+	}
+	
+	/**
+	 * Gets the event bits which were sunk on the widget itself. Used to
+	 * determine which events should be passed to a widget's 
+	 * {@link EventListener#onBrowserEvent(Event) onBrowserEvent()} method. This
+	 * can happen when subclassing or wrapping a widget.
+	 * 
+	 * @return a bitmask of the event types
+	 * @see Event
+	 */
+	public int getLegacyEventBits()
+	{
+		return m_legacyEventBits;
 	}
 	
 	private void sinkAllBits()

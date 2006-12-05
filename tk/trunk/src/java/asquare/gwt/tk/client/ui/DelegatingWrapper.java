@@ -33,16 +33,12 @@ public class DelegatingWrapper extends EventWrapper
 	private final EventDelegate m_delegate;
 		
 	/**
-	 * @throws IllegalArgumentException if <code>widget</code> or <code>delegate</code> are null
+	 * @throws NullPointerException if <code>widget</code> or <code>delegate</code> are null
 	 */
 	public DelegatingWrapper(Widget widget, EventDelegate delegate)
 	{
-		if (widget == null || delegate == null)
-			throw new IllegalArgumentException();
-		
+		super(widget, delegate.getEventBits());
 		m_delegate = delegate;
-		initWidget(widget);
-		DOM.sinkEvents(widget.getElement(), delegate.getEventBits());
 	}
 	
 	/*

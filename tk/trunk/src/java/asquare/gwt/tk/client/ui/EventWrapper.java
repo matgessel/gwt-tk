@@ -28,6 +28,17 @@ public abstract class EventWrapper extends Composite
 {
 	private Widget m_widget;
 	
+	public EventWrapper()
+	{
+		
+	}
+	
+	public EventWrapper(Widget w, int eventMask)
+	{
+		initWidget(w);
+		sinkEvents(eventMask);
+	}
+	
 	protected void initWidget(Widget widget)
 	{
 		super.initWidget(widget);
@@ -53,6 +64,7 @@ public abstract class EventWrapper extends Composite
 	/**
 	 * Override to process browser events. Don't forget to call super
 	 * implementation if you want the wrapped widget to process events also.
+	 * {@inheritDoc}
 	 */
 	public void onBrowserEvent(Event event)
 	{
