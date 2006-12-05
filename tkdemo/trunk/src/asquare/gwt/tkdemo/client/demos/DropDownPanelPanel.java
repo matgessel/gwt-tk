@@ -15,9 +15,7 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.DropDownPanel;
-import asquare.gwt.tk.client.ui.SimpleHyperLink;
+import asquare.gwt.tk.client.ui.*;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.user.client.ui.*;
@@ -38,18 +36,30 @@ public class DropDownPanelPanel extends Composite
 		DropDownPanel dropDown1 = new DropDownPanel();
 		DomUtil.setAttribute(dropDown1, "id", "dropDown-1");		
 		dropDown1.setHeaderText("Drop Down 1", false);
-		Image image = new Image("icecube.jpg");
-		image.setSize("100px", "100px");
-		dropDown1.add(image);
+		HTML dd1Content = new HTML("This DropDownPanel uses CSS to change the header image.");
+		dropDown1.add(dd1Content);
 		dropDown1.setOpen(true);
 		left.add(dropDown1);
 		
-		DropDownPanel dropDown2 = new DropDownPanel();
-		DomUtil.setAttribute(dropDown2, "id", "dropDown-2");		
-		dropDown2.setHeaderText("Drop Down 2", true);
-		image = new Image("icecube.jpg");
-		image.setSize("100px", "250px");
-		dropDown2.add(image);
+		final DropDownPanel dropDown2 = new DropDownPanel();
+		DomUtil.setAttribute(dropDown2, "id", "dropDown-2");
+		final String closedHeader = "<img src='triangle.gif'/>&nbsp;Drop Down 2";
+		final String openHeader = "<img src='opentriangle.gif'/>&nbsp;Drop Down 2";
+		dropDown2.setHeaderText(closedHeader, true);
+		dropDown2.addDropDownListener(new DropDownListener()
+		{
+			public void dropDownClosed(DropDownPanel sender)
+			{
+				dropDown2.setHeaderText(closedHeader, true);
+			}
+		
+			public void dropDownOpened(DropDownPanel sender)
+			{
+				dropDown2.setHeaderText(openHeader, true);
+			}
+		});
+		HTML dd2Content = new HTML("This DropDownPanel uses a listener to change the header image.");
+		dropDown2.add(dd2Content);
 		left.add(dropDown2);
 		
 		outer.add(left);
@@ -79,7 +89,7 @@ public class DropDownPanelPanel extends Composite
 		final DropDownPanel dropDown4 = new DropDownPanel();
 		dropDown4.addStyleName("division");
 		DomUtil.setAttribute(dropDown4, "id", "dropDown-4");
-		image = new Image("icecube.jpg");
+		Image image = new Image("icecube.jpg");
 		image.setSize("200px", "250px");
 		dropDown4.add(image);
 		outer.add(dropDown4);
