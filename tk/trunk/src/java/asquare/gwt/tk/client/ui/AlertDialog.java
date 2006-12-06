@@ -535,7 +535,7 @@ public class AlertDialog extends ModalDialog
 		protected boolean doBrowserEvent(Widget widget, Event event)
 		{
 			final AlertDialog dialog = (AlertDialog) widget;
-			char keyCode = (char) DomUtil.getKeyCode(event);
+			char keyCode = (char) DomUtil.eventGetKeyCode(event);
 			if (dialog.getKeyMap().containsKey(keyCode))
 			{
 				Command command = dialog.getKeyMap().get(keyCode);
@@ -562,7 +562,7 @@ public class AlertDialog extends ModalDialog
 			FocusModel focusModel = ((ModalDialog) widget).getFocusModel();
 			if (focusModel != null && focusModel.getSize() > 1)
 			{
-				char keyCode = (char) DomUtil.getKeyCode(event);
+				char keyCode = (char) DomUtil.eventGetKeyCode(event);
 				if (keyCode == KeyboardListener.KEY_RIGHT || keyCode == KeyboardListener.KEY_DOWN)
 				{
 					// increment focus

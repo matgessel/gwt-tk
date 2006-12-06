@@ -15,7 +15,9 @@
  */
 package com.google.gwt.user.client.impl;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
 
 public class DOMExtensionImpl
 {
@@ -60,4 +62,14 @@ public class DOMExtensionImpl
 		}
 		return $doc.documentElement.scrollTop;
 	}-*/;
+
+	public int eventGetAbsoluteX(Event event)
+	{
+		return getViewportScrollX() + DOM.eventGetClientX(event);
+	}
+
+	public int eventGetAbsoluteY(Event event)
+	{
+		return getViewportScrollY() + DOM.eventGetClientY(event);
+	}
 }

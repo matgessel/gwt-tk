@@ -53,8 +53,8 @@ public class DragController extends ControllerAdaptor
 	{
     	// translate the coordinates into the source widget's coordinate space
 		// see MouseListenerCollection.fireMouseEvent()
-		int sourceX = DomUtil.getViewportScrollX() + DOM.eventGetClientX(event) - DOM.getAbsoluteLeft(widget.getElement());
-		int sourceY = DomUtil.getViewportScrollY() + DOM.eventGetClientY(event) - DOM.getAbsoluteTop(widget.getElement());
+		int sourceX = DomUtil.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(widget.getElement());
+		int sourceY = DomUtil.eventGetAbsoluteY(event) - DOM.getAbsoluteTop(widget.getElement());
 		
 		switch(DOM.eventGetType(event))
 		{

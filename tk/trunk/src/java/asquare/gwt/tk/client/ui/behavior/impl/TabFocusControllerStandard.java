@@ -33,7 +33,7 @@ public class TabFocusControllerStandard extends AbstractTabFocusController
 	// EventDelegate methods
 	protected boolean doBrowserEvent(Widget widget, Event event)
 	{
-		if (DomUtil.getKeyCode(event) == KeyboardListener.KEY_TAB)
+		if (DomUtil.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
 		{
 			if (m_focusModel.getSize() > 0)
 			{

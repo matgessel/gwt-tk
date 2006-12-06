@@ -56,4 +56,20 @@ public class DOMExtenstion
 	{
 		return s_impl.getViewportScrollY();
 	}
+	
+	/*
+	 * Needed here for mouse events
+	 */
+	public static int eventGetAbsoluteX(Event event)
+	{
+		return s_impl.eventGetAbsoluteX(event);
+	}
+	
+	/*
+	 * Needed here for mouse events
+	 */
+	public static int eventGetAbsoluteY(Event event)
+	{
+		return s_impl.eventGetAbsoluteY(event);
+	}
 }

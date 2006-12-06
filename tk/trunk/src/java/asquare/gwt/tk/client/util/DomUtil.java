@@ -311,7 +311,7 @@ public class DomUtil
 	 * @throws IllegalArgumentException if event is other than onkeydown or
 	 *             onkeyup
 	 */
-	public static char getKeyCode(Event event)
+	public static char eventGetKeyCode(Event event)
 	{
 		if ((DOM.eventGetType(event) & (Event.ONKEYDOWN | Event.ONKEYUP)) == 0)
 			throw new IllegalArgumentException();
@@ -327,12 +327,38 @@ public class DomUtil
 	 * @return a unicode character
 	 * @throws IllegalArgumentException if event is other than onkeypress
 	 */
-	public static char getCharCode(Event event)
+	public static char eventGetCharCode(Event event)
 	{
 		if (DOM.eventGetType(event) != Event.ONKEYPRESS)
 			throw new IllegalArgumentException();
 		
 		return (char) DOM.eventGetKeyCode(event);
+	}
+	
+	/**
+	 * Get the mouse x coordinate relative to the document's origin. This method
+	 * differs from {@link DOM#eventGetClientX(Event)} in that it includes the
+	 * area hidden by document scroll.
+	 * 
+	 * @param event a native DOM event object
+	 * @return the x coordinate in screen pixels
+	 */
+	public static int eventGetAbsoluteX(Event event)
+	{
+		return DOMExtenstion.eventGetAbsoluteX(event);
+	}
+	
+	/**
+	 * Get the mouse y coordinate relative to the document's origin. This method
+	 * differs from {@link DOM#eventGetClientY(Event)} in that it includes the
+	 * area hidden by document scroll.
+	 * 
+	 * @param event a native DOM event object
+	 * @return the y coordinate in screen pixels
+	 */
+	public static int eventGetAbsoluteY(Event event)
+	{
+		return DOMExtenstion.eventGetAbsoluteY(event);
 	}
 	
 	/**

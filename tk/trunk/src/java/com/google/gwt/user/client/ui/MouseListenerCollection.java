@@ -15,10 +15,10 @@
  */
 package com.google.gwt.user.client.ui;
 
-import com.google.gwt.user.client.*;
-
 import java.util.Iterator;
 import java.util.Vector;
+
+import com.google.gwt.user.client.*;
 
 /**
  * A helper class for implementers of the SourcesMouseEvents interface. This
@@ -67,8 +67,8 @@ public class MouseListenerCollection extends Vector {
 	public void fireMouseEvent(Widget sender, Event event)
 	{
 		// translate the coordinate into the target widget's coordinate space
-		int x = DOMExtenstion.getViewportScrollX() + DOM.eventGetClientX(event) - DOM.getAbsoluteLeft(sender.getElement());
-		int y = DOMExtenstion.getViewportScrollY() + DOM.eventGetClientY(event) - DOM.getAbsoluteTop(sender.getElement());
+		int x = DOMExtenstion.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(sender.getElement());
+		int y = DOMExtenstion.eventGetAbsoluteY(event) - DOM.getAbsoluteTop(sender.getElement());
 
 		switch (DOM.eventGetType(event))
 		{
