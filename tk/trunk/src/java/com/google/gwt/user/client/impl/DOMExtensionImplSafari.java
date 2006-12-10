@@ -15,8 +15,6 @@
  */
 package com.google.gwt.user.client.impl;
 
-import com.google.gwt.user.client.Element;
-
 public class DOMExtensionImplSafari extends DOMExtensionImpl
 {
 	public native int getViewportScrollX() /*-{
@@ -25,33 +23,5 @@ public class DOMExtensionImplSafari extends DOMExtensionImpl
 	
 	public native int getViewportScrollY() /*-{
 		return $doc.body.scrollTop;
-	}-*/;
-
-	public native int getAbsoluteTop(Element element) /*-{
-		var absolutelyPositioned = element.style.position == 'absolute';
-		var top = 0;
-		var parent = element.offsetParent;
-		while (parent && ! (absolutelyPositioned && parent == $doc.body))
-		{
-			top += element.offsetTop - element.scrollTop;
-			element = parent;
-			parent = element.offsetParent;
-		}
-		top += element.offsetTop; // this may not be necessary; can the documentElement have a margin?
-		return top;
-	}-*/;
-
-	public native int getAbsoluteLeft(Element element) /*-{
-		var absolutelyPositioned = element.style.position == 'absolute';
-		var left = 0;
-		var parent = element.offsetParent;
-		while (parent && ! (absolutelyPositioned && parent == $doc.body))
-		{
-			left += element.offsetLeft - element.scrollLeft;
-			element = parent;
-			parent = element.offsetParent;
-		}
-		left += element.offsetLeft; // this may not be necessary; can the documentElement have a margin?
-		return left;
 	}-*/;
 }

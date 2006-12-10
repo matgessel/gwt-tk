@@ -51,10 +51,6 @@ import com.google.gwt.user.client.Event;
  * case if you are getting this message: <br/>
  * <code>com.google.gwt.core.client.JavaScriptException: JavaScript TypeError exception: Object doesn't support this property or method</code>.
  * </P>
- * <p>
- * Known problem: debug is enabled on Safari after pressing 'Esc' only once
- * because Safari generates duplicate key events for Esc & arrow keys.
- * </p>
  */
 public class Debug
 {

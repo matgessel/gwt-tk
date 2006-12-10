@@ -24,21 +24,34 @@ import com.google.gwt.user.client.Event;
  */
 class DOMImplSafariPatched extends DOMImplSafari
 {
-	public void eventSetKeyCode(Event evt, char key)
-	{
-		throw new UnsupportedOperationException("Method disabled because it is unsupported on Mozilla");
-	}
+	public native int getAbsoluteLeft(Element element) /*-{
+		var absolutelyPositioned = element.style.position == 'absolute';
+		var left = 0;
+		var parent = element.offsetParent;
+		while (parent && ! (absolutelyPositioned && parent == $doc.body))
+		{
+			left += element.offsetLeft - element.scrollLeft;
+			element = parent;
+			parent = element.offsetParent;
+		}
+		left += element.offsetLeft; // this may not be necessary; can the documentElement have a margin?
+		return left;
+	}-*/;
 	
-	public int getAbsoluteLeft(Element elem)
-	{
-		return DOMExtenstion.getAbsoluteLeft(elem);
-	}
+	public native int getAbsoluteTop(Element element) /*-{
+		var absolutelyPositioned = element.style.position == 'absolute';
+		var top = 0;
+		var parent = element.offsetParent;
+		while (parent && ! (absolutelyPositioned && parent == $doc.body))
+		{
+			top += element.offsetTop - element.scrollTop;
+			element = parent;
+			parent = element.offsetParent;
+		}
+		top += element.offsetTop; // this may not be necessary; can the documentElement have a margin?
+		return top;
+	}-*/;
 
-	public int getAbsoluteTop(Element elem)
-	{
-		return DOMExtenstion.getAbsoluteTop(elem);
-	}
-	
 	public int eventGetClientX(Event evt)
 	{
 		return eventGetClientX0(evt) - DOMExtenstion.getViewportScrollX();

@@ -16,37 +16,10 @@
 package com.google.gwt.user.client.impl;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 
 public class DOMExtensionImpl
 {
-	public native int getAbsoluteTop(Element element) /*-{
-		var top = 0;
-		var parent = element.offsetParent;
-		while (parent)
-		{
-			top += element.offsetTop - element.scrollTop;
-			element = parent;
-			parent = element.offsetParent;
-		}
-		top += element.offsetTop; // this may not be necessary; can the documentElement have a margin?
-		return top;
-	}-*/;
-	
-	public native int getAbsoluteLeft(Element element) /*-{
-		var left = 0;
-		var parent = element.offsetParent;
-		while (parent)
-		{
-			left += element.offsetLeft - element.scrollLeft;
-			element = parent;
-			parent = element.offsetParent;
-		}
-		left += element.offsetLeft; // this may not be necessary; can the documentElement have a margin?
-		return left;
-	}-*/;
-	
 	public native int getViewportScrollX() /*-{
 		if ($doc.compatMode == "BackCompat")
 		{

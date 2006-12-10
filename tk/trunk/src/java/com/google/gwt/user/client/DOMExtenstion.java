@@ -25,21 +25,12 @@ import com.google.gwt.user.client.impl.DOMExtensionImpl;
  * Only includes method which are necessary to patch the DOM. Do not use this
  * class directly as it should be removed when DOM bugs are fixed.
  * 
+ * @deprecated
  * @see asquare.gwt.tk.client.util.DomUtil
  */
 public class DOMExtenstion
 {
 	private static final DOMExtensionImpl s_impl = (DOMExtensionImpl) GWT.create(DOMExtensionImpl.class);
-	
-	public static int getAbsoluteLeft(Element elem)
-	{
-		return s_impl.getAbsoluteLeft(elem);
-	}
-
-	public static int getAbsoluteTop(Element elem)
-	{
-		return s_impl.getAbsoluteTop(elem);
-	}
 	
 	/*
 	 * Needed here for mouse events

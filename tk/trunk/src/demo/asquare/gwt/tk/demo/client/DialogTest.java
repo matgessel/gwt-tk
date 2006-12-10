@@ -18,10 +18,16 @@ package asquare.gwt.tk.demo.client;
 import asquare.gwt.debug.client.*;
 import asquare.gwt.tk.client.ui.AlertDialog;
 import asquare.gwt.tk.client.ui.ModalDialog;
+import asquare.gwt.tk.client.ui.behavior.Controller;
+import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
+import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Widget;
 
 public class DialogTest implements EntryPoint
 {
@@ -35,6 +41,15 @@ public class DialogTest implements EntryPoint
 		dialog.removeController(dialog.getController(ModalDialog.PositionDialogController.class));
 		dialog.setSize("400px", "200px");
 		dialog.setPopupPosition(200, 200);
+		dialog.addController(new ControllerAdaptor(Event.ONMOUSEDOWN, Controller.class)
+		{
+			public void onBrowserEvent(Widget widget, Event event)
+			{
+				int x = DomUtil.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(widget.getElement());
+				int y = DomUtil.eventGetAbsoluteY(event) - DOM.getAbsoluteTop(widget.getElement());
+				Debug.println("onMouseDown(" + x + "," + y + ")");
+			}
+		});
 		dialog.show();
 		
 		new DebugEventListener('x', Event.ONMOUSEDOWN, null)
@@ -48,11 +63,11 @@ public class DialogTest implements EntryPoint
 				int clientX = DOM.eventGetClientX(event);
 				int clientY = DOM.eventGetClientY(event);
 				int absLeft = DOM.getAbsoluteLeft(target);
-				int absTop = DOMExtenstion.getAbsoluteTop(target);
+				int absTop = DOM.getAbsoluteTop(target);
 				int offsetLeft = getOffsetLeft(target);
 				int offsetTop = getOffsetTop(target);
-				int docScrollX = DOMExtenstion.getViewportScrollX();
-				int docScrollY = DOMExtenstion.getViewportScrollY();
+				int docScrollX = DomUtil.getViewportScrollX();
+				int docScrollY = DomUtil.getViewportScrollY();
 				Debug.println(
 						"screenX=" + screenX + 
 			    		",screenY=" + screenY + 

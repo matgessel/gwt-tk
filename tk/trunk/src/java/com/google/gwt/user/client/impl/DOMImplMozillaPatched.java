@@ -15,8 +15,6 @@
  */
 package com.google.gwt.user.client.impl;
 
-import com.google.gwt.user.client.DOMExtenstion;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 
 /**
@@ -27,15 +25,5 @@ class DOMImplMozillaPatched extends DOMImplMozilla
 	public void eventSetKeyCode(Event evt, char key)
 	{
 		throw new UnsupportedOperationException("Method disabled because it is unsupported on Mozilla");
-	}
-	
-	public int getAbsoluteLeft(Element elem)
-	{
-		return DOMExtenstion.getAbsoluteLeft(elem);
-	}
-
-	public int getAbsoluteTop(Element elem)
-	{
-		return DOMExtenstion.getAbsoluteTop(elem);
 	}
 }

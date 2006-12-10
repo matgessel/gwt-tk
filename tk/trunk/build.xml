@@ -278,4 +278,12 @@
 			<fileset dir="${project.dir}/bin/java" includes="**/*.class"/>
 		</jar>
 	</target>
+	
+	<target name="jarGwtTkServer">
+		<delete file="gwttk-server-${project.version}.jar"/>
+		<jar destfile="gwttk-server-${project.version}.jar">
+			<fileset dir="${project.dir}/bin/java" includes="*.txt"/>
+			<fileset dir="${project.dir}/bin/java" includes="**/server/*"/>
+		</jar>
+	</target>
 </project>
