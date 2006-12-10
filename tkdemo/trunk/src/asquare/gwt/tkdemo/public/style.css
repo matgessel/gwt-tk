@@ -190,26 +190,28 @@ code {
 
 #dropDown-left .tk-DropDownPanel {
   border: solid 4px  rgb(195, 217, 255);
+  margin-bottom: 8px;
 }
 
 #dropDown-left .tk-DropDownPanelHeader {
   text-align: left;
-  background-image: url(triangle.gif);
-  background-position: left;
-  background-repeat: no-repeat;
-  padding: 0px;
-  padding-left: 16px;
-  padding-right: 8px;
+  padding: 0;
   white-space: nowrap;
 }
 
 #dropDown-left .tk-DropDownPanel-open .tk-DropDownPanelHeader {
-  background-image: url(opentriangle.gif);
   border-bottom: solid 4px  rgb(195, 217, 255);
 }
 
-#dropDown-1 {
-  margin-bottom: 8px;
+#dropDown-1 .tk-DropDownPanelHeader {
+  padding: 0 8px 0 16px;
+  background-image: url(triangle.gif);
+  background-position: left;
+  background-repeat: no-repeat;
+}
+
+#dropDown-1.tk-DropDownPanel-open .tk-DropDownPanelHeader {
+  background-image: url(opentriangle.gif);
 }
 
 #dropDown-3 {
@@ -218,10 +220,6 @@ code {
 
 #dropDown-3 .tk-DropDownPanelHeader  {
   float: left;
-}
-
-#dropDown-4.tk-DropDownPanel-closed {
-  display: none;
 }
 
 #alert-imageButtons .tk-AlertDialog-buttons img {
@@ -411,4 +409,8 @@ code {
 .externalhyperlink-styled {
   background: url(external.png) center left no-repeat;
   padding-left: 13px;
+}
+
+.events-editing {
+  border: solid red 1px;
 }

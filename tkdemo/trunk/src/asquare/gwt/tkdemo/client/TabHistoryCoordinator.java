@@ -15,20 +15,22 @@
  */
 package asquare.gwt.tkdemo.client;
 
-import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.HistoryListener;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SourcesTabEvents;
+import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabListener;
-import com.google.gwt.user.client.ui.TabPanel;
 
 public class TabHistoryCoordinator implements HistoryListener, TabListener
 {
 	private final TabCollection m_tabs;
-	private final TabPanel m_tabPanel;
+	private final TabBar m_tabPanel;
 	private final String m_windowTitle = Window.getTitle();
 	
 	private int m_selectedTab = -1;
 	
-	public TabHistoryCoordinator(TabCollection tabs, TabPanel tabPanel, String initialTabToken)
+	public TabHistoryCoordinator(TabCollection tabs, TabBar tabPanel, String initialTabToken)
 	{
 		m_tabs = tabs;
 		m_tabPanel = tabPanel;

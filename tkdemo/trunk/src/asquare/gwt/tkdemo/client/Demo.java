@@ -25,9 +25,7 @@ import asquare.gwt.tkdemo.client.demos.*;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.*;
 
 public class Demo implements EntryPoint
 {
@@ -37,6 +35,7 @@ public class Demo implements EntryPoint
 		tabs.add("dropdown", "DropDownPanel", new DropDownPanelPanel(), new String[] {"DropDownPanel"});
 		tabs.add("dialogs", "Dialogs", new DialogPanel(), new String[] {"ModalDialog", "AlertDialog"});
 		tabs.add("cellpanel", "Cell Panels", new ExposedCellPanelPanel(), new String[] {"RowPanel", "ColumnPanel"});
+		tabs.add("events", "Events", new EventsPanel(), new String[] {"EventWrapper", "Controller"});
 		tabs.add("debug", "Debug", new DebugPanel(), new String[] {"Debug"});
 		tabs.add("misc", "Misc", new MiscPanel(), new String[] {"SimpleHyperLink", "ExternalHyperLink", FocusCycleDemo.NAME, GlassPanelDemo.NAME});
 		
@@ -45,8 +44,11 @@ public class Demo implements EntryPoint
 		DomUtil.setAttribute(outer, "id", "main");
 		outer.setWidth("100%");
 		
-		final TabPanel tabPanel = new TabPanel();
-		tabPanel.setWidth("100%");
+		TabBar tabBar = new TabBar();
+		tabBar.setWidth("100%");
+		DemoContent tabContent = new DemoContent();
+		tabBar.addTabListener(tabContent);
+		tabContent.setWidth("100%");
 		for (int i = 0; i < tabs.size(); i++)
 		{
 			// nest a table so inner content can be 100% and bordered/padded
@@ -55,16 +57,18 @@ public class Demo implements EntryPoint
 			border.setStyleName("TabPanel-contentBorder");
 			border.add(tabs.getWidget(i));
 			
-			tabPanel.add(border, tabs.getDescription(i));
+			tabBar.addTab(tabs.getDescription(i));
+			tabContent.add(border);
 		}
-		outer.add(tabPanel);
+		outer.add(tabBar);
+		outer.add(tabContent);
 		
 		String initialTabToken = History.getToken();
 		if (initialTabToken.length() == 0)
 		{
 			initialTabToken = tabs.getToken(0);
 		}
-		new TabHistoryCoordinator(tabs, tabPanel, initialTabToken);
+		new TabHistoryCoordinator(tabs, tabBar, initialTabToken);
 		
 		BrowserInfo browserInfo = (BrowserInfo) GWT.create(BrowserInfo.class);
 		String compatMode = describeCompatMode();
