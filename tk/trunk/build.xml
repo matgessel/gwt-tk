@@ -75,7 +75,27 @@
 			<arg value="${module.package}.${module.name}"/>
 		</java>
 	</target>
-
+	
+	<target name="compileDemo">
+		<description>Compiles obfuscated code *with* debug statments</description>
+		<property name="deliverableDir" value="${project.dir}/export/www"/>
+		<mkdir dir="${deliverableDir}"/>
+		<delete>
+			<fileset dir="${deliverableDir}" includes="**/*"/>
+		</delete>
+		<java classname="com.google.gwt.dev.GWTCompiler" 
+				classpathref="project.full.classpath"
+				fork="true">
+			<arg value="-logLevel"/>
+			<arg value="${logLevel}"/>
+			<arg value="-out"/>
+			<arg value="${deliverableDir}"/>
+			<arg value="-style"/>
+			<arg value="OBF"/>
+			<arg value="${module.package}.${module.name}"/>
+		</java>
+	</target>
+	
 	<target name="compileForDevelopment">
 		<description>Compiles to human readable script with debug statements</description>
 		<java classname="com.google.gwt.dev.GWTCompiler" 
