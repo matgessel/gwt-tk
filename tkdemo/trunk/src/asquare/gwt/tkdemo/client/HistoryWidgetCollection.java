@@ -21,7 +21,11 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public class TabCollection
+/**
+ * A collection which associates each added widget to a history token and a
+ * description. 
+ */
+public class HistoryWidgetCollection
 {
 	private final Vector m_entries = new Vector();
 	

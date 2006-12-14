@@ -63,12 +63,23 @@ public class DebugPanel extends Composite
 	{
 		String content = 
 			"<H2>Debug Utilities</H2>" + 
-			"<p>Includes a debug console, <a href='#' onclick=\"Debug.dump(window);return false;\">pretty printing</a> of native JavaScript objects, a stub implementation for compile-time removal and an experimental event monitor. </p>" +
-			"<p>Debugging statements are output to the in-browser Debug Console. In hosted mode the message also goes to <code>System.out</code> and the GWT Shell. The console will appear when it recieves output if it is enabled (it is enabled by default). Press <code>w</code> twice to enable/disable the debug console independently of other debug funtions.</p>" + 
-			"<p>You can print debug statments from JSNI and <a href='#' onclick=\"Debug.println('This is a pure HTML onclick handler');return false;\">regular JavaScript</a>. </p>" + 
-			"<p>Debug output can be enabled at runtime via <code>Debug.enable()</code> or by pressing <code>Esc</code> twice (debug is enabled for this demo, but is otherwise disabled by default).</p>" + 
-			"<p>Press <code>e</code> twice to enable event tracing. Mouse move/in/out &amp; scroll events are ignored by default. </p>" + 
-			"<p>A stub implementation facilitates removal of trace statements and class definitions from the deliverable. </p>" + 
+			"<h4>Features</h4>" +
+			"<dl>" +
+			"  <dt>Tracing</dt>" +
+			"  <dd>Debug output can be enabled at runtime via <code>Debug.enable()</code> or by pressing <code>Esc</code> twice (debug is enabled for this demo, but is otherwise disabled by default)." +
+			"    You can <a href='#' onclick=\"Debug.prettyPrint(window);return false;\">pretty print</a> and <a href='#' onclick=\"Debug.dump(window);return false;\">dump</a> native JavaScript objects to the console." +
+			"    Trace statments can be printed from JSNI and <a href='#' onclick=\"Debug.println('This is a pure HTML onclick handler');return false;\">external JavaScript</a>. " +
+			"  </dd>" +
+			"  <dt>Debug console</dt>" +
+			"  <dd>Debugging messages are output to the in-browser Debug Console. In hosted mode, messages are mirrored to <code>System.out</code> and the GWT Shell. " +
+			"    The console will be shown when it recieves output if it is enabled (it is enabled by default). " +
+			"    Press <code>w</code> twice to enable/disable the debug console independently of other debug funtions. " +
+			"  </dd>" +
+			"  <dt>Event monitor</dt>" +
+			"  <dd>Press <code>e</code> twice to enable event tracing. MouseMove, mouseIn, mouseOut &amp; scroll events are ignored by default. </dd>" +
+			"  <dt>Stub implementation</dt>" +
+			"  <dd>Facilitates compile-time removal of trace statements and debug class definitions. Place ahead of GWT Tk in your classpath when compiling. </dd>" +
+			"</dl>" +
 			"<p>Debug classes are packaged in a separate module for manual dependency elimination; just comment out the <code>inherit</code> element in your application's model descriptor. </p>" + 
 			"<p>See the API documentation for usage notes. </p>" + 
 			"";

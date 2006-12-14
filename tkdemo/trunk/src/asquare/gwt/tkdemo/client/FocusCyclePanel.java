@@ -24,6 +24,11 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HasFocus;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * A panel which adds its children to a panel-wide focus cycle. The focus will
+ * not be allowed to leave the panel via Tab key strokes. This is subject to
+ * browser compatibility.
+ */
 public class FocusCyclePanel extends BasicPanel
 {
 	private final FocusModel m_focusModel = new FocusModel();

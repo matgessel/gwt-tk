@@ -19,6 +19,10 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.*;
 
+/**
+ * A container which displays one of its children when a tab is selected. 
+ * Basically, a lazy-load replacement for the bottom portion of TabPanel.  
+ */
 public class DemoContent extends Composite implements TabListener
 {
 	private final SimplePanel m_panel = new SimplePanel();

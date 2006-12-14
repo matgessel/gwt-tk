@@ -67,10 +67,10 @@ public class EventsPanel extends Composite
 		BasicPanel outer = new BasicPanel();
 		
 		HTML description = new HTML("<h2>Example 1</h2>" + 
-				"<p>Shows how to use an EventWrapper to process unsupported events on a widget. " + 
+				"<p>Shows how to use an EventWrapper to process unsupported events on widgets without subclassing. " + 
 				"In this example we add a style name to the widget when it is double-clicked. " + 
 				"Logic to prevent text selection is implemented in an ad hoc manner. " + 
-				"The selection and platform hook logic is intermingled with the double-click event handler. </p>");
+				"Logic for preventing selection, handling platform differences and handling the double-click event are intermingled. </p>");
 		description.setStyleName("description division");
 		outer.add(description);
 		
@@ -130,10 +130,18 @@ public class EventsPanel extends Composite
 		BasicPanel outer = new BasicPanel();
 		
 		HTML description = new HTML("<h2>Example 2</h2>" +
-				"<p>This is a rewrite of the previous example using controllers to handle events. " + 
-				"We can use an existing controller to prevent text selection. " + 
-				"This keeps the double-click controller pristine " +
-				"and reduces maintanence of selection logic across the entire system. </p>");
+				"<p>This is a rewrite of the previous example using separate controllers to handle events. " + 
+				"  We can use <code>PreventSelectionController</code> to prevent text selection. " +
+				"  This keeps the double-click controller pristine and ensures that selection logic is consistent across the entire system. " +
+				"</p>" + 
+				"<p><code>PreventSelectionController</code> encapsulates differences in browsers using implementation classes and the deferred binding mechanism.</p>" +
+				"<p>Deferred binding results in: </p>" + 
+				"<ul>" +
+				"  <li>smaller script size</li>" +
+				"  <li>easy replacement of existing logic via rules in your Module.gwt.xml file</li>" +
+				"  <li>simple and clean support for additional browsers</li>" +
+				"</ul>" + 
+				"");
 		description.setStyleName("description division");
 		outer.add(description);
 		

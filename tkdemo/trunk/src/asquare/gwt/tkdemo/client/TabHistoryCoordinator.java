@@ -22,15 +22,20 @@ import com.google.gwt.user.client.ui.SourcesTabEvents;
 import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabListener;
 
+/**
+ * Encapsulates the control logic which ensures that TabPanel state and History
+ * state are consistent. The TabPanel will be updated when the History stack
+ * changes and vice-versa.
+ */
 public class TabHistoryCoordinator implements HistoryListener, TabListener
 {
-	private final TabCollection m_tabs;
+	private final HistoryWidgetCollection m_tabs;
 	private final TabBar m_tabPanel;
 	private final String m_windowTitle = Window.getTitle();
 	
 	private int m_selectedTab = -1;
 	
-	public TabHistoryCoordinator(TabCollection tabs, TabBar tabPanel, String initialTabToken)
+	public TabHistoryCoordinator(HistoryWidgetCollection tabs, TabBar tabPanel, String initialTabToken)
 	{
 		m_tabs = tabs;
 		m_tabPanel = tabPanel;

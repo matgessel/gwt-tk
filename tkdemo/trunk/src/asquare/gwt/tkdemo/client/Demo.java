@@ -27,11 +27,19 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.*;
 
+/**
+ * This is the entry point for the demo application. It builds the GUI after 
+ * the script loads.
+ */
 public class Demo implements EntryPoint
 {
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
+	 */
 	public void onModuleLoad()
 	{
-		TabCollection tabs = new TabCollection();
+		HistoryWidgetCollection tabs = new HistoryWidgetCollection();
 		tabs.add("dropdown", "DropDownPanel", new DropDownPanelPanel(), new String[] {"DropDownPanel"});
 		tabs.add("dialogs", "Dialogs", new DialogPanel(), new String[] {"ModalDialog", "AlertDialog"});
 		tabs.add("cellpanel", "Cell Panels", new ExposedCellPanelPanel(), new String[] {"RowPanel", "ColumnPanel"});
@@ -82,6 +90,11 @@ public class Demo implements EntryPoint
 	    new DebugElementDumpInspector().install();
 	}
 	
+	/**
+	 * Generates a human-readable string representing the CSS rendering mode.
+	 * 
+	 * @see <a href="http://en.wikipedia.org/wiki/Quirks_mode">quirks mode</a>
+	 */
 	public native String describeCompatMode() /*-{
 		var result = "unknown";
 		if ($doc.compatMode == "BackCompat")
