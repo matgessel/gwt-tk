@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- 
+ -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Dialog Mockup</title>
+<link href="siteStyle.css" rel="stylesheet" type="text/css">
+<link href="ModalDialog.css" rel="stylesheet" type="text/css">
+<STYLE>
+.ModalDialog-outer {
+  border: solid black 1px;
+  background: none;
+}
+.ModalDialog-center {
+  text-align: center;
+  vertical-align: middle;
+  border: solid black 1px;
+}
+</STYLE>
+</head>
+<body>
+<h1>Dialog Mockup</h1>
+<DIV style="border: solid blue 1px; width: 200%; height: 2000px; margin: 0;">
+<H2>Some content</H2>
+</DIV>
+<DIV id="dialog" class="ModalDialog-outer" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%;">
+	<TABLE cellspacing="0" style="width: 100%; height: 100%; table-layout: fixed;"><TBODY>
+		<TR>
+			<TD></TD>
+			<TD></TD>
+			<TD></TD></TR>
+		<TR>
+			<TD></TD>
+			<TD>
+				<DIV class="ModalDialog-center">Center</DIV>
+			</TD>
+			<TD></TD>
+		</TR>
+		<TR>
+			<TD></TD>
+			<TD></TD>
+			<TD></TD>
+		</TR>
+	</TBODY></TABLE>
+</DIV>
+<SCRIPT>
+	var dialog = document.getElementById("dialog");
+	dialog.style["height"] = window.innerHeight + "px";
+</SCRIPT>
+</body>
+</html>
