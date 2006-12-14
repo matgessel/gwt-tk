@@ -429,6 +429,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 * 
 	 * @param styleName a CSS class name
 	 * @throws IllegalStateException if no cells exist
+	 * @throws IllegalArgumentException if <code>styleName</code> is <code>&quot;&quot;</code>
 	 */
 	public void addCellStyleName(String styleName)
 	{
@@ -446,6 +447,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 * @param styleName a CSS class name
 	 * @throws IndexOutOfBoundsException if the cell specified by
 	 *             <code>cellIndex</code> does not exist
+	 * @throws IllegalArgumentException if <code>styleName</code> is <code>&quot;&quot;</code>
 	 */
 	public void addCellStyleName(int cellIndex, String styleName)
 	{
@@ -484,6 +486,40 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
 		DOM.setAttribute(getCellElement(cellIndex), "className", styleName);
+	}
+	
+	/**
+	 * Removes the specified style name from the last cell. Does nothing if
+	 * <code>styleName</code> is not present.
+	 * 
+	 * @param styleName a CSS class name
+	 * @throws IllegalStateException if no cells exist
+	 * @throws IllegalArgumentException if <code>styleName</code> is
+	 *             <code>&quot;&quot;</code>
+	 */
+	public void removeCellStyleName(String styleName)
+	{
+		if (getCellCount() == 0)
+			throw new IllegalStateException();
+		
+		removeCellStyleName(getCellCount() - 1, styleName);
+	}
+	
+	/**
+	 * Removes the specified style name from the last cell. Does nothing if
+	 * <code>styleName</code> is not present.
+	 * 
+	 * @param cellIndex the index of the cell
+	 * @param styleName a CSS class name
+	 * @throws IndexOutOfBoundsException if the cell specified by
+	 *             <code>cellIndex</code> does not exist
+	 * @throws IllegalArgumentException if <code>styleName</code> is <code>&quot;&quot;</code>
+	 */
+	public void removeCellStyleName(int cellIndex, String styleName)
+	{
+		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
+		
+		setStyleName(getCellElement(cellIndex), styleName, false);
 	}
 	
 	/**

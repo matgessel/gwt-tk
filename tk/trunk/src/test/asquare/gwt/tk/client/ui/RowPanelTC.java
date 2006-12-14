@@ -780,8 +780,15 @@ public class RowPanelTC extends GWTTestCase
 		m_panel.addCell();
 
 		// empty string
-		m_panel.addCellStyleName("");
-		assertEquals("", m_panel.getCellStyleName(0).trim());
+		try
+		{
+			m_panel.addCellStyleName("");
+			fail();
+		}
+		catch (IllegalArgumentException ex)
+		{
+			// EXPECTED
+		}
 		
 		// basic test
 		m_panel.addCellStyleName("foo");
@@ -795,7 +802,7 @@ public class RowPanelTC extends GWTTestCase
 		m_panel.addCellStyleName("bar");
 		assertEquals("foo bar", m_panel.getCellStyleName(0).trim());
 	}
-
+	
 	public void testAddCellStyleName2()
 	{
 		setUpImpl();
@@ -824,10 +831,17 @@ public class RowPanelTC extends GWTTestCase
 		
 		m_panel.addCell();
 		m_panel.addCell();
-
+		
 		// empty string
-		m_panel.addCellStyleName(0, "");
-		assertEquals("", m_panel.getCellStyleName(0).trim());
+		try
+		{
+			m_panel.addCellStyleName("");
+			fail();
+		}
+		catch (IllegalArgumentException ex)
+		{
+			// EXPECTED
+		}
 		
 		// basic test
 		m_panel.addCellStyleName(0, "foo");
@@ -872,7 +886,7 @@ public class RowPanelTC extends GWTTestCase
 		m_panel.setCellStyleName("bar");
 		assertEquals("bar", m_panel.getCellStyleName(0).trim());
 	}
-
+	
 	public void testSetCellStyleName2()
 	{
 		setUpImpl();
@@ -914,5 +928,117 @@ public class RowPanelTC extends GWTTestCase
 		m_panel.setCellStyleName(1, "bar");
 		assertEquals("foo", m_panel.getCellStyleName(0).trim());
 		assertEquals("bar", m_panel.getCellStyleName(1).trim());
+	}
+	
+	public void testRemoveCellStyleName()
+	{
+		setUpImpl();
+		
+		// no rows
+		try
+		{
+			m_panel.removeCellStyleName("foo");
+			fail();
+		}
+		catch (IllegalStateException ex)
+		{
+			// EXPECTED
+		}
+		
+		m_panel.addCell();
+		
+		// empty string
+		try
+		{
+			m_panel.removeCellStyleName("");
+			fail();
+		}
+		catch (IllegalArgumentException ex)
+		{
+			// EXPECTED
+		}
+		
+		// basic test
+		m_panel.setCellStyleName("foo");
+		m_panel.removeCellStyleName("foo");
+		assertEquals("", m_panel.getCellStyleName(0).trim());
+		
+		// remove 1st of 2
+		m_panel.setCellStyleName("foo bar");
+		m_panel.removeCellStyleName("foo");
+		assertEquals("bar", m_panel.getCellStyleName(0).trim());
+
+		// remove 2nd of 2
+		m_panel.setCellStyleName("foo bar");
+		m_panel.removeCellStyleName("bar");
+		assertEquals("foo", m_panel.getCellStyleName(0).trim());
+		
+		// duplicate name
+		m_panel.setCellStyleName("foo foo");
+		m_panel.removeCellStyleName("foo");
+		assertEquals("foo", m_panel.getCellStyleName(0).trim());
+		
+		// invalid name
+		m_panel.setCellStyleName("foo bar");
+		m_panel.removeCellStyleName("baz");
+		assertEquals("foo bar", m_panel.getCellStyleName(0).trim());
+		
+		// invalid name empty string
+		m_panel.setCellStyleName("");
+		m_panel.removeCellStyleName("foo");
+		assertEquals("", m_panel.getCellStyleName(0).trim());
+	}
+	
+	public void testRemoveCellStyleName2()
+	{
+		setUpImpl();
+		
+		// negative index
+		try
+		{
+			m_panel.removeCellStyleName(-1, "foo");
+			fail();
+		}
+		catch (IndexOutOfBoundsException ex)
+		{
+			// EXPECTED
+		}
+		
+		// invalid index
+		try
+		{
+			m_panel.removeCellStyleName(0, "foo");
+			fail();
+		}
+		catch (IndexOutOfBoundsException ex)
+		{
+			// EXPECTED
+		}
+		
+		m_panel.addCell();
+		m_panel.addCell();
+		
+		// empty string
+		try
+		{
+			m_panel.removeCellStyleName("");
+			fail();
+		}
+		catch (IllegalArgumentException ex)
+		{
+			// EXPECTED
+		}
+		
+		// basic test
+		m_panel.setCellStyleName(0, "foo");
+		m_panel.removeCellStyleName(0, "foo");
+		assertEquals("", m_panel.getCellStyleName(0).trim());
+		
+		// second row
+		m_panel.setCellStyleName(0, "foo");
+		m_panel.setCellStyleName(1, "bar");
+		m_panel.removeCellStyleName(1, "bar");
+		assertEquals("foo", m_panel.getCellStyleName(0).trim());
+		assertEquals("", m_panel.getCellStyleName(1).trim());
 	}
 }
