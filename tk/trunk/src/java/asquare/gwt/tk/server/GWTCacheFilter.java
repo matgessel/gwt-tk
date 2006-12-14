@@ -23,21 +23,99 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9">Cache-control directive</a>
- * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21">Expires directive</a>
- * @see <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32">Pragma directive</a>
+ * This is a filter which enforces proper caching of the generated GWT script
+ * files. It requires that serve your GWT application via a Java servlet
+ * container.
+ * <p>
+ * To use, add the jar to <code>WEB-INF/lib</code> and add the
+ * following to your deployment descriptor (web.xml):
  * 
+ * <pre>
+ * &lt;filter&gt;
+ *   &lt;filter-name&gt;GWTCacheFilter&lt;/filter-name&gt;
+ *   &lt;filter-class&gt;asquare.gwt.tk.server.GWTCacheFilter&lt;/filter-class&gt;
+ *   &lt;description&gt;Enforces proper caching of GWT script files&lt;/description&gt;
+ * &lt;/filter&gt;
+ * 
+ * &lt;filter-mapping&gt;
+ *   &lt;filter-name&gt;GWTCacheFilter&lt;/filter-name&gt;
+ *   &lt;url-pattern&gt;*.html&lt;/url-pattern&gt;
+ * &lt;/filter-mapping&gt;</pre>
+ * 
+ * By default, files ending in <code>.cache.html</code> are cached and files
+ * ending in <code>.nocache.html</code> are not cached. You can override the
+ * defaults by specifying file name patterns in filter init-params. The pattern
+ * is parsed as a JDK regular expression. The defaults are below: 
+ * 
+ * <pre>
+ * &lt;init-param&gt;
+ *   &lt;param-name&gt;forceDontCache&lt;/param-name&gt;
+ *   &lt;param-value&gt;.+\.nocache.html&lt;/param-value&gt;
+ * &lt;/init-param&gt;
+ * &lt;init-param&gt;
+ *   &lt;param-name&gt;forceCache&lt;/param-name&gt;
+ *   &lt;param-value&gt;.+\.cache.html&lt;/param-value&gt;
+ * &lt;/init-param&gt;</pre>
+ * 
+ * <p>
+ * Usage notes
+ * <ul>
+ * <li>You can verify that the filter is being applied with Firefox's Web
+ * Developer Extension. Click Tools > Web Developer > Information > View
+ * Response Headers.
+ * <li>If you are running an Apache httpd/Jk/Tomcat server configuration you
+ * need to ensure that Tomcat is serving HTML files, otherwise the filter will
+ * not be applied.
+ * <li>One reason that this filter exists is that you cannot use <code>*.nocache.html</code> or
+ * <code>*.cache.html</code> for url patterns. According to the 2.3 servlet
+ * spec, an extension is defined as the characters after the <strong>last</strong>
+ * period.
+ * <li>The header is modified <em>before</em> passing control down the filter chain. 
+ * </ul>
+ * 
+ * @see <a
+ *      href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.9">Cache-control
+ *      directive</a>
+ * @see <a
+ *      href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21">Expires
+ *      directive</a>
+ * @see <a
+ *      href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32">Pragma
+ *      directive</a>
  */
 public class GWTCacheFilter implements Filter
 {
+	/**
+	 * The name of the filter init-param which specifies files not to cache. 
+	 * The name is <code>{@value}</code>. 
+	 */
 	public static final String INITPARAM_FORCEDONTCACHE = "forceDontCache";
+	
+	/**
+	 * The name of the filter init-param which specifies files to cache. 
+	 * The name is <code>{@value}</code>. 
+	 */
 	public static final String INITPARAM_FORCECACHE = "forceCache";
+	
+	/**
+	 * The default value of the <code>forceCache</code> init-param. 
+	 * The value is <code>{@value}</code>. 
+	 */
 	public static final String DEFAULT_FORCEDONTCACHE = ".+\\.nocache.html";
+	
+	/**
+	 * The default value of the <code>forceDontCache</code> init-param. 
+	 * The value is <code>{@value}</code>. 
+	 */
 	public static final String DEFAULT_FORCECACHE = ".+\\.cache.html";
 	
 	private Pattern forceDontCachePattern;
 	private Pattern forceCachePattern;
 	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+	 */
 	public void init(FilterConfig filterConfig) throws ServletException
 	{
 		String forceDontCachePatternString = filterConfig.getInitParameter(INITPARAM_FORCEDONTCACHE);
@@ -54,6 +132,10 @@ public class GWTCacheFilter implements Filter
 		forceCachePattern = Pattern.compile(forceCachePatternString);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
 	{
 		if (request instanceof HttpServletRequest)
@@ -78,6 +160,10 @@ public class GWTCacheFilter implements Filter
 		chain.doFilter(request, response);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see javax.servlet.Filter#destroy()
+	 */
 	public void destroy()
 	{
 	}

@@ -26,3 +26,9 @@ h1, h2, h3, h4, p, ul {
 li {
   margin-bottom: 0.33em;
 }
+hr {
+  height: 4px;
+  background-color: #6688AA;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}

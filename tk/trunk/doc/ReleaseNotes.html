@@ -9,9 +9,58 @@
 <DIV id="content">
 <h1>GWT Tk Release Notes</h1>
 
-<hr>
+<hr/>
+
+<h2>0.2.1</h2>
+
+<p>GWT Tk 0.2.1 was compiled against GWT 1.2.22</p>
+
+<ul>
+	<li>Added a server binary which only contains compiled server-side classes</li>
+</ul>
+
+<h2>Tk module</h2>
+
+<ul>
+	<li>EventWrapper: added a constructor to make it a little easier
+	to subclass anonymously</li>
+	<li>CWrapper: only events which were sunk by the widget itself are
+	passed to the widget's onBrowserEvent() method</li>
+	<li>ControllerSupportDelegate: was not initializing the value of legacyEventBits in
+	constructor</li>
+	<li>DomUtil: renamed getKeyCode() to eventGetKeyCode()</li>
+	<li>DomUtil: renamed getCharCode() to eventGetCharCode()</li>
+	<li>DomUtil: added eventGetAbsoluteX()</li>
+	<li>DomUtil: added eventGetAbsoluteY()</li>
+	<li>ExposedCellPanel: added removeCellStyleName(String styleName)</li>
+	<li>ExposedCellPanel: added removeCellStyleName(int cellIndex, String styleName)</li>
+	<li>Created the server package</li>
+	<li>Added GWTCacheFilter. This servlet filter sets appropriate Pragma, Expires &amp; Cache-control headers for
+	*.cache.html and *.nocache.html. </li>
+	<li>Removed Gray20.png from the public directory. It is still available in <code>/src/resources/</code> </li>
+</ul>
+
+<h2>Patch module</h2>
+
+<p>Removed fixes for DOM.getAbsoluteTop() &amp;
+DOM.getAbsoluteLeft() for Opera, Mozilla &amp; IE. (The fix was left in
+for Safari because the value is still off by the doc scroll in GWT
+1.2.22.)</p>
+
+<h2>Demo</h2>
+
+<ul>
+	<li>Modified one of the DropDownPanel examples to change the the header image in response to a DropDownListener</li>
+	<li>Removed the invalid CSS rule which referred to <code>.tk-DropDownPanel-closed</code></li>
+	<li>Renamed TabCollection to HistoryWidgetCollection</li>
+	<li>Added Events tab to demonstrate handling of unsupported events with EventWrapper and Controller</li>
+	<li>The online demo is now obfuscated for faster download</li>
+</ul>
+
+<hr/>
 
 <h2>0.2.0</h2>
+
 <p>GWT Tk 0.2.0 was compiled against GWT 1.1.10</p>
 
 <h2>RowPanel, ColumnPanel</h2>
@@ -182,7 +231,7 @@ linking to a page or resource external to the application.</p>
 	over the dialog b) an element in the dialog is focused</li>
 </ul>
 
-<hr>
+<hr/>
 
 <h2>0.1.0</h2>
 <p>GWT Tk 0.1.0 was compiled against GWT 1.0.21</p>

@@ -506,7 +506,8 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	}
 	
 	/**
-	 * Removes the specified style name from the last cell. Does nothing if
+	 * Adds a style name to the cell specified by
+	 * <code><cellIndex/code>. Does nothing if
 	 * <code>styleName</code> is not present.
 	 * 
 	 * @param cellIndex the index of the cell

@@ -983,7 +983,7 @@ public class RowPanelTC extends GWTTestCase
 		m_panel.removeCellStyleName("baz");
 		assertEquals("foo bar", m_panel.getCellStyleName(0).trim());
 		
-		// invalid name empty string
+		// invalid name (empty string)
 		m_panel.setCellStyleName("");
 		m_panel.removeCellStyleName("foo");
 		assertEquals("", m_panel.getCellStyleName(0).trim());
