@@ -25,7 +25,7 @@ import com.google.gwt.user.client.impl.DOMExtensionImpl;
  * Only includes method which are necessary to patch the DOM. Do not use this
  * class directly as it should be removed when DOM bugs are fixed.
  * 
- * @deprecated marked as depricated as a reminder not to outside of the patch module
+ * @deprecated Marked as depricated as a reminder not to use outside of the patch module
  * @see asquare.gwt.tk.client.util.DomUtil
  */
 public class DOMExtenstion

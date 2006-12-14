@@ -16,6 +16,7 @@
 <p>GWT Tk 0.2.1 was compiled against GWT 1.2.22</p>
 
 <ul>
+	<li>The primary purpose of this release is to bring GWT Tk up to date with GWT 1.2</li>
 	<li>Added a server binary which only contains compiled server-side classes</li>
 </ul>
 
@@ -54,7 +55,8 @@ for Safari because the value is still off by the doc scroll in GWT
 	<li>Removed the invalid CSS rule which referred to <code>.tk-DropDownPanel-closed</code></li>
 	<li>Renamed TabCollection to HistoryWidgetCollection</li>
 	<li>Added Events tab to demonstrate handling of unsupported events with EventWrapper and Controller</li>
-	<li>The online demo is now obfuscated for faster download</li>
+	<li>Added an obfuscated compile target for a faster online download</li>
+	<li>Tab bodies are lazily initialized to improve application start time</li>
 </ul>
 
 <hr/>
