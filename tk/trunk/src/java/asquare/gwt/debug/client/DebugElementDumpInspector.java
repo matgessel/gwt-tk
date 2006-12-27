@@ -32,7 +32,7 @@ public class DebugElementDumpInspector extends DebugEventListener
 	/**
 	 * The default enabler key (<code>'d'</code>).
 	 */
-	public static final char DEFAULT_ENABLE_KEY = (char) 27;
+	public static final char DEFAULT_ENABLE_KEY = 'd';
 	
 	public DebugElementDumpInspector()
 	{
