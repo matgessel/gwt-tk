@@ -154,7 +154,7 @@ public class ControllerSupportDelegate implements ControllerSupport
 		if (controllers != null)
 		{
 			m_controllers = new Vector();
-			for (int i = 0, size = m_controllers.size(); i < size; i++)
+			for (int i = 0, size = controllers.size(); i < size; i++)
 			{
 				m_controllers.add((Controller) controllers.get(i));
 			}
