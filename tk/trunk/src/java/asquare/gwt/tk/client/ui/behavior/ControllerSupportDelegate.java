@@ -144,25 +144,31 @@ public class ControllerSupportDelegate implements ControllerSupport
 	
 	public void setControllers(List controllers)
 	{
-		if (m_controllers != null && m_widget.isAttached())
+		if (m_widget.isAttached())
 		{
-			for (int i = m_controllers.size() - 1; i >= 0; i--)
+			unplugControllers();
+		}
+		
+		m_controllers = null;
+		
+		if (controllers != null)
+		{
+			m_controllers = new Vector();
+			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
-				((Controller) m_controllers.get(i)).unplug(m_widget);
+				m_controllers.add((Controller) controllers.get(i));
 			}
 		}
-		m_controllers = controllers;
-		if (m_controllers != null && m_widget.isAttached())
+		
+		if (m_widget.isAttached())
 		{
-			for (int i = m_controllers.size() - 1; i >= 0; i--)
-			{
-				((Controller) m_controllers.get(i)).plugIn(m_widget);
-			}
+			plugInControllers();
 		}
+		
 		sinkAllBits();
 	}
 	
-	public void onAttach()
+	private void plugInControllers()
 	{
 		if (m_controllers != null)
 		{
@@ -171,6 +177,22 @@ public class ControllerSupportDelegate implements ControllerSupport
 				((Controller) m_controllers.get(i)).plugIn(m_widget);
 			}
 		}
+	}
+	
+	private void unplugControllers()
+	{
+		if (m_controllers != null)
+		{
+			for (int i = m_controllers.size() - 1; i >= 0; i--)
+			{
+				((Controller) m_controllers.get(i)).unplug(m_widget);
+			}
+		}
+	}
+	
+	public void onAttach()
+	{
+		plugInControllers();
 	}
 	
 //	/**
@@ -184,13 +206,7 @@ public class ControllerSupportDelegate implements ControllerSupport
 //		if (m_processing)
 //			throw new IllegalStateException("Detach called while calling onBrowserEvent(Event event)");
 //		
-		if (m_controllers != null)
-		{
-			for (int i = 0, size = m_controllers.size(); i < size; i++)
-			{
-				((Controller) m_controllers.get(i)).unplug(m_widget);
-			}
-		}
+		unplugControllers();
 	}
 	
 	public void onBrowserEvent(Event event)
