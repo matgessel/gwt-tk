@@ -25,7 +25,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  */
 public class Debug
 {
-	public static final boolean ENABLED = true;
+	public static final boolean ENABLED = false;
 	
 	public static final char DEFAULT_ENABLE_KEY = (char) 27;
 	
