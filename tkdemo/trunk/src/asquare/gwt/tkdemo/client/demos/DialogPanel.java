@@ -199,10 +199,7 @@ public class DialogPanel extends Composite
 				int contentHeight = 100;
 				dialog.setContentWidth(contentWidth + "px");
 				dialog.setContentHeight(contentHeight + "px");
-				int approxCaptionHeight = 25;
-				int left = DomUtil.getViewportScrollX() + DomUtil.getViewportWidth() / 2 - contentWidth / 2;
-				int top = DomUtil.getViewportScrollY() + DomUtil.getViewportHeight() / 2 - (contentHeight + approxCaptionHeight) / 2;
-				dialog.setPopupPosition(left, top);
+				dialog.setPopupPosition(100, 100);
 				dialog.setCaption("Explicitly positioned dialog", false);
 				dialog.add(new Label("Automatic positioning is disabled. Dimensions and position are set explicitly. "));
 				dialog.add(new CloseButton(dialog));
