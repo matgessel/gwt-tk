@@ -60,6 +60,7 @@ public class DropDownPanelPanel extends Composite
 		});
 		HTML dd2Content = new HTML("This DropDownPanel uses a listener to change the header image.");
 		dropDown2.add(dd2Content);
+		dropDown2.setOpen(true);
 		left.add(dropDown2);
 		
 		outer.add(left);
