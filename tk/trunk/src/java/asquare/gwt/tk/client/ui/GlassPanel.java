@@ -26,13 +26,15 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.impl.PopupImpl;
 
 /**
  * A panel which covers the entire viewport or document, whichever is larger.
- * Useful for modal dialogs and the "lightbox" effect. Window resizing logic is
- * handled in a pluggable controller whose implementation varies by platform.
- * When shown, a style name is applied to the body element; the style name is removed
- * when the GlassPanel is hidden. 
+ * The GlassPanel prevents interaction with the document. Useful for modal
+ * dialogs and the "lightbox" effect. Window resizing logic is handled in a
+ * pluggable controller whose implementation varies by platform. When the
+ * GlassPanel is shown, a style name is applied to the body element; the style
+ * name is removed when the GlassPanel is hidden.
  * <h3>CSS Style Rules</h3>
  * <ul class='css'>
  * <li>.tk-GlassPanel { }</li>
@@ -41,11 +43,11 @@ import com.google.gwt.user.client.ui.Widget;
  * CSS Example
  * 
  * <pre>
- *     .tk-GlassPanel {
- *       background: black;
- *       opacity: 0.2;
- *       filter: alpha(opacity=20);
- *     }
+ * .tk-GlassPanel {
+ *   background: black;
+ *   opacity: 0.2;
+ *   filter: alpha(opacity=20);
+ * }
  * </pre>
  * 
  * The filter rule applies transparency in IE.
@@ -59,6 +61,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class GlassPanel extends CComplexPanel
 {
 	public static final String DEFAULT_BODY_STYLENAME = "body-GlassPanelShowing";
+	
+	private static final PopupImpl m_impl = (PopupImpl) GWT.create(PopupImpl.class);
 	
 	private String m_bodyStyleName;
 	
@@ -165,6 +169,7 @@ public class GlassPanel extends CComplexPanel
 		DomUtil.setStyleAttribute(this, "left", "0px");
 		DomUtil.setStyleAttribute(this, "top", "0px");
 		RootPanel.get().add(this);
+		m_impl.onShow(getElement());
 	}
 	
 	/**
@@ -172,6 +177,7 @@ public class GlassPanel extends CComplexPanel
 	 */
 	public void hide()
 	{
+		m_impl.onHide(getElement());
 		RootPanel.get().remove(this);
 		if (m_bodyStyleName != null)
 		{
