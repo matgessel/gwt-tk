@@ -13,19 +13,5 @@
  License for the specific language governing permissions and limitations under
  the License.
  -->
-<html>
-	<head>
-		<title>GWT Tk Dialog Test</title>
-
-		<LINK href="style.css" rel="stylesheet" type="text/css">
-
-		<meta name='gwt:module' content='asquare.gwt.tk.demo.DialogTest'>
-	</head>
-
-	<body>
-		<script language="javascript" src="gwt.js"></script>
-
-		<h1>GWT Tk Dialog Test</h1>
-		<img src="one.gif" width="1000px" height="700px"/>
-	</body>
-</html>
+<module>
+</module>
