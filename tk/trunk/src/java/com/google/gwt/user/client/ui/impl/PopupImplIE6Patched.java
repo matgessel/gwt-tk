@@ -1,5 +1,6 @@
 /*
  * Copyright 2006 Google Inc.
+ * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,22 +22,29 @@ import com.google.gwt.user.client.Element;
  * Internet Explorer 6 implementation of
  * {@link com.google.gwt.user.client.ui.impl.PopupImpl}.
  * <p>
- * <strong>NOTICE</strong>: this class was modified from the original to
- * eliminate scrollbar jumping and flicker when dialogs are shown.
+ * <strong>NOTICE</strong>: this class was modified from {@link com.google.gwt.user.client.ui.impl.PopupImplIE6 PopupImplIE6} to  
+ * <ul>
+ *   <li>eliminate scrollbar jumping and flicker when dialogs are shown
+ *   <li>enable popup transparency
+ *   <li>eliminate mixed content warning in https pages
+ * </ul>
  * </p>
+ * @see <a href="http://weblogs.asp.net/bleroy/archive/2005/08/09/how-to-put-a-div-over-a-select-in-ie.aspx">How to put a DIV over a SELECT in IE?</a>
  */
-public class PopupImplIE6 extends PopupImpl
+public class PopupImplIE6Patched extends PopupImplIE6
 {
 	public native void onShow(Element popup) /*-{
 		var frame = $doc.createElement('iframe');
 		frame.scrolling = 'no';
 		frame.frameBorder = 0;
 		frame.style.position = 'absolute';
-
+		frame.src = 'javascript:\'<html></html>\''; // https fix
+		frame.style['filter'] = 'alpha(opacity=0)'; // transparency fix
+		
 		popup.__frame = frame;
 		frame.__popup = popup;
 		
-		// takes effect immediately
+		// takes effect immediately (jumping iframe fix)
 		frame.style['left'] = popup.offsetLeft;
 		frame.style['top'] = popup.offsetTop;
 		frame.style['width'] = popup.offsetWidth;
@@ -48,12 +56,5 @@ public class PopupImplIE6 extends PopupImpl
 		frame.style.setExpression('width', 'this.__popup.offsetWidth');
 		frame.style.setExpression('height', 'this.__popup.offsetHeight');
 		popup.parentElement.insertBefore(frame, popup);
-	}-*/;
-
-	public native void onHide(Element popup) /*-{
-		var frame = popup.__frame;
-		frame.parentElement.removeChild(frame);
-		popup.__frame = null;
-		frame.__popup = null;
 	}-*/;
 }
