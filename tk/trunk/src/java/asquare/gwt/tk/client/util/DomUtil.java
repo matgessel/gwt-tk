@@ -137,6 +137,19 @@ public class DomUtil
 	}
 	
 	/**
+	 * Gets an attribute on the specified UIObject's element.
+	 * 
+	 * @param uio a UIObject
+	 * @param name an attribute name, in "camelCase"
+	 * @return value the attribute value, or <code>null</code> if the
+	 *         attribute is not defined
+	 */
+	public static String getAttribute(UIObject uio, String name)
+	{
+		return DOM.getAttribute(uio.getElement(), name);
+	}
+	
+	/**
 	 * Sets an attribute on the specified UIObject's element. 
 	 * 
 	 * @param uio a UIObject
@@ -149,7 +162,44 @@ public class DomUtil
 	}
 	
 	/**
-	 * Sets a CSS style attribute on the specified UIObject's element. 
+	 * Gets an int attribute on the specified UIObject's element. 
+	 * 
+	 * @param uio a UIObject
+	 * @param name the attribute name, in "camelCase"
+	 * @return the value, or <code>0</code> if the attribute is not defined
+	 */
+	public static int getIntAttribute(UIObject uio, String name)
+	{
+		return DOM.getIntAttribute(uio.getElement(), name);
+	}
+	
+	/**
+	 * Sets an int attribute on the specified UIObject's element. 
+	 * 
+	 * @param uio a UIObject
+	 * @param name the attribute name, in "camelCase"
+	 * @param value an int value
+	 */
+	public static void setIntAttribute(UIObject uio, String name, int value)
+	{
+		DOM.setIntAttribute(uio.getElement(), name, value);
+	}
+	
+	/**
+	 * Gets a CSS style property for the specified UIObject's element.
+	 * 
+	 * @param uio a UIObject
+	 * @param name a CSS style property name, in "camelCase"
+	 * @return value the style property value, or <code>null</code> if the
+	 *         property is not set
+	 */
+	public static String getStyleAttribute(UIObject uio, String name)
+	{
+		return DOM.getStyleAttribute(uio.getElement(), name);
+	}
+	
+	/**
+	 * Sets a CSS style property for the specified UIObject's element. 
 	 * 
 	 * @param uio a UIObject
 	 * @param name a CSS style property name, in "camelCase"
@@ -158,6 +208,60 @@ public class DomUtil
 	public static void setStyleAttribute(UIObject uio, String name, String value)
 	{
 		DOM.setStyleAttribute(uio.getElement(), name, value);
+	}
+	
+	/**
+	 * Gets a CSS style property for the specified UIObject's element.
+	 * 
+	 * @param uio a UIObject
+	 * @param name a CSS style property name, in "camelCase"
+	 * @return value an int value, or <code>null</code> if the property is not
+	 *         set
+	 */
+	public static int getIntStyleAttribute(UIObject uio, String name)
+	{
+		return DOM.getIntStyleAttribute(uio.getElement(), name);
+	}
+	
+	/**
+	 * Sets a CSS style property for the specified UIObject's element. 
+	 * 
+	 * @param uio a UIObject
+	 * @param name a CSS style property name, in "camelCase"
+	 * @param value an int value
+	 */
+	public static void setIntStyleAttribute(UIObject uio, String name, int value)
+	{
+		DOM.setIntStyleAttribute(uio.getElement(), name, value);
+	}
+	
+	/**
+	 * Gets a CSS style property for the specified UIObject's element.
+	 * 
+	 * @param uio a UIObject
+	 * @param name a CSS style property name, in "camelCase"
+	 * @return value a screen pixel value, or <code>null</code> if the
+	 *         property is not set
+	 */
+	public static int getPixelStyleAttribute(UIObject uio, String name)
+	{
+		/*
+		 * DOM.getIntStyleAttribute() uses parseInt(), 
+		 * which parses until a non-digit is encountered 
+		 */
+		return DOM.getIntStyleAttribute(uio.getElement(), name);
+	}
+	
+	/**
+	 * Sets a CSS style property for the specified UIObject's element. 
+	 * 
+	 * @param uio a UIObject
+	 * @param name a CSS style property name, in "camelCase"
+	 * @param value an int value, in screen pixels
+	 */
+	public static void setPixelStyleAttribute(UIObject uio, String name, int value)
+	{
+		DOM.setStyleAttribute(uio.getElement(), name, value + "px");
 	}
 	
 	/**

@@ -116,7 +116,7 @@ public class ExternalHyperLink extends Widget implements HasText, HasHTML
 	 */
 	public String getUrl()
 	{
-		return DOM.getAttribute(getElement(), "href");
+		return DomUtil.getAttribute(this, "href");
 	}
 	
 	/**
@@ -132,7 +132,7 @@ public class ExternalHyperLink extends Widget implements HasText, HasHTML
 	 */
 	public String getTarget()
 	{
-		return DOM.getAttribute(getElement(), "target");
+		return DomUtil.getAttribute(this, "target");
 	}
 	
 	/**

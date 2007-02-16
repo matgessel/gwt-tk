@@ -15,7 +15,8 @@
  */
 package asquare.gwt.tk.client.ui;
 
-import com.google.gwt.user.client.DOM;
+import asquare.gwt.tk.client.util.DomUtil;
+
 import com.google.gwt.user.client.ui.Image;
 
 /**
@@ -57,7 +58,7 @@ public class Icon extends Image
 	 */
 	public int getWidth()
 	{
-		return DOM.getIntAttribute(getElement(), "width");
+		return DomUtil.getIntAttribute(this, "width");
 	}
 	
 	/**
@@ -67,6 +68,6 @@ public class Icon extends Image
 	 */
 	public int getHeight()
 	{
-		return DOM.getIntAttribute(getElement(), "height");
+		return DomUtil.getIntAttribute(this, "height");
 	}
 }
