@@ -28,6 +28,10 @@ public abstract class EventWrapper extends Composite
 {
 	private Widget m_widget;
 	
+	/**
+	 * Default constructor for convenience. You will need to call
+	 * {@link #initWidget(Widget)} before calling any {@link Widget} methods.
+	 */
 	public EventWrapper()
 	{
 		
@@ -39,6 +43,10 @@ public abstract class EventWrapper extends Composite
 		sinkEvents(eventMask);
 	}
 	
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.Composite#initWidget(com.google.gwt.user.client.ui.Widget)
+	 */
 	protected void initWidget(Widget widget)
 	{
 		super.initWidget(widget);
