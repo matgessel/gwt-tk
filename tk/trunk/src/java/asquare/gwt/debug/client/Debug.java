@@ -15,20 +15,22 @@
  */
 package asquare.gwt.debug.client;
 
+import asquare.gwt.debug.client.impl.DebugImpl;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Event;
 
 /**
  * <p>
- * Facade for debugging methods. Installs hooks for printing debug statements
+ * Facade for debugging methods. Creates methods for printing debug statements
  * from JSNI and native JavaScript. You can enable/disable debug methods by
- * pressing <code>Esc</code> twice sequentially. Uses a
- * {@link asquare.gwt.debug.client.DebugEventListener DebugEventListener} to
- * listen for the enabler key. See
- * {@link asquare.gwt.debug.client.DebugEventListener DebugEventListener} about
- * potential conflicts with PopupPanel and DialogBox.
- * </p>
+ * pressing the <code>Esc</code> key twice sequentially.
+ * <p>
+ * Uses a {@link asquare.gwt.debug.client.DebugEventListener DebugEventListener}
+ * to listen for the enabler key. <em>See
+ * {@link asquare.gwt.debug.client.DebugEventListener DebugEventListener} for
+ * potential conflicts with PopupPanel and DialogBox.</em>
  * <p>
  * A stub version of this class is provided which will remove this class
  * definition from the final deliverable if placed ahead of this implementation
@@ -40,17 +42,19 @@ import com.google.gwt.user.client.Event;
  * <pre>
  * if (Debug.ENABLED)
  * {
- *   Debug.println(&quot;Foo.bar(&quot; + value1 + ',' + value2 + ')');
+ * 	Debug.println(&quot;Foo.bar(&quot; + value1 + ',' + value2 + ')');
  * }
  * </pre>
  * <code>Debug.ENABLED</code> is <code>false</code> in the stub version.
  * </p>
  * <P>
- * The compiler may optimize out the class if you <strong>only</strong> reference this class
- * through JSNI. Consider calling {@link #init() Debug.init()} in your entry point or test
- * case if you are getting this message: <br/>
+ * The compiler may optimize out the class if you <strong>only</strong>
+ * reference this class through JSNI. Consider calling
+ * {@link #init() Debug.init()} in your entry point or test case if you are
+ * getting this message: <br/>
  * <code>com.google.gwt.core.client.JavaScriptException: JavaScript TypeError exception: Object doesn't support this property or method</code>.
- * </P>
+ * 
+ * @see DebugConsole
  */
 public class Debug
 {
@@ -72,6 +76,8 @@ public class Debug
 	private static Enabler s_enabler = null;
 	
 	private static char s_enableKey = DEFAULT_ENABLE_KEY;
+	
+	private static DebugImpl s_impl = (DebugImpl) GWT.create(DebugImpl.class);
 	
 	static
 	{
@@ -118,22 +124,22 @@ public class Debug
 		{
 			@asquare.gwt.debug.client.Debug::enable()();
 		};
-
+		
 		Debug.enableSilently = $wnd.Debug.enableSilently = function()
 		{
 			@asquare.gwt.debug.client.Debug::enableSilently()();
 		};
-
+		
 		Debug.disable = $wnd.Debug.disable = function()
 		{
 			@asquare.gwt.debug.client.Debug::disable()();
 		};
-
+		
 		Debug.print = $wnd.Debug.print = function(object)
 		{
 			@asquare.gwt.debug.client.Debug::print(Ljava/lang/String;)("" + object);
 		};
-
+		
 		Debug.println = $wnd.Debug.println = function(object)
 		{
 			@asquare.gwt.debug.client.Debug::println(Ljava/lang/String;)("" + object);
@@ -264,10 +270,13 @@ public class Debug
 	}
 	
 	/**
-	 * Prints a debugging message to the in-browser console. 
-	 * In hosted mode the message also goes to {@link System#out} and the GWT Shell. 
+	 * Prints a debugging message to the {@link DebugConsole} widget. The
+	 * message is mirrored to the browser's native console, if supported. In
+	 * hosted mode the message is mirrored to {@link System#out} and the GWT
+	 * Shell.
 	 * 
 	 * @param message
+	 * @see DebugConsole
 	 */
 	public static void print(String message)
 	{
@@ -275,15 +284,19 @@ public class Debug
 		{
 			System.out.print(message);
 			GWT.log(message, null);
+			printToBrowserConsole(message);
 			DebugConsole.getInstance().print(message);
 		}
 	}
 	
 	/**
-	 * Prints a debugging message to the in-browser console, follwed by "\r\n". 
-	 * In hosted mode the message also goes to {@link System#out} and the GWT Shell. 
+	 * Prints a debugging message to the {@link DebugConsole} widget, follwed by
+	 * "\r\n". The message is mirrored to the browser's native console, if
+	 * supported. In hosted mode the message is mirrored to {@link System#out}
+	 * and the GWT Shell.
 	 * 
 	 * @param message
+	 * @see DebugConsole
 	 */
 	public static void println(String message)
 	{
@@ -297,17 +310,15 @@ public class Debug
 	}
 	
 	/**
-	 * Prints a message to the native browser console. 
-	 * Only works in Safari at this time.  
+	 * Prints a message to the native browser console, if available. Otherwise
+	 * does nothing.
 	 * 
 	 * @param message
 	 */
-	public static native void printToBrowserConsole(String message) /*-{
-		if(window.console)
-		{
-			window.console.log(message);
-		}
-	}-*/;
+	public static void printToBrowserConsole(String message)
+	{
+		s_impl.printToBrowserConsole(message);
+	}
 	
 	/**
 	 * Prints a description of a JavaScript object. Not very useful for Java
