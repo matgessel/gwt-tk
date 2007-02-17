@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Vector;
 
 import asquare.gwt.tk.client.ui.*;
+import asquare.gwt.tk.client.ui.behavior.FocusModel;
 import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
 import asquare.gwt.tk.client.util.DomUtil;
 
@@ -207,6 +208,90 @@ public class DialogPanel extends Composite
 			}
 		});
 		panel.add(explicitlySizedDialog);
+		
+		final Button multipleDialogs = new Button("Multiple dialogs");
+		multipleDialogs.addClickListener(new ClickListener()
+		{
+			public void onClick(Widget sender)
+			{
+				ModalDialog dialog = new ModalDialog();
+				dialog.setCaption("First dialog", false);
+				FocusModel fModel = dialog.getFocusModel();
+				RowPanel outer = new RowPanel();
+				
+				dialog.add(new HTML(""));
+				
+				final UrlLocation urlBox = new UrlLocation();
+				urlBox.setText("http://www.google.com");
+				urlBox.setWidth("80%");
+				fModel.add(urlBox);
+				outer.add(urlBox);
+				
+				Button goButton = new Button("Go");
+				fModel.add(goButton);
+				fModel.setFocusWidget(goButton);
+				outer.addWidget(goButton, false);
+				
+				ListBox addressList = new ListBox();
+				addressList.addItem("Select an address");
+				addressList.addItem("http://www.google.com");
+				addressList.addItem("http://www.sourceforge.net");
+				addressList.addItem("http://www.apache.org");
+				addressList.addItem("http://www.asquare.net");
+				fModel.add(addressList);
+				outer.add(addressList);
+				
+				final Frame frame = new Frame();
+				frame.setSize("400px", "200px");
+				outer.add(frame);
+				urlBox.addChangeListener(new ChangeListener()
+				{
+					public void onChange(Widget sender)
+					{
+						frame.setUrl(urlBox.getURL());
+					}
+				});
+				goButton.addClickListener(new ClickListener()
+				{
+					public void onClick(Widget sender)
+					{
+						frame.setUrl(urlBox.getURL());
+					}
+				});
+				addressList.addChangeListener(new ChangeListener()
+				{
+					public void onChange(Widget sender)
+					{
+						ListBox list = (ListBox) sender;
+						if (list.getSelectedIndex() > 0)
+						{
+							urlBox.setText(list.getItemText(list.getSelectedIndex()));
+							frame.setUrl(list.getItemText(list.getSelectedIndex()));
+						}
+					}
+				});
+				final Button secondDialog = new Button("Show second dialog");
+				secondDialog.addClickListener(new ClickListener()
+				{
+					public void onClick(Widget sender)
+					{
+						final ModalDialog dialog = new ModalDialog();
+						dialog.setCaption("Second dialog", false);
+						dialog.add(new Label("Note that you cannot manipulate the widgets in the first dialog. "));
+						dialog.add(new CloseButton(dialog));
+						dialog.show(secondDialog);
+					}
+				});
+				fModel.add(secondDialog);
+				outer.add(secondDialog);
+				Button closeButton = new CloseButton(dialog);
+				fModel.add(closeButton);
+				outer.add(closeButton);
+				dialog.add(outer);
+				dialog.show(multipleDialogs);
+			}
+		});
+		panel.add(multipleDialogs);
 		
 		final Button styledDialog = new Button("Styled");
 		styledDialog.addClickListener(new ClickListener()
