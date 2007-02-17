@@ -1,0 +1,22 @@
+Controller Life Cycle Brainstorm
+
+BEFORE ATTACH
+
+AFTER ATTACH
+set widget field
+install an IE6 onselectstart listener
+set initial size
+set initial position
+Add a style name to the body element
+Add a WindowListener
+initialize controller state based on ui (scrollbars)
+
+EVENT PROCESSING
+getWidget()
+
+BEFORE DETACH
+Remove a WindowListener
+uninstall an IE6 onselectstart listener
+transfer focus on dialog close
+
+AFTER DETACH
