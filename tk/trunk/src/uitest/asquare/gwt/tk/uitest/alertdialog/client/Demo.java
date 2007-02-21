@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.tk.uitest.modaldialog.client;
+package asquare.gwt.tk.uitest.alertdialog.client;
 
 import asquare.gwt.debug.client.*;
 import asquare.gwt.tk.client.ui.AlertDialog;

@@ -18,5 +18,5 @@
 	
 	<inherits name="asquare.gwt.tk.Tk"/>
 	
-	<entry-point class="asquare.gwt.tk.uitest.modaldialog.client.Demo"/>
+	<entry-point class="asquare.gwt.tk.uitest.alertdialog.client.Demo"/>
 </module>
