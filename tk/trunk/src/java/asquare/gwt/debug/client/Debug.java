@@ -181,7 +181,7 @@ public class Debug
 			}
 			else
 			{
-				for (member in object)
+				for (var member in object)
 				{
 					Debug.print("  +" + member + "=");
 					try
