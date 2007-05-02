@@ -24,7 +24,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 public class GlassPanelControllerIE6 implements GlassPanelController
 {
 	/*
-	 * The original implementation was chosed via a deferred binding rule.
+	 * Originally, the implementation was selected via a deferred binding rule.
 	 * However, adding an additional rule for strict/quirks mode increased
 	 * compile time by 40%.
 	 */
