@@ -101,11 +101,11 @@ public class DomUtil
 	 * Gets the id attribute of the specified UIObject's element.
 	 * 
 	 * @param uio the UIObject
-	 * @return the id or null the id attribute is not set
+	 * @return the id or <code>null</code> if the id attribute is not set
 	 */
 	public static String getId(UIObject uio)
 	{
-		return DOM.getAttribute(uio.getElement(), "id");
+		return getId(uio.getElement());
 	}
 	
 	/**
@@ -133,7 +133,28 @@ public class DomUtil
 	 */
 	public static void setId(UIObject uio, String id)
 	{
-		DOM.setAttribute(uio.getElement(), "id", id);
+		setId(uio.getElement(), id);
+	}
+	
+	/**
+	 * @see #getId(UIObject)
+	 * @param e a native DOM element
+	 * @return the id or <code>null</code> if the id attribute is not set
+	 */
+	public static String getId(Element e)
+	{
+		return DOM.getAttribute(e, "id");
+	}
+	
+	/**
+	 * @see #setId(UIObject, String)
+	 * @param e a native DOM element
+	 * @param id a unique id. It is a good practice to namespace ids to avoid
+	 *            future id confilicts, i.e. organization.project.foo.
+	 */
+	public static void setId(Element e, String id)
+	{
+		DOM.setAttribute(e, "id", id);
 	}
 	
 	/**

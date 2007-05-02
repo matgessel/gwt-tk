@@ -16,6 +16,7 @@
 package asquare.gwt.tk.client.util;
 
 import asquare.gwt.debug.client.Debug;
+import asquare.gwt.tk.client.Tests;
 
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.junit.client.GWTTestCase;
@@ -27,7 +28,7 @@ public class DomUtilTC extends GWTTestCase
 {
 	public String getModuleName()
 	{
-		return "asquare.gwt.tk.TkTC";
+		return Tests.getModuleName();
 	}
 
 	public void testAppendText()
