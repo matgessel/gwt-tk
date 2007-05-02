@@ -92,9 +92,9 @@ public class DebugConsole extends DialogBox
 		controls.add(controlsRight);
 		controls.setCellHorizontalAlignment(controlsRight, HorizontalPanel.ALIGN_RIGHT);
 		
-		final Button disableDebugButton = new Button("Disable&nbsp;Debug");
-		DOM.setAttribute(disableDebugButton.getElement(), "title", "Prevents output of debug statements");
-		controlsLeft.add(disableDebugButton);
+		final Button taggleDebugButton = new Button("Toggle&nbsp;Debug");
+		DOM.setAttribute(taggleDebugButton.getElement(), "title", "Toggles output of debug statements");
+		controlsLeft.add(taggleDebugButton);
 		
 		updateDisableButtonText();
 		DOM.setAttribute(m_disableButton.getElement(), "title", "Prevents this console from appearing when debug statements are printed");
@@ -131,9 +131,16 @@ public class DebugConsole extends DialogBox
 				{
 					disable();
 				}
-				else if (sender == disableDebugButton)
+				else if (sender == taggleDebugButton)
 				{
-					Debug.disable();
+					if (Debug.isEnabled())
+					{
+						Debug.disable();
+					}
+					else
+					{
+						Debug.enable();
+					}
 				}
 				else
 				{
@@ -141,7 +148,7 @@ public class DebugConsole extends DialogBox
 				}
 			}
 		};
-		disableDebugButton.addClickListener(controller);
+		taggleDebugButton.addClickListener(controller);
 		m_disableButton.addClickListener(controller);
 		clearButton.addClickListener(controller);
 		hideButton.addClickListener(controller);

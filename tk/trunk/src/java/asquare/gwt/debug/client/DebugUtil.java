@@ -105,7 +105,7 @@ public class DebugUtil
 		}
 		return result.toString();
 	}
-
+	
 	/**
 	 * Creates a human readable String describing the specified event.
 	 * 
