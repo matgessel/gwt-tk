@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
  * Ideally, this fuctionality would be in a superclass like
  * {@link com.google.gwt.user.client.ui.Widget Widget}.
  */
-public class ControllerSupportDelegate implements ControllerSupport
+public class ControllerSupportDelegate
 {
 	private final Widget m_widget;
 	
@@ -79,7 +79,7 @@ public class ControllerSupportDelegate implements ControllerSupport
 				DOM.getEventsSunk(m_widget.getElement()) | m_legacyEventBits);
 	}
 	
-	public void unSinkEvents(int eventBits)
+	public void unsinkEvents(int eventBits)
 	{
 		m_legacyEventBits &= ~eventBits;
 		sinkAllBits();

@@ -124,7 +124,7 @@ public class CWrapper extends EventWrapper implements ControllerSupport
 	 */
 	public void unsinkEvents(int eventBits)
 	{
-		m_controllerSupport.unSinkEvents(eventBits);
+		m_controllerSupport.unsinkEvents(eventBits);
 	}
 	
 	/*
