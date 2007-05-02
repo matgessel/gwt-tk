@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,26 +15,23 @@
  */
 package asquare.gwt.tk.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import junit.framework.Assert;
 
-public class JUnitShellDocTC extends GWTTestCase
+public final class Tests
 {
-	static
+	public static String getModuleName()
 	{
-		/*
-		 * Uncomment the following line to print the usage message. 
-		 * (Note: this will break the test run) 
-		 */
-//		System.setProperty("gwt.args", "-help");
+		return "asquare.gwt.tk.TkTc";
 	}
 	
-	public String getModuleName()
+	public static void assertSameElements(Object[] a1, Object[] a2)
 	{
-		return Tests.getModuleName();
-	}
-	
-	public void testPrintJUnitShellDoc()
-	{
-		// NOOP
+		Assert.assertNotNull(a1);
+		Assert.assertNotNull(a2);
+		Assert.assertEquals(a1.length, a2.length);
+		for (int i = 0; i < a1.length; i++)
+		{
+			Assert.assertSame(String.valueOf(i), a1[i], a2[i]);
+		}
 	}
 }

@@ -15,6 +15,8 @@
  */
 package asquare.gwt.tk.client.ui;
 
+import asquare.gwt.tk.client.Tests;
+
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -29,7 +31,7 @@ public class RowPanelTC extends GWTTestCase
 	
 	public String getModuleName()
 	{
-		return "asquare.gwt.tk.TkTc";
+		return Tests.getModuleName();
 	}
 	
 	protected void setUpImpl()
