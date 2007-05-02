@@ -38,7 +38,8 @@ import com.google.gwt.user.client.ui.impl.PopupImpl;
  * <h3>CSS Style Rules</h3>
  * <ul class='css'>
  * <li>.tk-GlassPanel { }</li>
- * <li>.body-GlassPanelShowing { added to the BODY element when a GlassPanel is shown }</li>
+ * <li>.body-GlassPanelShowing { added to the BODY element when a GlassPanel is
+ * shown }</li>
  * </ul>
  * CSS Example
  * 
@@ -50,12 +51,35 @@ import com.google.gwt.user.client.ui.impl.PopupImpl;
  * }
  * </pre>
  * 
+ * This example uses a transparent PNG background to workaround a bug with Flash
+ * &amp; transparency in Firefox/Mac:
+ * 
+ * <pre>
+ * <b>Java</b>
+ * GlassPanel gp = new GlassPanel();
+ * Label content = new Label();
+ * content.setStyleName(&quot;Content&quot;);
+ * content.setSize(&quot;100%&quot;, &quot;100%&quot;);
+ * gp.add(content);
+ * gp.show();
+ * </pre>
+ * 
+ * <pre>
+ * <b>CSS</b>
+ * .tk-GlassPanel {
+ *   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='Gray20.png', sizingMethod='scale');
+ * }
+ * .tk-GlassPanel .Content
+ *   background: url('Gray20.png');
+ *   filter: alpha(opacity=0);
+ * }
+ * </pre>
+ * 
  * The filter rule applies transparency in IE.
  * 
  * @see <a href="http://www.quirksmode.org/css/opacity.html">opacity on
  *      quirksmode</a>
- * @see <a
- *      href="http://msdn.microsoft.com/library/default.asp?url=/workshop/author/filter/reference/reference.asp">Filters
+ * @see <a href="http://msdn2.microsoft.com/en-us/library/ms532853.aspx">Filters
  *      for IE</a>
  */
 public class GlassPanel extends CComplexPanel

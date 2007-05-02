@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * An anchor linking to a page (or resource) external to the application. 
  * Clicking the hyperlink will result in the GWT application being 
- * unloaded unless you specify a target frame or window or "_blank". 
+ * unloaded unless you specify a target frame, window or "_blank". 
  * 
  * <h3>Example usage</h3>
  * <p>
@@ -91,13 +91,16 @@ public class ExternalHyperLink extends Widget implements HasText, HasHTML
 		setElement(DOM.createAnchor());
 		setStyleName("tk-ExternalHyperLink");
 		
-		if (asHtml && text != null)
+		if (text != null)
 		{
-			setHTML(text);
-		}
-		else if (text != null)
-		{
-			setText(text);
+			if (asHtml)
+			{
+				setHTML(text);
+			}
+			else
+			{
+				setText(text);
+			}
 		}
 		
 		if (url != null)
