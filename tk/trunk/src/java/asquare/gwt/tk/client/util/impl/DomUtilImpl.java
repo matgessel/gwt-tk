@@ -17,8 +17,12 @@ package asquare.gwt.tk.client.util.impl;
 
 public class DomUtilImpl
 {
+	private static final boolean QUIRKS_MODE = isQuirksMode0();
+	private static final boolean MAC = isMac0();
+	private static final boolean WIN = isWin0();
+	
 	public native int getViewportWidth() /*-{
-		if ($doc.compatMode == "BackCompat")
+		if (@asquare.gwt.tk.client.util.impl.DomUtilImpl::QUIRKS_MODE)
 		{
 			return $doc.body.clientWidth;
 		}
@@ -26,7 +30,7 @@ public class DomUtilImpl
 	}-*/;
 	
 	public native int getViewportHeight() /*-{
-		if ($doc.compatMode == "BackCompat")
+		if (@asquare.gwt.tk.client.util.impl.DomUtilImpl::QUIRKS_MODE)
 		{
 			return $doc.body.clientHeight;
 		}
@@ -34,7 +38,7 @@ public class DomUtilImpl
 	}-*/;
 	
 	public native int getDocumentScrollWidth() /*-{
-		if ($doc.compatMode == "BackCompat")
+		if (@asquare.gwt.tk.client.util.impl.DomUtilImpl::QUIRKS_MODE)
 		{
 			return $doc.body.scrollWidth;
 		}
@@ -42,22 +46,37 @@ public class DomUtilImpl
 	}-*/;
 	
 	public native int getDocumentScrollHeight() /*-{
-		if ($doc.compatMode == "BackCompat")
+		if (@asquare.gwt.tk.client.util.impl.DomUtilImpl::QUIRKS_MODE)
 		{
 			return $doc.body.scrollHeight;
 		}
 		return $doc.documentElement.scrollHeight;
 	}-*/;
 	
-	public native boolean isQuirksMode() /*-{
+	public boolean isQuirksMode()
+	{
+		return QUIRKS_MODE;
+	}
+	
+	private static native boolean isQuirksMode0() /*-{
 		return $doc.compatMode == "BackCompat";
 	}-*/;
 	
-	public native boolean isMac() /*-{
+	public boolean isMac()
+	{
+		return MAC;
+	}
+	
+	private static native boolean isMac0() /*-{
 		return navigator.userAgent.toLowerCase().indexOf("mac") != -1;
 	}-*/;
 	
-	public native boolean isWin() /*-{
+	public boolean isWin()
+	{
+		return WIN;
+	}
+	
+	private static native boolean isWin0() /*-{
 		return navigator.userAgent.toLowerCase().indexOf("win") != -1;
 	}-*/;
 }
