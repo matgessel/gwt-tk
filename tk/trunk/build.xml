@@ -19,8 +19,17 @@
 		A GWT build file which can be used for multiple projects. 
 	</description>
 	
+	<condition property="dev.jar.name" value="gwt-dev-mac.jar">
+		<os family="mac"/>
+	</condition>
+	<condition property="dev.jar.name" value="gwt-dev-windows.jar">
+		<os family="windows"/>
+	</condition>
+	<!-- assume linux if not mac or win -->
+	<property name="dev.jar.name" value="gwt-dev-linux.jar"/>
+	
 	<!-- src is for GWT compile, bin is for javadoc -->
-	<property name="gwt.tk.lib.path" value="${basedir}/src/java;${basedir}/bin/java"/>
+	<property name="gwt.tk.lib.path" value="${basedir}/src/java;${basedir}/bin/java;${basedir}/src/super"/>
 	
 	<property name="debug.stub.path" value="${basedir}/src/debugstub"/>
 	
@@ -43,7 +52,7 @@
 	
 	<path id="gwt.classpath">
 		<pathelement location="${gwt.lib.location}/gwt-user.jar"/>
-		<pathelement location="${gwt.lib.location}/gwt-dev-windows.jar"/>
+		<pathelement location="${gwt.lib.location}/${dev.jar.name}"/>
 	</path>
 	
 	<path id="project.full.classpath">
@@ -256,7 +265,16 @@
 	
 	<target name="javadocGwt" depends="initTempDir">
 		<description>Creates javadocs for the GWT user library in the standard format</description>
-		<unjar src="${gwt.lib.location}/gwt-user.jar" dest="${temp.dir}"/>
+		<unjar src="${gwt.lib.location}/gwt-user.jar" dest="${temp.dir}">
+			<patternset>
+				<include name="com/google/**"/>
+			</patternset>
+		</unjar>
+		<unjar src="${gwt.lib.location}/${dev.jar.name}" dest="${temp.dir}">
+			<patternset>
+				<include name="com/google/gwt/core/**"/>
+			</patternset>
+		</unjar>
 		<mkdir dir="${gwt.doc.destination.dir}"/>
 		<delete>
 			<fileset dir="${gwt.doc.destination.dir}" includes="**/*"/>
@@ -295,6 +313,7 @@
 		<delete file="gwttk-${project.version}.jar"/>
 		<jar destfile="gwttk-${project.version}.jar">
 			<fileset dir="${project.dir}/src/java"/>
+			<fileset dir="${project.dir}/src/super"/>
 			<fileset dir="${project.dir}/bin/java" includes="**/*.class"/>
 		</jar>
 	</target>
@@ -303,7 +322,16 @@
 		<delete file="gwttk-server-${project.version}.jar"/>
 		<jar destfile="gwttk-server-${project.version}.jar">
 			<fileset dir="${project.dir}/bin/java" includes="*.txt"/>
-			<fileset dir="${project.dir}/bin/java" includes="**/server/*"/>
+			<fileset dir="${project.dir}/bin/java" includes="**/server/**"/>
+		</jar>
+	</target>
+	
+	<target name="jarSandbox">
+		<delete file="gwttk-sandbox${project.version}.jar"/>
+		<jar destfile="gwttk-sandbox${project.version}.jar">
+			<fileset dir="${project.dir}/src/java" includes="*.txt"/>
+			<fileset dir="${project.dir}/src/java" includes="asquare/gwt/sb/**"/>
+			<fileset dir="${project.dir}/bin/java" includes="asquare/gwt/sb/**"/>
 		</jar>
 	</target>
 </project>

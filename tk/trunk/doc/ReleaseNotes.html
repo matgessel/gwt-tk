@@ -11,6 +11,110 @@
 
 <hr />
 
+<h2>0.2.3</h2>
+
+<p>GWT Tk 0.2.3 was compiled against GWT 1.3.3</p>
+
+<h2>Tk module</h2>
+<ul>
+	<li>ModalDialog
+	<ul>
+		<li>the content panel's minimum height is now set in a
+		cross-platform manner</li>
+		<li>centering logic now accounts for non-reflowable content such
+		as long TextBoxes (Amir Michail)</li>
+		<li>eliminated scrollbar flicker in Opera/Firefox[Mac] when
+		showing most dialogs</li>
+		<li>fixed an issue where centering was sometimes off horizontally
+		by the width of a scrollbar</li>
+		<li>Document can now be scrolled when dialog is displayed in
+		Firefox[Win]</li>
+	</ul>
+	</li>
+	<li>FocusModel
+	<ul>
+		<li><code>add()</code> throws <code>IllegalArgumentException</code>
+		if the specified widget is already present in the model</li>
+		<li><code>insert()</code> throws <code>IllegalArgumentException</code>
+		if the specified widget is already present in the model</li>
+		<li><code>setFocusWidget()</code> throws <code>IllegalArgumentException</code>
+		if the specified widget is not present in the focus model</li>
+		<li>now skips <code>FocusWidget</code> instances which are not
+		enabled (avoids error message in IE)</li>
+	</ul>
+	</li>
+	<li>GwtUtil
+	<ul>
+		<li><code>arrayCopy()</code> added. Performs checked copying of
+		arrays.</li>
+		<li><code>toArray()</code> added. Same as List.toArray(), except
+		does not auto-expand destination array.</li>
+		<li><code>rangeCheck()</code> fixed a bug affecting ranges which
+		do not start at 0</li>
+	</ul>
+	</li>
+	<li>BasicPanel now implements IndexedPanel</li>
+	<li>JsUtil: fixed a rare issue where a SWTException would be thrown instead of JavaScriptException in hosted mode</li>
+	<li>PreventSelectionController: singleton field is depricated, use getter instead</li>
+	<li>FocusCommand: added support for blurring widgets</li>
+	<li>CPopupPanel: added. Same as <code>PopupPanel</code>, but allows scrolling in Firefox while popup is shown</li>
+	<li>ControllerSupportDelegate: renamed <code>unSinkEvents</code> to <code>unsinkEvents</code> (capitalization) </li>
+	<li>DomUtil
+	<ul>
+		<li><code>getId(Element)</code> added</li>
+		<li><code>setId(Element, String)</code> added</li>
+		<li>performance improved when fetching values which depend on rendering mode</li>
+	</ul>
+	</li>
+</ul>
+
+<h2>Emulation module</h2>
+<ul>
+	<li>Created a new module for jre emulation: <code>asquare.gwt.tk.emul.Emulation</code></li>
+	<li>Added <code>CloneNotSupportedException</code></li>
+</ul>
+
+<h2>Debug module</h2>
+<ul>
+	<li>Debug state can be toggled from console, rather than just
+	disabled</li>
+	<li>Debug.dump(): fix a JavaScript variable not declared with &quot;var&quot;</li>
+</ul>
+
+<h2>Sandbox module</h2>
+<ul>
+	<li>Added this module to share works in progress</li>
+	<li>Added an experimental, data-driven UI framework</li>
+</ul>
+
+<h2>Demo</h2>
+<ul>
+	<li>Demo panels all load at startup, but incremental progress is
+	shown</li>
+	<li>Rewrote demo tab panel based on a <code>ListModel</code></li>
+	<li>Rewrote the tab/history coordination logic eliminating
+	necessity for circularity checks (relationships are now hierarcical
+	model-observer)</li>
+	<li>Added a <code>ModalDialog</code> example demonstrating focus
+	management</li>
+	<li>Addded a <code>GlassPanel</code> example demonstrating
+	cross-platform, alpha-transparent PNG background.
+</ul>
+
+<h2>Known Problems</h2>
+<ul>
+	<li>Checkboxes are not added to focus cycle. <br />
+	Workaround: <br />
+	<code>CheckBox cb = new CheckBox("my check box");
+	DOM.setIntAttribute(cb.getElement(), "tabIndex", 0);
+	dialog.getFocusModel().add(cb); </code><br />
+	See GWT issue <A
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=878">878</A>
+	</li>
+</ul>
+
+<hr />
+
 <h2>0.2.2</h2>
 
 <p>GWT Tk 0.2.2 was compiled against GWT 1.3.3</p>
@@ -59,9 +163,9 @@
 <h2>Demo</h2>
 <ul>
 	<li>ModalDialog demo: added an example with 2 dialogs</li>
-	<li>ModalDialog demo: the example of an explicitly positioned dialog is
-	now displayed in upper left of the page so it is more obvious [reporter:
-	Klaus-Peter Berg]</li>
+	<li>ModalDialog demo: the example of an explicitly positioned
+	dialog is now displayed in upper left of the page so it is more obvious
+	[reporter: Klaus-Peter Berg]</li>
 	<li>DropDownPanel demo: 2nd dropdown is open by default</li>
 </ul>
 
@@ -125,8 +229,8 @@ for Safari because the value is still off by the doc scroll in GWT
 	with EventWrapper and Controller</li>
 	<li>Added an obfuscated compile target for a faster online
 	download</li>
-	<li>Tab bodies are lazily initialized to improve application start
-	time</li>
+	<li>Tab bodies are lazily appended to the document to improve
+	application load performance</li>
 </ul>
 
 <hr />
