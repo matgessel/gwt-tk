@@ -42,22 +42,216 @@ public class GwtUtil
 	}
 	
 	/**
-	 * Checks that an index is valid for the specified range. A flag is passed to
-	 * indicate whether the range should be extended by 1 to allow for adding a
-	 * last element. Throws an exception if the index is out of bounds for the
-	 * list.
+	 * Checks that a number is contained within the specified range. A flag is
+	 * passed to indicate whether the range should be extended by 1 (to allow
+	 * for adding a last element). Throws an exception if the index is out of
+	 * bounds for the range.
 	 * 
-	 * @param firstIndex the first allowable index
-	 * @param size the size of the allowable range
-	 * @param index the index to range check
-	 * @param adding <code>true</code> to allow for
-	 *            {@link List#add(int, java.lang.Object) adding} at the index
-	 *            after last element in list
+	 * @param first the first allowable number
+	 * @param size the size of the allowed range
+	 * @param n the index to range check
+	 * @param extend <code>true</code> to extend the size of the range by
+	 *            <code>1</code>
 	 * @throws IndexOutOfBoundsException if the index is out of range
 	 */
-	public static void rangeCheck(int firstIndex, int size, int index, boolean adding) throws IndexOutOfBoundsException
+	public static void rangeCheck(int first, int size, int n, boolean extend) throws IndexOutOfBoundsException
 	{
-		if (index < firstIndex || index > size || (! adding) && index == size)
-			throw new IndexOutOfBoundsException(Integer.toString(index));
+		if (n < first || n > (first + size) || (! extend) && n == (first + size))
+			throw new IndexOutOfBoundsException(Integer.toString(n));
+	}
+	
+	/**
+	 * Copies elements from the <code>src</code> array to the <code>dest</code> array. 
+	 * 
+	 * @param src the source array
+	 * @param srcPos the starting position in the source array
+	 * @param dest the destination array
+	 * @param destPos the starting position in the destination array
+	 * @param length the number of array elements to copy
+	 * @throws NullPointerException if <code>src</code> or <code>dest</code> is <code>null</code>
+	 * @throws IndexOutOfBoundsException if <code>srcPos < 0 || destPos < 0 || length < 0 || (srcPos + length > src.length) || (destPos + length > dest.length)</code>
+	 * @throws ArrayStoreException if an element in <code>src</code> cannot not be copied to <code>dest</code> due to a type mismatch
+	 * @see System#arraycopy(Object, int, Object, int, int)
+	 */
+	public static void arrayCopy(Object src, int srcPos, Object dest, int destPos, int length)
+	{
+		// need to check srcPos and destPos for script mode
+		if (length < 0 || srcPos < 0 || destPos < 0)
+			throw new IndexOutOfBoundsException();
+		
+		if (src instanceof Object[] && dest instanceof Object[])
+		{
+			arrayCopy((Object[]) src, srcPos, (Object[]) dest, destPos, length);
+		}
+		else if (src instanceof int[] && dest instanceof int[])
+		{
+			arrayCopy((int[]) src, srcPos, (int[]) dest, destPos, length);
+		}
+		else if (src instanceof boolean[] && dest instanceof boolean[])
+		{
+			arrayCopy((boolean[]) src, srcPos, (boolean[]) dest, destPos, length);
+		}
+		else if (src instanceof float[] && dest instanceof float[])
+		{
+			arrayCopy((float[]) src, srcPos, (float[]) dest, destPos, length);
+		}
+		else if (src instanceof char[] && dest instanceof char[])
+		{
+			arrayCopy((char[]) src, srcPos, (char[]) dest, destPos, length);
+		}
+		else if (src instanceof byte[] && dest instanceof byte[])
+		{
+			arrayCopy((byte[]) src, srcPos, (byte[]) dest, destPos, length);
+		}
+		else if (src instanceof short[] && dest instanceof short[])
+		{
+			arrayCopy((short[]) src, srcPos, (short[]) dest, destPos, length);
+		}
+		else if (src instanceof long[] && dest instanceof long[])
+		{
+			arrayCopy((long[]) src, srcPos, (long[]) dest, destPos, length);
+		}
+		else if (src instanceof double[] && dest instanceof double[])
+		{
+			arrayCopy((double[]) src, srcPos, (double[]) dest, destPos, length);
+		}
+		else if (src == null || dest == null)
+		{
+			throw new NullPointerException();
+		}
+		else
+		{
+			throw new ArrayStoreException();
+		}
+	}
+	
+	private static void arrayCopy(Object[] src, int srcPos, Object[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(int[] src, int srcPos, int[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(boolean[] src, int srcPos, boolean[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(float[] src, int srcPos, float[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(char[] src, int srcPos, char[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(byte[] src, int srcPos, byte[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(short[] src, int srcPos, short[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(long[] src, int srcPos, long[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	private static void arrayCopy(double[] src, int srcPos, double[] dest, int destPos, int length)
+	{
+		if (srcPos + length > src.length || destPos + length > dest.length)
+			throw new IndexOutOfBoundsException();
+		
+		for (int i = 0; i < length; i++)
+		{
+			dest[destPos + i] = src[srcPos + i];
+		}
+	}
+	
+	/**
+	 * Copies all of the elements in <code>list</code> to <code>array</code>.
+	 * Similar to {@link List#toArray(Object[])} except this does not
+	 * automatically expand the array size.
+	 * 
+	 * @param src a list
+	 * @param dest a non-primitive array
+	 * @throws NullPointerException if <code>src</code> or <code>dest</code>
+	 *             is <code>null</code>
+	 * @throws IndexOutOfBoundsException if <code>dest</code> is not large
+	 *             enough to contain all of the list elements.
+	 * @throws ArrayStoreException if an element in <code>list</code> cannot
+	 *             not be copied to <code>dest</code> due to a type mismatch
+	 */
+	public static Object[] toArray(List src, Object[] dest)
+	{
+		// necessary in web mode
+		if (src == null || dest == null)
+			throw new NullPointerException();
+		
+		int size = src.size();
+		rangeCheck(0, dest.length, size - 1, false);
+		
+		for (int i = 0; i < size; i++)
+		{
+			dest[i] = src.get(i);
+		}
+		
+		return dest;
 	}
 }
