@@ -22,10 +22,26 @@ import com.google.gwt.core.client.GWT;
  * the controller via deferred binding.
  * <p>This controller prevents text selection within it's associated widget. 
  */
-public interface PreventSelectionController extends Controller
+public abstract class PreventSelectionController extends ControllerAdaptor
 {
 	/**
-	 * A shared instance of the controller. 
+	 * A shared instance of the controller.
+	 * 
+	 * @deprecated static dependency on {@link GWT#create(Class)} means GWT must
+	 *             be bootstrapped to test classes which reference this class
 	 */
-	PreventSelectionController INSTANCE = (PreventSelectionController) GWT.create(PreventSelectionController.class);
+	public static final PreventSelectionController INSTANCE = (PreventSelectionController) GWT.create(PreventSelectionController.class);
+	
+	/**
+	 * Gets a shared instance of the controller.
+	 */
+	public static final PreventSelectionController getInstance()
+	{
+		return INSTANCE;
+	}
+	
+	public PreventSelectionController(int eventBits)
+	{
+		super(eventBits, PreventSelectionController.class);
+	}
 }

@@ -15,23 +15,17 @@
  */
 package asquare.gwt.tk.client.ui.behavior.impl;
 
-import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class PreventSelectionControllerStandard extends ControllerAdaptor implements PreventSelectionController
+public class PreventSelectionControllerStandard extends PreventSelectionController 
 {
 	public PreventSelectionControllerStandard()
 	{
-		super(PreventSelectionController.class);
-	}
-	
-	public int getEventBits()
-	{
-		return Event.ONMOUSEDOWN;
+		super(Event.ONMOUSEDOWN);
 	}
 	
 	protected boolean doBrowserEvent(Widget widget, Event event)

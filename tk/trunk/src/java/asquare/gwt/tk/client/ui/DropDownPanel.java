@@ -105,7 +105,7 @@ public class DropDownPanel extends CComplexPanel
 	{
 		List result = new Vector();
 		result.add(new OpenerController(this));
-		result.add(PreventSelectionController.INSTANCE);
+		result.add(PreventSelectionController.getInstance());
 		return result;
 	}
 	
