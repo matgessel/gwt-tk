@@ -15,6 +15,7 @@
  */
 package asquare.gwt.tk.client.util;
 
+import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
@@ -76,8 +77,7 @@ public class JsUtil
 	 * 
 	 * @param length the array length
 	 * @return the array as an opaque JavaScriptObject
-	 * @throws com.google.gwt.core.client.JavaScriptException if length is less
-	 *             than 0
+	 * @throws JavaScriptException if length is less than 0
 	 */
 	public static native JavaScriptObject arrayNewArray(int length) /*-{
 		if (length < 0)
@@ -87,30 +87,40 @@ public class JsUtil
 	}-*/;
 	
 	/**
-	 * Get the length of a native JavaScript array. 
+	 * Get the length of a native JavaScript array.
 	 * 
-	 * @param array an opaque handle to a JavaScript array 
+	 * @param array an opaque handle to a JavaScript array
 	 * @return the length
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is null
+	 * @throws JavaScriptException if the array is null
 	 */
 	public static native int arrayLength(JavaScriptObject array) /*-{
 		return array.length;
 	}-*/;
 	
 	/**
-	 * Get an int value from a native JavaScript array. 
+	 * Get an int value from a native JavaScript array.
 	 * 
 	 * @param array an opaque handle to a JavaScript array
 	 * @param index the index, starting at 0
 	 * @return the value
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is
-	 *             null
-	 * @throws com.google.gwt.core.client.JavaScriptException if the index is
-	 *             out of bounds
-	 * @throws com.google.gwt.core.client.JavaScriptException if value at the
-	 *             index is not coercable to an int (hosted mode only)
+	 * @throws JavaScriptException if the array is null
+	 * @throws JavaScriptException if the index is out of bounds
+	 * @throws JavaScriptException if value at the index is not coercable to an
+	 *             int (hosted mode only)
 	 */
-	public static native int arrayGetInt(JavaScriptObject array, int index) /*-{
+	public static int arrayGetInt(JavaScriptObject array, int index)
+	{
+		try
+		{
+			return arrayGetInt0(array, index);
+		}
+		catch (RuntimeException e)
+		{
+			throw new JavaScriptException(null, e.getMessage());
+		}
+	}
+	
+	private static native int arrayGetInt0(JavaScriptObject array, int index) /*-{
 		return array[index];
 	}-*/;
 	
@@ -120,31 +130,51 @@ public class JsUtil
 	 * @param array an opaque handle to a JavaScript array
 	 * @param index the index, starting at 0
 	 * @return the value
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is
-	 *             null
-	 * @throws com.google.gwt.core.client.JavaScriptException if the index is
-	 *             out of bounds
-	 * @throws com.google.gwt.core.client.JavaScriptException if value at the
-	 *             index is not coercable to a float (hosted mode only)
+	 * @throws JavaScriptException if the array is null
+	 * @throws JavaScriptException if the index is out of bounds
+	 * @throws JavaScriptException if value at the index is not coercable to a
+	 *             float (hosted mode only)
 	 */
-	public static native float arrayGetFloat(JavaScriptObject array, int index) /*-{
+	public static float arrayGetFloat(JavaScriptObject array, int index)
+	{
+		try
+		{
+			return arrayGetFloat0(array, index);
+		}
+		catch (RuntimeException e)
+		{
+			throw new JavaScriptException(null, e.getMessage());
+		}
+	}
+	
+	private static native float arrayGetFloat0(JavaScriptObject array, int index) /*-{
 		return array[index];
 	}-*/;
-	
+
 	/**
 	 * Get an object from a native JavaScript array.
 	 * 
 	 * @param array an opaque handle to a JavaScript array
 	 * @param index the index, starting at 0
 	 * @return the value
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is
-	 *             null
-	 * @throws com.google.gwt.core.client.JavaScriptException if the index is
-	 *             out of bounds
-	 * @throws com.google.gwt.core.client.JavaScriptException if value at the
-	 *             index is not an object (hosted mode only)
+	 * @throws JavaScriptException if the array is null
+	 * @throws JavaScriptException if the index is out of bounds
+	 * @throws JavaScriptException if value at the index is not an object
+	 *             (hosted mode only)
 	 */
-	public static native Object arrayGetObject(JavaScriptObject array, int index) /*-{
+	public static Object arrayGetObject(JavaScriptObject array, int index)
+	{
+		try
+		{
+			return arrayGetObject0(array, index);
+		}
+		catch (IllegalArgumentException e)
+		{
+			throw new JavaScriptException(null, e.getMessage());
+		}
+	}
+	
+	private static native Object arrayGetObject0(JavaScriptObject array, int index) /*-{
 		return array[index];
 	}-*/;
 
@@ -155,10 +185,8 @@ public class JsUtil
 	 * @param array an opaque handle to a JavaScript array
 	 * @param index the index, starting at 0
 	 * @param value an integer primative value
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is
-	 *             null
-	 * @throws com.google.gwt.core.client.JavaScriptException if the index is
-	 *             negative
+	 * @throws JavaScriptException if the array is null
+	 * @throws JavaScriptException if the index is negative
 	 */
 	public static native void arraySet(JavaScriptObject array, int index, int value) /*-{
 		array[index] = value;
@@ -171,10 +199,8 @@ public class JsUtil
 	 * @param array an opaque handle to a JavaScript array
 	 * @param index the index, starting at 0
 	 * @param value an float primative value
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is
-	 *             null
-	 * @throws com.google.gwt.core.client.JavaScriptException if the index is
-	 *             negative
+	 * @throws JavaScriptException if the array is null
+	 * @throws JavaScriptException if the index is negative
 	 */
 	public static native void arraySet(JavaScriptObject array, int index, float value) /*-{
 		array[index] = value;
@@ -187,10 +213,8 @@ public class JsUtil
 	 * @param array an opaque handle to a JavaScript array
 	 * @param index the index, starting at 0
 	 * @param value an object
-	 * @throws com.google.gwt.core.client.JavaScriptException if the array is
-	 *             null
-	 * @throws com.google.gwt.core.client.JavaScriptException if the index is
-	 *             negative
+	 * @throws JavaScriptException if the array is null
+	 * @throws JavaScriptException if the index is negative
 	 */
 	public static native void arraySet(JavaScriptObject array, int index, Object value) /*-{
 		array[index] = value;

@@ -16,7 +16,9 @@
 package asquare.gwt.tk.client.util;
 
 import asquare.gwt.debug.client.Debug;
+import asquare.gwt.tk.client.Tests;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.junit.client.GWTTestCase;
@@ -25,7 +27,7 @@ public class JsUtilTC extends GWTTestCase
 {
 	public String getModuleName()
 	{
-		return "asquare.gwt.tk.TkTC";
+		return Tests.getModuleName();
 	}
 
 	public void testJSArray()
@@ -147,14 +149,15 @@ public class JsUtilTC extends GWTTestCase
 		JsUtil.arraySet(array, 0, 1.0f);
 		assertTrue(1 == JsUtil.arrayGetInt(array, 0));
 		
-// These tests currently throw SWTException in hosted mode and fail in web mode		
 		// set object, get int
 		JsUtil.arraySet(array, 0, o);
 		try
 		{
-//			addCheckpoint("Value: " + JsUtil.arrayGetInt(array, 0));
 			JsUtil.arrayGetInt(array, 0);
-			fail("expected JavaScript exception because value is an object, not an int");
+			if (! GWT.isScript())
+			{
+				fail("expected JavaScript exception because value is an object, not an int");
+			}
 		}
 		catch (JavaScriptException e)
 		{
@@ -166,7 +169,10 @@ public class JsUtilTC extends GWTTestCase
 		try
 		{
 			JsUtil.arrayGetFloat(array, 0);
-			fail("expected JavaScript exception because value is an object, not a float");
+			if (! GWT.isScript())
+			{
+				fail("expected JavaScript exception because value is an object, not a float");
+			}
 		}
 		catch (JavaScriptException e)
 		{
@@ -178,7 +184,10 @@ public class JsUtilTC extends GWTTestCase
 		try
 		{
 			JsUtil.arrayGetObject(array, 0);
-			fail("expected JavaScript exception because value is an int, not an object");
+			if (! GWT.isScript())
+			{
+				fail("expected JavaScript exception because value is an int, not an object");
+			}
 		}
 		catch (JavaScriptException e)
 		{
