@@ -26,4 +26,10 @@
 	<inherits name='asquare.gwt.tk.TabFocusController'/>
 
 	<inherits name='asquare.gwt.tk.PreventSelectionController'/>
+	
+	<inherits name='asquare.gwt.tk.CPopupPanel'/>
+	
+	<inherits name='asquare.gwt.tk.ModalDialog'/>
+	
+	<source path="client"/>
 </module>

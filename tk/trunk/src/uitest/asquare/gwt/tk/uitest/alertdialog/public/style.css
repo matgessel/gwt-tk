@@ -24,9 +24,9 @@ table {
 }
 
 .tk-ModalDialog * {
-  padding: 5px;
+/*  padding: 5px;
   margin: 5px;
-  text-align: center;
+  text-align: center;*/
 }
 
 .tk-ModalDialog .Caption {
@@ -42,7 +42,6 @@ table {
 
 .tk-ModalDialog .Content {
   padding: 8px 8px 0 8px;
-  vertical-align: middle;
   width: 250px;
   height: 100px;
 }
@@ -53,4 +52,14 @@ table {
 
 .tk-ModalDialog-glassPane {
   background-image: url("Gray20.png");
+}
+
+.tk-AlertDialog-message {
+  text-align: center;
+  margin: 8px;
+}
+
+.tk-AlertDialog-buttons {
+  text-align: center;
+  margin: 8px;
 }

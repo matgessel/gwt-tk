@@ -24,7 +24,8 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.impl.FocusImpl;
 
 /**
@@ -54,6 +55,9 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
  * Usage Notes
  * </p>
  * <ul>
+ * <li>Call {@link #removeController(Controller)} with {@link TabFocusController}.class to disable built-in focus management.</li>
+ * <li>{@link #setWidth(String)} can result in a dialog which is wider than the caption. 
+ * Use {@link #setContentWidth(String)} indstead. </li>
  * <li>IE6 ignores table cell heights in strict mode. This means that you can't
  * set the dialog height and use "1px" to force minimum caption height.<br/>
  * Workaround: set the height of the content cell and let the dialog auto-size.</li>
@@ -69,7 +73,7 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
  * <li>.tk-ModalDialog-dragging { applied to the dialog whilst dragging }</li>
  * </ul>
  */
-public class ModalDialog extends PopupPanel implements ControllerSupport
+public class ModalDialog extends CPopupPanel
 {
 	public static final String STYLENAME_DIALOG = "tk-ModalDialog";
 	public static final String STYLENAME_GLASSPANEL = "tk-ModalDialog-glassPanel";
@@ -83,9 +87,8 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	private final GlassPanel m_glassPanel = new GlassPanel();
 	private final RowPanel m_panel = new RowPanel();
 	private final Element m_contentTd;
-	private final ControllerSupportDelegate m_controllerSupport = new ControllerSupportDelegate(this);
 	
-	private FocusModel m_focusModel = new FocusModel();
+	private FocusModel m_focusModel;
 	private CaptionWrapper m_caption = null;
 	private int m_minContentWidth = 200;
 	private int m_minContentHeight = 75;
@@ -93,31 +96,27 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	
 	public ModalDialog()
 	{
+	    setFocusModel(new FocusModel());
 	    setStyleName(STYLENAME_DIALOG);
 		DOM.appendChild(getElement(), m_focusable);
 		m_glassPanel.addStyleName(STYLENAME_GLASSPANEL);
 		m_panel.addCell();
-		m_contentTd = m_panel.getCellElement(0);
 		m_panel.addCellStyleName(STYLENAME_CONTENT);
-		setWidget(m_panel);
-		setControllers(createControllers());
+		m_contentTd = m_panel.getCellElement(0);
+		super.setWidget(m_panel);
 	}
 	
-	/**
-	 * A factory method which gives a subclass the opportunity to override default 
-	 * controller creation.
-	 * 
-	 * @return a List with 0 or more controllers, or <code>null</code>
+	/*
+	 * (non-Javadoc)
+	 * @see asquare.gwt.tk.client.ui.CPopupPanel#createControllers()
 	 */
 	protected List createControllers()
 	{
 		List result = new Vector();
-		result.add(new PositionDialogController());
-		result.add(new InitializeFocusController());
-		TabFocusController focusController = (TabFocusController) GWT.create(TabFocusController.class);
-		focusController.setModel(getFocusModel());
-		result.add(focusController);
-		result.add(new FocusOnCloseController());
+		result.add(GWT.create(PositionDialogController.class));
+		result.add(GWT.create(InitializeFocusController.class));
+		result.add(GWT.create(TabFocusController.class));
+		result.add(GWT.create(FocusOnCloseController.class));
 		return result;
 	}
 	
@@ -130,64 +129,10 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	protected List createCaptionControllers()
 	{
 		List result = new Vector();
-		result.add(PreventSelectionController.INSTANCE);
+		result.add(PreventSelectionController.getInstance());
 		result.add(new DragStyleController(this));
 		result.add(new DragController(new DragPopupGesture(this)));
 		return result;
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#getController(java.lang.Class)
-	 */
-	public Controller getController(Class id)
-	{
-		return m_controllerSupport.getController(id);
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#addController(asquare.gwt.tk.client.ui.behavior.Controller)
-	 */
-	public Widget addController(Controller controller)
-	{
-		return m_controllerSupport.addController(controller);
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#removeController(asquare.gwt.tk.client.ui.behavior.Controller)
-	 */
-	public Widget removeController(Controller controller)
-	{
-		return m_controllerSupport.removeController(controller);
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#setControllers(java.util.List)
-	 */
-	public void setControllers(List controllers)
-	{
-		m_controllerSupport.setControllers(controllers);
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.UIObject#sinkEvents(int)
-	 */
-	public void sinkEvents(int eventBits)
-	{
-		m_controllerSupport.sinkEvents(eventBits);
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.UIObject#unsinkEvents(int)
-	 */
-	public void unsinkEvents(int eventBits)
-	{
-		m_controllerSupport.unSinkEvents(eventBits);
 	}
 	
 	/**
@@ -204,6 +149,11 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	public void setFocusModel(FocusModel focusModel)
 	{
 		m_focusModel = focusModel;
+		TabFocusController tabFocusController = (TabFocusController) getController(TabFocusController.class);
+		if (tabFocusController != null)
+		{
+			tabFocusController.setModel(focusModel);
+		}
 	}
 	
 	/**
@@ -256,7 +206,7 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	 */
 	public void setContentWidth(String width)
 	{
-		DOM.setStyleAttribute(m_contentTd, "width", width);
+		DOM.setAttribute(m_contentTd, "width", width);
 	}
 	
 	/**
@@ -267,12 +217,12 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	 */
 	public void setContentHeight(String height)
 	{
-		DOM.setStyleAttribute(m_contentTd, "height", height);
+		DOM.setAttribute(m_contentTd, "height", height);
 	}
 	
 	/**
 	 * Get the actual width of the content panel. This does not work until the
-	 * dialog is attached to the DOM.
+	 * dialog has been shown.
 	 * 
 	 * @return the width in pixels
 	 */
@@ -283,7 +233,7 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	
 	/**
 	 * Get the actual height of the content panel. This does not work until the
-	 * dialog is attached to the DOM.
+	 * dialog has been shown.
 	 * 
 	 * @return the height in pixels
 	 */
@@ -308,6 +258,16 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 		{
 			m_focusModel.add((HasFocus) w);
 		}
+	}
+	
+	/**
+	 * Not supported. Use {@link #add(Widget)} instead. 
+	 * 
+	 * @throws UnsupportedOperationException
+	 */
+	public void setWidget(Widget w)
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
@@ -447,6 +407,11 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	{
 		m_focusOnCloseWidget = focusOnCloseWidget;
 		m_glassPanel.show();
+		Controller positionDialogController = getController(PositionDialogController.class);
+		if (positionDialogController != null)
+		{
+			(( PositionDialogController) positionDialogController).beforeAttach(this);
+		}
 		super.show();
 	}
 	
@@ -470,7 +435,6 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 		if (isAttached())
 			return;
 		
-		m_controllerSupport.onAttach();
 		super.onAttach();
 		
 		if (m_caption != null)
@@ -494,17 +458,7 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 		finally
 		{
 			super.onDetach();
-			m_controllerSupport.onDetach();
 		}
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see com.google.gwt.user.client.EventListener#onBrowserEvent(com.google.gwt.user.client.Event)
-	 */
-	public void onBrowserEvent(Event event)
-	{
-		m_controllerSupport.onBrowserEvent(event);
 	}
 	
 	/**
@@ -543,7 +497,7 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	 * dialog. It can, however, be instantiated, added to and removed from it's
 	 * parent dialog without causing problems.
 	 */
-	public final class InitializeFocusController extends ControllerAdaptor
+	public static final class InitializeFocusController extends ControllerAdaptor
 	{
 		public InitializeFocusController()
 		{
@@ -552,20 +506,24 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 		
 		public void plugIn(Widget widget)
 		{
-			if (getFocusModel().getFocusWidget() != null)
+			final ModalDialog dialog = (ModalDialog) widget;
+			HasFocus focusWidget = dialog.getFocusModel().getFocusWidget();
+			Command focusCommand;
+			if (focusWidget != null)
 			{
-				DeferredCommand.add(new FocusCommand(getFocusModel().getFocusWidget()));
+				focusCommand = new FocusCommand(focusWidget);
 			}
 			else
 			{
-				DeferredCommand.add(new Command()
+				focusCommand = new Command()
 				{
 					public void execute()
 					{
-						s_focusImpl.focus(m_focusable);
+						s_focusImpl.focus(dialog.m_focusable);
 					}
-				});
+				};
 			}
+			DeferredCommand.add(focusCommand);
 		}
 	}
 	
@@ -590,43 +548,215 @@ public class ModalDialog extends PopupPanel implements ControllerSupport
 	}
 	
 	/**
-	 * A controller which encapsulates dialog positioning logic. 
+	 * A controller which encapsulates dialog sizing and positioning logic.
+	 * Although this class doesn't react to events, we're going to implement
+	 * Controller to enable dynamic configuration via
+	 * {@link ControllerSupport#getController(Class)}.
 	 */
 	public static class PositionDialogController extends ControllerAdaptor
 	{
+		private int m_viewportWidth;
+		private int m_viewportHeight;
+		
 		public PositionDialogController()
 		{
-			super(0, PositionDialogController.class);
+			super(PositionDialogController.class);
+		}
+		
+		protected int getViewportWidth()
+		{
+			return m_viewportWidth;
+		}
+		
+		protected void setViewportWidth(int centerX)
+		{
+			m_viewportWidth = centerX;
+		}
+		
+		protected int getViewportHeight()
+		{
+			return m_viewportHeight;
+		}
+		
+		protected void setViewportHeight(int centerY)
+		{
+			m_viewportHeight = centerY;
 		}
 		
 		public void plugIn(Widget widget)
 		{
-			ModalDialog dialog = (ModalDialog) widget;
-			int contentWidth = dialog.getContentOffsetWidth();
-			int maxContentWidth = Window.getClientWidth() / 2;
-			if (contentWidth > maxContentWidth || contentWidth < dialog.getContentMinWidth())
+			afterAttach((ModalDialog) widget);
+		}
+		
+		protected int applyMinWidthConstraint(ModalDialog dialog, int contentWidth)
+		{
+			return Math.max(dialog.getContentMinWidth(), contentWidth);
+		}
+		
+		protected int applyMaxWidthConstraint(ModalDialog dialog, int contentWidth)
+		{
+			return Math.min(getViewportWidth() / 2, contentWidth);
+		}
+		
+		protected int applyMinHeightConstraint(ModalDialog dialog, int contentHeight)
+		{
+			return Math.max(dialog.getContentMinHeight(), contentHeight);
+		}
+		
+		/**
+		 * Template method for updating the content width.
+		 * <ul>
+		 * <li>post: the dialog content width (style attribute) will be updated
+		 * <li>post: the <code>dialogWidth</code> property will be finalized
+		 * </ul>
+		 * @param width
+		 */
+		protected int updateContentWidth(ModalDialog dialog, int contentWidth)
+		{
+			int dialogWidth = dialog.getOffsetWidth();
+			int contentWidthInitial = dialog.getContentOffsetWidth();
+			
+			if (contentWidth != contentWidthInitial)
 			{
-				if (contentWidth > maxContentWidth)
-				{
-					contentWidth = maxContentWidth;
-				}
-				if (contentWidth < dialog.getContentMinWidth())
-				{
-					contentWidth = dialog.getContentMinWidth();
-				}
+				/*
+				 * Note: setting the content width does *not* result in
+				 * immediate re-layout of parent dialog. The dialog width
+				 * property will be unchanged if we refetch it. 
+				 */
 				dialog.setContentWidth(contentWidth + "px");
+				
+				/*
+				 * Refetch the content width. The non-reflowable content (e.g. a
+				 * wide image or long TextBox) may force a width greater than
+				 * the intended value. This returns the old value in IE6.
+				 */
+				contentWidth = dialog.getContentOffsetWidth();
+				
+				/*
+				 * The change to the content width will result in a change in the
+				 * overall dialog's width. Try to predict the width after the
+				 * pending re-layout.
+				 */
+				final int padding = dialogWidth - contentWidthInitial;
+				dialogWidth = contentWidth + padding;
 			}
+			
+			return dialogWidth;
+		}
+		
+		/**
+		 * Template method for updating the content height.
+		 * <ul>
+		 * <li>post: the dialog content height (style attribute) will be updated
+		 * <li>post: the <code>dialogHeight</code> property will be finalized
+		 * </ul>
+		 * @param width
+		 */
+		protected int updateContentHeight(ModalDialog dialog, int contentHeight)
+		{
 			int dialogHeight = dialog.getOffsetHeight();
-			int left = DomUtil.getViewportScrollX() + DomUtil.getViewportWidth() / 2 - contentWidth / 2;
-			int contentHeight = dialog.getContentOffsetHeight();
-			if (contentHeight < dialog.getContentMinHeight())
+			int contentHeightInitial = dialog.getContentOffsetHeight();
+			
+			if (contentHeight != contentHeightInitial)
 			{
-				contentHeight = dialog.getContentMinHeight();
-				dialog.setContentHeight(contentHeight + "px");
+				/*
+				 * Refetch the content height. The non-reflowable content 
+				 * may force a height greater than the intended value.
+				 */
+				contentHeight = dialog.getContentOffsetHeight();
+				
+				/*
+				 * The change to the content height will result in a change in the
+				 * overall dialog's height. Try to predict the height after the
+				 * pending re-layout.
+				 */
+				final int padding = dialogHeight - contentHeightInitial;
+				dialogHeight = contentHeight + padding;
 			}
-			// calculate top last because maxContentWidth constraint may change height
-			int top = DomUtil.getViewportScrollY() + DomUtil.getViewportHeight() / 2 - dialogHeight / 2;
-			dialog.setPopupPosition(left, top);
+			
+			return dialogHeight;
+		}
+		
+		/**
+		 * Template method for setting the dialog's final position. This
+		 * implementation prevents the dialog being positioned above or left of
+		 * the origin.
+		 * 
+		 * @param dialog
+		 * @param dialogWidth
+		 * @param dialogHeight
+		 */
+		protected void setDialogPosition(ModalDialog dialog, int dialogWidth, int dialogHeight)
+		{
+			int left = DomUtil.getViewportScrollX() + getViewportWidth() / 2 - dialogWidth / 2;
+			int top = DomUtil.getViewportScrollY() + getViewportHeight() / 2 - dialogHeight / 2;
+			
+			// set the position
+			dialog.setPopupPosition((left < 0) ? 0 : left, (top < 0) ? 0 : top);
+		}
+		
+		public void beforeAttach(ModalDialog dialog)
+		{
+			/*
+			 * Attaching the dialog sometimes temporarily add a scroll bar,
+			 * throwing off the viewport dimensions. This can happen even if a
+			 * scroll bar is never displayed. 
+			 */
+			setViewportWidth(DomUtil.getViewportWidth());
+			setViewportHeight(DomUtil.getViewportHeight());
+			
+			/*
+			 * Guard against flicker when repositioning dialog. 
+			 * This may not be necessary, but it can't hurt. 
+			 */
+			DomUtil.setStyleAttribute(dialog, "visibility", "hidden");
+			
+			/*
+			 * This should eliminate scrollbar flicker in Opera/FF[Mac] unless
+			 * the dialog height > viewport height.
+			 */
+			dialog.setPopupPosition(0, 0);
+		}
+		
+		public void afterAttach(ModalDialog dialog)
+		{
+			int dialogWidth, dialogHeight;
+			
+			/**
+			 * Apply width constraints
+			 * Get/estimate dialog width. 
+			 */
+			dialogWidth = (updateContentWidth(dialog, applyMinWidthConstraint(dialog, applyMaxWidthConstraint(dialog, dialog.getContentOffsetWidth()))));
+			
+			/*
+			 * Apply height constraint last because width constraints 
+			 * may have changed content height. 
+			 * Get/estimate dialog height. 
+			 */
+			dialogHeight = updateContentHeight(dialog, applyMinHeightConstraint(dialog, dialog.getContentOffsetHeight()));
+			
+			setDialogPosition(dialog, dialogWidth, dialogHeight);
+			DomUtil.setStyleAttribute(dialog, "visibility", "visible");
+		}
+	}
+	
+	public static class PositionDialogControllerIE6 extends PositionDialogController
+	{
+		protected int updateContentWidth(ModalDialog dialog, int contentWidth)
+		{
+			int dialogWidth = dialog.getOffsetWidth();
+			
+			if (contentWidth != dialog.getContentOffsetWidth())
+			{
+				dialog.setContentWidth(contentWidth + "px");
+				
+				/*
+				 * This magic call forces IE to update the layout. 
+				 */
+				dialogWidth = dialog.getOffsetWidth();
+			}
+			
+			return dialogWidth;
 		}
 	}
 	

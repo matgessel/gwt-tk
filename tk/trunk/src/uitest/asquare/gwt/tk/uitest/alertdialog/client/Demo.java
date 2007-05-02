@@ -17,40 +17,20 @@ package asquare.gwt.tk.uitest.alertdialog.client;
 
 import asquare.gwt.debug.client.*;
 import asquare.gwt.tk.client.ui.AlertDialog;
-import asquare.gwt.tk.client.ui.ModalDialog;
 import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Demo implements EntryPoint
 {
 	public void onModuleLoad()
 	{
-		AlertDialog dialog = new AlertDialog();
-		dialog.setCaptionText("Caption Text", false);
-		dialog.addButton("Save", 's', null, AlertDialog.BUTTON_DEFAULT);
-		dialog.addButton("Don't Save", 'd', null, AlertDialog.BUTTON_PLAIN);
-		dialog.addButton("Cancel", 'c', null, AlertDialog.BUTTON_CANCEL);
-		dialog.removeController(dialog.getController(ModalDialog.PositionDialogController.class));
-		dialog.setSize("400px", "200px");
-		dialog.setPopupPosition(200, 200);
-		dialog.addController(new ControllerAdaptor(Event.ONMOUSEDOWN, Controller.class)
-		{
-			public void onBrowserEvent(Widget widget, Event event)
-			{
-				int x = DomUtil.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(widget.getElement());
-				int y = DomUtil.eventGetAbsoluteY(event) - DOM.getAbsoluteTop(widget.getElement());
-				Debug.println("onMouseDown(" + x + "," + y + ")");
-			}
-		});
-		dialog.show();
+		Debug.enable();
 		
 		new DebugEventListener('x', Event.ONMOUSEDOWN, null)
 		{
@@ -97,11 +77,35 @@ public class Demo implements EntryPoint
 		
 		new DebugEventListener(Event.ONMOUSEDOWN | Event.ONMOUSEUP).install();
 		
-		Debug.enable();
 		if (! GWT.isScript())
 		{
 			DebugConsole.getInstance().disable();
 		}
+
+		Command showDialog = new Command()
+		{
+			private AlertDialog m_dialog;
+			
+			public void execute()
+			{
+				if (m_dialog == null)
+				{
+					m_dialog = AlertDialog.createWarning(this, "Caption text", "Message text");
+					m_dialog.setSize("400px", "200px");
+					m_dialog.addController(new ControllerAdaptor(Event.ONMOUSEDOWN, Controller.class)
+					{
+						public void onBrowserEvent(Widget widget, Event event)
+						{
+							int x = DomUtil.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(widget.getElement());
+							int y = DomUtil.eventGetAbsoluteY(event) - DOM.getAbsoluteTop(widget.getElement());
+							Debug.println("onMouseDown(" + x + "," + y + ")");
+						}
+					});
+				}
+				m_dialog.show();
+			}
+		};
+		showDialog.execute();
 	}
 	
 	private static native void printOffsetTopHierarchy(Element element) /*-{
