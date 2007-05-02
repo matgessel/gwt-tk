@@ -19,6 +19,8 @@ import asquare.gwt.tk.client.util.DomUtil;
 import asquare.gwt.tk.client.util.GwtUtil;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.IndexedPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -30,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
  *      href="http://www.w3.org/TR/CSS21/visuren.html#inline-formatting">Inline
  *      formatting context</a>
  */
-public class BasicPanel extends CComplexPanel
+public class BasicPanel extends CComplexPanel implements IndexedPanel
 {
 	/**
 	 * The default element (<code>DIV</code>), if no element is specified.
@@ -73,6 +75,17 @@ public class BasicPanel extends CComplexPanel
 	 * Constructs a panel based on the specified element and the default display
 	 * style.
 	 * 
+	 * @param element a DOM element
+	 */
+	public BasicPanel(Element element)
+	{
+		this(element, DISPLAY_DEFAULT);
+	}
+	
+	/**
+	 * Constructs a panel based on the specified element and the default display
+	 * style.
+	 * 
 	 * @param element a html element tag
 	 */
 	public BasicPanel(String element)
@@ -89,7 +102,19 @@ public class BasicPanel extends CComplexPanel
 	 */
 	public BasicPanel(String element, String childrenDisplay)
 	{
-		super(DOM.createElement(element));
+		this(DOM.createElement(element), childrenDisplay);
+	}
+	
+	/**
+	 * Constructs a panel based on the specified element and display style.
+	 * 
+	 * @param element a DOM element
+	 * @param childrenDisplay a css <code>display</code> style value to apply
+	 *            to added children
+	 */
+	public BasicPanel(Element element, String childrenDisplay)
+	{
+		super(element);
 		m_childrenDisplay = childrenDisplay;
 	}
 	
@@ -112,6 +137,24 @@ public class BasicPanel extends CComplexPanel
 	public void setChildrenDisplay(String childrenDisplay)
 	{
 		m_childrenDisplay = childrenDisplay;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.IndexedPanel#getWidget(int)
+	 */
+	public Widget getWidget(int index)
+	{
+		return getChildren().get(index);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.IndexedPanel#getWidgetIndex(com.google.gwt.user.client.ui.Widget)
+	 */
+	public int getWidgetIndex(Widget child)
+	{
+		return getChildren().indexOf(child);
 	}
 	
 	/**
@@ -140,9 +183,21 @@ public class BasicPanel extends CComplexPanel
 		{
 			DomUtil.setStyleAttribute(w, "display", m_childrenDisplay);
 		}
-		// pass null and insert manually so we can control index
+		// pass null and insert manually so we can control DOM element order
 		insert(w, null, beforeIndex);
 		DOM.insertChild(getElement(), w.getElement(), beforeIndex);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.google.gwt.user.client.ui.IndexedPanel#remove(int)
+	 */
+	public boolean remove(int index)
+	{
+		if (index < 0 || index >= getWidgetCount())
+			return false;
+		
+		return remove(getWidget(index));
 	}
 	
 	/**
