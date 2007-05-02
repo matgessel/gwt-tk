@@ -19,17 +19,36 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HasFocus;
 
 /**
- * Focuses a widget. 
+ * Focuses or blurs a widget. 
  * 
  * @see com.google.gwt.user.client.DeferredCommand#add(com.google.gwt.user.client.Command)
  */
 public class FocusCommand implements Command
 {
 	private final HasFocus m_widget;
+	private final boolean m_focus;
 	
+	/**
+	 * Constructs a command which will focus the specified widget. 
+	 * 
+	 * @param widget a widget which implements {@link HasFocus}
+	 */
 	public FocusCommand(HasFocus widget)
 	{
 		m_widget = widget;
+		m_focus = true;
+	}
+	
+	/**
+	 * Constructs a command which will focus or blur the specified widget. 
+	 * 
+	 * @param widget a widget which implements {@link HasFocus}
+	 * @param focus <code>true</code> to focus <code>widget</code>, <code>false</code> to blur
+	 */
+	public FocusCommand(HasFocus widget, boolean focus)
+	{
+		m_widget = widget;
+		m_focus = focus;
 	}
 	
 	/*
@@ -38,6 +57,6 @@ public class FocusCommand implements Command
 	 */
 	public void execute()
 	{
-		m_widget.setFocus(true);
+		m_widget.setFocus(m_focus);
 	}
 }
