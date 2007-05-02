@@ -15,13 +15,12 @@
  */
 package asquare.gwt.tk.client.ui.behavior.impl;
 
+import asquare.gwt.tk.client.ui.behavior.FocusModel;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.HasFocus;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class TabFocusControllerStandard extends AbstractTabFocusController
 {
@@ -35,19 +34,16 @@ public class TabFocusControllerStandard extends AbstractTabFocusController
 	{
 		if (DomUtil.eventGetKeyCode(event) == KeyboardListener.KEY_TAB)
 		{
-			if (m_focusModel.getSize() > 0)
+			FocusModel model = getModel();
+			if (model != null && model.getSize() > 0)
 			{
-				HasFocus next;
-				if (DOM.eventGetShiftKey(event))
+				HasFocus next = model.getNextWidget(! DOM.eventGetShiftKey(event));
+				if (next != null && next != model.getFocusWidget())
 				{
-					next = m_focusModel.getPreviousWidget();
+					next.setFocus(true);
 				}
-				else
-				{
-					next = m_focusModel.getNextWidget();
-				}
-				next.setFocus(true);
 			}
+			
 			// cancel tab keydown, thereby preventing focus change
 			return false;
 		}

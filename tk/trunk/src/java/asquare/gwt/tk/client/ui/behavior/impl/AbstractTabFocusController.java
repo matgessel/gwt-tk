@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractTabFocusController extends ControllerAdaptor implements TabFocusController, FocusListener, FocusModelListener
 {
-	protected FocusModel m_focusModel = null;
+	private FocusModel m_focusModel = null;
 	
 	public AbstractTabFocusController()
 	{
@@ -33,6 +33,11 @@ public abstract class AbstractTabFocusController extends ControllerAdaptor imple
 	protected AbstractTabFocusController(int eventBits)
 	{
 		super(eventBits, TabFocusController.class);
+	}
+	
+	public FocusModel getModel()
+	{
+		return m_focusModel;
 	}
 	
 	public void setModel(FocusModel focusModel)
