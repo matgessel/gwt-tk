@@ -33,12 +33,12 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
  * <ul>
  * <li>an optional caption</li>
  * <li>support for widgets in the caption</li>
- * <li>a background panel which blocks user interaction with the page (also
- * stylable for the "light box" effect). </li>
+ * <li>a background "{@link GlassPanel}" which blocks user interaction with
+ * the page (also stylable for the "light box" effect). </li>
  * <li>automatic centering in browser's main viewport (regardless of document
  * scroll)</li>
- * <li>resizable: if you set the size of the content area the layout will maintain
- * integrity on all platforms &amp; quirks/strict modes</li>
+ * <li>resizable: if you set the size of the content area the layout will
+ * maintain integrity on all platforms &amp; quirks/strict modes</li>
  * <li>minimum size specification for content area (optional, default is 200 x
  * 75px)</li>
  * <li>focus containment &amp; management</li>
@@ -51,13 +51,14 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
  * <li>disallows text selection</li>
  * <li>has the <code>Caption</code> style name</li>
  * </ul>
- * <p>
- * Usage Notes
- * </p>
+ * <h3>Usage Notes</h3>
  * <ul>
- * <li>Call {@link #removeController(Controller)} with {@link TabFocusController}.class to disable built-in focus management.</li>
- * <li>{@link #setWidth(String)} can result in a dialog which is wider than the caption. 
- * Use {@link #setContentWidth(String)} indstead. </li>
+ * <li>When adding a Panel, the panel's child widgets are not automatically
+ * added to the {@link #getFocusModel() focus model}. </li>
+ * <li>Call {@link #removeController(Controller)} with
+ * <code>{@link TabFocusController}.class</code> to disable built-in focus management.</li>
+ * <li>{@link #setWidth(String)} can result in a dialog which is wider than the
+ * caption. Use {@link #setContentWidth(String)} instead. </li>
  * <li>IE6 ignores table cell heights in strict mode. This means that you can't
  * set the dialog height and use "1px" to force minimum caption height.<br/>
  * Workaround: set the height of the content cell and let the dialog auto-size.</li>
@@ -72,6 +73,30 @@ import com.google.gwt.user.client.ui.impl.FocusImpl;
  * <li>.tk-ModalDialog-content { the content area }</li>
  * <li>.tk-ModalDialog-dragging { applied to the dialog whilst dragging }</li>
  * </ul>
+ * <h3>Example</h3>
+ * 
+ * <pre>
+ * final Button showDialogButton = new Button(&quot;Focus management&quot;);
+ * showDialogButton.addClickListener(new ClickListener()
+ * {
+ * 	public void onClick(Widget sender)
+ * 	{
+ * 		final ModalDialog inputDialog = new ModalDialog();
+ * 		inputDialog.setCaption(&quot;Input&quot;, false);
+ * 		inputDialog.add(new Label(&quot;Enter a value&quot;));
+ * 		inputDialog.add(new TextBox());
+ * 		inputDialog.add(new Button(&quot;OK&quot;, new ClickListener()
+ * 		{
+ * 			public void onClick(Widget sender)
+ * 			{
+ * 				inputDialog.hide();
+ * 			}
+ * 		}));
+ * 
+ * 		inputDialog.show(showDialogButton);
+ * 	}
+ * });
+ * </pre>
  */
 public class ModalDialog extends CPopupPanel
 {
@@ -415,8 +440,10 @@ public class ModalDialog extends CPopupPanel
 		super.show();
 	}
 	
-	/*
-	 *  (non-Javadoc)
+	/**
+	 * Detaches the dialog from the DOM (it will be garbage collected if there
+	 * are no references to it). Has no effect if the dialog is not showing. 
+	 * 
 	 * @see com.google.gwt.user.client.ui.PopupPanel#hide()
 	 */
 	public void hide()
