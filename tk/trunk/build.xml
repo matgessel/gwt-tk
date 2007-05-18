@@ -314,7 +314,7 @@
 		<jar destfile="gwttk-${project.version}.jar">
 			<fileset dir="${project.dir}/src/java"/>
 			<fileset dir="${project.dir}/src/super"/>
-			<fileset dir="${project.dir}/bin/java" includes="**/*.class"/>
+			<fileset dir="${project.dir}/bin/java" includes="**/*.class" excludes="asquare/gwt/sb/**"/>
 		</jar>
 	</target>
 	
@@ -327,10 +327,10 @@
 	</target>
 	
 	<target name="jarSandbox">
-		<delete file="gwttk-sandbox${project.version}.jar"/>
-		<jar destfile="gwttk-sandbox${project.version}.jar">
+		<delete file="gwttk-sandbox-${project.version}.jar"/>
+		<jar destfile="gwttk-sandbox-${project.version}.jar">
 			<fileset dir="${project.dir}/src/java" includes="*.txt"/>
-			<fileset dir="${project.dir}/src/java" includes="asquare/gwt/sb/**"/>
+			<fileset dir="${project.dir}/src/sandbox"/>
 			<fileset dir="${project.dir}/bin/java" includes="asquare/gwt/sb/**"/>
 		</jar>
 	</target>
