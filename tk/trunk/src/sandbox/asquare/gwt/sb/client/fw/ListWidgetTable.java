@@ -24,7 +24,7 @@ public class ListWidgetTable extends ListWidget
 {
 	private final ExposedCellPanel m_panel;
 	
-	protected ListWidgetTable(ExposedCellPanel table)
+	public ListWidgetTable(ExposedCellPanel table)
 	{
 		super(table);
 		m_panel = table;
