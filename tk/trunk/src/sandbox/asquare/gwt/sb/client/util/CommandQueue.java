@@ -17,8 +17,6 @@ package asquare.gwt.sb.client.util;
 
 import java.util.Vector;
 
-import asquare.gwt.debug.client.Debug;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 
@@ -46,14 +44,14 @@ public class CommandQueue
 	
 	public void add(Command command)
 	{
-		Debug.println("CommandQueue.add(" + command + ')');
+//		Debug.println("CommandQueue.add(" + command + ')');
 		m_queue.add(command);
 		run();
 	}
 	
 	protected void deferRun()
 	{
-		Debug.println("CommandQueue.deferRun()");
+//		Debug.println("CommandQueue.deferRun()");
 		if (hasNext())
 		{
 			DeferredCommand.add(new Command()
@@ -68,7 +66,7 @@ public class CommandQueue
 	
 	protected void run()
 	{
-		Debug.println("CommandQueue.run()");
+//		Debug.println("CommandQueue.run()");
 		if (m_running)
 			return;
 		
@@ -84,7 +82,7 @@ public class CommandQueue
 	
 	protected void executeCommand(Command command)
 	{
-		Debug.println("CommandQueue.executeCommand(" + command + ")");
+//		Debug.println("CommandQueue.executeCommand(" + command + ")");
 		command.execute();
 	}
 	
