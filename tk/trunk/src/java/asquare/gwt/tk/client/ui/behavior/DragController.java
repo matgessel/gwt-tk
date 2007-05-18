@@ -91,10 +91,14 @@ public class DragController extends ControllerAdaptor
 	
 	public void onMouseUp(Widget sender, int x, int y)
 	{
-//	    Debug.println("DragController.onMouseUp(x=" + x + ",y=" + y + ")");
-		m_dragGesture.step(x, y);
-		m_dragGesture.finish(x, y);
-		DOM.releaseCapture(sender.getElement());
-		m_dragging = false;
+		// a child widget may have cancelled the mouse down
+		if (m_dragging)
+		{
+//		    Debug.println("DragController.onMouseUp(x=" + x + ",y=" + y + ")");
+			m_dragGesture.step(x, y);
+			m_dragGesture.finish(x, y);
+			DOM.releaseCapture(sender.getElement());
+			m_dragging = false;
+		}
 	}
 }
