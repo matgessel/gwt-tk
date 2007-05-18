@@ -636,7 +636,6 @@ public class ModalDialog extends CPopupPanel
 		 * <li>post: the dialog content width (style attribute) will be updated
 		 * <li>post: the <code>dialogWidth</code> property will be finalized
 		 * </ul>
-		 * @param width
 		 */
 		protected int updateContentWidth(ModalDialog dialog, int contentWidth)
 		{
@@ -677,7 +676,6 @@ public class ModalDialog extends CPopupPanel
 		 * <li>post: the dialog content height (style attribute) will be updated
 		 * <li>post: the <code>dialogHeight</code> property will be finalized
 		 * </ul>
-		 * @param width
 		 */
 		protected int updateContentHeight(ModalDialog dialog, int contentHeight)
 		{

@@ -161,7 +161,7 @@ public class FocusModel
 	/**
 	 * Determines whether the specified Widget can be added to the model. 
 	 * 
-	 * @param w a widget which is candidate to be added to the model
+	 * @param widget a widget which is candidate to be added to the model
 	 * @return <code>true</code> if <code>widget.getTabIndex() >= 0</code>
 	 */
 	protected boolean shouldAdd(HasFocus widget)

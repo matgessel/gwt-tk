@@ -19,6 +19,9 @@
 <ul>
 	<li>ModalDialog
 	<ul>
+		<li><code>setWidget(Widget)</code> now throws
+		UnsupportedOperationException. Use <code>addWidget(Widget)</code>
+		instead.</li>
 		<li>the content panel's minimum height is now set in a
 		cross-platform manner</li>
 		<li>centering logic now accounts for non-reflowable content such
@@ -54,18 +57,28 @@
 	</ul>
 	</li>
 	<li>BasicPanel now implements IndexedPanel</li>
-	<li>JsUtil: fixed a rare issue where a SWTException would be thrown instead of JavaScriptException in hosted mode</li>
-	<li>PreventSelectionController: singleton field is depricated, use getter instead</li>
+	<li>JsUtil: fixed a rare issue where a SWTException would be
+	thrown instead of JavaScriptException in hosted mode</li>
+	<li>PreventSelectionController: singleton field is depricated, use
+	getter instead</li>
 	<li>FocusCommand: added support for blurring widgets</li>
-	<li>CPopupPanel: added. Same as <code>PopupPanel</code>, but allows scrolling in Firefox while popup is shown</li>
-	<li>ControllerSupportDelegate: renamed <code>unSinkEvents</code> to <code>unsinkEvents</code> (capitalization) </li>
+	<li>CPopupPanel: added. Same as <code>PopupPanel</code>, but
+	allows scrolling in Firefox while popup is shown</li>
+	<li>ControllerSupportDelegate: renamed <code>unSinkEvents</code>
+	to <code>unsinkEvents</code> (capitalization)</li>
 	<li>DomUtil
 	<ul>
 		<li><code>getId(Element)</code> added</li>
 		<li><code>setId(Element, String)</code> added</li>
-		<li>performance improved when fetching values which depend on rendering mode</li>
+		<li>performance improved when fetching values which depend on
+		rendering mode</li>
 	</ul>
 	</li>
+</ul>
+
+<h2>Patch module</h2>
+<ul>
+	<li>Fix Mozilla error when mouseover/mouseout a TextBox or TextArea (Mozilla bug 208427)</li>
 </ul>
 
 <h2>Emulation module</h2>
@@ -78,7 +91,8 @@
 <ul>
 	<li>Debug state can be toggled from console, rather than just
 	disabled</li>
-	<li>Debug.dump(): fix a JavaScript variable not declared with &quot;var&quot;</li>
+	<li>Debug.dump(): fix a JavaScript variable not declared with
+	&quot;var&quot;</li>
 </ul>
 
 <h2>Sandbox module</h2>
