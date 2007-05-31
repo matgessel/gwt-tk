@@ -30,8 +30,11 @@ import com.google.gwt.user.client.ui.Widget;
 public class DragController extends ControllerAdaptor
 {
 	private final DragGesture m_dragGesture;
+	private final int m_threshold;
 	
+	private boolean m_mouseDown = false;
 	private boolean m_dragging = false;
+	private int m_downX, m_downY;
 	
 	/**
 	 * Creates a new DragController which delegates to the specified
@@ -41,8 +44,23 @@ public class DragController extends ControllerAdaptor
 	 */
 	public DragController(DragGesture gesture)
 	{
+		this(gesture, 0);
+	}
+	
+	/**
+	 * Creates a new DragController which delegates to the specified
+	 * DragGesture. The DragGesture is not activated until the mouse movement
+	 * equals the specified distance; this prevents accidental movement.
+	 * 
+	 * @param distance the distance in screen pixels to move before taking an
+	 *            action, or <code>0</code>
+	 * @param gesture a delegate object
+	 */
+	public DragController(DragGesture gesture, int distance)
+	{
 		super(Event.ONMOUSEDOWN | Event.ONMOUSEMOVE | Event.ONMOUSEUP, DragController.class);
 		m_dragGesture = gesture;
+		m_threshold = distance;
 	}
 	
 	/*
@@ -72,33 +90,58 @@ public class DragController extends ControllerAdaptor
 		}
 	}
 	
+	private boolean equalsThreshold(int x, int y)
+	{
+		return Math.abs(x - m_downX) >= m_threshold || Math.abs(y - m_downY) >= m_threshold;
+	}
+	
+	private void doStartDrag(Widget sender, int x, int y)
+	{
+		m_dragging = true;
+		m_dragGesture.start(x, y);
+	}
+	
 	public void onMouseDown(Widget sender, int x, int y)
 	{
 //	    Debug.println("DragController.onMouseDown(x=" + x + ",y=" + y + ")");
-		m_dragging = true;
 		DOM.setCapture(sender.getElement());
-		m_dragGesture.start(x, y);
+		m_downX = x;
+		m_downY = y;
+		m_mouseDown = true;
+		if (equalsThreshold(x, y))
+		{
+			doStartDrag(sender, x, y);
+		}
 	}
 	
 	public void onMouseMove(Widget sender, int x, int y)
 	{
-		if (m_dragging)
+//	    Debug.println("DragController.onMouseMove(x=" + x + ",y=" + y + ")");
+		if (m_mouseDown)
 		{
-//		    Debug.println("DragController.onMouseMove(x=" + x + ",y=" + y + ")");
-			m_dragGesture.step(x, y);
+			if (! m_dragging && equalsThreshold(x, y))
+			{
+				doStartDrag(sender, m_downX, m_downY);
+			}
+			if (m_dragging)
+			{
+				m_dragGesture.step(x, y);
+			}
 		}
 	}
 	
 	public void onMouseUp(Widget sender, int x, int y)
 	{
-		// a child widget may have cancelled the mouse down
-		if (m_dragging)
+//	    Debug.println("DragController.onMouseUp(x=" + x + ",y=" + y + ")");
+		
+		// it is possible to get a mouse up without a mouse down
+		if (m_mouseDown)
 		{
-//		    Debug.println("DragController.onMouseUp(x=" + x + ",y=" + y + ")");
 			m_dragGesture.step(x, y);
 			m_dragGesture.finish(x, y);
 			DOM.releaseCapture(sender.getElement());
 			m_dragging = false;
+			m_mouseDown = false;
 		}
 	}
 }
