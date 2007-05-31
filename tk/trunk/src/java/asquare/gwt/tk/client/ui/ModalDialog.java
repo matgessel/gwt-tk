@@ -155,7 +155,7 @@ public class ModalDialog extends CPopupPanel
 	{
 		List result = new Vector();
 		result.add(PreventSelectionController.getInstance());
-		result.add(new DragStyleController(this));
+		result.add(new DragStyleController(this, STYLENAME_DRAGGING));
 		result.add(new DragController(new DragPopupGesture(this)));
 		return result;
 	}
@@ -782,32 +782,6 @@ public class ModalDialog extends CPopupPanel
 			}
 			
 			return dialogWidth;
-		}
-	}
-	
-	/**
-	 * A controller which applies the "dragging" style name to the dialog. 
-	 */
-	public static class DragStyleController extends ControllerAdaptor
-	{
-		private final ModalDialog m_dialog;
-		
-		public DragStyleController(ModalDialog dialog)
-		{
-			super(Event.ONMOUSEDOWN | Event.ONMOUSEUP, DragStyleController.class);
-			m_dialog = dialog;
-		}
-		
-		public void onBrowserEvent(Widget widget, Event event)
-		{
-			if (DOM.eventGetType(event) == Event.ONMOUSEDOWN)
-			{
-				m_dialog.addStyleName(STYLENAME_DRAGGING);
-			}
-			else if (DOM.eventGetType(event) == Event.ONMOUSEUP)
-			{
-				m_dialog.removeStyleName(STYLENAME_DRAGGING);
-			}
 		}
 	}
 }
