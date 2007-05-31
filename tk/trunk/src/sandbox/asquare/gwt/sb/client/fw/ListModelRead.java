@@ -15,31 +15,19 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ListModelEvent extends Object
+public interface ListModelRead
 {
-	private final ListModelRead m_source;
-	private final int m_beginInterval;
-	private final int m_endInterval;
+	int getSize();
 	
-	public ListModelEvent(ListModelRead source, int beginInterval, int endInterval)
-	{
-		m_source = source;
-		m_beginInterval = beginInterval;
-		m_endInterval = endInterval;
-	}
+	Object get(int index);
+	
+	void addListener(ListModelListener listener);
+	
+	void removeListener(ListModelListener listener);
 
-	public int getBeginInterval()
-	{
-		return m_beginInterval;
-	}
-
-	public int getEndInterval()
-	{
-		return m_endInterval;
-	}
-
-	public ListModelRead getSource()
-	{
-		return m_source;
-	}
+	boolean isIndexSelected(int index);
+	
+	boolean isIndexDisabled(int index);
+	
+	boolean isIndexActive(int index);
 }

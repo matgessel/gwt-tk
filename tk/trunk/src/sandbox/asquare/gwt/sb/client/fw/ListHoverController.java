@@ -23,17 +23,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ListHoverController extends ControllerAdaptor
 {
-	private final ListModelBase m_model;
+	private final ListModel m_model;
 	
-	public ListHoverController(ListModelBase model)
+	public ListHoverController(ListModel model)
 	{
 		super(Event.ONMOUSEOVER | Event.ONMOUSEOUT, ListHoverController.class);
 		m_model = model;
-	}
-
-	protected ListModelBase getModel()
-	{
-		return m_model;
 	}
 	
 	public void onBrowserEvent(Widget widget, Event event)

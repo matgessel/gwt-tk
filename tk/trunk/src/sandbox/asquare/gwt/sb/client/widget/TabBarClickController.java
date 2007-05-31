@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.widget;
 
-import asquare.gwt.sb.client.fw.ListModelBase;
+import asquare.gwt.sb.client.fw.ListModel;
 import asquare.gwt.sb.client.fw.ListSelectionModelSingle;
 import asquare.gwt.sb.client.fw.ListView;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
@@ -26,10 +26,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TabBarClickController extends ControllerAdaptor
 {
-	private final ListModelBase m_model;
+	private final ListModel m_model;
 	private final ListSelectionModelSingle m_selectionModel;
 	
-	public TabBarClickController(ListModelBase model)
+	public TabBarClickController(ListModel model)
 	{
 		super(Event.ONMOUSEDOWN, TabBarClickController.class);
 		m_model = model;

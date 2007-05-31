@@ -41,6 +41,14 @@ public class ListModelDefault extends ListModelBase
 		insert(m_items.size(), o);
 	}
 	
+	public void addAll(Object[] items)
+	{
+		for (int i = 0; i < items.length; i++)
+		{
+			add(items[i]);
+		}
+	}
+	
 	public void insert(int index, Object o)
 	{
 		m_items.add(index, o);

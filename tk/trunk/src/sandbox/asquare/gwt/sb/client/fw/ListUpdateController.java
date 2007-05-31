@@ -21,7 +21,7 @@ public class ListUpdateController implements ListModelListener
 {
 	private final ListView m_view;
 	
-	public ListUpdateController(ListModel model, ListView view)
+	public ListUpdateController(ListModelRead model, ListView view)
 	{
 		m_view = view;
 		model.addListener(this);
@@ -44,7 +44,7 @@ public class ListUpdateController implements ListModelListener
 		this.listModelChanged(e.getSource(), e.getBeginInterval(), e.getEndInterval());
 	}
 	
-	private void listModelChanged(ListModel model, int changeStart, int changeEnd)
+	private void listModelChanged(ListModelRead model, int changeStart, int changeEnd)
 	{
 		Properties tempProperties = new Properties();
 		int newSize = model.getSize();
@@ -73,7 +73,7 @@ public class ListUpdateController implements ListModelListener
 		}
 	}
 	
-	protected Properties configureCellProperties(int index, ListModel model, ListView view, Properties properties)
+	protected Properties configureCellProperties(int index, ListModelRead model, ListView view, Properties properties)
 	{
 		properties.set(ModelElementFormatter.PROPERTY_SELECTED, model.isIndexSelected(index));
 		properties.set(ModelElementFormatter.PROPERTY_ACTIVE, model.isIndexActive(index));
