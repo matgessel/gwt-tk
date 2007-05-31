@@ -254,4 +254,16 @@ public class GwtUtil
 		
 		return dest;
 	}
+	
+	/**
+	 * Tests two Strings for equality. Same as {@link String#equals(Object)}.
+	 * Either argument may be <code>null</code>.
+	 * 
+	 * @param a a String, or <code>null</code>
+	 * @param b a String, or <code>null</code>
+	 * @return <code>true</code> if <code>(a == b || a != null && a.equals(b))</code>
+	 */
+	public static native boolean equals(String a, String b) /*-{
+		return a == b;
+	}-*/;
 }
