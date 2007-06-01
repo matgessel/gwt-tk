@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,14 +18,22 @@ package asquare.gwt.tkdemo.client;
 import asquare.gwt.debug.client.BrowserInfo;
 import asquare.gwt.debug.client.Debug;
 import asquare.gwt.debug.client.DebugElementDumpInspector;
+import asquare.gwt.sb.client.fw.*;
+import asquare.gwt.sb.client.widget.CTabBar;
+import asquare.gwt.tk.client.ui.ColumnPanel;
+import asquare.gwt.tk.client.ui.ExposedCellPanel;
 import asquare.gwt.tk.client.ui.RowPanel;
 import asquare.gwt.tk.client.util.DomUtil;
-import asquare.gwt.tkdemo.client.demos.*;
+import asquare.gwt.tkdemo.client.ui.*;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * This is the entry point for the demo application. It builds the GUI after 
@@ -39,44 +47,43 @@ public class Demo implements EntryPoint
 	 */
 	public void onModuleLoad()
 	{
-		HistoryWidgetCollection tabs = new HistoryWidgetCollection();
-		tabs.add("dropdown", "DropDownPanel", new DropDownPanelPanel(), new String[] {"DropDownPanel"});
-		tabs.add("dialogs", "Dialogs", new DialogPanel(), new String[] {"ModalDialog", "AlertDialog"});
-		tabs.add("cellpanel", "Cell Panels", new ExposedCellPanelPanel(), new String[] {"RowPanel", "ColumnPanel"});
-		tabs.add("events", "Events", new EventsPanel(), new String[] {"EventWrapper", "Controller"});
-		tabs.add("debug", "Debug", new DebugPanel(), new String[] {"Debug"});
-		tabs.add("misc", "Misc", new MiscPanel(), new String[] {"SimpleHyperLink", "ExternalHyperLink", FocusCycleDemo.NAME, GlassPanelDemo.NAME});
+	    Debug.enableSilently();
+	    
+		final AppPanelCollection panels = new DemoPanelCollection();
+		
+		String initialTabToken = History.getToken();
+		int initialIndex = panels.getIndexForToken(initialTabToken);
+		if (initialIndex == -1)
+		{
+			initialIndex = 0;
+		}
 		
 		// use a table for border to work around bugs with 100% child width
 		RowPanel outer = new RowPanel();
 		DomUtil.setAttribute(outer, "id", "main");
 		outer.setWidth("100%");
 		
-		TabBar tabBar = new TabBar();
-		tabBar.setWidth("100%");
-		DemoContent tabContent = new DemoContent();
-		tabBar.addTabListener(tabContent);
-		tabContent.setWidth("100%");
-		for (int i = 0; i < tabs.size(); i++)
-		{
-			// nest a table so inner content can be 100% and bordered/padded
-			RowPanel border = new RowPanel();
-			border.setSize("100%", "100%");
-			border.setStyleName("TabPanel-contentBorder");
-			border.add(tabs.getWidget(i));
-			
-			tabBar.addTab(tabs.getDescription(i));
-			tabContent.add(border);
-		}
-		outer.add(tabBar);
-		outer.add(tabContent);
+		ExposedCellPanel tabPanel = new ColumnPanel();
+		tabPanel.setSize("100%", "100%");
 		
-		String initialTabToken = History.getToken();
-		if (initialTabToken.length() == 0)
-		{
-			initialTabToken = tabs.getToken(0);
-		}
-		new TabHistoryCoordinator(tabs, tabBar, initialTabToken);
+		ListWidget verticalTabStructure = new ListWidgetVTable();
+		final ListViewBase tabBarView = new CTabBar(verticalTabStructure, null, new SideTabFormatter3());
+		final ListSelectionModelSingle tabBarSelectionModel = new ListSelectionModelSingle();
+		final ListModelDefault tabBarModel = new ListModelDefault(tabBarSelectionModel);
+		new ListUpdateController(tabBarModel, tabBarView);
+		History.addHistoryListener(new TabModelUpdateController(panels, tabBarModel));
+		
+		tabBarView.setStyleName("DemoTabBar");
+		tabPanel.add(tabBarView);
+		tabPanel.setCellStyleName("DemoTabPanel-tabBar");
+		
+		tabPanel.add(new HTML("<h2 style='text-align: center; width: 100%; height: 100%;'>Loading...</h2>"));
+		tabPanel.setCellStyleName("DemoTabPanel-tabBody");
+		tabPanel.setCellWidth("100%");
+		new TabBodyUpdateController(tabBarModel, tabPanel, panels);
+		
+		outer.add(tabPanel);
+		RootPanel.get().add(outer);
 		
 		BrowserInfo browserInfo = (BrowserInfo) GWT.create(BrowserInfo.class);
 		String compatMode = describeCompatMode();
@@ -84,10 +91,13 @@ public class Demo implements EntryPoint
 		env.setStyleName("compatMode");
 		outer.add(env);
 		
-		RootPanel.get().add(outer);
-		
-	    Debug.enableSilently();
 	    new DebugElementDumpInspector().install();
+	    
+	    /**
+		 * Incrementally add tabs to TabBar, allowing the UI to redraw to show
+		 * progress.
+		 */
+	    DeferredCommand.add(new LoadUICommand(panels, tabBarModel, tabBarView, initialIndex));
 	}
 	
 	/**
@@ -107,4 +117,43 @@ public class Demo implements EntryPoint
 		}
 		return result;
 	}-*/;
+	
+	private static class LoadUICommand implements Command
+	{
+		private final AppPanelCollection m_panels;
+		private final ListViewBase m_tabBarView;
+		private final ListModelDefault m_tabBarmodel;
+		private final ListSelectionModelSingle m_selectionModel;
+		private final int m_initialIndex;
+		
+		private int m_index = 0;
+		
+		public LoadUICommand(AppPanelCollection panels, ListModelDefault tabBarModel, ListViewBase tabBarView, int initialIndex)
+		{
+			m_panels = panels;
+			m_tabBarmodel = tabBarModel;
+			m_selectionModel = (ListSelectionModelSingle) tabBarModel.getSelectionModel();
+			m_tabBarView = tabBarView;
+			m_initialIndex = initialIndex;
+		}
+		
+		public void execute()
+		{
+			if (m_index < m_panels.getSize())
+			{
+				m_panels.getWidget(m_index);
+				m_tabBarmodel.add(m_panels.getUIString(m_index));
+				m_tabBarmodel.update();
+				m_index++;
+				DeferredCommand.add(this);
+			}
+			else
+			{
+				m_selectionModel.setSelectedIndex(m_initialIndex);
+				m_tabBarmodel.update();
+				m_tabBarView.addController(new ListHoverController(m_tabBarmodel));
+				m_tabBarView.addController(new TabBarClickControllerHistory(m_panels));
+			}
+		}
+	}
 }

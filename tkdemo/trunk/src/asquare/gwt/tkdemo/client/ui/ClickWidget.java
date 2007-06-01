@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -48,7 +48,7 @@ public class ClickWidget extends CWidget implements HasText, HasHTML, SourcesCli
 	protected List createControllers()
 	{
 		Vector result = new Vector();
-		result.add(PreventSelectionController.INSTANCE);
+		result.add(PreventSelectionController.getInstance());
 		result.add(new LegacyClickController());
 		return result;
 	}

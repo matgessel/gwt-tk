@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.tkdemo.client;
+package asquare.gwt.tkdemo.client.junk;
+
+import asquare.gwt.tkdemo.client.ui.AppPanelCollection;
 
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
@@ -29,13 +31,13 @@ import com.google.gwt.user.client.ui.TabListener;
  */
 public class TabHistoryCoordinator implements HistoryListener, TabListener
 {
-	private final HistoryWidgetCollection m_tabs;
+	private final AppPanelCollection m_tabs;
 	private final TabBar m_tabPanel;
 	private final String m_windowTitle = Window.getTitle();
 	
 	private int m_selectedTab = -1;
 	
-	public TabHistoryCoordinator(HistoryWidgetCollection tabs, TabBar tabPanel, String initialTabToken)
+	public TabHistoryCoordinator(AppPanelCollection tabs, TabBar tabPanel, String initialTabToken)
 	{
 		m_tabs = tabs;
 		m_tabPanel = tabPanel;
@@ -57,7 +59,7 @@ public class TabHistoryCoordinator implements HistoryListener, TabListener
 		{
 			m_selectedTab = tabIndex; // set first to prevent re-entry
 			m_tabPanel.selectTab(tabIndex);
-			Window.setTitle(m_windowTitle + " > " + m_tabs.getDescription(tabIndex));
+			Window.setTitle(m_windowTitle + " > " + m_tabs.getUIString(tabIndex));
 		}
 	}
 	
@@ -73,7 +75,7 @@ public class TabHistoryCoordinator implements HistoryListener, TabListener
 	{
 		return true;
 	}
-
+	
 	public void onTabSelected(SourcesTabEvents sender, int tabIndex)
 	{
 		if (tabIndex != m_selectedTab)

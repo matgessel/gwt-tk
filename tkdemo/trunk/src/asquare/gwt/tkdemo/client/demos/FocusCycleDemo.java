@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,7 +20,7 @@ import asquare.gwt.tk.client.ui.CWrapper;
 import asquare.gwt.tk.client.ui.behavior.FocusModel;
 import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 import asquare.gwt.tk.client.util.DomUtil;
-import asquare.gwt.tkdemo.client.FocusCyclePanel;
+import asquare.gwt.tkdemo.client.ui.FocusCyclePanel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.*;
@@ -59,16 +59,53 @@ public class FocusCycleDemo extends BasicPanel
 		FocusCyclePanel cycle1 = new FocusCyclePanel("div", "block");
 		
 		cycle1.add(new Label("Cycle 1"));
+		
 		cycle1.add(new Button("Button"));
+		
+		Button buttonDisabled = new Button("disabled");
+		buttonDisabled.setEnabled(false);
+		cycle1.add(buttonDisabled);
+		
+		Button buttonNegativeTabIndex = new Button("tabIndex = -1");
+		buttonNegativeTabIndex.setTabIndex(-1);
+		cycle1.add(buttonNegativeTabIndex);
+		
+		cycle1.add(new CheckBox("CheckBox"));
+		
+		cycle1.add(new FocusPanel(new Label("FocusPanel")));
+		
+		ListBox listBox = new ListBox();
+		listBox.addItem("ListBox");
+		listBox.addItem("Item 1");
+		listBox.addItem("Item 2");
+		listBox.addItem("Item 3");
+		cycle1.add(listBox);
+		
 		TextBox textBox = new TextBox();
 		textBox.setText("TextBox");
 		cycle1.add(textBox);
+		
 		PasswordTextBox pwBox = new PasswordTextBox();
 		pwBox.setText("PasswordTextBox");
 		cycle1.add(pwBox);
+		
 		TextArea textArea = new TextArea();
 		textArea.setText("TextArea");
 		cycle1.add(textArea);
+		
+		Tree tree = new Tree();
+		TreeItem treeRoot = new TreeItem("Tree");
+		for (int branchNum = 1; branchNum < 4; branchNum++)
+		{
+			TreeItem branch = new TreeItem("Branch " + branchNum);
+			for (int item = 1; item < 4; item++)
+			{
+				branch.addItem("Item " + item);
+			}
+			treeRoot.addItem(branch);
+		}
+		tree.addItem(treeRoot);
+		cycle1.add(tree);
 		
 		return cycle1;
 	}
@@ -81,7 +118,7 @@ public class FocusCycleDemo extends BasicPanel
 		focusController.setModel(focusModel);
 		
 		cycle2.add(new Label("Cycle 2"));
-		Label label = new Label("Focus cycle across containers");
+		Label label = new Label("A custom focus cycle across containers");
 		DomUtil.setStyleAttribute(label, "font-size", "smaller");
 		cycle2.add(label);
 		HorizontalPanel containers = new HorizontalPanel();

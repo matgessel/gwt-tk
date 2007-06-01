@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,6 +24,7 @@ import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 public class DialogPanel extends Composite
 {
@@ -53,7 +54,7 @@ public class DialogPanel extends Composite
 			"<li>caption prevents text selection</li>" + 
 			"<li>focus management and containment (internal tab cycle)</li>" + 
 			"<li>can focus a widget upon dismissal</li>" + 
-			"<li>minimim size enforcement (optional, default is 200 x 100 px)</li>" + 
+			"<li>minimim size enforcement for content panel (optional, default is 200 x 75 px)</li>" + 
 			"</ul>" + 
 			"<H2>AlertDialog</H2>" + 
 			"<h4>Features</h4>" + 
@@ -100,6 +101,12 @@ public class DialogPanel extends Composite
 			public CloseButton(ModalDialog dialog)
 			{
 				super("Close");
+				addClickListener(new CloseListener(dialog));
+			}
+			
+			public CloseButton(ModalDialog dialog, String text)
+			{
+				super(text);
 				addClickListener(new CloseListener(dialog));
 			}
 		}
@@ -162,7 +169,7 @@ public class DialogPanel extends Composite
 					protected List createCaptionControllers()
 					{
 						List result = new Vector();
-						result.add(PreventSelectionController.INSTANCE);
+						result.add(PreventSelectionController.getInstance());
 						return result;
 					}
 				};
@@ -189,8 +196,58 @@ public class DialogPanel extends Composite
 		});
 		panel.add(styledDragDialog);
 		
-		final Button explicitlySizedDialog = new Button("Explicitly positioned");
-		explicitlySizedDialog.addClickListener(new ClickListener()
+		final Button focusManagementDialog = new Button("Focus management");
+		focusManagementDialog.addClickListener(new ClickListener()
+		{
+			public void onClick(Widget sender)
+			{
+				final ModalDialog dialog = new ModalDialog();
+				dialog.setCaption("Register", false);
+				FocusModel fModel = dialog.getFocusModel();
+				
+				final int FIELD_COUNT = 3;
+				Grid table = new Grid(FIELD_COUNT, 2);
+				dialog.add(table);
+				Widget[] labels = new Widget[FIELD_COUNT];
+				labels[0] = new Label("User name: ");
+				labels[1] = new Label("Password: ");
+				labels[2] = new Label("Retype password: ");
+				
+				FocusWidget[] fields = new FocusWidget[FIELD_COUNT];
+				fields[0] = new TextBox();
+				fields[1] = new PasswordTextBox();
+				fields[2] = new PasswordTextBox();
+				
+				CellFormatter formatter = table.getCellFormatter();
+				for (int i = 0; i < labels.length; i++)
+				{
+					table.setWidget(i, 0, labels[i]);
+					formatter.setHorizontalAlignment(i, 0, HasHorizontalAlignment.ALIGN_LEFT);
+					table.setWidget(i, 1, fields[i]);
+					fModel.add(fields[i]);
+				}
+				fModel.setFocusWidget(fields[0]);
+				
+				ColumnPanel buttonPanel = new ColumnPanel();
+				buttonPanel.setWidth("100%");
+				dialog.add(buttonPanel);
+				
+				Button closeButton = new CloseButton(dialog, "Register!");
+				fModel.add(closeButton);
+				buttonPanel.add(closeButton);
+				
+				Button cancelButton = new CloseButton(dialog, "Cancel");
+				fModel.add(cancelButton);
+				buttonPanel.addWidget(cancelButton, false);
+				buttonPanel.setCellHorizontalAlignment(ColumnPanel.ALIGN_RIGHT);
+				
+				dialog.show(focusManagementDialog);
+			}
+		});
+		panel.add(focusManagementDialog);
+		
+		final Button explicitlyPositionedDialog = new Button("Explicitly positioned");
+		explicitlyPositionedDialog.addClickListener(new ClickListener()
 		{
 			public void onClick(Widget sender)
 			{
@@ -204,10 +261,10 @@ public class DialogPanel extends Composite
 				dialog.setCaption("Explicitly positioned dialog", false);
 				dialog.add(new Label("Automatic positioning is disabled. Dimensions and position are set explicitly. "));
 				dialog.add(new CloseButton(dialog));
-				dialog.show(explicitlySizedDialog);
+				dialog.show(explicitlyPositionedDialog);
 			}
 		});
-		panel.add(explicitlySizedDialog);
+		panel.add(explicitlyPositionedDialog);
 		
 		final Button multipleDialogs = new Button("Multiple dialogs");
 		multipleDialogs.addClickListener(new ClickListener()
@@ -222,8 +279,8 @@ public class DialogPanel extends Composite
 				dialog.add(new HTML(""));
 				
 				final UrlLocation urlBox = new UrlLocation();
-				urlBox.setText("http://www.google.com");
-				urlBox.setWidth("80%");
+				urlBox.setText("http://www.asquare.net");
+				urlBox.setWidth("350px");
 				fModel.add(urlBox);
 				outer.add(urlBox);
 				
@@ -234,10 +291,10 @@ public class DialogPanel extends Composite
 				
 				ListBox addressList = new ListBox();
 				addressList.addItem("Select an address");
+				addressList.addItem("http://www.asquare.net");
 				addressList.addItem("http://www.google.com");
 				addressList.addItem("http://www.sourceforge.net");
 				addressList.addItem("http://www.apache.org");
-				addressList.addItem("http://www.asquare.net");
 				fModel.add(addressList);
 				outer.add(addressList);
 				

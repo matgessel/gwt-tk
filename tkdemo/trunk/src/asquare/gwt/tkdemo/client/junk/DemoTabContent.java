@@ -13,22 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.tkdemo.client;
+package asquare.gwt.tkdemo.client.junk;
 
 import java.util.Vector;
+
+import asquare.gwt.tk.client.util.GwtUtil;
 
 import com.google.gwt.user.client.ui.*;
 
 /**
  * A container which displays one of its children when a tab is selected. 
- * Basically, a lazy-load replacement for the bottom portion of TabPanel.  
+ * Basically, a lazy-attach replacement for the bottom portion of TabPanel.  
  */
-public class DemoContent extends Composite implements TabListener
+public class DemoTabContent extends Composite implements TabListener
 {
 	private final SimplePanel m_panel = new SimplePanel();
 	private final Vector m_panels = new Vector();
 	
-	public DemoContent()
+	public DemoTabContent()
 	{
 		initWidget(m_panel);
 	}
@@ -38,10 +40,22 @@ public class DemoContent extends Composite implements TabListener
 		m_panels.add(w);
 	}
 	
+	public void showWidget(int index)
+	{
+		GwtUtil.rangeCheck(-1, m_panels.size() + 1, index, false);
+		
+		Widget w = null;
+		if (index != -1)
+		{
+			w = (Widget) m_panels.get(index);
+		}
+		m_panel.setWidget(w);
+	}
+	
 	// TabListener methods
 	public void onTabSelected(SourcesTabEvents sender, int tabIndex)
 	{
-		m_panel.setWidget((Widget) m_panels.get(tabIndex));
+		showWidget(tabIndex);
 	}
 	
 	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex)

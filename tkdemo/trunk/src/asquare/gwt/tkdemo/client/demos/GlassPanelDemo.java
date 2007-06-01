@@ -24,9 +24,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class GlassPanelDemo extends BasicPanel
 {
@@ -86,6 +84,20 @@ public class GlassPanelDemo extends BasicPanel
 		example.add(new ShowExample("Dark", new CreateExample("glasspanel-ex-dark")));
 		example.add(new ShowExample("Light", new CreateExample("glasspanel-ex-light")));
 		example.add(new ShowExample("Opaque", new CreateExample("glasspanel-ex-opaque")));
+		example.add(new ShowExample("Transparent PNG background image", new ClickListener()
+		{
+			public void onClick(Widget sender)
+			{
+				final GlassPanel gp = new GlassPanel();
+				DomUtil.setId(gp, "glasspanel-ex-transparentPNG");
+				Label content = new Label();
+				content.setStyleName("Content");
+				content.setSize("100%", "100%");
+				gp.add(content);
+				gp.addController(new HideGlassPanelController());
+				gp.show();
+			}
+		}));
 		example.add(new ShowExample("Tiled background image", new CreateExample("glasspanel-ex-tiledBG")));
 		example.add(new ShowExample("Centered background image", new CreateExample("glasspanel-ex-centeredBG")));
 		example.add(new ShowExample("Foreground text", new ClickListener()

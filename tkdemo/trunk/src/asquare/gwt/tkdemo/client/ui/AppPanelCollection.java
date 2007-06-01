@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,33 +13,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.tkdemo.client;
+package asquare.gwt.tkdemo.client.ui;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * A collection which associates each added widget to a history token and a
- * description. 
+ * UI String. 
  */
-public class HistoryWidgetCollection
+public class AppPanelCollection
 {
 	private final Vector m_entries = new Vector();
 	
-	public void add(String token, String description, Widget body)
+	public void add(String primaryToken, String uiString, WidgetProvider tabBody)
 	{
-		add(token, description, body, null);
+		add(primaryToken, uiString, null, tabBody);
 	}
 	
-	public void add(String token, String description, Widget body, String[] additinalTokens)
+	public void add(String primaryToken, String uiString, String[] additionalTokens, WidgetProvider tabBody)
 	{
-		if (token == null || description == null || body == null)
+		if (primaryToken == null || uiString == null || tabBody == null)
 			throw new IllegalArgumentException();
 		
-		m_entries.add(new Entry(token, description, body, additinalTokens));
+		m_entries.add(new Entry(primaryToken, uiString, tabBody, additionalTokens));
 	}
 	
 	public void remove(int index)
@@ -49,10 +50,10 @@ public class HistoryWidgetCollection
 	
 	public Widget getWidget(int index)
 	{
-		return ((Entry) m_entries.get(index)).m_body;
+		return ((Entry) m_entries.get(index)).m_widgetProvider.getWidget();
 	}
 	
-	public String getDescription(int index)
+	public String getUIString(int index)
 	{
 		return ((Entry) m_entries.get(index)).m_description;
 	}
@@ -74,7 +75,7 @@ public class HistoryWidgetCollection
 		return -1;
 	}
 	
-	public int size()
+	public int getSize()
 	{
 		return m_entries.size();
 	}
@@ -83,17 +84,17 @@ public class HistoryWidgetCollection
 	{
 		public final String m_token;
 		public final String m_description;
-		public final Widget m_body;
+		public final WidgetProvider m_widgetProvider;
 		private final List m_additionalTokens;
 		
-		public Entry(String token, String description, Widget body, String[] additinalTokens)
+		public Entry(String token, String description, WidgetProvider tabBody, String[] additionalTokens)
 		{
 			m_token = token;
 			m_description = description;
-			m_body = body;
-			if (additinalTokens != null && additinalTokens.length > 0)
+			m_widgetProvider = tabBody;
+			if (additionalTokens != null && additionalTokens.length > 0)
 			{
-				m_additionalTokens = Arrays.asList(additinalTokens);
+				m_additionalTokens = Arrays.asList(additionalTokens);
 			}
 			else
 			{
@@ -103,7 +104,7 @@ public class HistoryWidgetCollection
 		
 		public boolean hasToken(String token)
 		{
-			return m_token == token || m_additionalTokens != null && m_additionalTokens.contains(token);
+			return m_token.equals(token) || m_additionalTokens != null && m_additionalTokens.contains(token);
 		}
 	}
 }

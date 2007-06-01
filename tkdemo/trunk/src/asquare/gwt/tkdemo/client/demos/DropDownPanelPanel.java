@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -72,7 +72,7 @@ public class DropDownPanelPanel extends Composite
 			"<p>The content can be <span id='open'></span>&nbsp;&amp; <span id='close'></span>&nbsp;programatically.</p>" + 
 			"<p>The headers prevent selection of the text within them. In IE this is done in a special implementation using an <code>onselectstart</code> listener which returns <code>false</code>. In other browsers, <code>DOM.eventPreventDefault(Event)</code> for <code>Event.ONMOUSEDOWN</code> suffices. </p>" +
 			"<p>You can add a listener to the DropDownPanel and make layout changes when the it opens/closes (e.g. maximize its parent element when it opens). </p>" + 
-			"<p><em>Note: we cannot put a border around the drop down 1 header because in IE the background image would be obscured by the border.</em></p>";
+			"<p><em>Note: we cannot put a border around the Drop Down 1 header because in IE the background image would be obscured by the border.</em></p>";
 		DropDownPanel dropDown3 = new DropDownPanel();
 		dropDown3.addStyleName("division");
 		DomUtil.setAttribute(dropDown3, "id", "dropDown-3");		

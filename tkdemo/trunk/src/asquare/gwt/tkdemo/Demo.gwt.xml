@@ -21,5 +21,7 @@
 	
 	<inherits name='asquare.gwt.tk.Tk'/>
 	
+	<inherits name='asquare.gwt.sb.Sandbox'/>
+	
 	<entry-point class='asquare.gwt.tkdemo.client.Demo'/>
 </module>
