@@ -19,10 +19,15 @@
 	<replace-with class="asquare.gwt.tk.client.ui.behavior.impl.GlassPanelControllerStandard">
 		<when-type-is class="asquare.gwt.tk.client.ui.behavior.GlassPanelController"/>
 	</replace-with>
-
+	
 	<replace-with class="asquare.gwt.tk.client.ui.behavior.impl.GlassPanelControllerIE6">
 		<when-type-is class="asquare.gwt.tk.client.ui.behavior.GlassPanelController"/>
 		<when-property-is name="user.agent" value="ie6"/>
+	</replace-with>
+	
+	<replace-with class="asquare.gwt.tk.client.ui.behavior.impl.GlassPanelControllerSafari">
+		<when-type-is class="asquare.gwt.tk.client.ui.behavior.GlassPanelController"/>
+		<when-property-is name="user.agent" value="safari"/>
 	</replace-with>
 	
 <!-- this rule increases complile time for Demo app by 30-40%
