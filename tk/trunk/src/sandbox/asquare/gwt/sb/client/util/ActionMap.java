@@ -15,6 +15,8 @@
  */
 package asquare.gwt.sb.client.util;
 
+import com.google.gwt.user.client.ui.KeyboardListener;
+
 /**
  * @see KeyboardListener for modifiers
  */

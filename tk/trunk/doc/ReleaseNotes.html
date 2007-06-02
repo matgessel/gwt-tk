@@ -15,6 +15,10 @@
 
 <p>GWT Tk 0.2.3 was compiled against GWT 1.3.3</p>
 
+<ul>
+	<li>This is a maintainence which includes some minor additions.</li>
+</ul>
+
 <h2>Tk module</h2>
 <ul>
 	<li>ModalDialog
@@ -31,7 +35,7 @@
 		<li>fixed an issue where centering was sometimes off horizontally
 		by the width of a scrollbar</li>
 		<li>Document can now be scrolled when dialog is displayed in
-		Firefox[Win]</li>
+		Firefox[Win] (Adam Duston)</li>
 	</ul>
 	</li>
 	<li>FocusModel
@@ -50,46 +54,56 @@
 	<ul>
 		<li><code>arrayCopy()</code> added. Performs checked copying of
 		arrays.</li>
-		<li><code>toArray()</code> added. Same as List.toArray(), except
-		does not auto-expand destination array.</li>
+		<li><code>toArray()</code> added. Same as List.toArray(Object[]),
+		except does not auto-expand destination array.</li>
 		<li><code>rangeCheck()</code> fixed a bug affecting ranges which
 		do not start at 0</li>
 	</ul>
 	</li>
-	<li>BasicPanel now implements IndexedPanel</li>
+	<li>BasicPanel now implements <code>IndexedPanel</code></li>
 	<li>JsUtil: fixed a rare issue where a SWTException would be
 	thrown instead of JavaScriptException in hosted mode</li>
 	<li>PreventSelectionController: singleton field is depricated, use
-	getter instead</li>
+	<code>getInstance()</code> instead</li>
 	<li>FocusCommand: added support for blurring widgets</li>
-	<li>CPopupPanel: added. Same as <code>PopupPanel</code>, but
-	allows scrolling in Firefox while popup is shown</li>
-	<li>ControllerSupportDelegate: renamed <code>unSinkEvents</code>
-	to <code>unsinkEvents</code> (capitalization)</li>
+	<li>CPopupPanel: added. Same as <code>PopupPanel</code>, with
+	controller support. Also allows scrolling in Firefox while popup is
+	shown.</li>
+	<li>ControllerSupportDelegate: renamed <code>un<u>S</u>inkEvents</code>
+	to <code>un<u>s</u>inkEvents</code> (capitalization)</li>
 	<li>DomUtil
 	<ul>
 		<li><code>getId(Element)</code> added</li>
 		<li><code>setId(Element, String)</code> added</li>
-		<li>performance improved when fetching values which depend on
-		rendering mode</li>
+		<li>improved performance when fetching values which depend on
+		quirks/strict rendering mode</li>
 	</ul>
 	</li>
+	<li>DragStyleController is available as a reusable
+	top-level class (previously nested in <code>ModalDialog</code>)</li>
+	<li>DragController: added an optional movement
+	threshold which must be exceeded before the drag action will activate.</li>
 </ul>
 
 <h2>Patch module</h2>
 <ul>
-	<li>Fix Mozilla error when mouseover/mouseout a TextBox or TextArea (Mozilla bug 208427)</li>
+	<li>Fix Mozilla error when mouseover/mouseout a TextBox or
+	TextArea (Mozilla bug 208427)<br/>
+	GWT issue <A
+	href="http://code.google.com/p/google-web-toolkit/issues/detail?id=671">671</A>
+	</li>
 </ul>
 
 <h2>Emulation module</h2>
 <ul>
 	<li>Created a new module for jre emulation: <code>asquare.gwt.tk.emul.Emulation</code></li>
 	<li>Added <code>CloneNotSupportedException</code></li>
+	<li>Added <code>Serializable</code> interface</li>
 </ul>
 
 <h2>Debug module</h2>
 <ul>
-	<li>Debug state can be toggled from console, rather than just
+	<li>Debug enable state can be toggled from console, rather than just
 	disabled</li>
 	<li>Debug.dump(): fix a JavaScript variable not declared with
 	&quot;var&quot;</li>
@@ -98,21 +112,20 @@
 <h2>Sandbox module</h2>
 <ul>
 	<li>Added this module to share works in progress</li>
-	<li>Added an experimental, data-driven UI framework</li>
+	<li>Added an experimental, data-centric UI framework (<code>asquare.gwt.sb.client.fw)</code></li>
 </ul>
 
 <h2>Demo</h2>
 <ul>
-	<li>Demo panels all load at startup, but incremental progress is
-	shown</li>
+	<li>Demo panels load incrementally at startup</li>
 	<li>Rewrote demo tab panel based on a <code>ListModel</code></li>
 	<li>Rewrote the tab/history coordination logic eliminating
-	necessity for circularity checks (relationships are now hierarcical
+	necessity for circularity checks (relationships are now hierarchical
 	model-observer)</li>
 	<li>Added a <code>ModalDialog</code> example demonstrating focus
 	management</li>
 	<li>Addded a <code>GlassPanel</code> example demonstrating
-	cross-platform, alpha-transparent PNG background.
+	cross-platform, alpha-transparent PNG background (useful in Safari when Flash is used). 
 </ul>
 
 <h2>Known Problems</h2>
