@@ -1,0 +1,478 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>GWT Tk Release Notes</title>
+<LINK rel="stylesheet" href="style.css" />
+</head>
+<body>
+<DIV id="content">
+<h1>GWT Tk Release Notes</h1>
+
+<hr />
+
+<h2>0.2.3</h2>
+
+<p>GWT Tk 0.2.3 was compiled against GWT 1.3.3</p>
+
+<ul>
+	<li>This is a maintainence which includes some minor additions.</li>
+</ul>
+
+<h2>Tk module</h2>
+<ul>
+	<li>ModalDialog
+	<ul>
+		<li><code>setWidget(Widget)</code> now throws
+		UnsupportedOperationException. Use <code>addWidget(Widget)</code>
+		instead.</li>
+		<li>the content panel's minimum height is now set in a
+		cross-platform manner</li>
+		<li>centering logic now accounts for non-reflowable content such
+		as long TextBoxes (Amir Michail)</li>
+		<li>eliminated scrollbar flicker in Opera/Firefox[Mac] when
+		showing most dialogs</li>
+		<li>fixed an issue where centering was sometimes off horizontally
+		by the width of a scrollbar</li>
+		<li>Document can now be scrolled when dialog is displayed in
+		Firefox[Win] (Adam Duston)</li>
+	</ul>
+	</li>
+	<li>FocusModel
+	<ul>
+		<li><code>add()</code> throws <code>IllegalArgumentException</code>
+		if the specified widget is already present in the model</li>
+		<li><code>insert()</code> throws <code>IllegalArgumentException</code>
+		if the specified widget is already present in the model</li>
+		<li><code>setFocusWidget()</code> throws <code>IllegalArgumentException</code>
+		if the specified widget is not present in the focus model</li>
+		<li>now skips <code>FocusWidget</code> instances which are not
+		enabled (avoids error message in IE)</li>
+	</ul>
+	</li>
+	<li>GwtUtil
+	<ul>
+		<li><code>arrayCopy()</code> added. Performs checked copying of
+		arrays.</li>
+		<li><code>toArray()</code> added. Same as List.toArray(Object[]),
+		except does not auto-expand destination array.</li>
+		<li><code>rangeCheck()</code> fixed a bug affecting ranges which
+		do not start at 0</li>
+	</ul>
+	</li>
+	<li>BasicPanel now implements <code>IndexedPanel</code></li>
+	<li>JsUtil: fixed a rare issue where a SWTException would be
+	thrown instead of JavaScriptException in hosted mode</li>
+	<li>PreventSelectionController: singleton field is depricated, use
+	<code>getInstance()</code> instead</li>
+	<li>FocusCommand: added support for blurring widgets</li>
+	<li>CPopupPanel: added. Same as <code>PopupPanel</code>, with
+	controller support. Also allows scrolling in Firefox while popup is
+	shown.</li>
+	<li>ControllerSupportDelegate: renamed <code>un<u>S</u>inkEvents</code>
+	to <code>un<u>s</u>inkEvents</code> (capitalization)</li>
+	<li>DomUtil
+	<ul>
+		<li><code>getId(Element)</code> added</li>
+		<li><code>setId(Element, String)</code> added</li>
+		<li>improved performance when fetching values which depend on
+		quirks/strict rendering mode</li>
+	</ul>
+	</li>
+	<li>DragStyleController is available as a reusable
+	top-level class (previously nested in <code>ModalDialog</code>)</li>
+	<li>DragController: added an optional movement
+	threshold which must be exceeded before the drag action will activate.</li>
+</ul>
+
+<h2>Patch module</h2>
+<ul>
+	<li>Fix Mozilla error when mouseover/mouseout a TextBox or
+	TextArea (Mozilla bug 208427)<br/>
+	GWT issue <A
+	href="http://code.google.com/p/google-web-toolkit/issues/detail?id=671">671</A>
+	</li>
+</ul>
+
+<h2>Emulation module</h2>
+<ul>
+	<li>Created a new module for jre emulation: <code>asquare.gwt.tk.emul.Emulation</code></li>
+	<li>Added <code>CloneNotSupportedException</code></li>
+	<li>Added <code>Serializable</code> interface</li>
+</ul>
+
+<h2>Debug module</h2>
+<ul>
+	<li>Debug enable state can be toggled from console, rather than just
+	disabled</li>
+	<li>Debug.dump(): fix a JavaScript variable not declared with
+	&quot;var&quot;</li>
+</ul>
+
+<h2>Sandbox module</h2>
+<ul>
+	<li>Added this module to share works in progress</li>
+	<li>Added an experimental, data-centric UI framework (<code>asquare.gwt.sb.client.fw)</code></li>
+</ul>
+
+<h2>Demo</h2>
+<ul>
+	<li>Demo panels load incrementally at startup</li>
+	<li>Rewrote demo tab panel based on a <code>ListModel</code></li>
+	<li>Rewrote the tab/history coordination logic eliminating
+	necessity for circularity checks (relationships are now hierarchical
+	model-observer)</li>
+	<li>Added a <code>ModalDialog</code> example demonstrating focus
+	management</li>
+	<li>Addded a <code>GlassPanel</code> example demonstrating
+	cross-platform, alpha-transparent PNG background (useful in Safari when Flash is used). 
+</ul>
+
+<h2>Known Problems</h2>
+<ul>
+	<li>Checkboxes are not added to focus cycle. <br />
+	Workaround: <br />
+	<code>CheckBox cb = new CheckBox("my check box");
+	DOM.setIntAttribute(cb.getElement(), "tabIndex", 0);
+	dialog.getFocusModel().add(cb); </code><br />
+	See GWT issue <A
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=878">878</A>
+	</li>
+</ul>
+
+<hr />
+
+<h2>0.2.2</h2>
+
+<p>GWT Tk 0.2.2 was compiled against GWT 1.3.3</p>
+
+<ul>
+	<li>This is a maintainence release primarily addressing
+	GlassPanel/ListBox interactions.</li>
+	<li>PopupPanels with no CSS are now transparent in IE (this
+	matches behavior on other platforms).</li>
+</ul>
+
+<h2>Tk module</h2>
+<ul>
+	<li>DomUtil: added getter methods for some DOM attributes</li>
+	<li>DomUtil: added pixel-unit getter and setter for style
+	attributes</li>
+	<li>GlassPanel: ListBox (SELECT) components are now hidden by
+	GlassPanel in IE [reporter: Tom Chen]</li>
+</ul>
+
+<h2>Debug module</h2>
+<ul>
+	<li>Debug.printToBrowserConsole(): added support for Opera's error
+	console</li>
+	<li>Debug: print() and println() javadocs are clearer [reporter:
+	Klaus-Peter Berg]</li>
+	<li>Debug: print() is now mirrored to the native browser console
+	(if available)</li>
+</ul>
+
+<h2>Patch module</h2>
+<ul>
+	<li>Patched PopupImplIE6 to allow popup transparency<br />
+	GWT issue <A
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=85">85</A></li>
+	<li>Patched PopupImplIE6 to eliminate mixed content warning when
+	displaying popups via SSL (https://)<br />
+	GWT issue <A
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=174">174</A></li>
+	<li>Moved PopupImplIE6 patch to PopupImplIE6Patched. The patch is
+	applied by a deferred binding rule in Patch.gwt.xml. This change was
+	made to give users the option to override/revert the patch impl via a
+	deferred binding rule in their own .gwt.xml file.</li>
+</ul>
+
+<h2>Demo</h2>
+<ul>
+	<li>ModalDialog demo: added an example with 2 dialogs</li>
+	<li>ModalDialog demo: the example of an explicitly positioned
+	dialog is now displayed in upper left of the page so it is more obvious
+	[reporter: Klaus-Peter Berg]</li>
+	<li>DropDownPanel demo: 2nd dropdown is open by default</li>
+</ul>
+
+<h2>JUnit patch</h2>
+<ul>
+	<li>removed this source tree (the bugs were fixed in GWT 1.1.10)</li>
+</ul>
+
+<hr />
+
+<h2>0.2.1</h2>
+
+<p>GWT Tk 0.2.1 was compiled against GWT 1.2.22</p>
+
+<ul>
+	<li>The primary purpose of this release is to bring GWT Tk up to
+	date with GWT 1.2</li>
+	<li>Added a server binary which only contains compiled server-side
+	classes</li>
+</ul>
+
+<h2>Tk module</h2>
+
+<ul>
+	<li>EventWrapper: added a constructor to make it a little easier
+	to subclass anonymously</li>
+	<li>CWrapper: only events which were sunk by the widget itself are
+	passed to the widget's onBrowserEvent() method</li>
+	<li>ControllerSupportDelegate: was not initializing the value of
+	legacyEventBits in constructor</li>
+	<li>DomUtil: renamed getKeyCode() to eventGetKeyCode()</li>
+	<li>DomUtil: renamed getCharCode() to eventGetCharCode()</li>
+	<li>DomUtil: added eventGetAbsoluteX()</li>
+	<li>DomUtil: added eventGetAbsoluteY()</li>
+	<li>ExposedCellPanel: added removeCellStyleName(String styleName)</li>
+	<li>ExposedCellPanel: added removeCellStyleName(int cellIndex,
+	String styleName)</li>
+	<li>Created the server package</li>
+	<li>Added GWTCacheFilter. This servlet filter sets appropriate
+	Pragma, Expires &amp; Cache-control headers for *.cache.html and
+	*.nocache.html.</li>
+	<li>Removed Gray20.png from the public directory. It is still
+	available in <code>/src/resources/</code></li>
+</ul>
+
+<h2>Patch module</h2>
+
+<p>Removed fixes for DOM.getAbsoluteTop() &amp;
+DOM.getAbsoluteLeft() for Opera, Mozilla &amp; IE. (The fix was left in
+for Safari because the value is still off by the doc scroll in GWT
+1.2.22.)</p>
+
+<h2>Demo</h2>
+
+<ul>
+	<li>Modified one of the DropDownPanel examples to change the the
+	header image in response to a DropDownListener</li>
+	<li>Removed the invalid CSS rule which referred to <code>.tk-DropDownPanel-closed</code></li>
+	<li>Renamed TabCollection to HistoryWidgetCollection</li>
+	<li>Added Events tab to demonstrate handling of unsupported events
+	with EventWrapper and Controller</li>
+	<li>Added an obfuscated compile target for a faster online
+	download</li>
+	<li>Tab bodies are lazily appended to the document to improve
+	application load performance</li>
+</ul>
+
+<hr />
+
+<h2>0.2.0</h2>
+
+<p>GWT Tk 0.2.0 was compiled against GWT 1.1.10</p>
+
+<h2>RowPanel, ColumnPanel</h2>
+<p><a
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#RowPanel">http://www.asquare.net/gwttk/apps/demo/Demo.html#RowPanel</a></p>
+<p>Flexible replacements for VerticalPanel &amp; HorizontalPanel</p>
+<ul>
+	<li>Support multiple widgets in each table cell</li>
+	<li>Allow empty TDs</li>
+	<li>Expose TDs to CSS</li>
+	<li>Simplify layout by eliminating a nested container (e.g. TabBar
+	tabs)</li>
+	<li>Random access to cells and widgets</li>
+</ul>
+
+<h2>ModalDialog</h2>
+<p><A
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#ModalDialog">http://www.asquare.net/gwttk/apps/demo/Demo.html#ModalDialog</A></p>
+
+<ul>
+	<li>caption is optional</li>
+	<li>caption supports widgets</li>
+	<li>prevents text selection in the caption</li>
+	<li>CSS-stylable GlassPanel covers entire document / viewport
+	(whichever is larger)</li>
+	<li>automatic centering in browser's main viewport (regardless of
+	document scroll)</li>
+	<li>resizable: if you set the size of the content area the layout
+	will hold integrity on all platforms &amp; quirks/strict modes</li>
+	<li>minimum size specification for content area (optional, default
+	is 200 x 75px)</li>
+	<li>focus containment &amp; management (IE, Mozilla [Win] and
+	Safari)</li>
+	<li>prevents click-focus of background elements (all browsers)</li>
+	<li>works in strict/quirks mode on all browsers</li>
+	<li>option to restore focus to a widget after the dialog is hidden</li>
+</ul>
+<h2>AlertDialog</h2>
+<p><A
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#AlertDialog">http://www.asquare.net/gwttk/apps/demo/Demo.html#AlertDialog</A></p>
+
+<p>A modal dialog tailored to conveniently displaying alerts</p>
+<ul>
+	<li>can display alert via a static method (think JOptionPane)</li>
+	<li>highly configurable</li>
+	<li>icon in the caption indicates severity</li>
+	<li>button hotkeys</li>
+	<li>default button is automatically focused (optional)</li>
+	<li>Esc key automatically triggers Cancel button (optional)</li>
+	<li>button focus cycle is traversable with arrow keys</li>
+</ul>
+
+<h2>GlassPanel</h2>
+<p><A
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#GlassPanel">http://www.asquare.net/gwttk/apps/demo/Demo.html#GlassPanel</A></p>
+
+<p>A panel which covers the entire viewport or document, whichever
+is larger. Useful for modal dialogs and the "lightbox" effect. Window
+resizing logic is handled in a pluggable controller whose implementation
+varies by platform. When shown, a style name is applied to the body
+element; the style name is removed when the GlassPanel is hidden.</p>
+
+<h2>ExternalHyperLink</h2>
+<p><a
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#ExternalHyperLink">http://www.asquare.net/gwttk/apps/demo/Demo.html#ExternalHyperLink</a></p>
+<p>The ultimate answer to "How do I link to another page?". An
+anchor linking to a page or resource external to the application.</p>
+<p>Features text, HTML, URL and target properties</p>
+
+<h2>Tk module</h2>
+<ul>
+	<li>Added methods to get viewport size and scroll on the main 4
+	browsers in quirks/strict modes. See <a
+		href=http://www.asquare.net/javascript/tests/ViewportTestResults.html>http://www.asquare.net/javascript/tests/ViewportTestResults.html</a>
+
+	</li>
+	<li>JsUtil.appendText() now has an option to create a text node if
+	none is found</li>
+	<li>DomUtil: added getTitle(), setTitle() (element tooltips)</li>
+	<li>DomUtil: renamed clear() to clean()</li>
+	<li>GwtUtil: addded array range checking methods</li>
+	<li>DropDownPanel: removed "tk-DropDownPanel-closed" style name,
+	added controller support, factored browser specific code into
+	controller class.</li>
+	<li>DropDownPanel.gwt.xml: deleted module descriptor</li>
+	<li>BasicPanel: removed "tk-BasicPanel" style name, added
+	controller support</li>
+	<li>RenderMode.gwt.xml: detects quirks mode and sets up a deferred
+	binding property</li>
+	<li>Refactored event handling into Controllers</li>
+	<li>SimpleHyperLink: implemented HasHTML</li>
+</ul>
+
+<h2>Patch module</h2>
+<ul>
+	<li>Renamed DOMPatch module to Patch</li>
+	<li>Fixed MouseListener coordinates for scrolled documents.<br />
+	GWT issue <a
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=286">286</a></li>
+	<li>Fixed DOM.getAbsoluteTop()/DOM.getAbsoluteLeft() bugs for
+	strict mode and scrolled documents. <br />
+	GWT issue <a
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=286">286</a>
+	&amp; <a
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=321">321</a></li>
+	<li>Removed the strict mode CSS value fix<br />
+	<a
+		href="http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/cc4a617a9da39655">Forum
+	post</a></li>
+	<li>Fixed an IE issue for PopupPanel and DialogBox where a white
+	box and/or scrollbars flash breifly when the a popup is displayed. <br />
+	GWT issue <a
+		href="http://code.google.com/p/google-web-toolkit/issues/detail?id=455">455</a></li>
+</ul>
+
+<h2>Debug module</h2>
+<p><A href="http://www.asquare.net/gwttk/apps/demo/Demo.html#Debug">http://www.asquare.net/gwttk/apps/demo/Demo.html#Debug</A></p>
+<ul>
+	<li>Debug output is mirrored to Safari's native JavaScript
+	console. See <a
+		href=http://developer.apple.com/internet/safari/faq.html#anchor14
+		title=http://developer.apple.com/internet/safari/faq.html#anchor14>http://developer.apple.com/internet/safari/faq.html#anchor14</a>
+
+	</li>
+	<li>Changed debug enable key to "Esc" because Caps Lock doesn't
+	genereate an event on Safari</li>
+	<li>You can now set the debug enabler key</li>
+	<li>Added enableSilently() to JSNI Debug api</li>
+	<li>Console tweaks: <br />
+	- no longer auto-hides when debug is disabled <br />
+	- gave the console a style name (tk-DebugConsole) <br />
+	- added tool tips to console controls <br />
+	- added a "Disable Debug" button</li>
+	<li>Changed Debug.prettyPrint() to Debug.dump().
+	Debug.prettyPrint() now prints a 1 line description.</li>
+	<li>Added a hierarchy inspector. Press 'h' twice to enable and
+	click an HTML element to print it's continment hierarchy to the
+	console.</li>
+	<li>Added an element dump inspector. Press 'd' twice to enable and
+	click an HTML element to dump it's members to the console.</li>
+	<li>DebugEventListener: changed the "use default" enableKey
+	character to '0' becuase '-1' wasn't working</li>
+	<li>Removed dependency on Tk module so that the debug module can
+	be used to demonstrate core GWT bugs.</li>
+</ul>
+
+<h2>Known Problems</h2>
+<ul>
+	<li>Debug is enabled on Safari after pressing 'Esc' only once
+	because Safari generates duplicate key events for Esc &amp; arrow keys.</li>
+	<li>ModalDialog causes the scrollbars to momentarily jump in when
+	it is shown in Camino and Firefox[Mac]. The dialog cannot be centered
+	until it is added to the DOM and it's size is determined.<br />
+	Workaround: remove the PositionDialogController and set the dialog size
+	and position the dialog manually before showing it. See the <cite><a
+		href="http://www.asquare.net/gwttk/apps/demo/Demo.html#ModalDialog">Explicitly
+	positioned</a></cite> example in the demo.</li>
+	<li>ModalDialog focus cycle does not work for Shift-Tab in Safari
+	because Safari doesn't generate a valid keycode for Shift-Tab</li>
+	<li>ModalDialog prevents scrolling browser window when visible.
+	Happens with GWT PopupPanel and DialogBox as well. The root cause is
+	PopupPanel.onEventPreview() cancelling the mousedown event. <br />
+	<a
+		href=http://code.google.com/p/google-web-toolkit/issues/detail?id=399>GWT
+	issue 399</a></li>
+	<li>ModalDialog focus containment is implemented only for IE,
+	Mozilla[Win] and Safari. In Opera and Mozilla[Mac], cancelling the tab
+	keydown does not prevent transfer of focus. Mozilla[Linux] is unknown.
+	A possible workaround is to write a controller which uses a timer to
+	grab the focus back after it is transferred to a control outside the
+	focus cycle.</li>
+	<li>AlertDialog button hotkeys do not work in Opera unless a)
+	mouse is over the dialog b) an element in the dialog is focused</li>
+</ul>
+
+<hr />
+
+<h2>0.1.0</h2>
+<p>GWT Tk 0.1.0 was compiled against GWT 1.0.21</p>
+
+<h2>Debug utility</h2>
+<p><A href="http://www.asquare.net/gwttk/apps/demo/Demo.html#Debug">http://www.asquare.net/gwttk/apps/demo/Demo.html#Debug</A></p>
+<p>Print debug statements from "Java", &nbsp;JNSI and external
+JavaScript. In-browser console and hot-key enabling. Stub class provided
+for easy removal from deliverable.</p>
+
+<H2>DropDownPanel</H2>
+<p><A
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#DropDownPanel">http://www.asquare.net/gwttk/apps/demo/Demo.html#DropDownPanel</A></p>
+<p>Same concept as the "Labels" and "Contacts" tip-downs in GMail.</p>
+
+<H2>SimpleHyperLink</H2>
+<p><A
+	href="http://www.asquare.net/gwttk/apps/demo/Demo.html#SimpleHyperLink">http://www.asquare.net/gwttk/apps/demo/Demo.html#SimpleHyperLink</A></p>
+<p>A hyperlink based on an anchor. No pesky DIV messing up your text
+flow. No history tokens in the location bar.</p>
+
+<H2>GWT Patch</H2>
+<p>Includes an example of how to patch the GWT DOM implementation.
+Uses inheritance and deferred binding to override the desired methods.
+The patch is applied by inheriting the patch module after the GWT User
+module. Use as a template for your own patches.</p>
+
+<H2>Ant build script</H2>
+<p>Build multiple GWT projects. Show usage messages. Generate
+javadocs. Generate javadocs for the GWT User library. Properties are
+externalized. In Eclipse, if you set the ${project_loc} property you can
+just click the External Tools shortcut to build the project containing
+the select resource.</p>
+</DIV>
+</body>
+</html>
