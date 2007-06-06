@@ -92,13 +92,12 @@ public class EventsPanel extends Composite
 		
 		public Ex1_EventWrapper(Widget w)
 		{
-			super(w, Event.ONDBLCLICK);
+			super(w, Event.ONDBLCLICK | Event.ONMOUSEDOWN);
 			installIEHook(w.getElement());
 		}
 		
 		/*
-		 * Prevents text selection in IE. OK to install on other browsers as it
-		 * will be ignored.
+		 * Prevents text selection in IE
 		 */
 		private native void installIEHook(Element element) /*-{
 			element.onselectstart = function() { return false; };
