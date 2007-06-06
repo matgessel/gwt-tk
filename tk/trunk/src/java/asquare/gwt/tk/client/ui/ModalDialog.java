@@ -595,9 +595,9 @@ public class ModalDialog extends CPopupPanel
 			return m_viewportWidth;
 		}
 		
-		protected void setViewportWidth(int centerX)
+		protected void setViewportWidth(int width)
 		{
-			m_viewportWidth = centerX;
+			m_viewportWidth = width;
 		}
 		
 		protected int getViewportHeight()
@@ -605,9 +605,9 @@ public class ModalDialog extends CPopupPanel
 			return m_viewportHeight;
 		}
 		
-		protected void setViewportHeight(int centerY)
+		protected void setViewportHeight(int height)
 		{
-			m_viewportHeight = centerY;
+			m_viewportHeight = height;
 		}
 		
 		public void plugIn(Widget widget)
