@@ -198,7 +198,7 @@ public class AlertDialog extends ModalDialog
 	}
 	
 	/**
-	 * Get the image which will be displayed in the caption. 
+	 * Get the image that will be displayed in the caption. 
 	 */
 	public Image getIcon()
 	{
@@ -206,7 +206,7 @@ public class AlertDialog extends ModalDialog
 	}
 	
 	/**
-	 * Set the image will be displayed in the caption. 
+	 * Set the image that will be displayed in the caption. 
 	 * 
 	 * @param url a URL to an image or null
 	 */
@@ -258,6 +258,28 @@ public class AlertDialog extends ModalDialog
 	{
 		m_captionText = captionText;
 		m_captionTextAsHtml = asHtml;
+	}
+	
+	/**
+	 * Not supported.
+	 * 
+	 * @throws UnsupportedOperationException
+	 * @deprecated
+	 */
+	public void setCaption(String text, boolean asHtml)
+	{
+		throw new UnsupportedOperationException();
+	}
+	
+	/**
+	 * Not supported.
+	 *  
+	 * @throws UnsupportedOperationException
+	 * @deprecated
+	 */
+	public void setCaption(Widget w)
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	/**
