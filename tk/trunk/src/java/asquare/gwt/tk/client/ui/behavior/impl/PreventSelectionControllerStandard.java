@@ -28,13 +28,9 @@ public class PreventSelectionControllerStandard extends PreventSelectionControll
 		super(Event.ONMOUSEDOWN);
 	}
 	
-	protected boolean doBrowserEvent(Widget widget, Event event)
+	public void onBrowserEvent(Widget widget, Event event)
 	{
-		if (DOM.eventGetType(event) == Event.ONMOUSEDOWN)
-		{
-			// prevent text selection (works in Mozilla, Safari & Opera)
-			return false;
-		}
-		return true;
+        // prevents text selection in Mozilla, Safari & Opera
+        DOM.eventPreventDefault(event);
 	}
 }
