@@ -49,12 +49,14 @@ public class PopupImplIE6Patched extends PopupImplIE6
 		frame.style['top'] = popup.offsetTop;
 		frame.style['width'] = popup.offsetWidth;
 		frame.style['height'] = popup.offsetHeight;
+		frame.style['zIndex'] = popup.style.zIndex;
 		
 		// updates position and dimensions as popup is moved & resized
 		frame.style.setExpression('left', 'this.__popup.offsetLeft');
 		frame.style.setExpression('top', 'this.__popup.offsetTop');
 		frame.style.setExpression('width', 'this.__popup.offsetWidth');
 		frame.style.setExpression('height', 'this.__popup.offsetHeight');
+		frame.style.setExpression('zIndex', 'this.__popup.style.zIndex');
 		popup.parentElement.insertBefore(frame, popup);
 	}-*/;
 }
