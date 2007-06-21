@@ -514,7 +514,7 @@ public class AlertDialog extends ModalDialog
 	 */
 	public void show(HasFocus focusOnCloseWidget)
 	{
-		setCaption(buildCaption());
+		super.setCaption(buildCaption());
 		buildContent();
 		super.show(focusOnCloseWidget);
 	}
