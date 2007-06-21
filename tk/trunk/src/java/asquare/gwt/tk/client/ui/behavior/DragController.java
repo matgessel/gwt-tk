@@ -58,7 +58,7 @@ public class DragController extends ControllerAdaptor
 	 */
 	public DragController(DragGesture gesture, int distance)
 	{
-		super(Event.ONMOUSEDOWN | Event.ONMOUSEMOVE | Event.ONMOUSEUP, DragController.class);
+		super(Event.ONMOUSEDOWN | Event.ONMOUSEMOVE | Event.ONMOUSEUP | Event.ONLOSECAPTURE, DragController.class);
 		m_dragGesture = gesture;
 		m_threshold = distance;
 	}
@@ -85,6 +85,16 @@ public class DragController extends ControllerAdaptor
 				break;
 
 			case Event.ONMOUSEUP: 
+				onMouseUp(widget, sourceX, sourceY);
+				break;
+				
+			/*
+			 * Firefox loses the mouseup if released outside the client area.
+			 * But we do get an onlosecapture event. Not ideal, but it prevents
+			 * a invalid state (dragging while mouse is released).
+			 * http://code.google.com/p/google-web-toolkit/issues/detail?id=243
+			 */ 
+			case Event.ONLOSECAPTURE: 
 				onMouseUp(widget, sourceX, sourceY);
 				break;
 		}
