@@ -95,7 +95,7 @@ public class DragController extends ControllerAdaptor
 			 * http://code.google.com/p/google-web-toolkit/issues/detail?id=243
 			 */ 
 			case Event.ONLOSECAPTURE: 
-				onMouseUp(widget, sourceX, sourceY);
+				onMouseUp(widget, -1, -1);
 				break;
 		}
 	}
@@ -147,11 +147,11 @@ public class DragController extends ControllerAdaptor
 		// it is possible to get a mouse up without a mouse down
 		if (m_mouseDown)
 		{
-			m_dragGesture.step(x, y);
+            // clear flag to prevent reentrancy via ONLOSECAPTURE
+            m_mouseDown = false;
+            m_dragging = false;
 			m_dragGesture.finish(x, y);
 			DOM.releaseCapture(sender.getElement());
-			m_dragging = false;
-			m_mouseDown = false;
 		}
 	}
 }
