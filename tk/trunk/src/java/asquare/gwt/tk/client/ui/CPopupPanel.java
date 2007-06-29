@@ -166,19 +166,24 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport
 	/**
 	 * This class basically exists to deal with the Firefox/scroll bug. 
 	 */
-	static class EventPreviewDelegate
+	protected static class EventPreviewDelegate
 	{
+		/**
+		 * @param event
+		 * @param superResult the result of <code>PopupPanel{@link #onEventPreview(Event, boolean)}</code>
+		 * @return <code>false</code> to cancel the event
+		 */
 		public boolean onEventPreview(Event event, boolean superResult)
 		{
 			return superResult;
 		}
 	}
 	
-	static class EventPreviewDelegateFF extends EventPreviewDelegate
+	protected static class EventPreviewDelegateFF extends EventPreviewDelegate
 	{
 		public boolean onEventPreview(Event event, boolean superResult)
 		{
-			if (DomUtil.isWin() && (DOM.eventGetType(event) & Event.MOUSEEVENTS) != 0)
+			if (! DomUtil.isMac() && (DOM.eventGetType(event) & Event.MOUSEEVENTS) != 0)
 			{
 				/*
 				 * The client area is bounded by the scroll bars. If a mouse
