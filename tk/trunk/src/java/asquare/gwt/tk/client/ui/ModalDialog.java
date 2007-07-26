@@ -156,7 +156,7 @@ public class ModalDialog extends CPopupPanel
 		List result = new Vector();
 		result.add(PreventSelectionController.getInstance());
 		result.add(new DragStyleController(this, STYLENAME_DRAGGING));
-		result.add(new DragController(new DragPopupGesture(this)));
+		result.add(new DragController(new DragPerformanceFilter(new DragFloatingObjectGesture(this))));
 		return result;
 	}
 	

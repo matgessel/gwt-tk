@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,21 +15,24 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.UIObject;
 
 /**
- * A DragWidgetGesture which sets the position via
- * {@link PopupPanel#setPopupPosition(int, int)}
+ * A DragGesture which absoutely positions a target widget.
  */
-public class DragPopupGesture extends DragWidgetGesture
+public class DragFloatingObjectGesture extends AdjustObjectGesture
 {
-	public DragPopupGesture(PopupPanel widget)
+	/**
+	 * @param target the widget to be dragged
+	 */
+	public DragFloatingObjectGesture(UIObject target)
 	{
-		super(widget);
+		super(target, target);
 	}
 	
-	protected void setTargetPosition(int left, int top)
+	public void step(int x, int y)
 	{
-		((PopupPanel) getDragWidget()).setPopupPosition(left, top);
+		setLeft(getDeltaX(x));
+		setTop(getDeltaY(y));
 	}
 }

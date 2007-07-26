@@ -14,24 +14,17 @@
  the License.
  -->
 <module>
-	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="com.google.gwt.user.User"/>
 	
-	<!-- patch module must be after Google module -->
-	<inherits name='com.google.gwt.user.Patch'/>
-
-	<inherits name='asquare.gwt.tk.DomUtil'/>
+	<replace-with class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategyImmediate">
+		<when-type-is class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategy"/>
+	</replace-with>
 	
-	<inherits name='asquare.gwt.tk.GlassPanel'/>
-	
-	<inherits name='asquare.gwt.tk.TabFocusController'/>
-
-	<inherits name='asquare.gwt.tk.PreventSelectionController'/>
-	
-	<inherits name='asquare.gwt.tk.CPopupPanel'/>
-	
-	<inherits name='asquare.gwt.tk.ModalDialog'/>
-	
-	<inherits name='asquare.gwt.tk.DragPerformanceFilter'/>
-	
-	<source path="client"/>
+	<replace-with class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategyMozilla">
+		<when-type-is class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategy"/>
+		<any>
+			<when-property-is name="user.agent" value="gecko"/>
+			<when-property-is name="user.agent" value="gecko1_8"/>
+		</any>
+	</replace-with>
 </module>
