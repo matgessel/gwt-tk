@@ -32,12 +32,13 @@ public class ControllerSupportDelegate
 {
 	private final Widget m_widget;
 	
-	private List m_controllers;
+	private List m_controllers = null;
 	private int m_legacyEventBits = 0;
-//	private boolean m_processing = false;
 	
 	/**
 	 * Creates a delegate for the specified widget. 
+	 * 
+	 * @param widget the widget which will be passed to Controller methods
 	 */
 	public ControllerSupportDelegate(Widget widget)
 	{
@@ -195,17 +196,8 @@ public class ControllerSupportDelegate
 		plugInControllers();
 	}
 	
-//	/**
-//	 * @throws IllegalStateException if the widget is detached while controllers
-//	 *             are processing an event. To prevent this from happening, use
-//	 *             {@link com.google.gwt.user.client.DeferredCommand DeferredCommand}
-//	 *             to remove the widget.
-//	 */
 	public void onDetach()
 	{
-//		if (m_processing)
-//			throw new IllegalStateException("Detach called while calling onBrowserEvent(Event event)");
-//		
 		unplugControllers();
 	}
 	
@@ -213,16 +205,15 @@ public class ControllerSupportDelegate
 	{
 		if (m_controllers != null)
 		{
-//			m_processing = true;
+			int eventType = DOM.eventGetType(event);
 			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
 				Controller controller = (Controller) m_controllers.get(i);
-				if ((controller.getEventBits() & DOM.eventGetType(event)) != 0)
+				if ((controller.getEventBits() & eventType) != 0)
 				{
 					controller.onBrowserEvent(m_widget, event);
 				}
 			}
-//			m_processing = false;
 		}
 	}
 }
