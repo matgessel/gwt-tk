@@ -53,7 +53,18 @@ public interface AssociativeArray
 	boolean getBoolean(String key);
 	
 	/**
-	 * Map an Object to the specified key, replacing any existing mapping. 
+	 * Get the primitive int value associated with the specified key. 
+	 * 
+	 * @param key a String
+	 * @return the value <code>key</code> has been mapped to <code>true</code>, otherwise <code>-1</code>
+	 * @throws NullPointerException if <code>key</code> is <code>null</code>
+	 * @throws ClassCastException if the value which is mapped to
+	 *             <code>key</code> is not a primitive int value
+	 */
+	int getInt(String key);
+	
+	/**
+	 * Map an Object to the specified key, replacing any existing mapping for the key. 
 	 * 
 	 * @param key a String
 	 * @param value an Object, or <code>null</code>
@@ -62,13 +73,22 @@ public interface AssociativeArray
 	void set(String key, Object value);
 	
 	/**
-	 * Map an boolean value to the specified key, replacing any existing mapping. 
+	 * Map an boolean value to the specified key, replacing any existing mapping for the key. 
 	 * 
 	 * @param key a String
 	 * @param value <code>true</code> or <code>false</code>
 	 * @throws NullPointerException if <code>key</code> is <code>null</code>
 	 */
 	void set(String key, boolean value);
+	
+	/**
+	 * Map an int value to the specified key, replacing any existing mapping for the key. 
+	 * 
+	 * @param key a String
+	 * @param value <code>true</code> or <code>false</code>
+	 * @throws NullPointerException if <code>key</code> is <code>null</code>
+	 */
+	void set(String key, int value);
 	
 	/**
 	 * Removes all mappings (if any). 

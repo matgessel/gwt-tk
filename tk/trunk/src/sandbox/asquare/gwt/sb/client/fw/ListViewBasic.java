@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.List;
-
 public class ListViewBasic extends ListViewDefault
 {
 	public ListViewBasic()
@@ -26,16 +24,16 @@ public class ListViewBasic extends ListViewDefault
 	
 	public ListViewBasic(String listElement, String itemElement)
 	{
-		this(listElement, itemElement, null, null);
+		this(listElement, itemElement,  null);
 	}
 
-	public ListViewBasic(ModelElementFormatter formatter)
+	public ListViewBasic(CellRenderer formatter)
 	{
-		this(ListWidgetBasic.DEFAULT_ELEMENT_LIST, ListWidgetBasic.DEFAULT_ELEMENT_ITEM, null, formatter);
+		this(ListWidgetBasic.DEFAULT_ELEMENT_LIST, ListWidgetBasic.DEFAULT_ELEMENT_ITEM, formatter);
 	}
 	
-	public ListViewBasic(String listElement, String itemElement, List controllers, ModelElementFormatter formatter)
+	public ListViewBasic(String listElement, String itemElement, CellRenderer formatter)
 	{
-		super(new ListWidgetBasic(), controllers, formatter);
+		super(new ListWidgetBasic(), formatter);
 	}
 }

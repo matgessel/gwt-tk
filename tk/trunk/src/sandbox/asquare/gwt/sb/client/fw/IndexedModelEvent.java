@@ -15,15 +15,14 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ListModelEvent extends Object
+public class IndexedModelEvent extends ModelChangeEvent
 {
-	private final ListModelRead m_source;
 	private final int m_beginInterval;
 	private final int m_endInterval;
 	
-	public ListModelEvent(ListModelRead source, int beginInterval, int endInterval)
+	public IndexedModelEvent(IndexedDataSource source, int beginInterval, int endInterval)
 	{
-		m_source = source;
+		super(source);
 		m_beginInterval = beginInterval;
 		m_endInterval = endInterval;
 	}
@@ -37,9 +36,9 @@ public class ListModelEvent extends Object
 	{
 		return m_endInterval;
 	}
-
-	public ListModelRead getSource()
+	
+	public IndexedDataSource getIndexedModel()
 	{
-		return m_source;
+		return (IndexedDataSource) super.getSource();
 	}
 }

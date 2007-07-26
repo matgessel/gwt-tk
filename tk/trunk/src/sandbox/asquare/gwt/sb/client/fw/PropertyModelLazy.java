@@ -15,37 +15,29 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
+import java.util.EventListener;
 
 import asquare.gwt.sb.client.util.Properties;
 
-public class PropertyModelLazy
+public class PropertyModelLazy implements ExplicitUpdateModel
 {
+	private final ModelChangeSupportBase m_changeSupport = new ChangeSupport();
 	private final Properties m_impl = new Properties();
-	
-	private boolean m_changed = false;
-	private Vector m_listeners = null;
 	
 	public void addListener(PropertyModelListener listener)
 	{
-		if (m_listeners == null)
-		{
-			m_listeners = new Vector();
-		}
-		m_listeners.add(listener);
+		m_changeSupport.addListener(listener);
 	}
 	
 	public void removeListener(PropertyModelListener listener)
 	{
-		if (m_listeners != null)
-		{
-			m_listeners.remove(listener);
-		}
+		m_changeSupport.removeListener(listener);
 	}
 	
 	public void clear()
 	{
 		m_impl.clear();
+		m_changeSupport.setChanged();
 	}
 	
 	public Object get(String name)
@@ -68,7 +60,7 @@ public class PropertyModelLazy
 		if (m_impl.getBoolean(name) != value)
 		{
 			m_impl.set(name, value);
-			m_changed = true;
+			m_changeSupport.setChanged();
 		}
 	}
 	
@@ -79,19 +71,19 @@ public class PropertyModelLazy
 			return;
 		
 		m_impl.set(name, value);
-		m_changed = true;
+		m_changeSupport.setChanged();
 	}
 	
-	protected void fireChanged()
+	public void update()
 	{
-		if (m_changed && m_listeners.size() > 0)
+		m_changeSupport.update();
+	}
+	
+	private class ChangeSupport extends ModelChangeSupportLight
+	{
+		protected void notifyListener(EventListener listener)
 		{
-			Object[] listeners = m_listeners.toArray();
-			for (int i = 0; i < listeners.length; i++)
-			{
-				((PropertyModelListener) listeners[i]).modelChanged(this);
-			}
-			m_changed = false;
+			((PropertyModelListener) listener).modelChanged(PropertyModelLazy.this);
 		}
 	}
 }

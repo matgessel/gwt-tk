@@ -13,21 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.sb.client.fw;
+package asquare.gwt.sb.client.util;
 
-public interface ListModelRead
+/**
+ * A queue which pauses between executing each command. 
+ */
+public class CommandQueueDeferredStepped extends CommandQueueDeferred
 {
-	int getSize();
-	
-	Object get(int index);
-	
-	void addListener(ListModelListener listener);
-	
-	void removeListener(ListModelListener listener);
-
-	boolean isIndexSelected(int index);
-	
-	boolean isIndexDisabled(int index);
-	
-	boolean isIndexActive(int index);
+	protected void scheduleRunIteration()
+	{
+		deferRun();
+	}
 }

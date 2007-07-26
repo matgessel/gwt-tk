@@ -15,11 +15,15 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface ListModel extends ListModelRead
+public interface ListModel extends IndexedDataSource, ModelHoverSupport
 {
+	void addListener(ModelListener listener);
+
+	void removeListener(ModelListener listener);
+	
 	ListSelectionModel getSelectionModel();
 	
-	void setActiveIndex(int index);
+	boolean isIndexSelected(int index);
 	
-	void update();
+	boolean isIndexDisabled(int index);
 }

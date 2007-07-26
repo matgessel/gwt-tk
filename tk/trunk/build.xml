@@ -325,13 +325,22 @@
 			<fileset dir="${project.dir}/bin/java" includes="**/server/**"/>
 		</jar>
 	</target>
-	
-	<target name="jarSandbox">
-		<delete file="gwttk-sandbox-${project.version}.jar"/>
-		<jar destfile="gwttk-sandbox-${project.version}.jar">
-			<fileset dir="${project.dir}/src/java" includes="*.txt"/>
-			<fileset dir="${project.dir}/src/sandbox"/>
-			<fileset dir="${project.dir}/bin/java" includes="asquare/gwt/sb/**"/>
-		</jar>
-	</target>
+    
+    <target name="jarSandbox">
+        <delete file="gwttk-sandbox-${project.version}.jar"/>
+        <jar destfile="gwttk-sandbox-${project.version}.jar">
+            <fileset dir="${project.dir}/src/java" includes="*.txt"/>
+            <fileset dir="${project.dir}/src/sandbox"/>
+            <fileset dir="${project.dir}/bin/java" includes="asquare/gwt/sb/**"/>
+        </jar>
+    </target>
+    
+    <target name="jarTest">
+        <delete file="gwttk-test-${project.version}.jar"/>
+        <jar destfile="gwttk-test-${project.version}.jar">
+            <fileset dir="${project.dir}/src/java" includes="*.txt"/>
+            <fileset dir="${project.dir}/src/test"/>
+            <fileset dir="${project.dir}/bin/test"/>
+        </jar>
+    </target>
 </project>

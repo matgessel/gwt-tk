@@ -16,22 +16,43 @@
 package asquare.gwt.sb.client.util;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DeferredCommand;
 
 /**
- * A queue which immediately executes commands upon queuing. 
+ * A queue which pauses before starting command execution. 
  */
-public class CommandQueue extends CommandQueueBase
+public class CommandQueueDeferred extends CommandQueueBase
 {
+	private boolean m_runScheduled = false;
+	
 	public void add(Command command)
 	{
 		if (addImpl(command))
 		{
-			run();
+			deferRun();
 		}
 	}
 	
 	protected void scheduleRunIteration()
 	{
 		run();
+	}
+	
+	protected void deferRun()
+	{
+//		Debug.println("CommandQueue.deferRun()");
+		if (m_runScheduled)
+			return;
+		
+		m_runScheduled = true;
+		
+		DeferredCommand.add(new Command()
+		{
+			public void execute()
+			{
+				m_runScheduled = false;
+				run();
+			}
+		});
 	}
 }

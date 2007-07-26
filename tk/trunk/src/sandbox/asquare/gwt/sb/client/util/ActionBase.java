@@ -20,7 +20,17 @@ import java.util.Vector;
 public abstract class ActionBase implements Action
 {
 	private Vector m_listeners;
+	private String m_uiString;
 	private boolean m_enabled = true;
+	
+	public ActionBase()
+	{
+	}
+	
+	public ActionBase(String uiString)
+	{
+		m_uiString = uiString;
+	}
 	
 	public void addListener(ActionPropertyListener listener)
 	{
@@ -51,6 +61,16 @@ public abstract class ActionBase implements Action
 			m_enabled = enabled;
 			fireEnabledChanged();
 		}
+	}
+	
+	public String getUIString()
+	{
+		return m_uiString;
+	}
+	
+	public void setUiString(String uiString)
+	{
+		m_uiString = uiString;
 	}
 	
 	public String toString()

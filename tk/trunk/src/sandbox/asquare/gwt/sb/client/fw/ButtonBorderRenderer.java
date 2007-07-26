@@ -21,7 +21,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
 /**
- * A formatter which divides the element into a 3x3 grid. The grid can be styled
+ * A renderer which divides the element into a 3x3 grid. The grid can be styled
  * to accomodate the size to the content. 
  * <p>
  * Pros
@@ -37,21 +37,21 @@ import com.google.gwt.user.client.Element;
  * <li>Changing element style is relatively slow...especially noticable with hovers styles. </li>
  * </ul>
  */
-public class ButtonBorderFormatter extends ModelElementFormatterDefault
+public class ButtonBorderRenderer extends CellRendererDefault
 {
 	public static final String STYLENAME = "tk-Button";
 	
-	public ButtonBorderFormatter()
+	public ButtonBorderRenderer()
 	{
 		this(STYLENAME);
 	}
 	
-	public ButtonBorderFormatter(String listCellStyleName)
+	public ButtonBorderRenderer(String listCellStyleName)
 	{
 		super(listCellStyleName);
 	}
 	
-	public void formatCell(Element viewElement, Object modelElement, Properties properties)
+	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
 		DOM.setAttribute(viewElement, "className", buildStyleName(properties));
 		

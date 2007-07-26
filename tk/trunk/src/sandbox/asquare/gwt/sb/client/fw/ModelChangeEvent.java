@@ -15,15 +15,17 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ListElementFormatterDefault extends ModelElementFormatterDefault
+public class ModelChangeEvent extends Object
 {
-	public ListElementFormatterDefault()
-	{
-		this(ListView.STYLENAME_LIST_ITEM);
-	}
+	private final Object m_source;
 	
-	public ListElementFormatterDefault(String elementStyleName)
+	public ModelChangeEvent(Object source)
 	{
-		super(elementStyleName);
+		m_source = source;
+	}
+
+	public Object getSource()
+	{
+		return m_source;
 	}
 }

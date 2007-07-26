@@ -21,48 +21,54 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ListHoverController extends ControllerAdaptor
+public class IndexedViewHoverController extends ControllerAdaptor
 {
-	private final ListModel m_model;
+	private final ModelHoverSupport m_model;
 	
-	public ListHoverController(ListModel model)
+	public IndexedViewHoverController(ModelHoverSupport model)
 	{
-		super(Event.ONMOUSEOVER | Event.ONMOUSEOUT, ListHoverController.class);
+		super(Event.ONMOUSEOVER | Event.ONMOUSEOUT, IndexedViewHoverController.class);
 		m_model = model;
+	}
+	
+	public void plugIn(Widget widget)
+	{
+		if (! (widget instanceof IndexedView))
+			throw new ClassCastException();
 	}
 	
 	public void onBrowserEvent(Widget widget, Event event)
 	{
-		ListView list = (ListView) widget;
-		int targetIndex = list.getIndexOf(DOM.eventGetTarget(event));
+		IndexedView indexedView = (IndexedView) widget;
+		int targetIndex = indexedView.getIndexOf(DOM.eventGetTarget(event));
 		
 		switch (DOM.eventGetType(event))
 		{
 			case Event.ONMOUSEOVER: 
-				int fromIndex = list.getIndexOf(DOM.eventGetFromElement(event));
+				int fromIndex = indexedView.getIndexOf(DOM.eventGetFromElement(event));
 				
-				// Ignore over events generated within the same list item
+				// Ignore over events generated within the same view cell
 				if (targetIndex != fromIndex)
 				{
-					m_model.setActiveIndex(targetIndex);
+					m_model.setHoverIndex(targetIndex);
 					m_model.update();
 				}
 				break;
 			
 			case Event.ONMOUSEOUT: 
-				int toIndex = list.getIndexOf(DOM.eventGetToElement(event));
+				int toIndex = indexedView.getIndexOf(DOM.eventGetToElement(event));
 				
-				// Ignore out events generated within the same list item
+				// Ignore out events generated within the same view cell
 				if (targetIndex != toIndex)
 				{
 					/*
 					 * Performance: ignore out events if the cursor is moving to
-					 * another item in the same list. (The over event will set
+					 * another cell in the same view. (The over event will set
 					 * the active index anyway, resulting in a 2nd update).
 					 */ 
 					if (toIndex == -1)
 					{
-						m_model.setActiveIndex(-1);
+						m_model.setHoverIndex(-1);
 						m_model.update();
 					}
 				}

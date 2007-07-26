@@ -17,11 +17,11 @@ package asquare.gwt.sb.client.fw;
 
 import asquare.gwt.sb.client.util.Properties;
 
-public class ListUpdateController implements ListModelListener
+public class ListUpdateController implements ModelListener
 {
 	private final ListView m_view;
 	
-	public ListUpdateController(ListModelRead model, ListView view)
+	public ListUpdateController(ListModel model, ListView view)
 	{
 		m_view = view;
 		model.addListener(this);
@@ -30,7 +30,7 @@ public class ListUpdateController implements ListModelListener
 		int changeEnd = model.getSize() - 1;
 		if (changeEnd > -1)
 		{
-			listModelChanged(model, 0, changeEnd);
+			modelChanged(model, 0, changeEnd);
 		}
 	}
 	
@@ -39,12 +39,13 @@ public class ListUpdateController implements ListModelListener
 		return m_view;
 	}
 	
-	public void listModelChanged(ListModelEvent e)
+	public void modelChanged(ModelChangeEvent e)
 	{
-		this.listModelChanged(e.getSource(), e.getBeginInterval(), e.getEndInterval());
+		IndexedModelEvent lme = (IndexedModelEvent) e;
+		modelChanged((ListModel) lme.getSource(), lme.getBeginInterval(), lme.getEndInterval());
 	}
 	
-	private void listModelChanged(ListModelRead model, int changeStart, int changeEnd)
+	private void modelChanged(ListModel model, int changeStart, int changeEnd)
 	{
 		Properties tempProperties = new Properties();
 		int newSize = model.getSize();
@@ -53,7 +54,7 @@ public class ListUpdateController implements ListModelListener
 		// ensure view has enough items
 		for (int i = oldSize; i < newSize; i++)
 		{
-			m_view.insert(i, model.get(i), configureCellProperties(i, model, m_view, tempProperties));
+			m_view.insert(i, model.get(i), configureCellProperties(i, model, tempProperties));
 		}
 		
 		// remove extra view items
@@ -69,15 +70,15 @@ public class ListUpdateController implements ListModelListener
 		 */
 		for (int i = changeStart; i < oldSize && i < newSize && i < changeEnd + 1; i++)
 		{
-			m_view.formatCell(i, model.get(i), configureCellProperties(i, model, m_view, tempProperties));
+			m_view.renderCell(i, model.get(i), configureCellProperties(i, model, tempProperties));
 		}
 	}
 	
-	protected Properties configureCellProperties(int index, ListModelRead model, ListView view, Properties properties)
+	protected Properties configureCellProperties(int index, ListModel model, Properties properties)
 	{
-		properties.set(ModelElementFormatter.PROPERTY_SELECTED, model.isIndexSelected(index));
-		properties.set(ModelElementFormatter.PROPERTY_ACTIVE, model.isIndexActive(index));
-		properties.set(ModelElementFormatter.PROPERTY_DISABLED, model.isIndexDisabled(index));
+		properties.set(CellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index));
+		properties.set(CellRenderer.PROPERTY_HOVER, model.isIndexHovering(index));
+		properties.set(CellRenderer.PROPERTY_DISABLED, model.isIndexDisabled(index));
 		return properties;
 	}
 }

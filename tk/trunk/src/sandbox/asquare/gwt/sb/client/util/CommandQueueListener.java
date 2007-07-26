@@ -15,9 +15,30 @@
  */
 package asquare.gwt.sb.client.util;
 
+import java.util.EventListener;
+
 import com.google.gwt.user.client.Command;
 
-public interface CommandQueueListener
+public interface CommandQueueListener extends EventListener
 {
-	void commandExecuted(Command command);
+	boolean beforeCommandAdded(CommandQueueBase queue, Command command);
+	
+	void afterCommandAdded(CommandQueueBase queue, Command command);
+	
+	/**
+	 * Called immediately before a command is be executed
+	 * 
+	 * @param queue the queue executing the command
+	 * @param command the command to be executed
+	 * @return <code>false</code> to cancel executing the command
+	 */
+	boolean beforeCommandExecuted(CommandQueueBase queue, Command command);
+	
+	/**
+	 * Called immediately after a command is executed
+	 * 
+	 * @param queue the queue executing the command
+	 * @param command the command which was executed
+	 */
+	void afterCommandExecuted(CommandQueueBase queue, Command command);
 }

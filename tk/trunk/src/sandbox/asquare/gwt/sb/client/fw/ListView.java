@@ -17,8 +17,6 @@ package asquare.gwt.sb.client.fw;
 
 import asquare.gwt.sb.client.util.Properties;
 
-import com.google.gwt.user.client.Element;
-
 /**
  * A list widget which displays arbitrary items. 
  * 
@@ -28,16 +26,14 @@ import com.google.gwt.user.client.Element;
  * <li>.tk-ListItem { an item in the list }</li>
  * </ul>
  */
-public interface ListView
+public interface ListView extends IndexedView
 {
 	public static final String STYLENAME_LIST = "tk-ListView";
 	public static final String STYLENAME_LIST_ITEM = "tk-ListItem";
 	
-	ModelElementFormatter getFormatter();
+	CellRenderer getRenderer();
 	
-	void setFormatter(ModelElementFormatter formatter);
-	
-	int getIndexOf(Element eventTarget);
+	void setRenderer(CellRenderer renderer);
 	
 	void add(Object item, Properties cellProperties);
 	
@@ -49,5 +45,5 @@ public interface ListView
 	
 	int getSize();
 	
-	void formatCell(int index, Object item, Properties cellProperties);
+	void renderCell(int index, Object item, Properties cellProperties);
 }

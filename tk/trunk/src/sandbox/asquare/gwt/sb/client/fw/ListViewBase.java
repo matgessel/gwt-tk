@@ -15,50 +15,38 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.List;
-import java.util.Vector;
-
 import asquare.gwt.sb.client.util.Properties;
-import asquare.gwt.tk.client.ui.CWrapper;
-import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class ListViewBase extends CWrapper implements ListView
+public abstract class ListViewBase extends ViewBase implements ListView
 {
-	private ModelElementFormatter m_formatter;
+	private CellRenderer m_renderer;
 	
-	protected ListViewBase(Widget listImpl, List controllers, ModelElementFormatter formatter)
+	protected ListViewBase(Widget listImpl, CellRenderer cellRenderer)
 	{
-		super(listImpl, controllers);
+		super(listImpl);
 		setStyleName(ListView.STYLENAME_LIST);
-		m_formatter = ((formatter != null) ? formatter : createFormatter());
+		m_renderer = ((cellRenderer != null) ? cellRenderer : createFormatter());
 	}
 	
-	protected List createControllers()
+	protected CellRenderer createFormatter()
 	{
-		List result = new Vector();
-		result.add(PreventSelectionController.getInstance());
-		return result;
+        CellRendererDefault result = (CellRendererDefault) GWT.create(CellRendererDefault.class);
+        result.setElementBaseStyleName(ListView.STYLENAME_LIST_ITEM);
+        return result;
 	}
 	
-	protected ModelElementFormatter createFormatter()
+	public CellRenderer getRenderer()
 	{
-		ListElementFormatterDefault result = (ListElementFormatterDefault) GWT.create(ListElementFormatterDefault.class);
-		result.setElementStyleName(STYLENAME_LIST_ITEM);
-		return result;
+		return m_renderer;
 	}
 	
-	public ModelElementFormatter getFormatter()
+	public void setRenderer(CellRenderer renderer)
 	{
-		return m_formatter;
-	}
-	
-	public void setFormatter(ModelElementFormatter formatter)
-	{
-		m_formatter = formatter;
+		m_renderer = renderer;
 	}
 	
 	public void add(Object item, Properties cellProperties)
@@ -68,15 +56,15 @@ public abstract class ListViewBase extends CWrapper implements ListView
 	
 	public void insert(int index, Object item, Properties cellProperties)
 	{
-		m_formatter.formatCell(insertCellStructure(index), item, cellProperties);
+		getRenderer().renderCell(insertCellStructure(index), item, cellProperties);
 	}
 	
 	protected abstract Element insertCellStructure(int index);
 	
 	protected abstract Element getCellElement(int index);
 	
-	public void formatCell(int index, Object item, Properties cellProperties)
+	public void renderCell(int index, Object item, Properties cellProperties)
 	{
-		m_formatter.formatCell(getCellElement(index), item, cellProperties);
+		getRenderer().renderCell(getCellElement(index), item, cellProperties);
 	}
 }

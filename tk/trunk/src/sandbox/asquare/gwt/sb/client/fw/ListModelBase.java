@@ -15,68 +15,43 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
-
-public abstract class ListModelBase implements ListModel, ListSelectionModelListener
+public abstract class ListModelBase implements ListModel
 {
+	private final ChangeSupport m_changeSupport = new ChangeSupport();
 	private final ListSelectionModel m_selectionModel;
 	
-	private Vector m_listeners;
-	private int m_activeIndex = -1;
-	private int m_changeStart = -1;
-	private int m_changeEnd = -1;
+	private int m_hoverIndex = -1;
 	
 	public ListModelBase(ListSelectionModel selectionModel)
 	{
 		m_selectionModel = selectionModel;
-		m_selectionModel.addListener(this);
-	}
-	
-	public void addListener(ListModelListener listener)
-	{
-		if (m_listeners == null)
+		m_selectionModel.addListener(new ListSelectionModelListener()
 		{
-			m_listeners = new Vector();
-		}
-		m_listeners.add(listener);
-	}
-	
-	public void removeListener(ListModelListener listener)
-	{
-		if (m_listeners != null)
-		{
-			m_listeners.remove(listener);
-		}
-	}
-	
-	public boolean isChanged()
-	{
-		return m_changeEnd > -1;
+			public void listSelectionModelChanged(int index)
+			{
+				m_changeSupport.addChange(index);
+			}
+		});
 	}
 	
 	protected void addChange(int index)
 	{
-		if (index < 0)
-			throw new IndexOutOfBoundsException(String.valueOf(index));
-		
-		if (index < m_changeStart || m_changeStart == -1)
-		{
-			m_changeStart = index;
-		}
-		if (index > m_changeEnd)
-		{
-			m_changeEnd = index;
-		}
+		m_changeSupport.addChange(index);
 	}
 	
-	public int getChangeStartIndex()
+	boolean isChanged()
 	{
-		return m_changeStart;
+		return m_changeSupport.isChanged();
 	}
-	
-	public int getChangeEndIndex()
+
+	public void addListener(ModelListener listener)
 	{
-		return m_changeEnd;
+		m_changeSupport.addListener(listener);
+	}
+
+	public void removeListener(ModelListener listener)
+	{
+		m_changeSupport.removeListener(listener);
 	}
 	
 	public ListSelectionModel getSelectionModel()
@@ -94,45 +69,71 @@ public abstract class ListModelBase implements ListModel, ListSelectionModelList
 		return false;
 	}
 	
-	public boolean isIndexActive(int index)
+	public boolean isIndexHovering(int index)
 	{
-		return index == m_activeIndex;
+		return index == m_hoverIndex;
 	}
 	
-	public void setActiveIndex(int index)
+	public void setHoverIndex(int index)
 	{
-		if (m_activeIndex != index)
+		if (m_hoverIndex != index)
 		{
-			if (m_activeIndex > -1)
+			if (m_hoverIndex > -1)
 			{
-				addChange(m_activeIndex);
+				m_changeSupport.addChange(m_hoverIndex);
 			}
-			m_activeIndex = index;
-			if (m_activeIndex > -1)
+			m_hoverIndex = index;
+			if (m_hoverIndex > -1)
 			{
-				addChange(m_activeIndex);
+				m_changeSupport.addChange(m_hoverIndex);
 			}
 		}
 	}
 	
 	public void update()
 	{
-		if (isChanged() && m_listeners != null && m_listeners.size() > 0)
-		{
-			Object[] listeners = m_listeners.toArray();
-			ListModelEvent e = new ListModelEvent(this, m_changeStart, m_changeEnd);
-			for (int i = 0; i < listeners.length; i++)
-			{
-				((ListModelListener) listeners[i]).listModelChanged(e);
-			}
-		}
-		m_changeStart = -1;
-		m_changeEnd = -1;
+		m_changeSupport.update();
 	}
 	
-	// ListSelectionModelListener method
-	public void listSelectionModelChanged(int index)
+	private class ChangeSupport extends ModelChangeSupportHeavy
 	{
-		addChange(index);
+		private int m_changeStart = -1;
+		private int m_changeEnd = -1;
+		
+		public boolean isChanged()
+		{
+			return m_changeEnd > -1;
+		}
+		
+		public void setChanged()
+		{
+			throw new UnsupportedOperationException();
+		}
+		
+		protected void resetChanges()
+		{
+			m_changeStart = -1;
+			m_changeEnd = -1;
+		}
+		
+		protected void addChange(int index)
+		{
+			if (index < 0)
+				throw new IndexOutOfBoundsException(String.valueOf(index));
+			
+			if (index < m_changeStart || m_changeStart == -1)
+			{
+				m_changeStart = index;
+			}
+			if (index > m_changeEnd)
+			{
+				m_changeEnd = index;
+			}
+		}
+		
+		protected ModelChangeEvent createChangeEvent()
+		{
+			return new IndexedModelEvent(ListModelBase.this, m_changeStart, m_changeEnd);
+		}
 	}
 }

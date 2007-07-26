@@ -15,18 +15,16 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.List;
-
 public class ListViewVTable extends ListViewDefault
 {
 	public ListViewVTable()
 	{
-		this(null, null);
+		this(null);
 	}
 	
-	public ListViewVTable(List controllers, ModelElementFormatter formatter)
+	public ListViewVTable(CellRenderer formatter)
 	{
-		super(new ListWidgetVTable(), controllers, formatter);
+		super(new ListWidgetVTable(), formatter);
 		
 	}
 }

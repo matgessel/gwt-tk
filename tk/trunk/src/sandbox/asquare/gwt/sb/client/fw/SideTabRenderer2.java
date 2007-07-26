@@ -35,19 +35,19 @@ import com.google.gwt.user.client.Element;
  * not provide "layout" for Alpha and AlphaImageLoader filters)</li>
  * </ul>
  */
-public class SideTabFormatter2 extends ModelElementFormatterDefault
+public class SideTabRenderer2 extends CellRendererDefault
 {
-	public SideTabFormatter2()
+	public SideTabRenderer2()
 	{
-		this(SideTabFormatter.STYLENAME);
+		this(SideTabRenderer.STYLENAME);
 	}
 	
-	public SideTabFormatter2(String listCellStyleName)
+	public SideTabRenderer2(String listCellStyleName)
 	{
 		super(listCellStyleName);
 	}
 	
-	public void formatCell(Element viewElement, Object modelElement, Properties properties)
+	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
 		// enables Content div to be absolutely positioned
 		DOM.setStyleAttribute(viewElement, "position", "relative");

@@ -17,7 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.Vector;
 
-public class ListModelDefault extends ListModelBase
+public class ListModelDefault extends ListModelBase implements MutableIndexedDataSource
 {
 	private final Vector m_items = new Vector();
 	

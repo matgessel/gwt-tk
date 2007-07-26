@@ -18,7 +18,7 @@ package asquare.gwt.tkdemo.client.ui;
 import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.tk.client.ui.ExposedCellPanel;
 
-public class TabBodyUpdateController implements ListModelListener
+public class TabBodyUpdateController implements ModelListener
 {
 	private final ExposedCellPanel m_tabPanel;
 	private final ListSelectionModelSingle m_selectionModel;
@@ -34,7 +34,7 @@ public class TabBodyUpdateController implements ListModelListener
 		model.addListener(this);
 	}
 	
-	public void listModelChanged(ListModelEvent e)
+	public void modelChanged(ModelChangeEvent event)
 	{
 		int selectedIndex = m_selectionModel.getSelectedIndex();
 		if (selectedIndex != m_previouslySelectedIndex)

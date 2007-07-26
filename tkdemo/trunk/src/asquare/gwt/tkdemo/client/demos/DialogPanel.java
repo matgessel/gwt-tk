@@ -224,9 +224,16 @@ public class DialogPanel extends Composite
 					table.setWidget(i, 0, labels[i]);
 					formatter.setHorizontalAlignment(i, 0, HasHorizontalAlignment.ALIGN_LEFT);
 					table.setWidget(i, 1, fields[i]);
-					fModel.add(fields[i]);
+					
+                    /*
+                     * Manually add fields to focus cycle. (The dialog does not
+                     * scan the children of panels for focusable widgets.)
+                     */
+                    fModel.add(fields[i]);
 				}
-				fModel.setFocusWidget(fields[0]);
+				
+                // this widget will be focused when the dialog is shown
+                fModel.setFocusWidget(fields[0]);
 				
 				ColumnPanel buttonPanel = new ColumnPanel();
 				buttonPanel.setWidth("100%");

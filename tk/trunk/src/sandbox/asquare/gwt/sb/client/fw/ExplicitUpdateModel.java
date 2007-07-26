@@ -15,17 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ListModelListenerStub implements ListModelListener
+public interface ExplicitUpdateModel
 {
-	public boolean m_changed = false;
-	
-	public void reset()
-	{
-		m_changed = false;
-	}
-	
-	public void listModelChanged(ListModelEvent e)
-	{
-		m_changed = true;
-	}
+	void update();
 }

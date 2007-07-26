@@ -13,21 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.sb.client.widget;
+package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.fw.*;
+import java.util.EventListener;
 
-/**
- * <h3>CSS Style Rules</h3>
- * <ul class='css'>
- * <li>.preSpacer { the initial spacer in the bar}</li>
- * <li>.postSpacer { traling spacer in the bar}</li>
- * </ul>
- */
-public class CTabBar extends CList
+public interface ModelListener extends EventListener
 {
-	public CTabBar(ListWidget structure, CellRenderer formatter)
-	{
-		super(new ListModelDefault(new ListSelectionModelSingle()), new TabBarView(structure, formatter));
-	}
+	void modelChanged(ModelChangeEvent event);
 }

@@ -15,6 +15,7 @@
  */
 package asquare.gwt.sb.client.util;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -26,6 +27,7 @@ public class Properties implements AssociativeArray
 	private JavaScriptObject m_array = createImpl();
 	
 	private native JavaScriptObject createImpl() /*-{
+		// create a 'native' object so that we can modify it in JSNI
 		return new Object();
 	}-*/;
 	
@@ -49,7 +51,8 @@ public class Properties implements AssociativeArray
 	}
 	
 	private native Object get0(String key) /*-{
-		return this.@asquare.gwt.sb.client.util.Properties::m_array[key] || null;
+		var result = this.@asquare.gwt.sb.client.util.Properties::m_array[key];
+		return result != null ? result : null;
 	}-*/;
 	
 	/*
@@ -67,18 +70,48 @@ public class Properties implements AssociativeArray
 	 */
 	public boolean getBoolean(String key)
 	{
-		try
+		if (! GWT.isScript())
 		{
-			return getBoolean0(key);
+			try
+			{
+				return getBoolean0(key);
+			}
+			catch (JavaScriptException e)
+			{
+				throw new ClassCastException(e.getDescription());
+			}
 		}
-		catch (JavaScriptException e)
-		{
-			throw new ClassCastException(e.getDescription());
-		}
+		return getBoolean0(key);
 	}
 	
 	private native boolean getBoolean0(String key) /*-{
 		return this.@asquare.gwt.sb.client.util.Properties::m_array[key] == true;
+	}-*/;
+	
+	/*
+	 * (non-Javadoc)
+	 * @see asquare.gwt.sb.client.util.AssociativeArray#getInt(java.lang.String)
+	 */
+	public int getInt(String key)
+	{
+		if (! GWT.isScript())
+		{
+			try
+			{
+				return getInt0(key);
+			}
+			// getting SWTException in hosted mode when coercing Object to int
+			catch (RuntimeException e)
+			{
+				throw new ClassCastException(e.getMessage());
+			}
+		}
+		return getInt0(key);
+	}
+	
+	private native int getInt0(String key) /*-{
+		var result = this.@asquare.gwt.sb.client.util.Properties::m_array[key];
+		return result != null ? result : -1;
 	}-*/;
 	
 	/*
@@ -99,6 +132,45 @@ public class Properties implements AssociativeArray
 	
 	/*
 	 * (non-Javadoc)
+	 * @see asquare.gwt.sb.client.util.AssociativeArray#set(java.lang.String, boolean)
+	 */
+	public native void set(String key, int value) /*-{
+		this.@asquare.gwt.sb.client.util.Properties::m_array[key] = value;
+	}-*/;
+	
+//	/*
+//	 * (non-Javadoc)
+//	 * @see asquare.gwt.sb.client.util.AssociativeArray#getKeySet()
+//	 */
+//	public String[] getKeySet()
+//	{
+//		JavaScriptObject result0 = getKeySet0();
+//		String[] result = new String[JsUtil.arrayLength(result0)];
+//		for (int i = 0; i < result.length; i++)
+//		{
+//			result[i] = (String) JsUtil.arrayGetObject(result0, i);
+//		}
+//		return result;
+//	}
+//	
+//	/**
+//	 * @return native array of keys
+//	 */
+//	private native JavaScriptObject getKeySet0() /*-{
+//		var result = new Array();
+//		
+//		return result;
+//	}-*/;
+//	
+//	public int getSize()
+//	{
+//		Debug.enableSilently();
+//		Debug.dump(m_array);
+//		return JsUtil.arrayLength(m_array); 
+//	};
+	
+	/*
+	 * (non-Javadoc)
 	 * @see asquare.gwt.sb.client.util.AssociativeArray#clear()
 	 */
 	public native void clear() /*-{
@@ -106,5 +178,28 @@ public class Properties implements AssociativeArray
 		{
 			delete this.@asquare.gwt.sb.client.util.Properties::m_array[member];
 		}
+	}-*/;
+	
+	public native String toString() /*-{
+		var result = "{";
+		var i = 0;
+		for (var member in this.@asquare.gwt.sb.client.util.Properties::m_array)
+		{
+			if (i++ > 0)
+			{
+				result += ",";
+			}
+			result += member + "=";
+			try
+			{
+				result += this.@asquare.gwt.sb.client.util.Properties::m_array[member];
+			}
+			catch(e)
+			{
+				result += "(Exception caught: " + e + ")";
+			}
+		}
+		result += "}";
+		return result;
 	}-*/;
 }

@@ -35,6 +35,9 @@ public class ListSelectionModelSingle extends ListSelectionModelBase
 	 */
 	public void setSelectedIndex(int index)
 	{
+        if (index < -1)
+            throw new IndexOutOfBoundsException(String.valueOf(index));
+        
 		if (m_selectedIndex != index)
 		{
 			if (m_selectedIndex != -1)

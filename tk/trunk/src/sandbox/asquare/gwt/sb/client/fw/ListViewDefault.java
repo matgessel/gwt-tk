@@ -15,17 +15,15 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.List;
-
 import com.google.gwt.user.client.Element;
 
 public class ListViewDefault extends ListViewBase
 {
 	private final ListWidget m_structure;
 	
-	protected ListViewDefault(ListWidget structure, List controllers, ModelElementFormatter formatter)
+	protected ListViewDefault(ListWidget structure, CellRenderer formatter)
 	{
-		super(structure, controllers, formatter);
+		super(structure, formatter);
 		m_structure = structure;
 	}
 	

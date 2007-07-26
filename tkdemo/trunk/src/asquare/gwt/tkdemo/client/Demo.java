@@ -15,25 +15,16 @@
  */
 package asquare.gwt.tkdemo.client;
 
-import asquare.gwt.debug.client.BrowserInfo;
-import asquare.gwt.debug.client.Debug;
-import asquare.gwt.debug.client.DebugElementDumpInspector;
+import asquare.gwt.debug.client.*;
 import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.sb.client.widget.CTabBar;
-import asquare.gwt.tk.client.ui.ColumnPanel;
-import asquare.gwt.tk.client.ui.ExposedCellPanel;
-import asquare.gwt.tk.client.ui.RowPanel;
-import asquare.gwt.tk.client.util.DomUtil;
+import asquare.gwt.tk.client.ui.*;
+import asquare.gwt.tk.client.util.*;
 import asquare.gwt.tkdemo.client.ui.*;
 
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.ui.*;
 
 /**
  * This is the entry point for the demo application. It builds the GUI after 
@@ -66,21 +57,16 @@ public class Demo implements EntryPoint
 		ExposedCellPanel tabPanel = new ColumnPanel();
 		tabPanel.setSize("100%", "100%");
 		
-		ListWidget verticalTabStructure = new ListWidgetVTable();
-		final ListViewBase tabBarView = new CTabBar(verticalTabStructure, null, new SideTabFormatter3());
-		final ListSelectionModelSingle tabBarSelectionModel = new ListSelectionModelSingle();
-		final ListModelDefault tabBarModel = new ListModelDefault(tabBarSelectionModel);
-		new ListUpdateController(tabBarModel, tabBarView);
-		History.addHistoryListener(new TabModelUpdateController(panels, tabBarModel));
-		
-		tabBarView.setStyleName("DemoTabBar");
-		tabPanel.add(tabBarView);
+		CTabBar tabbar = new CTabBar(new ListWidgetVTable(), new SideTabRenderer3());
+		tabbar.setStyleName("DemoTabBar");
+		History.addHistoryListener(new TabModelUpdateController(panels, tabbar.getListModel()));
+		tabPanel.add(tabbar);
 		tabPanel.setCellStyleName("DemoTabPanel-tabBar");
 		
 		tabPanel.add(new HTML("<h2 style='text-align: center; width: 100%; height: 100%;'>Loading...</h2>"));
 		tabPanel.setCellStyleName("DemoTabPanel-tabBody");
 		tabPanel.setCellWidth("100%");
-		new TabBodyUpdateController(tabBarModel, tabPanel, panels);
+		new TabBodyUpdateController(tabbar.getListModel(), tabPanel, panels);
 		
 		outer.add(tabPanel);
 		RootPanel.get().add(outer);
@@ -97,7 +83,7 @@ public class Demo implements EntryPoint
 		 * Incrementally add tabs to TabBar, allowing the UI to redraw to show
 		 * progress.
 		 */
-	    DeferredCommand.add(new LoadUICommand(panels, tabBarModel, tabBarView, initialIndex));
+	    DeferredCommand.add(new LoadUICommand(panels, tabbar, initialIndex));
 	}
 	
 	/**
@@ -121,19 +107,19 @@ public class Demo implements EntryPoint
 	private static class LoadUICommand implements Command
 	{
 		private final AppPanelCollection m_panels;
-		private final ListViewBase m_tabBarView;
+		private final CTabBar m_tabbar;
 		private final ListModelDefault m_tabBarmodel;
 		private final ListSelectionModelSingle m_selectionModel;
 		private final int m_initialIndex;
 		
 		private int m_index = 0;
 		
-		public LoadUICommand(AppPanelCollection panels, ListModelDefault tabBarModel, ListViewBase tabBarView, int initialIndex)
+		public LoadUICommand(AppPanelCollection panels, CTabBar tabbar, int initialIndex)
 		{
 			m_panels = panels;
-			m_tabBarmodel = tabBarModel;
-			m_selectionModel = (ListSelectionModelSingle) tabBarModel.getSelectionModel();
-			m_tabBarView = tabBarView;
+			m_tabbar = tabbar;
+			m_tabBarmodel = (ListModelDefault) tabbar.getListModel();
+			m_selectionModel = (ListSelectionModelSingle) m_tabBarmodel.getSelectionModel();
 			m_initialIndex = initialIndex;
 		}
 		
@@ -151,8 +137,8 @@ public class Demo implements EntryPoint
 			{
 				m_selectionModel.setSelectedIndex(m_initialIndex);
 				m_tabBarmodel.update();
-				m_tabBarView.addController(new ListHoverController(m_tabBarmodel));
-				m_tabBarView.addController(new TabBarClickControllerHistory(m_panels));
+				m_tabbar.addController(new IndexedViewHoverController(m_tabBarmodel));
+				m_tabbar.addController(new TabBarClickControllerHistory(m_panels));
 			}
 		}
 	}

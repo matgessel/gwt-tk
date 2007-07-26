@@ -43,16 +43,41 @@ public class CommandQueueTC extends GWTTestCase
 		
 		m_queue.add(m_undo1);
 		assertTrue(m_undo1.m_executed);
-		assertTrue(m_listener.m_notified);
+		assertTrue(m_listener.m_afterExecuted);
 	}
 	
 	private static class CommandQueueListenerStub implements CommandQueueListener
 	{
-		public boolean m_notified = false;
-
-		public void commandExecuted(Command command)
+		public boolean m_beforeAdded = false;
+		public boolean m_afterAdded = false;
+		public boolean m_beforeExecuted = false;
+		public boolean m_afterExecuted = false;
+		
+		public void init()
 		{
-			m_notified = true;
+			m_beforeAdded = m_afterAdded = m_beforeExecuted = m_afterExecuted = false;
+		}
+		
+		public boolean beforeCommandAdded(CommandQueueBase queue, Command command)
+		{
+			m_beforeAdded = true;
+			return true;
+		}
+		
+		public void afterCommandAdded(CommandQueueBase queue, Command command)
+		{
+			m_afterAdded = true;
+		}
+
+		public boolean beforeCommandExecuted(CommandQueueBase queue, Command command)
+		{
+			m_beforeExecuted = true;
+			return true;
+		}
+		
+		public void afterCommandExecuted(CommandQueueBase queue, Command command)
+		{
+			m_afterExecuted = true;
 		}
 	}
 }

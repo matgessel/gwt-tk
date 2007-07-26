@@ -28,6 +28,7 @@ public class PropertiesTC extends GWTTestCase
 	private static final String KEY_O = "object";
 	private static final String KEY_S = "string";
 	private static final String KEY_B = "boolean";
+	private static final String KEY_I = "int";
 	
 	private Properties m_properties;
 	private Object m_o;
@@ -35,6 +36,7 @@ public class PropertiesTC extends GWTTestCase
 	
 	protected void setupImpl()
 	{
+//		Debug.enableSilently();
 		m_properties = new Properties();
 		m_o = new Object()
 		{
@@ -77,7 +79,7 @@ public class PropertiesTC extends GWTTestCase
 			// EXPECTED
 		}
 		
-		// failed coercion
+		// failed coercion from boolean
 		m_properties.set(KEY_B, true);
 		try
 		{
@@ -85,6 +87,21 @@ public class PropertiesTC extends GWTTestCase
 			if (! GWT.isScript())
 			{
 				fail("failed coercion: boolean -> Object");
+			}
+		}
+		catch (ClassCastException e)
+		{
+			// EXPECTED
+		}
+		
+		// failed coercion from int
+		m_properties.set(KEY_I, 0);
+		try
+		{
+			m_properties.get(KEY_I);
+			if (! GWT.isScript())
+			{
+				fail("failed coercion: int -> Object");
 			}
 		}
 		catch (ClassCastException e)
@@ -102,21 +119,6 @@ public class PropertiesTC extends GWTTestCase
 		m_properties.set(KEY_S, m_s);
 		assertSame(m_s, m_properties.getString(KEY_S));
 		
-		// failed coercion
-		m_properties.set("key3", new Object());
-		try
-		{
-			m_properties.getString("key3");
-			if (! GWT.isScript())
-			{
-				fail("failed coercion: Object -> String");
-			}
-		}
-		catch (ClassCastException e)
-		{
-			// EXPECTED
-		}
-		
 		// null key
 		try
 		{
@@ -131,14 +133,44 @@ public class PropertiesTC extends GWTTestCase
 			// EXPECTED
 		}
 		
-		// failed coercion
-		m_properties.set("key3", true);
+		// failed coercion from Object
+		m_properties.set("object", new Object());
 		try
 		{
-			m_properties.getString("key3");
+			m_properties.getString("object");
+			if (! GWT.isScript())
+			{
+				fail("failed coercion: Object -> String");
+			}
+		}
+		catch (ClassCastException e)
+		{
+			// EXPECTED
+		}
+		
+		// failed coercion from boolean
+		m_properties.set("boolean", true);
+		try
+		{
+			m_properties.getString("boolean");
 			if (! GWT.isScript())
 			{
 				fail("failed coercion: boolean -> String");
+			}
+		}
+		catch (ClassCastException e)
+		{
+			// EXPECTED
+		}
+		
+		// failed coercion from int
+		m_properties.set("int", 10);
+		try
+		{
+			m_properties.getString("int");
+			if (! GWT.isScript())
+			{
+				fail("failed coercion: int -> String");
 			}
 		}
 		catch (ClassCastException e)
@@ -177,13 +209,81 @@ public class PropertiesTC extends GWTTestCase
 		}
 		
 		// failed coercion
-		m_properties.set("key3", new Object());
+		m_properties.set("object", new Object());
 		try
 		{
-			m_properties.getBoolean("key3");
+			m_properties.getBoolean("object");
 			if (! GWT.isScript())
 			{
 				fail("failed coercion: Object -> boolean");
+			}
+		}
+		catch (ClassCastException e)
+		{
+			// EXPECTED
+		}
+	}
+	
+	public void testGetSet_int()
+	{
+		setupImpl();
+		
+		assertEquals(-1, m_properties.getInt("key1"));
+		
+		m_properties.set("key1", 0);
+		assertEquals(0, m_properties.getInt("key1"));
+		
+		assertEquals(-1, m_properties.getInt("key2"));
+		
+		m_properties.set("key2", 0);
+		assertEquals(0, m_properties.getInt("key2"));
+
+		m_properties.set("key2", -1);
+		assertEquals(-1, m_properties.getInt("key2"));
+		
+		m_properties.set("max", Integer.MAX_VALUE);
+		assertEquals(Integer.MAX_VALUE, m_properties.getInt("max"));
+		
+		m_properties.set("min", Integer.MIN_VALUE);
+		assertEquals(Integer.MIN_VALUE, m_properties.getInt("min"));
+		
+		// null key
+		try
+		{
+			m_properties.get(null);
+			if (! GWT.isScript())
+			{
+				fail("null key");
+			}
+		}
+		catch (NullPointerException e)
+		{
+			// EXPECTED
+		}
+		
+		// failed coercion from Object
+		m_properties.set("object", new Object());
+		try
+		{
+			m_properties.getInt("object");
+			if (! GWT.isScript())
+			{
+				fail("failed coercion: Object -> int");
+			}
+		}
+		catch (ClassCastException e)
+		{
+			// EXPECTED
+		}
+		
+		// failed coercion from String(1)
+		m_properties.set("string", "1");
+		try
+		{
+			m_properties.getInt("string");
+			if (! GWT.isScript())
+			{
+				fail("failed coercion: String(1) -> int");
 			}
 		}
 		catch (ClassCastException e)

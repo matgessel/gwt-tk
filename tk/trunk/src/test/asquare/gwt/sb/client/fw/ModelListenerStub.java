@@ -15,9 +15,32 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.EventListener;
-
-public interface ListModelListener extends EventListener
+public class ModelListenerStub implements ModelListener
 {
-	void listModelChanged(ListModelEvent e);
+	private int m_notificationCount;
+	
+	public ModelListenerStub()
+	{
+		init();
+	}
+	
+	public void init()
+	{
+		m_notificationCount = 0;
+	}
+	
+	public boolean isChanged()
+	{
+		return m_notificationCount > 0;
+	}
+	
+	public int getNotificationCount()
+	{
+		return m_notificationCount;
+	}
+	
+	public void modelChanged(ModelChangeEvent e)
+	{
+		m_notificationCount++;
+	}
 }

@@ -37,19 +37,19 @@ import com.google.gwt.user.client.Element;
  * <ul>
  * </ul>
  */
-public class SideTabFormatter3 extends ModelElementFormatterDefault
+public class SideTabRenderer3 extends CellRendererDefault
 {
-	public SideTabFormatter3()
+	public SideTabRenderer3()
 	{
-		this(SideTabFormatter.STYLENAME);
+		this(SideTabRenderer.STYLENAME);
 	}
 	
-	public SideTabFormatter3(String listCellStyleName)
+	public SideTabRenderer3(String listCellStyleName)
 	{
 		super(listCellStyleName);
 	}
 	
-	public void formatCell(Element viewElement, Object modelElement, Properties properties)
+	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
 		DOM.setAttribute(viewElement, "className", buildStyleName(properties));
 		final String newHtml = 
