@@ -47,14 +47,34 @@ public class CWrapper extends EventWrapper implements ControllerSupport
 	 * Creates a CWrapper around the specified widget. Pass a
 	 * value for <code>controllers</code> if you wish to avoid controller
 	 * creation via {@link #createControllers()}. Otherwise pass null. 
+	 * The event target widget will be the wrapper.  
 	 * 
+	 * @param widget the widget to wrap
 	 * @param controllers a list of 0 or more controllers, or <code>null</code>
 	 * @throws IllegalArgumentException if <code>element</code> is null
 	 */
 	public CWrapper(Widget widget, List controllers)
 	{
+		this(widget, controllers, true);
+	}
+	
+	/**
+	 * Creates a CWrapper around the specified widget. Pass a value for
+	 * <code>controllers</code> if you wish to avoid controller creation via
+	 * {@link #createControllers()}. Otherwise pass null.
+	 * 
+	 * @param widget the widget to wrap
+	 * @param controllers a list of 0 or more controllers, or <code>null</code>
+	 * @param eventsTargetWrapper <code>true</code> to pass this wrapper
+	 *            object to {@link Controller} methods, <code>false</code> to
+	 *            pass the wrapped widget
+	 * @throws IllegalArgumentException if <code>element</code> is null
+	 */
+	public CWrapper(Widget widget, List controllers, boolean eventsTargetWrapper)
+	{
 		initWidget(widget);
-		m_controllerSupport = new ControllerSupportDelegate(this);
+		Widget eventTarget = eventsTargetWrapper ? this : widget;
+		m_controllerSupport = new ControllerSupportDelegate(eventTarget);
 		
 		if (controllers == null)
 			controllers = createControllers();
@@ -88,7 +108,8 @@ public class CWrapper extends EventWrapper implements ControllerSupport
 	 */
 	public Widget addController(Controller controller)
 	{
-		return m_controllerSupport.addController(controller);
+		m_controllerSupport.addController(controller);
+		return this;
 	}
 
 	/*
@@ -97,7 +118,8 @@ public class CWrapper extends EventWrapper implements ControllerSupport
 	 */
 	public Widget removeController(Controller controller)
 	{
-		return m_controllerSupport.removeController(controller);
+		m_controllerSupport.removeController(controller);
+		return this;
 	}
 	
 	/*
