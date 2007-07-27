@@ -245,11 +245,20 @@ public class GwtUtil
 			throw new NullPointerException();
 		
 		int size = src.size();
-		rangeCheck(0, dest.length, size - 1, false);
 		
-		for (int i = 0; i < size; i++)
+		if (size > 0)
 		{
-			dest[i] = src.get(i);
+			rangeCheck(0, dest.length, size - 1, false);
+			
+			for (int i = 0; i < size; i++)
+			{
+				dest[i] = src.get(i);
+			}
+		}
+		
+		if (dest.length > size)
+		{
+			dest[size] = null;
 		}
 		
 		return dest;

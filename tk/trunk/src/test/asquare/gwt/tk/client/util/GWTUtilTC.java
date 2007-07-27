@@ -421,6 +421,28 @@ public class GWTUtilTC extends GWTTestCase
 		{
 			// EXPECTED
 		}
+		
+		// basic test
+		Object[] dest = new Object[m_list.size()];
+		Object[] result = GwtUtil.toArray(m_list, dest);
+		assertSame(dest, result);
+		for (int i = 0; i < result.length; i++)
+		{
+			assertSame(m_list.get(i), result[i]);
+		}
+		
+		// 0 length list
+		Vector emptyList = new Vector();
+		result = GwtUtil.toArray(emptyList, new Object[emptyList.size()]);
+		
+		// array.length > list.size()
+		dest = new Object[m_list.size() + 10];
+		for (char i = 0; i < dest.length; i++)
+		{
+			dest[i] = new Character((char) ('a' + i));
+		}
+		result = GwtUtil.toArray(m_list, dest);
+		assertNull(dest[m_list.size()]);
 	}
 	
 	private static class Food
