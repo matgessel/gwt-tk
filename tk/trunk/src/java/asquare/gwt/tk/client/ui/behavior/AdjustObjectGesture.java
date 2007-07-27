@@ -15,7 +15,6 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import asquare.gwt.debug.client.Debug;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.user.client.ui.UIObject;

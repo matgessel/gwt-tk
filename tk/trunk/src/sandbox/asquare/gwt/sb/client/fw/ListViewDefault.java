@@ -21,9 +21,9 @@ public class ListViewDefault extends ListViewBase
 {
 	private final ListWidget m_structure;
 	
-	protected ListViewDefault(ListWidget structure, CellRenderer formatter)
+	protected ListViewDefault(ListWidget structure, CellRenderer renderer)
 	{
-		super(structure, formatter);
+		super(structure, renderer);
 		m_structure = structure;
 	}
 	

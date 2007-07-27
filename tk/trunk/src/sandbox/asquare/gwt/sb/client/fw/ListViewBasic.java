@@ -27,13 +27,13 @@ public class ListViewBasic extends ListViewDefault
 		this(listElement, itemElement,  null);
 	}
 
-	public ListViewBasic(CellRenderer formatter)
+	public ListViewBasic(CellRenderer renderer)
 	{
-		this(ListWidgetBasic.DEFAULT_ELEMENT_LIST, ListWidgetBasic.DEFAULT_ELEMENT_ITEM, formatter);
+		this(ListWidgetBasic.DEFAULT_ELEMENT_LIST, ListWidgetBasic.DEFAULT_ELEMENT_ITEM, renderer);
 	}
 	
-	public ListViewBasic(String listElement, String itemElement, CellRenderer formatter)
+	public ListViewBasic(String listElement, String itemElement, CellRenderer renderer)
 	{
-		super(new ListWidgetBasic(), formatter);
+		super(new ListWidgetBasic(), renderer);
 	}
 }
