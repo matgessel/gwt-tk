@@ -16,6 +16,7 @@
 package asquare.gwt.tk.client.ui.behavior;
 
 import asquare.gwt.tk.client.Tests;
+import asquare.gwt.tk.testutil.TkTestUtil;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.ui.Button;
@@ -300,7 +301,7 @@ public class FocusModelTC extends GWTTestCase
 		m_model.addListener(m_l1);
 		assertFalse(m_l1.isChanged());
 		m_model.add(a2);
-		Tests.assertSameElements(a2, m_l1.getAdded());
+		TkTestUtil.assertSameElements(a2, m_l1.getAdded());
 		assertTrue(m_l1.isChanged());
 		
 		// tabIndex < 0
@@ -380,7 +381,7 @@ public class FocusModelTC extends GWTTestCase
 		m_model.addListener(m_l1);
 		m_model.clear();
 		assertEquals(0, m_model.getSize());
-		Tests.assertSameElements(a, m_l1.getRemoved());
+		TkTestUtil.assertSameElements(a, m_l1.getRemoved());
 		
 		// clears focused widget
 		m_model.add(a);

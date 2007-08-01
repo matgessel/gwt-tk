@@ -335,12 +335,12 @@
         </jar>
     </target>
     
-    <target name="jarTest">
-        <delete file="gwttk-test-${project.version}.jar"/>
-        <jar destfile="gwttk-test-${project.version}.jar">
+    <target name="jarTestUtil">
+        <delete file="gwttk-testutil-${project.version}.jar"/>
+        <jar destfile="gwttk-testutil-${project.version}.jar">
             <fileset dir="${project.dir}/src/java" includes="*.txt"/>
-            <fileset dir="${project.dir}/src/test"/>
-            <fileset dir="${project.dir}/bin/test"/>
+            <fileset dir="${project.dir}/src/testutil"/>
+            <fileset dir="${project.dir}/bin/testutil"/>
         </jar>
     </target>
 </project>
