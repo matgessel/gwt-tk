@@ -30,37 +30,19 @@ import com.google.gwt.user.client.ui.Widget;
 public class DragController extends ControllerAdaptor
 {
 	private final DragGesture m_dragGesture;
-	private final int m_threshold;
 	
 	private boolean m_mouseDown = false;
-	private boolean m_dragging = false;
-	private int m_downX, m_downY;
 	
 	/**
 	 * Creates a new DragController which delegates to the specified
-	 * DragGesture. 
+	 * DragGesture.
 	 * 
 	 * @param gesture a delegate object
 	 */
 	public DragController(DragGesture gesture)
 	{
-		this(gesture, 0);
-	}
-	
-	/**
-	 * Creates a new DragController which delegates to the specified
-	 * DragGesture. The DragGesture is not activated until the mouse movement
-	 * equals the specified distance; this prevents accidental movement.
-	 * 
-	 * @param distance the distance in screen pixels to move before taking an
-	 *            action, or <code>0</code>
-	 * @param gesture a delegate object
-	 */
-	public DragController(DragGesture gesture, int distance)
-	{
 		super(Event.ONMOUSEDOWN | Event.ONMOUSEMOVE | Event.ONMOUSEUP | Event.ONLOSECAPTURE, DragController.class);
 		m_dragGesture = gesture;
-		m_threshold = distance;
 	}
 	
 	/*
@@ -100,28 +82,12 @@ public class DragController extends ControllerAdaptor
 		}
 	}
 	
-	private boolean equalsThreshold(int x, int y)
-	{
-		return Math.abs(x - m_downX) >= m_threshold || Math.abs(y - m_downY) >= m_threshold;
-	}
-	
-	private void doStartDrag(Widget sender, int x, int y)
-	{
-		m_dragging = true;
-		m_dragGesture.start(x, y);
-	}
-	
 	public void onMouseDown(Widget sender, int x, int y)
 	{
 //	    Debug.println("DragController.onMouseDown(x=" + x + ",y=" + y + ")");
 		DOM.setCapture(sender.getElement());
-		m_downX = x;
-		m_downY = y;
 		m_mouseDown = true;
-		if (equalsThreshold(x, y))
-		{
-			doStartDrag(sender, x, y);
-		}
+		m_dragGesture.start(x, y);
 	}
 	
 	public void onMouseMove(Widget sender, int x, int y)
@@ -129,14 +95,7 @@ public class DragController extends ControllerAdaptor
 //	    Debug.println("DragController.onMouseMove(x=" + x + ",y=" + y + ")");
 		if (m_mouseDown)
 		{
-			if (! m_dragging && equalsThreshold(x, y))
-			{
-				doStartDrag(sender, m_downX, m_downY);
-			}
-			if (m_dragging)
-			{
-				m_dragGesture.step(x, y);
-			}
+			m_dragGesture.step(x, y);
 		}
 	}
 	
@@ -149,7 +108,6 @@ public class DragController extends ControllerAdaptor
 		{
             // clear flag to prevent reentrancy via ONLOSECAPTURE
             m_mouseDown = false;
-            m_dragging = false;
 			m_dragGesture.finish(x, y);
 			DOM.releaseCapture(sender.getElement());
 		}

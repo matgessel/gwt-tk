@@ -21,17 +21,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 
-public class DragPerformanceFilter implements DragGesture
+public class DragPerformanceFilter extends DragGestureWrapper
 {
 	private static final StepStrategy s_defaultImpl = (StepStrategy) GWT.create(StepStrategy.class);
 	
-	private final DragGesture m_gesture;
-	
 	private StepStrategy m_stepStrategy = s_defaultImpl;
 	
-	public DragPerformanceFilter(DragGesture gesture)
+	public DragPerformanceFilter(DragGesture delegate)
 	{
-		m_gesture = gesture;
+		super(delegate);
 	}
 	
 	public StepStrategy getStepStrategy()
@@ -44,19 +42,9 @@ public class DragPerformanceFilter implements DragGesture
 		m_stepStrategy = impl;
 	}
 	
-	public void start(int x, int y)
-	{
-		m_gesture.start(x, y);
-	}
-	
 	public void step(int x, int y)
 	{
-		getStepStrategy().step(m_gesture, x, y);
-	}
-	
-	public void finish(int x, int y)
-	{
-		m_gesture.finish(x, y);
+		getStepStrategy().step(getDelegate(), x, y);
 	}
 	
 	public static abstract class StepStrategy
