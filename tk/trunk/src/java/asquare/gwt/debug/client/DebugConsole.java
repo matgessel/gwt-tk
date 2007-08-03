@@ -152,6 +152,9 @@ public class DebugConsole extends DialogBox
 		m_disableButton.addClickListener(controller);
 		clearButton.addClickListener(controller);
 		hideButton.addClickListener(controller);
+		
+		sinkEvents(Event.ONMOUSEDOWN);
+		preventSelectionInIE(getElement());
 	}
 	
 	/**
@@ -165,6 +168,10 @@ public class DebugConsole extends DialogBox
 		}
 		return s_instance;
 	}
+	
+	private static native void preventSelectionInIE(Element element) /*-{
+		element.onselectstart = function() { return false; };
+	}-*/;
 	
 	private void updateDisableButtonText()
 	{
@@ -302,6 +309,17 @@ public class DebugConsole extends DialogBox
 		
 		textNode.appendData(text);
 	}-*/;
+	
+	public void onBrowserEvent(Event event)
+	{
+		super.onBrowserEvent(event);
+		
+		// prevent selection in standard browsers
+		if (DOM.eventGetType(event) == Event.ONMOUSEDOWN)
+		{
+			DOM.eventPreventDefault(event);
+		}
+	}
 	
 	/**
 	 * Overrides {@link PopupPanel#show() popup's} implementation to prevent event filtering ala
