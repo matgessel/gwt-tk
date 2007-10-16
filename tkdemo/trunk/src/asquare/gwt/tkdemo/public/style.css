@@ -133,15 +133,18 @@ code {
   height: 7px;
   background: url(SideTabSolid_bottom.gif) no-repeat left top;
 }
-.tk-SideTab.Selected {
+.tk-SideTab-selected {
   cursor: default;
 }
-.tk-SideTab.Selected .bg {
+.tk-SideTab-selected .bg {
   background: #E8EEF7;
 }
-.tk-SideTab.Selected .bg, .tk-SideTab.Active .bg {
+.tk-SideTab-selected .bg, .tk-SideTab.Active .bg {
   opacity: 1.0;
   filter: alpha(opacity=100);
+}
+.tk-SideTab-hover {
+/*  color: red;*/
 }
 
 /* -------------------------------------------------------------------------- */
