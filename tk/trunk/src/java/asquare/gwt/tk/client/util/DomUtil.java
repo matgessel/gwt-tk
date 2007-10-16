@@ -98,6 +98,16 @@ public class DomUtil
 	}-*/;
 	
 	/**
+	 * Get the DOM nodeName of the specified element. 
+	 * 
+	 * @param element
+	 * @return the node name upper case, e.g. "TD"
+	 */
+	public static native String getElementName(Element element) /*-{
+		return element.nodeName;
+	}-*/;
+	
+	/**
 	 * Gets the id attribute of the specified UIObject's element.
 	 * 
 	 * @param uio the UIObject
