@@ -25,13 +25,16 @@ public abstract class ListModelBase implements ListModel
 	public ListModelBase(ListSelectionModel selectionModel)
 	{
 		m_selectionModel = selectionModel;
-		m_selectionModel.addListener(new ListSelectionModelListener()
+		if (m_selectionModel != null)
 		{
-			public void listSelectionModelChanged(int index)
+			m_selectionModel.addListener(new ListSelectionModelListener()
 			{
-				m_changeSupport.addChange(index);
-			}
-		});
+				public void listSelectionModelChanged(ListSelectionModel model, int index)
+				{
+					m_changeSupport.addChange(index);
+				}
+			});
+		}
 	}
 	
 	protected void addChange(int index)
@@ -61,7 +64,7 @@ public abstract class ListModelBase implements ListModel
 	
 	public boolean isIndexSelected(int index)
 	{
-		return m_selectionModel.isIndexSelected(index);
+		return m_selectionModel != null && m_selectionModel.isIndexSelected(index);
 	}
 	
 	public boolean isIndexDisabled(int index)

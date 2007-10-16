@@ -79,6 +79,9 @@ public class ListUpdateController implements ModelListener
 		properties.set(CellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index));
 		properties.set(CellRenderer.PROPERTY_HOVER, model.isIndexHovering(index));
 		properties.set(CellRenderer.PROPERTY_DISABLED, model.isIndexDisabled(index));
+		properties.set(CellRenderer.PROPERTY_FIRST, index == 0);
+		properties.set(CellRenderer.PROPERTY_LAST, index == model.getSize() - 1);
+		properties.set(CellRenderer.PROPERTY_INDEX, index);
 		return properties;
 	}
 }

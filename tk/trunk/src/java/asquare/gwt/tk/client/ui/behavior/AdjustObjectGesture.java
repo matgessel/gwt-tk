@@ -21,13 +21,16 @@ import com.google.gwt.user.client.ui.UIObject;
 
 public abstract class AdjustObjectGesture implements DragGesture
 {
-	private final UIObject m_outer;
-	private final UIObject m_content;
+	private UIObject m_outer;
+	private UIObject m_content;
 	
-	private int m_xStart, m_yStart;
+	protected AdjustObjectGesture()
+	{
+		this(null, null);
+	}
 	
 	/**
-	 * Note: <code>floater</code> and <code>content</code> may be the same Widget
+	 * Note: <code>outer</code> and <code>content</code> may be the same Widget
 	 * 
 	 * @param outer the floating container (for left and top)
 	 * @param content the content (for width & height)
@@ -39,14 +42,24 @@ public abstract class AdjustObjectGesture implements DragGesture
 		m_content = content;
 	}
 	
-	protected UIObject getDragObject()
+	public UIObject getDragObject()
 	{
 		return m_outer;
 	}
 	
-	protected UIObject getSizeObject()
+	public void setDragObject(UIObject outer)
+	{
+		m_outer = outer;
+	}
+	
+	public UIObject getSizeObject()
 	{
 		return m_content;
+	}
+	
+	public void setSizeObject(UIObject content)
+	{
+		m_content = content;
 	}
 	
 	/**
@@ -104,23 +117,11 @@ public abstract class AdjustObjectGesture implements DragGesture
 		}
 	}
 	
-	protected int getDeltaX(int currentX)
+	public void start(MouseEvent dragEvent)
 	{
-		return currentX - m_xStart;
 	}
 	
-	protected int getDeltaY(int currentY)
-	{
-		return currentY - m_yStart;
-	}
-	
-	public void start(int x, int y)
-	{
-		m_xStart = x;
-		m_yStart = y;
-	}
-	
-	public void finish(int x, int y)
+	public void finish()
 	{
 	}
 }

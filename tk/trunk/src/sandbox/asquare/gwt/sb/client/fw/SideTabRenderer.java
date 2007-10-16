@@ -49,7 +49,7 @@ public class SideTabRenderer extends CellRendererDefault
 	
 	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
-		DOM.setAttribute(viewElement, "className", buildStyleName(properties));
+		DOM.setAttribute(viewElement, "className", buildStyleName(modelElement, properties));
 		final String newHtml = 
 			"<div class='Content'>" + String.valueOf(modelElement) + "</div>"; 
 		DOM.setInnerHTML(viewElement, newHtml);

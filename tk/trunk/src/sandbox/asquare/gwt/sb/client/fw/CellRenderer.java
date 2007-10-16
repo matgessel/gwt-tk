@@ -28,6 +28,7 @@ import com.google.gwt.user.client.Element;
  */
 public interface CellRenderer
 {
+	public static final String PROPERTY_INDEX = "index";
 	public static final String PROPERTY_FIRST = "first";
 	public static final String PROPERTY_LAST = "last";
 	public static final String PROPERTY_SELECTED = "selected";

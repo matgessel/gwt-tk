@@ -50,7 +50,6 @@ public class ActionButton extends Button implements ActionPropertyListener
 		if (m_action != null)
 		{
 			m_action.addListener(this);
-			setText(action.getUIString());
 			actionPropertiesChanged(action);
 		}
 	}
@@ -67,6 +66,7 @@ public class ActionButton extends Button implements ActionPropertyListener
 	// ActionPropertyListener methods
 	public void actionPropertiesChanged(Action action)
 	{
+		setText(action.getUIString());
 		setEnabled(action.isEnabled());
 	}
 }

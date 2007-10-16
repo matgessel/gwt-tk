@@ -27,6 +27,8 @@ public abstract class ListWidget extends Composite
 	}
 	
 	public abstract Element insertCellStructure(int index);
+
+	public abstract Element getCellRootElement(Element eventTarget);
 	
 	public abstract Element getCellElement(int index);
 

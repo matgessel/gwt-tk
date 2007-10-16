@@ -15,19 +15,16 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
-
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 
-public class IndexedViewHoverController extends ControllerAdaptor
+public class IndexedViewHoverController extends HoverControllerBase
 {
 	private final ModelHoverSupport m_model;
 	
 	public IndexedViewHoverController(ModelHoverSupport model)
 	{
-		super(Event.ONMOUSEOVER | Event.ONMOUSEOUT, IndexedViewHoverController.class);
+		super(IndexedViewHoverController.class);
 		m_model = model;
 	}
 	
@@ -37,42 +34,19 @@ public class IndexedViewHoverController extends ControllerAdaptor
 			throw new ClassCastException();
 	}
 	
-	public void onBrowserEvent(Widget widget, Event event)
+	protected Element getCellRootElement(Widget widget, Element element)
 	{
-		IndexedView indexedView = (IndexedView) widget;
-		int targetIndex = indexedView.getIndexOf(DOM.eventGetTarget(event));
-		
-		switch (DOM.eventGetType(event))
+		return ((CompositeCellView) widget).getCellRootElement(element);
+	}
+	
+	protected void onHoverChanged(Widget widget, Element element)
+	{
+		int index = -1;
+		if (element != null)
 		{
-			case Event.ONMOUSEOVER: 
-				int fromIndex = indexedView.getIndexOf(DOM.eventGetFromElement(event));
-				
-				// Ignore over events generated within the same view cell
-				if (targetIndex != fromIndex)
-				{
-					m_model.setHoverIndex(targetIndex);
-					m_model.update();
-				}
-				break;
-			
-			case Event.ONMOUSEOUT: 
-				int toIndex = indexedView.getIndexOf(DOM.eventGetToElement(event));
-				
-				// Ignore out events generated within the same view cell
-				if (targetIndex != toIndex)
-				{
-					/*
-					 * Performance: ignore out events if the cursor is moving to
-					 * another cell in the same view. (The over event will set
-					 * the active index anyway, resulting in a 2nd update).
-					 */ 
-					if (toIndex == -1)
-					{
-						m_model.setHoverIndex(-1);
-						m_model.update();
-					}
-				}
-				break;
+			index = ((IndexedView) widget).getIndexOf(element);
 		}
+		m_model.setHoverIndex(index);
+		m_model.update();
 	}
 }

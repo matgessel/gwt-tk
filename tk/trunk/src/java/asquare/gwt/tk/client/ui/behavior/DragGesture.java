@@ -23,27 +23,18 @@ public abstract interface DragGesture
 	/**
 	 * Called at beginning of the input operation. This may be triggered by a
 	 * mousedown, or may be triggered by a hotkey during the middle of a drag.
-	 * 
-	 * @param x
-	 * @param y
 	 */
-	void start(int x, int y);
+	void start(MouseEvent event);
 	
 	/**
 	 * Called for each mouse movement during the input operation.
-	 * 
-	 * @param x
-	 * @param y
 	 */
-	void step(int x, int y);
+	void step(DragEvent event);
 	
 	/**
 	 * Called at the end of the input operation, after the last movement. This
 	 * may be triggered by a mouseup or may be triggered by the release of a
 	 * hotkey during a drag.
-	 * 
-	 * @param x
-	 * @param y
 	 */
-	void finish(int x, int y);
+	void finish();
 }

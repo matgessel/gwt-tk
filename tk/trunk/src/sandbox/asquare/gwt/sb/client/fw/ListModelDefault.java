@@ -53,6 +53,7 @@ public class ListModelDefault extends ListModelBase implements MutableIndexedDat
 	{
 		m_items.add(index, o);
 		addChange(index);
+		addChange(m_items.size());
 	}
 	
 	public void set(int index, Object o)

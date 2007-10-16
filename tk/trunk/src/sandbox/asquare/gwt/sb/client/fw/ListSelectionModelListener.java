@@ -19,5 +19,5 @@ import java.util.EventListener;
 
 public interface ListSelectionModelListener extends EventListener
 {
-	void listSelectionModelChanged(int index);
+	void listSelectionModelChanged(ListSelectionModel model, int index);
 }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package asquare.gwt.tk.client.ui.behavior;
 
 import com.google.gwt.user.client.ui.UIObject;
@@ -7,6 +22,7 @@ public class ResizeFloatingObjectGesture
 {
 	private ResizeFloatingObjectGesture()
 	{
+		// non-instantiable
 	}
 	
 	public static class NW extends AdjustObjectGesture
@@ -16,12 +32,12 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setWidth(-getDeltaX(x));
-			setLeft(getDeltaX(x));
-			setHeight(-getDeltaY(y));
-			setTop(getDeltaY(y));
+			setWidth(-e.getDeltaX());
+			setLeft(e.getDeltaX());
+			setHeight(-e.getDeltaY());
+			setTop(e.getDeltaY());
 		}
 	}
 	
@@ -32,10 +48,10 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setHeight(-getDeltaY(y));
-			setTop(getDeltaY(y));
+			setHeight(-e.getDeltaY());
+			setTop(e.getDeltaY());
 		}
 	}
 	
@@ -46,11 +62,11 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setHeight(-getDeltaY(y));
-			setTop(getDeltaY(y));
-			setWidth(getDeltaX(x));
+			setHeight(-e.getDeltaY());
+			setTop(e.getDeltaY());
+			setWidth(e.getDeltaX());
 		}
 	}
 	
@@ -61,10 +77,10 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setWidth(-getDeltaX(x));
-			setLeft(getDeltaX(x));
+			setWidth(-e.getDeltaX());
+			setLeft(e.getDeltaX());
 		}
 	}
 	
@@ -75,9 +91,9 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setWidth(getDeltaX(x));
+			setWidth(e.getDeltaX());
 		}
 	}
 	
@@ -88,11 +104,11 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setLeft(getDeltaX(x));
-			setWidth(-getDeltaX(x));
-			setHeight(getDeltaY(y));
+			setLeft(e.getDeltaX());
+			setWidth(-e.getDeltaX());
+			setHeight(e.getDeltaY());
 		}
 	}
 	
@@ -103,9 +119,9 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setHeight(getDeltaY(y));
+			setHeight(e.getDeltaY());
 		}
 	}
 	
@@ -116,10 +132,10 @@ public class ResizeFloatingObjectGesture
 			super(floater, content);
 		}
 		
-		public void step(int x, int y)
+		public void step(DragEvent e)
 		{
-			setWidth(getDeltaX(x));
-			setHeight(getDeltaY(y));
+			setWidth(e.getDeltaX());
+			setHeight(e.getDeltaY());
 		}
 	}
 }

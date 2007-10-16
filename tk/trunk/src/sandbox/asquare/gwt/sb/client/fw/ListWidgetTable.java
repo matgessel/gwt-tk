@@ -32,6 +32,19 @@ public class ListWidgetTable extends ListWidget
 		m_panel.setHorizontalAlignment(null);
 	}
 	
+	public Element getCellRootElement(Element eventTarget)
+	{
+		for (int i = 0, size = m_panel.getCellCount(); i < size; i++)
+		{
+			Element candidate = m_panel.getCellElement(i);
+			if (DOM.isOrHasChild(candidate, eventTarget))
+			{
+				return candidate;
+			}
+		}
+		return null;
+	}
+	
 	public int getIndexOf(Element eventTarget)
 	{
 		for (int i = 0, size = m_panel.getCellCount(); i < size; i++)

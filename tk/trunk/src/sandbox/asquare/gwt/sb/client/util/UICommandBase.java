@@ -17,7 +17,11 @@ package asquare.gwt.sb.client.util;
 
 public abstract class UICommandBase implements UICommand
 {
-	private final String m_uiString;
+	private String m_uiString;
+	
+	public UICommandBase()
+	{
+	}
 	
 	public UICommandBase(String uiString)
 	{
@@ -27,6 +31,11 @@ public abstract class UICommandBase implements UICommand
 	public String getUIString()
 	{
 		return m_uiString;
+	}
+	
+	public void setUiString(String uiString)
+	{
+		m_uiString = uiString;
 	}
 	
 	public String toString()

@@ -22,9 +22,8 @@ public class ListViewHTable extends ListViewDefault
 		this(null);
 	}
 	
-	public ListViewHTable(CellRenderer formatter)
+	public ListViewHTable(CellRenderer renderer)
 	{
-		super(new ListWidgetHTable(), formatter);
-		
+		super(new ListWidgetHTable(), renderer);
 	}
 }

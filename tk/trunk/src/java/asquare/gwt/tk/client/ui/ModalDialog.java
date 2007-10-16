@@ -154,9 +154,8 @@ public class ModalDialog extends CPopupPanel
 	protected List createCaptionControllers()
 	{
 		List result = new Vector();
-		result.add(PreventSelectionController.getInstance());
 		result.add(new DragStyleController(this, STYLENAME_DRAGGING));
-		result.add(new DragController(new DragPerformanceFilter(new DragFloatingObjectGesture(this))));
+		result.add(new DragController(new MousePerformanceFilter(new MouseDragHandler(new DragFloatingObjectGesture(this)))));
 		return result;
 	}
 	

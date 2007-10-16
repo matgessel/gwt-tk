@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,8 +15,6 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import asquare.gwt.tk.client.util.DomUtil;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
@@ -27,89 +25,57 @@ import com.google.gwt.user.client.ui.Widget;
  * 
  * @see asquare.gwt.tk.client.ui.behavior.DragGesture
  */
-public class DragController extends ControllerAdaptor
+public class DragController extends MouseController
 {
-	private final DragGesture m_dragGesture;
-	
-	private boolean m_mouseDown = false;
+	private MouseEvent m_previousEvent;
 	
 	/**
 	 * Creates a new DragController which delegates to the specified
-	 * DragGesture.
+	 * handler.
 	 * 
-	 * @param gesture a delegate object
+	 * @param handler a delegate object, or <code>null</code>
 	 */
-	public DragController(DragGesture gesture)
+	public DragController(MouseHandler handler)
 	{
-		super(Event.ONMOUSEDOWN | Event.ONMOUSEMOVE | Event.ONMOUSEUP | Event.ONLOSECAPTURE, DragController.class);
-		m_dragGesture = gesture;
+		super(handler.getEventBits() | Event.ONLOSECAPTURE, DragController.class, handler);
 	}
 	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.EventDelegateAdaptor#doBrowserEvent(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Event)
-	 */
 	public void onBrowserEvent(Widget widget, Event event)
 	{
-    	// translate the coordinates into the source widget's coordinate space
-		// see MouseListenerCollection.fireMouseEvent()
-		int sourceX = DomUtil.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(widget.getElement());
-		int sourceY = DomUtil.eventGetAbsoluteY(event) - DOM.getAbsoluteTop(widget.getElement());
-		
-		switch(DOM.eventGetType(event))
+		super.onBrowserEvent(widget, event);
+		if (DOM.eventGetType(event) == Event.ONLOSECAPTURE)
 		{
-			case Event.ONMOUSEDOWN: 
-				onMouseDown(widget, sourceX, sourceY);
-				break;
-
-			case Event.ONMOUSEMOVE: 
-				onMouseMove(widget, sourceX, sourceY);
-				break;
-
-			case Event.ONMOUSEUP: 
-				onMouseUp(widget, sourceX, sourceY);
-				break;
-				
 			/*
 			 * Firefox loses the mouseup if released outside the client area.
 			 * But we do get an onlosecapture event. Not ideal, but it prevents
 			 * a invalid state (dragging while mouse is released).
 			 * http://code.google.com/p/google-web-toolkit/issues/detail?id=243
 			 */ 
-			case Event.ONLOSECAPTURE: 
-				onMouseUp(widget, -1, -1);
-				break;
+			onMouseUp(m_previousEvent);
 		}
 	}
 	
-	public void onMouseDown(Widget sender, int x, int y)
+	protected void onMouseDown(MouseEvent e)
 	{
-//	    Debug.println("DragController.onMouseDown(x=" + x + ",y=" + y + ")");
-		DOM.setCapture(sender.getElement());
-		m_mouseDown = true;
-		m_dragGesture.start(x, y);
+		DOM.setCapture(e.getReceiver().getElement());
+		m_previousEvent = e;
+		super.onMouseDown(e);
 	}
 	
-	public void onMouseMove(Widget sender, int x, int y)
+	protected void onMouseMove(MouseEvent e)
 	{
-//	    Debug.println("DragController.onMouseMove(x=" + x + ",y=" + y + ")");
-		if (m_mouseDown)
+		m_previousEvent = e;
+		super.onMouseMove(e);
+	}
+	
+	protected void onMouseUp(MouseEvent e)
+	{
+		if (m_previousEvent != null)
 		{
-			m_dragGesture.step(x, y);
+			// do last to prevent reentrancy via ONLOSECAPTURE
+			DOM.releaseCapture(e.getReceiver().getElement());
 		}
-	}
-	
-	public void onMouseUp(Widget sender, int x, int y)
-	{
-//	    Debug.println("DragController.onMouseUp(x=" + x + ",y=" + y + ")");
-		
-		// it is possible to get a mouse up without a mouse down
-		if (m_mouseDown)
-		{
-            // clear flag to prevent reentrancy via ONLOSECAPTURE
-            m_mouseDown = false;
-			m_dragGesture.finish(x, y);
-			DOM.releaseCapture(sender.getElement());
-		}
+		super.onMouseUp(e);
+		m_previousEvent = null;
 	}
 }

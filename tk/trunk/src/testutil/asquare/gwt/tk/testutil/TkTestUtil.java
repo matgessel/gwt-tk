@@ -30,6 +30,17 @@ public final class TkTestUtil
 		}
 	}
     
+	public static void assertSameValues(int[] a1, int[] a2)
+	{
+		Assert.assertNotNull(a1);
+		Assert.assertNotNull(a2);
+		Assert.assertEquals(a1.length, a2.length);
+		for (int i = 0; i < a1.length; i++)
+		{
+			Assert.assertEquals(String.valueOf(i), a1[i], a2[i]);
+		}
+	}
+    
     public static Object[] createIntegerArray(int start, int count)
     {
         Object[] result = new Object[count];
@@ -53,6 +64,14 @@ public final class TkTestUtil
         for (int i = 0; i < length; i++)
         {
         	Assert.assertSame(expected[expectedPos + i], actual[actualPos + i]);
+        }
+    }
+    
+    public static void arrayValueCompare(int[] expected, int expectedPos, int[] actual, int actualPos, int length)
+    {
+        for (int i = 0; i < length; i++)
+        {
+        	Assert.assertEquals(expected[expectedPos + i], actual[actualPos + i]);
         }
     }
 }

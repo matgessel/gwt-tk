@@ -17,6 +17,8 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.Vector;
 
+import asquare.gwt.tk.client.util.GwtUtil;
+
 public class ListSelectionModelArbitrary extends ListSelectionModelBase
 {
 	private static final Object SELECTED = Boolean.TRUE;
@@ -27,12 +29,53 @@ public class ListSelectionModelArbitrary extends ListSelectionModelBase
 	 */
 	private Vector m_selection = new Vector();
 	
+	public boolean hasSelection()
+	{
+		return getMinSelectedIndex() != -1;
+	}
+	
 	public boolean isIndexSelected(int index)
 	{
 		if (index < 0)
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException(String.valueOf(index));
 		
 		return m_selection.size() > index && m_selection.get(index) == SELECTED;
+	}
+	
+	public int[] getSelectedIndices()
+	{
+		int[] temp = new int[m_selection.size()];
+		int count = 0;
+		for (int i = 0, size = m_selection.size(); i < size; i++)
+		{
+			if (m_selection.get(i) == SELECTED)
+			{
+				temp[count++] = i;
+			}
+		}
+		int[] result = new int[count];
+		GwtUtil.arrayCopy(temp, 0, result, 0, count);
+		return result;
+	}
+	
+	public int getMinSelectedIndex()
+	{
+		for (int i = 0, size = m_selection.size(); i < size; i++)
+		{
+			if (m_selection.get(i) == SELECTED)
+				return i;
+		}
+		return -1;
+	}
+	
+	public int getMaxSelectedIndex()
+	{
+		for (int i = m_selection.size() - 1; i >= 0; i--)
+		{
+			if (m_selection.get(i) == SELECTED)
+				return i;
+		}
+		return -1;
 	}
 	
 	public void setIndexSelected(int index, boolean selected)
@@ -64,8 +107,59 @@ public class ListSelectionModelArbitrary extends ListSelectionModelBase
 	{
 		for (int i = m_selection.size() - 1; i >=0; i--)
 		{
-			m_selection.remove(i);
-			fireSelectionChange(i);
+			if (m_selection.remove(i) == SELECTED)
+			{
+				fireSelectionChange(i);
+			}
+		}
+	}
+	
+	public int getSelectionSize()
+	{
+		int result = 0;
+		for (int i = 0, size = m_selection.size(); i < size; i++)
+		{
+			if (m_selection.get(i) == SELECTED)
+			{
+				result++;
+			}
+		}
+		return result;
+	}
+	
+	public void addSelectionRange(int from, int to)
+	{
+		setRangeSelected(from, to, true);
+	}
+	
+	public void setSelectionRange(int from, int to)
+	{
+		if (from < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(from));
+		
+		if (to < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(to));
+		
+		clearSelection();
+		setRangeSelected(from, to, true);
+	}
+	
+	public void removeSelectionRange(int from, int to)
+	{
+		setRangeSelected(from, to, false);
+	}
+
+	private void setRangeSelected(int from, int to, boolean selected)
+	{
+		if (from < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(from));
+		
+		if (to < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(to));
+		
+		for (int i = Math.min(from, to), max = Math.max(from, to); i <= max; i++)
+		{
+			setIndexSelected(i, selected);
 		}
 	}
 }

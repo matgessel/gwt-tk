@@ -29,10 +29,10 @@ public abstract class ListViewBase extends ViewBase implements ListView
 	{
 		super(listImpl);
 		setStyleName(ListView.STYLENAME_LIST);
-		m_renderer = ((cellRenderer != null) ? cellRenderer : createFormatter());
+		m_renderer = ((cellRenderer != null) ? cellRenderer : createRenderer());
 	}
 	
-	protected CellRenderer createFormatter()
+	protected CellRenderer createRenderer()
 	{
         CellRendererDefault result = (CellRendererDefault) GWT.create(CellRendererDefault.class);
         result.setElementBaseStyleName(ListView.STYLENAME_LIST_ITEM);

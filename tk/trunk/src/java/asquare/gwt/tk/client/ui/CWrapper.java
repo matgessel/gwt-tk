@@ -72,7 +72,7 @@ public class CWrapper extends EventWrapper implements ControllerSupport
 	 */
 	public CWrapper(Widget widget, List controllers, boolean eventsTargetWrapper)
 	{
-		initWidget(widget);
+		super.initWidget(widget);
 		Widget eventTarget = eventsTargetWrapper ? this : widget;
 		m_controllerSupport = new ControllerSupportDelegate(eventTarget);
 		
@@ -80,6 +80,16 @@ public class CWrapper extends EventWrapper implements ControllerSupport
 			controllers = createControllers();
 		
 		setControllers(controllers);
+	}
+	
+	/**
+	 * Not supported. The widget is set in the constructor and cannot be changed. 
+	 * 
+	 * @throws UnsupportedOperationException
+	 */
+	protected final void initWidget(Widget widget) throws UnsupportedOperationException
+	{
+		throw new UnsupportedOperationException();
 	}
 	
 	/**

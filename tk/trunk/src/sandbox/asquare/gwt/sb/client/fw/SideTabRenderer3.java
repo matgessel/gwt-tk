@@ -51,7 +51,7 @@ public class SideTabRenderer3 extends CellRendererDefault
 	
 	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
-		DOM.setAttribute(viewElement, "className", buildStyleName(properties));
+		DOM.setAttribute(viewElement, "className", buildStyleName(modelElement, properties));
 		final String newHtml = 
 			"<div style='position:relative'>" + // enables Content div to be absolutely positioned
 				"<div class='bg'>" +

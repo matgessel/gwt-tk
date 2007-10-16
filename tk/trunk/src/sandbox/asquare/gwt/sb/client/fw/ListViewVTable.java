@@ -22,9 +22,8 @@ public class ListViewVTable extends ListViewDefault
 		this(null);
 	}
 	
-	public ListViewVTable(CellRenderer formatter)
+	public ListViewVTable(CellRenderer renderer)
 	{
-		super(new ListWidgetVTable(), formatter);
-		
+		super(new ListWidgetVTable(), renderer);
 	}
 }

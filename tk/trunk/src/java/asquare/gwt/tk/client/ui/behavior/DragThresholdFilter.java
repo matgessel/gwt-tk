@@ -18,25 +18,24 @@ package asquare.gwt.tk.client.ui.behavior;
 /**
  * A DragGesture wrapper which which prevents the wrapped gesture's step action
  * from occuring until a specified distance is exceeded. This can be used to
- * prevent accidental manipulation or to separate actions which occur onMouseDown
- * from those that occur onDrag.
+ * prevent accidental manipulation or to pervent the wrapped gesture's start
+ * action from being executed until the mouse is moved.
  */
 public class DragThresholdFilter extends DragGestureWrapper
 {
 	private final int m_threshold;
 	
+	private MouseEvent m_start;
 	private boolean m_started = false;
-	private int m_startX, m_startY;
 	
 	/**
-	 * Creates a new DragGesture which prevents . The DragGesture is not activated until the mouse movement
-	 * equals the specified distance; this prevents accidental movement.
+	 * Creates a new DragGesture with the specified threshold.
 	 * 
 	 * @param distance the distance in screen pixels to move before taking an
 	 *            action, or <code>0</code>
 	 * @param gesture a delegate object
 	 */
-	public DragThresholdFilter(DragGesture delegate, int distance)
+	public DragThresholdFilter(int distance, DragGesture delegate)
 	{
 		super(delegate);
 		
@@ -46,38 +45,41 @@ public class DragThresholdFilter extends DragGestureWrapper
 		m_threshold = distance;
 	}
 	
-	private boolean equalsThreshold(int x, int y)
+	protected boolean equalsThreshold(int deltaX, int deltaY)
 	{
-		return Math.abs(x - m_startX) >= m_threshold || Math.abs(y - m_startY) >= m_threshold;
+		return Math.abs(deltaX) >= m_threshold || Math.abs(deltaY) >= m_threshold;
 	}
 	
-	public void start(int x, int y)
+	public void start(MouseEvent e)
 	{
-		m_startX = x;
-		m_startY = y;
 		if (m_threshold == 0)
 		{
 			m_started = true;
-			super.start(x, y);
+			super.start(e);
+		}
+		else
+		{
+			m_start = e;
 		}
 	}
 	
-	public void step(int x, int y)
+	public void step(DragEvent e)
 	{
-		if (! m_started && equalsThreshold(x, y))
+		if (! m_started && equalsThreshold(e.getDeltaX(), e.getDeltaY()))
 		{
 			m_started = true;
-			super.start(x, y);
+			super.start(m_start);
 		}
 		if (m_started)
 		{
-			super.step(x, y);
+			super.step(e);
 		}
 	}
 	
-	public void finish(int x, int y)
+	public void finish()
 	{
-		super.finish(x, y);
+		super.finish();
 		m_started = false;
+		m_start = null;
 	}
 }

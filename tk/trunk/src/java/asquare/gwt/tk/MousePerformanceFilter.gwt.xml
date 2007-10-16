@@ -16,12 +16,12 @@
 <module>
 	<inherits name="com.google.gwt.user.User"/>
 	
-	<replace-with class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategyImmediate">
-		<when-type-is class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategy"/>
+	<replace-with class="asquare.gwt.tk.client.ui.behavior.MousePerformanceFilter.MoveStrategyImmediate">
+		<when-type-is class="asquare.gwt.tk.client.ui.behavior.MousePerformanceFilter.MoveStrategy"/>
 	</replace-with>
 	
-	<replace-with class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategyMozilla">
-		<when-type-is class="asquare.gwt.tk.client.ui.behavior.DragPerformanceFilter.StepStrategy"/>
+	<replace-with class="asquare.gwt.tk.client.ui.behavior.MousePerformanceFilter.MoveStrategyMozilla">
+		<when-type-is class="asquare.gwt.tk.client.ui.behavior.MousePerformanceFilter.MoveStrategy"/>
 		<any>
 			<when-property-is name="user.agent" value="gecko"/>
 			<when-property-is name="user.agent" value="gecko1_8"/>

@@ -19,17 +19,15 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class EventDelegateAdaptor implements EventDelegate
+public abstract class EventDelegateAdaptor extends EventDelegateAdaptorBase implements EventDelegate
 {
-	private final int m_eventBits;
-	
 	/**
 	 * Default constructor for convienence. Subclasses must override
 	 * {@link #getEventBits()} if they want to process events.
 	 */
 	public EventDelegateAdaptor()
 	{
-		m_eventBits = 0;
+		this(0);
 	}
 	
 	/**
@@ -40,7 +38,7 @@ public abstract class EventDelegateAdaptor implements EventDelegate
 	 */
 	public EventDelegateAdaptor(int eventBits)
 	{
-		m_eventBits = eventBits;
+		super(eventBits);
 	}
 	
 	/*
@@ -65,14 +63,5 @@ public abstract class EventDelegateAdaptor implements EventDelegate
 	protected boolean doBrowserEvent(Widget widget, Event event)
 	{
 		return true;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 * Override in subclass if using the default constructor. 
-	 */
-	public int getEventBits()
-	{
-		return m_eventBits;
 	}
 }

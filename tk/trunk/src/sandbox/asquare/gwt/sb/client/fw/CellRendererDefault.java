@@ -32,7 +32,6 @@ public class CellRendererDefault implements CellRenderer
 {
 	private final Vector m_styleAttributeNames = new Vector();
 	private final Vector m_styleAttributeValues = new Vector();
-//	private final HashMap m_styleAttributes = new HashMap();
 	private String m_elementStyleName;
 	private StringFormatter m_formatter;
 	
@@ -129,7 +128,7 @@ public class CellRendererDefault implements CellRenderer
 	public void prepareElement(Element viewElement, Object modelElement, Properties properties)
 	{
 		// set cell class name(s)
-		String styleName = buildStyleName(properties);
+		String styleName = buildStyleName(modelElement, properties);
 		
 		if (! styleName.equals(DOM.getAttribute(viewElement, "className")))
 		{
@@ -155,7 +154,7 @@ public class CellRendererDefault implements CellRenderer
 		}
 	}
 	
-	protected String buildStyleName(Properties properties)
+	protected String buildStyleName(Object modelElement, Properties properties)
 	{
 		String baseStyleName = getElementBaseStyleName();
 		String result = baseStyleName != null ? baseStyleName : "";
@@ -192,7 +191,11 @@ public class CellRendererDefault implements CellRenderer
 		}
 		else
 		{
-			String newText = String.valueOf(modelElement);
+			String newText = m_formatter.getString(modelElement);
+			if ("".equals(newText))
+			{
+				newText = " ";
+			}
 			if (! DOM.getInnerText(viewElement).equals(newText))
 			{
 				DOM.setInnerText(viewElement, newText);

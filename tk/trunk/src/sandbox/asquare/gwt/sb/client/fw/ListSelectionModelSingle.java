@@ -21,10 +21,33 @@ public class ListSelectionModelSingle extends ListSelectionModelBase
 	
 	public boolean isIndexSelected(int index)
 	{
+		if (index < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(index));
+		
 		return index == m_selectedIndex;
 	}
 	
+	public boolean hasSelection()
+	{
+		return m_selectedIndex != -1;
+	}
+	
 	public int getSelectedIndex()
+	{
+		return m_selectedIndex;
+	}
+	
+	public int[] getSelectedIndices()
+	{
+		return m_selectedIndex == -1 ? new int[0] : new int[] {m_selectedIndex};
+	}
+	
+	public int getMinSelectedIndex()
+	{
+		return m_selectedIndex;
+	}
+	
+	public int getMaxSelectedIndex()
 	{
 		return m_selectedIndex;
 	}
@@ -56,8 +79,44 @@ public class ListSelectionModelSingle extends ListSelectionModelBase
 	{
 		if (m_selectedIndex != -1)
 		{
-			fireSelectionChange(m_selectedIndex);
+			int previouslySelectedIndex = m_selectedIndex;
 			m_selectedIndex = -1;
+			fireSelectionChange(previouslySelectedIndex);
+		}
+	}
+	
+	public int getSelectionSize()
+	{
+		return m_selectedIndex == -1 ? 0 : 1;
+	}
+	
+	public void addSelectionRange(int from, int to)
+	{
+		setSelectionRange(from, to);
+	}
+	
+	public void setSelectionRange(int from, int to)
+	{
+		if (from < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(from));
+		
+		if (to < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(to));
+		
+		setSelectedIndex(to);
+	}
+	
+	public void removeSelectionRange(int from, int to)
+	{
+		if (from < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(from));
+		
+		if (to < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(to));
+		
+		if (m_selectedIndex >= Math.min(from, to) && m_selectedIndex <= Math.max(from, to))
+		{
+			clearSelection();
 		}
 	}
 }

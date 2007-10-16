@@ -15,12 +15,8 @@
  */
 package asquare.gwt.sb.client.util;
 
-import com.google.gwt.user.client.Command;
-
-public interface Action extends Command
+public interface Action extends UICommand
 {
-	String getUIString();
-	
 	boolean isEnabled();
 	
 	void setEnabled(boolean enabled);

@@ -53,7 +53,7 @@ public class ButtonBorderRenderer extends CellRendererDefault
 	
 	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
-		DOM.setAttribute(viewElement, "className", buildStyleName(properties));
+		DOM.setAttribute(viewElement, "className", buildStyleName(modelElement, properties));
 		
 		// enables Content div to be absolutely positioned
 		DOM.setStyleAttribute(viewElement, "position", "relative");

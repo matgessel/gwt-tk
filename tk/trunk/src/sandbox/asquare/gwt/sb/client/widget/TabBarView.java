@@ -36,9 +36,9 @@ public class TabBarView extends ListViewDefault
 		this(new ListWidgetHTable(), null);
 	}
 	
-	public TabBarView(ListWidget structure, CellRenderer formatter)
+	public TabBarView(ListWidget structure, CellRenderer renderer)
 	{
-		super(structure, formatter);
+		super(structure, renderer);
 		addSpacers();
 		setStyleName("tk-TabBar");
 	}
@@ -54,10 +54,29 @@ public class TabBarView extends ListViewDefault
 		DOM.setInnerText(last, " "); // force cell to show in IE/Opera quirks mode
 	}
 	
+	public Element getCellElement(int index)
+	{
+		return super.getCellElement(index + 1);
+	}
+	
+	public Element getCellRootElement(Element element)
+	{
+		int index = getIndexOf(element);
+		return (index >= 0) ? getCellElement(index) : null;
+	}
+	
 	public int getIndexOf(Element eventTarget)
 	{
 		int result = super.getIndexOf(eventTarget);
-		return result != -1 ? result - 1 : result;
+		switch (result)
+		{
+			case -1: 
+			case 0: 
+				return -1;
+				
+			default: 
+				return result - 1;
+		}
 	}
 	
 	public void insert(int index, Object item, Properties cellProperties)
@@ -89,6 +108,6 @@ public class TabBarView extends ListViewDefault
 	public void renderCell(int index, Object item, Properties cellProperties)
 	{
 		GwtUtil.rangeCheck(1, getSize(), index + 1, false);
-		super.renderCell(index + 1, item, cellProperties);
+		super.renderCell(index, item, cellProperties);
 	}
 }

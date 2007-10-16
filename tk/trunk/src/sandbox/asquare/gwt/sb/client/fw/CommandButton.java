@@ -21,6 +21,9 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 
+/**
+ * A button which accepts a command for configuration and click action. 
+ */
 public class CommandButton extends Button
 {
 	private UICommand m_command;
@@ -41,8 +44,11 @@ public class CommandButton extends Button
 	
 	public void setCommand(UICommand command)
 	{
-		setText(command.getUIString());
 		m_command = command;
+		if (m_command != null)
+		{
+			setText(command.getUIString());
+		}
 	}
 	
 	public void onBrowserEvent(Event event)

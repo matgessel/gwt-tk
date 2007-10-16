@@ -15,37 +15,39 @@
  */
 package asquare.gwt.sb.client.util;
 
-import java.util.Vector;
+import java.util.EventListener;
 
-public abstract class ActionBase implements Action
+import asquare.gwt.sb.client.fw.ModelChangeSupportLight;
+
+public abstract class ActionBase extends UICommandBase implements Action
 {
-	private Vector m_listeners;
-	private String m_uiString;
+	private ChangeSupport m_changeSupport;
 	private boolean m_enabled = true;
 	
 	public ActionBase()
 	{
+		this(null);
 	}
 	
 	public ActionBase(String uiString)
 	{
-		m_uiString = uiString;
+		super(uiString);
 	}
 	
 	public void addListener(ActionPropertyListener listener)
 	{
-		if (m_listeners == null)
+		if (m_changeSupport == null)
 		{
-			m_listeners = new Vector();
+			m_changeSupport = new ChangeSupport();
 		}
-		m_listeners.add(listener);
+		m_changeSupport.addListener(listener);
 	}
 	
 	public void removeListener(ActionPropertyListener listener)
 	{
-		if (m_listeners != null)
+		if (m_changeSupport != null)
 		{
-			m_listeners.remove(listener);
+			m_changeSupport.removeListener(listener);
 		}
 	}
 	
@@ -59,34 +61,29 @@ public abstract class ActionBase implements Action
 		if (m_enabled != enabled)
 		{
 			m_enabled = enabled;
-			fireEnabledChanged();
+			if (m_changeSupport != null)
+			{
+				m_changeSupport.setChanged();
+				m_changeSupport.update();
+			}
 		}
-	}
-	
-	public String getUIString()
-	{
-		return m_uiString;
 	}
 	
 	public void setUiString(String uiString)
 	{
-		m_uiString = uiString;
-	}
-	
-	public String toString()
-	{
-		return getUIString();
-	}
-	
-	private void fireEnabledChanged()
-	{
-		if (m_listeners == null || m_listeners.size() == 0)
-			return;
-		
-		Object[] listeners = m_listeners.toArray();
-		for (int i = 0; i < listeners.length; i++)
+		super.setUiString(uiString);
+		if (m_changeSupport != null)
 		{
-			((ActionPropertyListener) listeners[i]).actionPropertiesChanged(this);
+			m_changeSupport.setChanged();
+			m_changeSupport.update();
+		}
+	}
+	
+	private class ChangeSupport extends ModelChangeSupportLight
+	{
+		protected void notifyListener(EventListener listener)
+		{
+			((ActionPropertyListener) listener).actionPropertiesChanged(ActionBase.this);
 		}
 	}
 }

@@ -27,7 +27,12 @@ public class ListViewDefault extends ListViewBase
 		m_structure = structure;
 	}
 	
-	protected Element getCellElement(int index)
+	public Element getCellRootElement(Element element)
+	{
+		return m_structure.getCellRootElement(element);
+	}
+	
+	public Element getCellElement(int index)
 	{
 		return m_structure.getCellElement(index);
 	}

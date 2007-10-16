@@ -39,6 +39,20 @@ public class ListWidgetBasic extends ListWidget
 		m_itemElementType = itemElement;
 	}
 	
+	public Element getCellRootElement(Element eventTarget)
+	{
+		Element e = getElement();
+		for (int i = 0, size = DOM.getChildCount(e); i < size; i++)
+		{
+			Element candidate = DOM.getChild(e, i);
+			if (DOM.isOrHasChild(candidate, eventTarget))
+			{
+				return candidate;
+			}
+		}
+		return null;
+	}
+	
 	public int getIndexOf(Element eventTarget)
 	{
 		Element e = getElement();

@@ -34,18 +34,18 @@ public class DragGestureWrapper implements DragGesture
 		return m_delegate;
 	}
 	
-	public void start(int x, int y)
+	public void start(MouseEvent e)
 	{
-		m_delegate.start(x, y);
+		m_delegate.start(e);
 	}
 	
-	public void step(int x, int y)
+	public void step(DragEvent e)
 	{
-		m_delegate.step(x, y);
+		m_delegate.step(e);
 	}
 	
-	public void finish(int x, int y)
+	public void finish()
 	{
-		m_delegate.finish(x, y);
+		m_delegate.finish();
 	}
 }

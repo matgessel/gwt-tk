@@ -22,6 +22,11 @@ import com.google.gwt.user.client.ui.UIObject;
  */
 public class DragFloatingObjectGesture extends AdjustObjectGesture
 {
+	public DragFloatingObjectGesture()
+	{
+		super();
+	}
+	
 	/**
 	 * @param target the widget to be dragged
 	 */
@@ -30,9 +35,9 @@ public class DragFloatingObjectGesture extends AdjustObjectGesture
 		super(target, target);
 	}
 	
-	public void step(int x, int y)
+	public void step(DragEvent e)
 	{
-		setLeft(getDeltaX(x));
-		setTop(getDeltaY(y));
+		setLeft(e.getDeltaX());
+		setTop(e.getDeltaY());
 	}
 }

@@ -15,7 +15,9 @@
  */
 package asquare.gwt.sb.client.util;
 
-public interface ActionPropertyListener
+import java.util.EventListener;
+
+public interface ActionPropertyListener extends EventListener
 {
 	void actionPropertiesChanged(Action action);
 }
