@@ -18,6 +18,7 @@ package asquare.gwt.tk.client.ui;
 import java.util.Vector;
 
 import asquare.gwt.tk.client.util.GwtUtil;
+import asquare.gwt.tk.client.util.TableUtil;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -50,8 +51,8 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 */
 	 ExposedCellPanel()
 	{
-		DOM.setAttribute(getTable(), "cellSpacing", "0");
-	    DOM.setAttribute(getTable(), "cellPadding", "0");
+		TableUtil.setTableCellPadding(getTable(), 0);
+		TableUtil.setTableCellSpacing(getTable(), 0);
 	}
 	
 	/**
@@ -548,7 +549,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		DOM.setAttribute(getCellElement(cellIndex), "width", width);
+		TableUtil.setTdWidth(getCellElement(cellIndex), width);
 	}
 
 	/**
@@ -576,7 +577,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		DOM.setAttribute(getCellElement(cellIndex), "height", height);
+		TableUtil.setTdHeight(getCellElement(cellIndex), height);
 	}
 	
 	/**
@@ -606,7 +607,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		DOM.setAttribute(getCellElement(cellIndex), "align", hAlign.getTextAlignString());
+		TableUtil.setTdHorizontalAlignment(getCellElement(cellIndex), hAlign);
 	}
 	
 	/**
@@ -636,7 +637,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		DOM.setStyleAttribute(getCellElement(cellIndex), "verticalAlign", vAlign.getVerticalAlignString());
+		TableUtil.setTdVerticalAlignment(getCellElement(cellIndex), vAlign);
 	}
 	
 	/**

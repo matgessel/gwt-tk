@@ -16,6 +16,7 @@
 package asquare.gwt.tk.client.ui;
 
 import asquare.gwt.tk.client.util.GwtUtil;
+import asquare.gwt.tk.client.util.TableUtil;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -40,10 +41,7 @@ public class RowPanel extends ExposedCellPanel
 	 */
 	protected void insertCellStructure(int cellIndex)
 	{
-		Element tr = DOM.createTR();
-		DOM.insertChild(getBody(), tr, cellIndex);
-		Element td = DOM.createTD();
-		DOM.appendChild(tr, td);
+		TableUtil.createAppendTd(TableUtil.createInsertTr(getBody(), cellIndex));
 	}
 
 	/*
@@ -54,8 +52,8 @@ public class RowPanel extends ExposedCellPanel
 	{
 		Element tr = DOM.getChild(getBody(), cellIndex);
 		Element td = getCellElement(cellIndex);
-		DOM.removeChild(tr, td);
 		DOM.removeChild(getBody(), tr);
+		DOM.removeChild(tr, td);
 	}
 	
 	/*
