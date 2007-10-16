@@ -265,14 +265,29 @@ public class GwtUtil
 	}
 	
 	/**
-	 * Tests two Strings for equality. Same as {@link String#equals(Object)}.
-	 * Either argument may be <code>null</code>.
+	 * Tests two Strings for equality. Same as {@link String#equals(Object)},
+	 * except that either argument may be <code>null</code>.
 	 * 
 	 * @param a a String, or <code>null</code>
 	 * @param b a String, or <code>null</code>
-	 * @return <code>true</code> if <code>(a == b || a != null && a.equals(b))</code>
+	 * @return <code>true</code> if
+	 *         <code>(a == b || a != null && a.equals(b))</code>
 	 */
 	public static native boolean equals(String a, String b) /*-{
 		return a == b;
 	}-*/;
+	
+	/**
+	 * Tests two Objects for equality. Same as {@link Object#equals(Object)},
+	 * except that either argument may be <code>null</code>.
+	 * 
+	 * @param a a String, or <code>null</code>
+	 * @param b a String, or <code>null</code>
+	 * @return <code>true</code> if
+	 *         <code>(a == b || a != null && a.equals(b))</code>
+	 */
+	public static boolean equals(Object a, Object b)
+	{
+		return a == b || a != null && a.equals(b); 
+	}
 }
