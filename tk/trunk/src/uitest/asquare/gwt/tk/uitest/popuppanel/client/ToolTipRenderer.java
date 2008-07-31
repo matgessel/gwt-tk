@@ -15,9 +15,9 @@
  */
 package asquare.gwt.tk.uitest.popuppanel.client;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
+import asquare.gwt.tk.client.ui.CWindow;
 
 public interface ToolTipRenderer
 {
-	void render(ComplexPanel toolTip, ToolTipModel model);
+	void render(CWindow toolTip, ToolTipModel model);
 }

@@ -15,8 +15,7 @@
  */
 package asquare.gwt.tk.client.ui;
 
-import asquare.gwt.tk.client.ui.EventWrapper;
-import asquare.gwt.tk.client.ui.behavior.EventDelegate;
+import asquare.gwt.tk.client.ui.behavior.BrowserEventHandler;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -24,18 +23,18 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * A widget wrapper which delegates events to an
- * {@link asquare.gwt.tk.client.ui.behavior.EventDelegate EventDelegate}. The
+ * {@link asquare.gwt.tk.client.ui.behavior.BrowserEventHandler BrowserEventHandler}. The
  * wrapped widget will allowed to process events before they are passed to the
  * delegate.
  */
 public class DelegatingWrapper extends EventWrapper
 {
-	private final EventDelegate m_delegate;
+	private final BrowserEventHandler m_delegate;
 		
 	/**
 	 * @throws NullPointerException if <code>widget</code> or <code>delegate</code> are null
 	 */
-	public DelegatingWrapper(Widget widget, EventDelegate delegate)
+	public DelegatingWrapper(Widget widget, BrowserEventHandler delegate)
 	{
 		super(widget, delegate.getEventBits());
 		m_delegate = delegate;

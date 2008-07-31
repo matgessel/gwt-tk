@@ -15,9 +15,10 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import asquare.gwt.sb.client.util.Properties;
+import asquare.gwt.tk.client.util.GwtUtil;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -28,10 +29,9 @@ import com.google.gwt.user.client.Element;
  * cell. The default conversion can be overriden by setting a custom formatter.
  * @see #setFormatter(StringFormatter)
  */
-public class CellRendererDefault implements CellRenderer
+public class CellRendererDefault implements CellRendererString
 {
-	private final Vector m_styleAttributeNames = new Vector();
-	private final Vector m_styleAttributeValues = new Vector();
+	private StyleRuleCollection m_styleRules = null;
 	private String m_elementStyleName;
 	private StringFormatter m_formatter;
 	
@@ -78,45 +78,62 @@ public class CellRendererDefault implements CellRenderer
 
 	public void setFormatter(StringFormatter formatter)
 	{
+		if (formatter == null)
+			throw new NullPointerException();
+		
 		m_formatter = formatter;
 	}
 	
-	public void setCSSProperty(String name, int value)
+	public void setCSSProperty(String cssProperty, int cssValue)
 	{
-		setCSSProperty(name, new Integer(value));
+		setCSSRule(null, cssProperty, cssValue);
 	}
 	
-	public void setCSSProperty(String name, String value)
+	public void setCSSProperty(String cssProperty, String cssValue)
 	{
-		setCSSProperty(name, (Object) value);
+		setCSSRule(null, cssProperty, cssValue);
 	}
 	
 	/**
-	 * @param value a Integer or a String
+	 * Set a rule to be triggered when renderer boolean property is
+	 * <code>true</code>. If the renderer property is not specified the rule
+	 * will be applied to all cells.
+	 * 
+	 * @param propertyName a <em>boolean</em> renderer property name, or
+	 *            <code>null</code>
+	 * @param cssProperty a css style property name
+	 * @param cssValue a css style value, or <code>null</code> to clear the
+	 *            previous rule
+	 * @throws IllegalArgumentException if <code>cssProperty</code> is
+	 *             <code>null</code> or an empty String
+	 * @throws IllegalArgumentException if <code>cssValue</code> is
+	 *             <code>null</code> or an empty String
 	 */
-	private void setCSSProperty(String name, Object value)
+	public void setCSSRule(String propertyName, String cssProperty, int cssValue)
 	{
-		if (name == null)
-			throw new IllegalArgumentException();
-		
-		int index = m_styleAttributeNames.indexOf(name);
-		if (value == null || value.equals(""))
+		getStyleRules().setCSSRule(propertyName, cssProperty, cssValue);
+	}
+	
+	public void setCSSRule(String propertyName, String cssProperty, String cssValue)
+	{
+		getStyleRules().setCSSRule(propertyName, cssProperty, cssValue);
+	}
+	
+	public void clearCssRule(String propertyName, String cssProperty)
+	{
+		if (m_styleRules != null)
 		{
-			m_styleAttributeNames.remove(index);
-			m_styleAttributeValues.remove(index);
+			m_styleRules.clearCssRule(propertyName, cssProperty);
 		}
-		else
+	}
+	
+	private StyleRuleCollection getStyleRules()
+	{
+		if (m_styleRules == null)
 		{
-			if (index == -1)
-			{
-				m_styleAttributeNames.add(name);
-				m_styleAttributeValues.add(value);
-			}
-			else
-			{
-				m_styleAttributeValues.setElementAt(value, index);
-			}
+			m_styleRules = new StyleRuleCollection();
 		}
+		return m_styleRules;
 	}
 	
 	public void renderCell(Element viewElement, Object modelElement, Properties properties)
@@ -130,26 +147,37 @@ public class CellRendererDefault implements CellRenderer
 		// set cell class name(s)
 		String styleName = buildStyleName(modelElement, properties);
 		
-		if (! styleName.equals(DOM.getAttribute(viewElement, "className")))
+		if (! styleName.equals(DOM.getElementProperty(viewElement, "className")))
 		{
-			DOM.setAttribute(viewElement, "className", styleName);
+			DOM.setElementProperty(viewElement, "className", styleName);
 		}
 		
 		// set cell CSS properties
-		for (int i = 0, size = m_styleAttributeNames.size(); i < size; i++)
+		if (m_styleRules != null)
 		{
-			Object value = m_styleAttributeValues.get(i);
-			if (value == null || value instanceof String)
+			for (int i = 0, size = m_styleRules.getSize(); i < size; i++)
 			{
-				DOM.setStyleAttribute(viewElement, (String) m_styleAttributeNames.get(i), (String) m_styleAttributeValues.get(i));
-			}
-			else if (value instanceof Integer)
-			{
-				DOM.setIntStyleAttribute(viewElement, (String) m_styleAttributeNames.get(i), ((Integer) m_styleAttributeValues.get(i)).intValue());
-			}
-			else
-			{
-				assert false;
+				String property = m_styleRules.getRendererProperty(i);
+				if (property == null || properties.getBoolean(property))
+				{
+					Object value = m_styleRules.getCssValue(i);
+					if (value instanceof String)
+					{
+						DOM.setStyleAttribute(viewElement, m_styleRules.getCssProperty(i), (String) value);
+					}
+					else if (value instanceof Integer)
+					{
+						DOM.setIntStyleAttribute(viewElement, m_styleRules.getCssProperty(i), ((Integer) value).intValue());
+					}
+					else
+					{
+						assert false;
+					}
+				}
+				else
+				{
+					DOM.setStyleAttribute(viewElement, m_styleRules.getCssProperty(i), "");
+				}
 			}
 		}
 	}
@@ -160,46 +188,182 @@ public class CellRendererDefault implements CellRenderer
 		String result = baseStyleName != null ? baseStyleName : "";
 		if (properties != null)
 		{
-			result = appendDependantStyle(result, StyleNames.FIRST, properties.getBoolean(PROPERTY_FIRST));
-			result = appendDependantStyle(result, StyleNames.LAST, properties.getBoolean(PROPERTY_LAST));
 			result = appendDependantStyle(result, StyleNames.SELECTED, properties.getBoolean(PROPERTY_SELECTED));
 			result = appendDependantStyle(result, StyleNames.HOVER, properties.getBoolean(PROPERTY_HOVER));
 			result = appendDependantStyle(result, StyleNames.DISABLED, properties.getBoolean(PROPERTY_DISABLED));
+			result = appendDependantStyle(result, StyleNames.ACTIVE, properties.getBoolean(PROPERTY_ACTIVE));
 		}
 		return result;
 	}
 	
-	protected String appendDependantStyle(String string, String dependentStyleName, boolean add)
+	protected String appendDependantStyle(String styleIn, String dependentStyleName)
+	{
+		return appendDependantStyle(styleIn, dependentStyleName, true);
+	}
+	
+	protected String appendDependantStyle(String styleIn, String dependentStyleName, boolean add)
 	{
 		if (add)
 		{
-			string += ' ' + (m_elementStyleName == null ? "gwt-nostyle" : m_elementStyleName) + '-' + dependentStyleName;
+			styleIn += ' ' + (m_elementStyleName == null ? "gwt-nostyle" : m_elementStyleName) + '-' + dependentStyleName;
 		}
-		return string;
+		return styleIn;
 	}
 	
+//	protected String getFormattedHtml(Object modelElement)
+//	{
+//		return m_formatter.getHtml(modelElement);
+//	}
+//	
+//	/**
+//	 * Template method which gives subclasses the opportunity to alter a
+//	 * formatted String before it is rendered. E.g. a table cell renderer may
+//	 * want to strip out line breaks.
+//	 */
+//	protected String getFormattedString(Object modelElement)
+//	{
+//		return m_formatter.getString(modelElement);
+//	}
+//	
+//	protected String getFormattedEditingString(Object modelElement)
+//	{
+//		return m_formatter.getEditingString(modelElement);
+//	}
+//	
 	public void renderContent(Element viewElement, Object modelElement, Properties properties)
 	{
 		String newHtml = m_formatter.getHtml(modelElement);
 		if (newHtml != null)
 		{
-			// TODO does this check work? (e.g. auto-generated tbody & td text nodes, possible platform formatting differences)
-			if (! DOM.getInnerHTML(viewElement).equals(newHtml))
-			{
-				DOM.setInnerHTML(viewElement, newHtml);
-			}
+			DOM.setInnerHTML(viewElement, newHtml);
 		}
 		else
 		{
 			String newText = m_formatter.getString(modelElement);
-			if ("".equals(newText))
+			if (newText.length() == 0)
 			{
-				newText = " ";
+				DOM.setInnerHTML(viewElement, "&nbsp;");
 			}
-			if (! DOM.getInnerText(viewElement).equals(newText))
+			else
 			{
 				DOM.setInnerText(viewElement, newText);
 			}
+		}
+	}
+	
+	private static class StyleRuleCollection
+	{
+		private final ArrayList m_rendererProperties = new ArrayList();
+		private final ArrayList m_cssProperties = new ArrayList();
+		private final ArrayList m_values = new ArrayList();
+		
+		public String getRendererProperty(int index)
+		{
+			return (String) m_rendererProperties.get(index);
+		}
+		
+		public String getCssProperty(int index)
+		{
+			return (String) m_cssProperties.get(index);
+		}
+		
+		/**
+		 * @return an Integer or a String
+		 */
+		public Object getCssValue(int index)
+		{
+			return m_values.get(index);
+		}
+		
+		public int getSize()
+		{
+			return m_cssProperties.size();
+		}
+		
+		public void setCSSRule(String propertyName, String cssProperty, int cssValue)
+		{
+			setCSSRule(propertyName, cssProperty, new Integer(cssValue));
+		}
+		
+		public void setCSSRule(String propertyName, String cssProperty, String cssValue)
+		{
+			setCSSRule(propertyName, cssProperty, (Object) cssValue);
+		}
+		
+		/**
+		 * @param cssValue an Integer or a String or <code>null</code>
+		 */
+		private void setCSSRule(String propertyName, String cssProperty, Object cssValue)
+		{
+			if (cssProperty == null || cssProperty.length() == 0)
+				throw new IllegalArgumentException();
+			
+			if (cssValue == null || "".equals(cssValue))
+				throw new IllegalArgumentException();
+			
+			int index = getRuleIndex(propertyName, cssProperty);
+			if (index == -1)
+			{
+				// add new rule
+				m_rendererProperties.add(propertyName);
+				m_cssProperties.add(cssProperty);
+				m_values.add(cssValue);
+			}
+			else
+			{
+				// update existing rule
+				m_values.set(index, cssValue);
+			}
+		}
+		
+		public void clearCssRule(String propertyName, String cssProperty)
+		{
+			if (cssProperty == null || cssProperty.length() == 0)
+				throw new IllegalArgumentException();
+			
+			int index = getRuleIndex(propertyName, cssProperty);
+			if (index != -1)
+			{
+				// clear existing rule
+				m_rendererProperties.remove(index);
+				m_cssProperties.remove(index);
+				m_values.remove(index);
+			}
+		}
+		
+		private int getRuleIndex(String propertyName, String cssProperty)
+		{
+			for (int i = 0, size = m_cssProperties.size(); i < size; i++)
+			{
+				if (cssProperty.equals(m_cssProperties.get(i)))
+				{
+					if (GwtUtil.equals(propertyName, m_rendererProperties.get(i)))
+					{
+						return i;
+					}
+				}
+			}
+			return -1;
+		}
+		
+		public String toString()
+		{
+			String result = "[";
+			for (int i = 0, size = getSize(); i < size; i++)
+			{
+				result += '[' + String.valueOf(m_rendererProperties.get(i)) + ',';
+				result += String.valueOf(m_cssProperties.get(i)) + ',';
+				result += String.valueOf(m_values.get(i));
+				if (i + 1 == size)
+				{
+					result += ']';
+				}
+				else
+				{
+					result += "],";
+				}
+			}
+			return result + ']';
 		}
 	}
 }

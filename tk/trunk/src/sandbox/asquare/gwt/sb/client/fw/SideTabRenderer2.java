@@ -35,7 +35,7 @@ import com.google.gwt.user.client.Element;
  * not provide "layout" for Alpha and AlphaImageLoader filters)</li>
  * </ul>
  */
-public class SideTabRenderer2 extends CellRendererDefault
+public class SideTabRenderer2 extends ListCellRendererDefault
 {
 	public SideTabRenderer2()
 	{
@@ -51,7 +51,7 @@ public class SideTabRenderer2 extends CellRendererDefault
 	{
 		// enables Content div to be absolutely positioned
 		DOM.setStyleAttribute(viewElement, "position", "relative");
-		DOM.setAttribute(viewElement, "className", buildStyleName(modelElement, properties));
+		DOM.setElementProperty(viewElement, "className", buildStyleName(modelElement, properties));
 		final String newHtml = 
 			"<div class='bg'>" +
 				"<div class='Content'>" +

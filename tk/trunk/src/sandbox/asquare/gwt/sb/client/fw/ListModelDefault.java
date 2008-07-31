@@ -15,15 +15,23 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+
+import asquare.gwt.tk.client.util.GwtUtil;
 
 public class ListModelDefault extends ListModelBase implements MutableIndexedDataSource
 {
-	private final Vector m_items = new Vector();
+	private final ArrayList m_items = new ArrayList();
 	
 	public ListModelDefault(ListSelectionModel selectionModel)
 	{
-		super(selectionModel);
+		this(selectionModel, null);
+	}
+	
+	public ListModelDefault(ListSelectionModel selectionModel, ListModelChangeSupport changeSupport)
+	{
+		super(selectionModel, changeSupport);
 	}
 	
 	public Object get(int index)
@@ -31,7 +39,7 @@ public class ListModelDefault extends ListModelBase implements MutableIndexedDat
 		return m_items.get(index);
 	}
 	
-	public int indexOf(Object o)
+	public int getIndexOf(Object o)
 	{
 		return m_items.indexOf(o);
 	}
@@ -49,51 +57,76 @@ public class ListModelDefault extends ListModelBase implements MutableIndexedDat
 		}
 	}
 	
+	public void addAll(List items)
+	{
+		for (int i = 0, size = items.size(); i < size; i++)
+		{
+			add(items.get(i));
+		}
+	}
+	
+	public void setItems(Object[] items)
+	{
+		clear();
+		addAll(items);
+	}
+	
+	public void setItems(List items)
+	{
+		clear();
+		addAll(items);
+	}
+	
 	public void insert(int index, Object o)
 	{
 		m_items.add(index, o);
-		addChange(index);
-		addChange(m_items.size());
+		addChange(new ListModelEvent.ListChangeItemInsertion(index, 1));
+		ListSelectionModel selectionModel = getSelectionModel();
+		if (selectionModel != null)
+		{
+			selectionModel.adjustForItemsInserted(index, 1);
+		}
 	}
 	
 	public void set(int index, Object o)
 	{
 		Object old = m_items.set(index, o);
-		if (old != o && (old != null && ! old.equals(o) || ! o.equals(old)))
+		if (! GwtUtil.equals(old, o))
 		{
-			addChange(index);
+			addItemPropertyChange(ITEM_PROPERTY_VALUE, index, 1);
 		}
 	}
 	
 	public void remove(int index)
 	{
-		addChange(index);
-		addChange(m_items.size());
 		m_items.remove(index);
+		addChange(new ListModelEvent.ListChangeItemRemoval(index, 1));
+		ListSelectionModel selectionModel = getSelectionModel();
+		if (selectionModel != null)
+		{
+			selectionModel.adjustForItemsRemoved(index, 1);
+		}
 	}
 	
+	/**
+	 * Removes all items in the model and clears the selection. 
+	 */
 	public void clear()
 	{
 		if (m_items.size() > 0)
 		{
-			addChange(0);
-			addChange(m_items.size());
+			addChange(new ListModelEvent.ListChangeItemRemoval(0, m_items.size()));
 			m_items.clear();
+			ListSelectionModel selectionModel = getSelectionModel();
+			if (selectionModel != null)
+			{
+				selectionModel.clearSelection();
+			}
 		}
 	}
 	
 	public int getSize()
 	{
 		return m_items.size();
-	}
-	
-	public void setSize(int size)
-	{
-		if (size != m_items.size())
-		{
-			addChange(size - 1);
-			addChange(m_items.size() - 1);
-			m_items.setSize(size);
-		}
 	}
 }

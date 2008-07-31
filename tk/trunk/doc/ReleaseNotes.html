@@ -11,7 +11,51 @@
 
 <hr />
 
-<h2>0.2.3</h2>
+<h2>0.2.4</h2>
+
+<p>GWT Tk 0.2.4 was compiled against GWT 1.4.62</p>
+
+<h2>Tk module</h2>
+<ul>
+	<li>various panels now play nice with GWT 1.4 (fixed exceptions)</li>
+	<li>AlertDialog now uses <code>ImageBundle</code> (see <code>TkImageFactory.createAlertDialogImages()</code></li>
+	<li>replaced all instances of <code>Vector</code> with <code>ArrayList</code></li>
+	<li>changed usage of <code>DOM.set*Attribute()</code> to <code>DOM.setElementProperty*()</code></li>
+	<LI>removed <CODE>onUnload()</CODE> implementations from <code>CWrapper</code> and <code>CComplexPanel</code></LI>
+	<li>added DOM event wrapper w/ property accessors</li>
+	<li>Controller refactoring
+		<li>refactored inheritance hierarchy</li>
+		<li>EventControllerBase wraps native events</li>
+		<li>Added controller aggregation (see <code>EventControllerBase</code>)</li>
+	</li>
+	<li>added <code>CWindow</code>
+		<li>basic window with no chrome</li>
+		<li>like <code>PopupPanel</code>, but no event baggage</li>
+		<li>can have a parent other than RootPanel</li>
+		<li>can be set to "lightweight" which disables blocking of windowed objects (such as ListBox) in IE for better performance in complex GUI</li>
+	</li>
+	<li>added <code>CComposite</code>, which allows the late initialization of the wrapped widget (<code>CWrapper</code> does not)
+	<li>eliminated several calls to <code>GWT.create()</code> with the hope that compile time would decrease (no luck)</li>
+	<li><code>FocusModel</code> added a few methods to make more reusable</li>
+	<li>TODO *****************refactored DragController </li>
+</ul>
+
+<h2>Debug module</h2>
+<ul>
+	<li>Debug.prettyPrint(): handles exceptions better</li>
+	<li>DebugConsole dialog positions correctly in GWT 1.4<li>
+</ul>
+
+<h2>Demo</h2>
+<ul>
+	<li>Added a modal "Loading..." dialog example</li>
+</ul>
+
+<hr />
+
+<ul>
+	<li>This is a maintenance release which includes some minor additions.</li>
+</ul>
 
 <p>GWT Tk 0.2.3 was compiled against GWT 1.3.3</p>
 
@@ -125,7 +169,7 @@
 	<li>Added a <code>ModalDialog</code> example demonstrating focus
 	management</li>
 	<li>Addded a <code>GlassPanel</code> example demonstrating
-	cross-platform, alpha-transparent PNG background (useful in Safari when Flash is used). 
+	cross-platform, alpha-transparent PNG background (useful in Safari when Flash is used). </li>
 </ul>
 
 <h2>Known Problems</h2>

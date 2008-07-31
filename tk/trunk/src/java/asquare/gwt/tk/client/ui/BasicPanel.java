@@ -183,9 +183,7 @@ public class BasicPanel extends CComplexPanel implements IndexedPanel
 		{
 			DomUtil.setStyleAttribute(w, "display", m_childrenDisplay);
 		}
-		// pass null and insert manually so we can control DOM element order
-		insert(w, null, beforeIndex);
-		DOM.insertChild(getElement(), w.getElement(), beforeIndex);
+		insert(w, getElement(), beforeIndex, true);
 	}
 	
 	/*

@@ -15,35 +15,121 @@
  */
 package asquare.gwt.tk.testutil;
 
+import asquare.gwt.tk.client.util.GwtUtil;
 import junit.framework.Assert;
 
 public final class TkTestUtil
 {
-	public static void assertSameElements(Object[] a1, Object[] a2)
-	{
-		Assert.assertNotNull(a1);
-		Assert.assertNotNull(a2);
-		Assert.assertEquals(a1.length, a2.length);
-		for (int i = 0; i < a1.length; i++)
-		{
-			Assert.assertSame(String.valueOf(i), a1[i], a2[i]);
-		}
-	}
-    
-	public static void assertSameValues(int[] a1, int[] a2)
-	{
-		Assert.assertNotNull(a1);
-		Assert.assertNotNull(a2);
-		Assert.assertEquals(a1.length, a2.length);
-		for (int i = 0; i < a1.length; i++)
-		{
-			Assert.assertEquals(String.valueOf(i), a1[i], a2[i]);
-		}
-	}
-    
-    public static Object[] createIntegerArray(int start, int count)
+    public static Object[] popElement(Object[] src, int index)
     {
-        Object[] result = new Object[count];
+        Object[] result = new Object[src.length - 1];
+        GwtUtil.arrayCopy(src, 0, result, 0, index);
+        GwtUtil.arrayCopy(src, index + 1, result, index, src.length - (index + 1));
+        return result;
+    }
+    
+    public static void assertSameElements(Object[] expected, Object[] actual)
+	{
+		Assert.assertNotNull("expected=null", expected);
+		Assert.assertNotNull("actual=null", actual);
+		Assert.assertEquals("length", expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++)
+		{
+			Assert.assertSame(String.valueOf(i), expected[i], actual[i]);
+		}
+	}
+    
+    public static void assertSameElements(Object[][] expected, Object[][] actual)
+    {
+		Assert.assertNotNull("expected=null", expected);
+		Assert.assertNotNull("actual=null", actual);
+		Assert.assertEquals("length", expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++)
+		{
+			String iString = String.valueOf(i);
+			if (expected[i] == actual[i])
+			{
+				continue;
+			}
+			Assert.assertNotNull("expected[" + iString + ']', expected[i]);
+			Assert.assertNotNull("actual[" + iString + ']', actual[i]);
+			Assert.assertEquals("length[" + iString + ']', expected[i].length, actual[i].length);
+			for (int j = 0; j < expected[i].length; j++)
+			{
+				Assert.assertSame('[' + iString + ',' + String.valueOf(j) + ']', expected[i][j], actual[i][j]);
+			}
+		}
+    }
+	
+	public static void assertEqualValues(Object[] expected, Object[] actual)
+	{
+		Assert.assertNotNull("expected=null", expected);
+		Assert.assertNotNull("actual=null", actual);
+		Assert.assertEquals("length", expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++)
+		{
+			Assert.assertEquals(String.valueOf(i), expected[i], actual[i]);
+		}
+	}
+    
+    public static void assertEqualValues(Object[][] expected, Object[][] actual)
+    {
+		Assert.assertNotNull("expected=null", expected);
+		Assert.assertNotNull("actual=null", actual);
+		Assert.assertEquals("length", expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++)
+		{
+			String iString = String.valueOf(i);
+			if (expected[i] == actual[i])
+			{
+				continue;
+			}
+			Assert.assertNotNull("expected[" + iString + ']', expected[i]);
+			Assert.assertNotNull("actual[" + iString + ']', actual[i]);
+			Assert.assertEquals("length[" + iString + ']', expected[i].length, actual[i].length);
+			for (int j = 0; j < expected[i].length; j++)
+			{
+				Assert.assertEquals('[' + iString + ',' + String.valueOf(j) + ']', expected[i][j], actual[i][j]);
+			}
+		}
+    }
+	
+	public static void assertEqualValues(int[] expected, int[] actual)
+	{
+		Assert.assertNotNull("expected=null", expected);
+		Assert.assertNotNull("actual=null", actual);
+		Assert.assertEquals("length", expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++)
+		{
+			Assert.assertEquals(String.valueOf(i), expected[i], actual[i]);
+		}
+	}
+    
+    public static void assertEqualValues(int[][] expected, int[][] actual)
+    {
+		Assert.assertNotNull("expected=null", expected);
+		Assert.assertNotNull("actual=null", actual);
+		Assert.assertEquals("length", expected.length, actual.length);
+		for (int i = 0; i < expected.length; i++)
+		{
+			String iString = String.valueOf(i);
+			if (expected[i] == actual[i])
+			{
+				continue;
+			}
+			Assert.assertNotNull("expected[" + iString + ']', expected[i]);
+			Assert.assertNotNull("actual[" + iString + ']', actual[i]);
+			Assert.assertEquals("length[" + iString + ']', expected[i].length, actual[i].length);
+			for (int j = 0; j < expected[i].length; j++)
+			{
+				Assert.assertEquals('[' + iString + ',' + String.valueOf(j) + ']', expected[i][j], actual[i][j]);
+			}
+		}
+    }
+	
+    public static Integer[] createIntegerArray(int start, int count)
+    {
+    	Integer[] result = new Integer[count];
         for (int i = 0; i < count; i++)
         {
             result[i] = new Integer(start + i);
@@ -55,7 +141,7 @@ public final class TkTestUtil
     {
         for (int i = 0; i < actual.length; i++)
         {
-        	Assert.assertSame(expected[expectedPos + i], actual[0 + i]);
+        	Assert.assertSame(String.valueOf(i), expected[expectedPos + i], actual[0 + i]);
         }
     }
     
@@ -63,7 +149,7 @@ public final class TkTestUtil
     {
         for (int i = 0; i < length; i++)
         {
-        	Assert.assertSame(expected[expectedPos + i], actual[actualPos + i]);
+        	Assert.assertSame(String.valueOf(i), expected[expectedPos + i], actual[actualPos + i]);
         }
     }
     
@@ -71,7 +157,21 @@ public final class TkTestUtil
     {
         for (int i = 0; i < length; i++)
         {
-        	Assert.assertEquals(expected[expectedPos + i], actual[actualPos + i]);
+        	Assert.assertEquals(String.valueOf(i), expected[expectedPos + i], actual[actualPos + i]);
         }
     }
+
+	public static int[] subRange(int[] array, int offset, int length)
+	{
+		int[] result = new int[length];
+		GwtUtil.arrayCopy(array, offset, result, 0, length);
+		return result;
+	}
+
+	public static Object[] subRange(Object[] array, int offset, int length)
+	{
+		Object[] result = new Object[length];
+		GwtUtil.arrayCopy(array, offset, result, 0, length);
+		return result;
+	}
 }

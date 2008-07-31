@@ -140,6 +140,7 @@ public class CComplexPanel extends ComplexPanel implements ControllerSupport
 	{
 		if (isAttached())
 			return;
+		
 		m_controllerSupport.onAttach();
 		super.onAttach();
 	}
@@ -153,31 +154,8 @@ public class CComplexPanel extends ComplexPanel implements ControllerSupport
 		if(! isAttached())
 			return;
 		
-		try
-		{
-			onUnload();
-		}
-		finally
-		{
-			super.onDetach();
-			m_controllerSupport.onDetach();
-		}
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.Widget#onLoad()
-	 */
-	protected void onLoad()
-	{
-	}
-	
-	/**
-	 * This method is called just before the widget is detached from the
-	 * browser's document.
-	 */
-	protected void onUnload()
-	{
+		super.onDetach();
+		m_controllerSupport.onDetach();
 	}
 	
 	/*

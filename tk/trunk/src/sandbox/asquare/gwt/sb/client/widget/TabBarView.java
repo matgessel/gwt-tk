@@ -46,58 +46,55 @@ public class TabBarView extends ListViewDefault
 	private void addSpacers()
 	{
 		Element first = insertCellStructure(0);
-		DOM.setAttribute(first, "className", "preSpacer");
+		DOM.setElementProperty(first, "className", "preSpacer");
 		DOM.setInnerText(first, " "); // force cell to show in IE/Opera quirks mode
 		
 		Element last = insertCellStructure(super.getSize());
-		DOM.setAttribute(last, "className", "postSpacer");
+		DOM.setElementProperty(last, "className", "postSpacer");
 		DOM.setInnerText(last, " "); // force cell to show in IE/Opera quirks mode
 	}
 	
-	public Element getCellElement(int index)
+	public Element getCellRootElement(CellId cellId)
 	{
-		return super.getCellElement(index + 1);
+		IndexedCellId cellId0 = (IndexedCellId) cellId;
+		return super.getCellRootElement(new IndexedCellIdImpl(cellId0.getIndex() + 1));
 	}
 	
 	public Element getCellRootElement(Element element)
 	{
 		int index = getIndexOf(element);
-		return (index >= 0) ? getCellElement(index) : null;
+		return (index >= 0) ? getCellRootElement(new IndexedCellIdImpl(index)) : null;
 	}
 	
 	public int getIndexOf(Element eventTarget)
 	{
-		int result = super.getIndexOf(eventTarget);
-		switch (result)
-		{
-			case -1: 
-			case 0: 
-				return -1;
-				
-			default: 
-				return result - 1;
-		}
+		int result = super.getIndexOf(eventTarget) - 1;
+		return (result >= 0 && result < getSize()) ? result : -1;
 	}
 	
-	public void insert(int index, Object item, Properties cellProperties)
+	public void insert(IndexedCellId cellId, Object item, Properties cellProperties)
 	{
-		GwtUtil.rangeCheck(1, getSize(), index + 1, true);
-		super.insert(index + 1, item, cellProperties);
+		cellId.setIndex(cellId.getIndex() + 1);
+		GwtUtil.rangeCheck(1, getSize(), cellId.getIndex(), true);
+		super.insert(cellId, item, cellProperties);
 	}
 	
 	public void clear()
 	{
 		// remove all children except spacers
-		for (int i = getSize() - 2; i >= 0; i--)
+		IndexedCellId cellId = new IndexedCellIdImpl();
+		for (int index = getSize() - 2; index >= 0; index--)
 		{
-			remove(i);
+			cellId.setIndex(index);
+			remove(cellId);
 		}
 	}
 	
-	public void remove(int index)
+	public void remove(IndexedCellId cellId)
 	{
-		GwtUtil.rangeCheck(1, getSize(), index + 1, false);
-		super.remove(index + 1);
+		cellId.setIndex(cellId.getIndex() + 1);
+		GwtUtil.rangeCheck(1, getSize(), cellId.getIndex(), false);
+		super.remove(cellId);
 	}
 	
 	public int getSize()
@@ -105,9 +102,10 @@ public class TabBarView extends ListViewDefault
 		return super.getSize() - 2;
 	}
 	
-	public void renderCell(int index, Object item, Properties cellProperties)
+	public void renderCell(CellId cellId, Object item, Properties cellProperties)
 	{
+		int index = ((IndexedCellId) cellId).getIndex();
 		GwtUtil.rangeCheck(1, getSize(), index + 1, false);
-		super.renderCell(index, item, cellProperties);
+		super.renderCell(cellId, item, cellProperties);
 	}
 }

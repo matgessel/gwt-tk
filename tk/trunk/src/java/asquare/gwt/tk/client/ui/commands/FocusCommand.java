@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.HasFocus;
 /**
  * Focuses or blurs a widget. 
  * 
- * @see com.google.gwt.user.client.DeferredCommand#add(com.google.gwt.user.client.Command)
+ * @see com.google.gwt.user.client.DeferredCommand#addCommand(Command)
  */
 public class FocusCommand implements Command
 {

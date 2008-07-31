@@ -15,25 +15,19 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-
 /**
  * Converts {@link MouseEvent}s to {@link DragEvent}s and delegates to the
  * specified {@link DragGesture}.
  */
-public class MouseDragHandler extends MouseHandlerAdaptor
+public class MouseDragHandler extends EventController
 {
-	private static MouseDragHandlerImpl s_Impl = (MouseDragHandlerImpl) GWT.create(MouseDragHandlerImpl.class);
-	
 	private DragGesture m_dragGesture;
 	private MouseEvent m_mouseDown = null;
 	private MouseEvent m_previousEvent = null;
 	
 	public MouseDragHandler(DragGesture dragGesture)
 	{
-		super(Event.ONMOUSEDOWN | Event.ONMOUSEMOVE | Event.ONMOUSEUP);
+		super(MouseDragHandler.class, MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_UP);
 		m_dragGesture = dragGesture;
 	}
 
@@ -62,11 +56,10 @@ public class MouseDragHandler extends MouseHandlerAdaptor
 	{
 		m_dragGesture = dragGesture;
 	}
-
+	
 	public void onMouseDown(MouseEvent e)
 	{
-		DOM.eventCancelBubble(e.getDomEvent(), true);
-		s_Impl.onMouseDown(e.getDomEvent());
+		e.stopPropagation();
 		
 		if (m_dragGesture != null)
 		{
@@ -80,7 +73,7 @@ public class MouseDragHandler extends MouseHandlerAdaptor
 	{
 		if (m_mouseDown != null)
 		{
-			m_dragGesture.step(new DragEvent(e, m_mouseDown, m_previousEvent));
+			m_dragGesture.step(new DragEventImpl((MouseEventImpl) e, (MouseEventImpl) m_mouseDown, (MouseEventImpl) m_previousEvent));
 			m_previousEvent = e;
 		}
 	}
@@ -95,33 +88,5 @@ public class MouseDragHandler extends MouseHandlerAdaptor
             m_dragGesture.finish();
 			m_previousEvent = null;
 		}
-		
-		s_Impl.onMouseUp(e.getDomEvent());
-	}
-	
-	protected static class MouseDragHandlerImpl
-	{
-		public void onMouseDown(Event event)
-		{
-	        // prevents text selection and image dragging in Mozilla, Safari & Opera
-			DOM.eventPreventDefault(event);
-		}
-		
-		public void onMouseUp(Event event)
-		{
-		}
-	}
-	
-	protected static class MouseDragHandlerImplIE6 extends MouseDragHandlerImpl
-	{
-		public native void onMouseDown(Event event) /*-{
-			$doc.body.onselectstart = function() { return false; };
-			$doc.body.ondragstart = function() { return false; };
-		}-*/;
-	
-		public native void onMouseUp(Event event) /*-{
-			$doc.body.onselectstart = null;
-			$doc.body.ondragstart = null;
-		}-*/;
 	}
 }

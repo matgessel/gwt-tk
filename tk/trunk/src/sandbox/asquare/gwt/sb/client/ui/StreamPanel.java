@@ -148,7 +148,7 @@ public class StreamPanel extends ComplexPanel
 	
 	public void attr(String attributeName, String value)
 	{
-		DOM.setAttribute((Element) m_elementTreePath.peek(), attributeName, value);
+		DOM.setElementProperty((Element) m_elementTreePath.peek(), attributeName, value);
 	}
 	
 	public void text(String text)

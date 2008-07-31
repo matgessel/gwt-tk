@@ -15,17 +15,12 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 import asquare.gwt.tk.client.ui.*;
-import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
-import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
+import asquare.gwt.tk.client.ui.behavior.*;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class EventsPanel extends Composite
@@ -42,7 +37,7 @@ public class EventsPanel extends Composite
 	
 	private static Collection createSomeWidgets()
 	{
-		Vector result = new Vector();
+        ArrayList result = new ArrayList();
 		result.add(new HTML("<b>Double-click a widget to select it</b>"));
 		result.add(new Button("Button"));
 		result.add(new CheckBox("CheckBox"));
@@ -152,7 +147,7 @@ public class EventsPanel extends Composite
 		 * Create a list of controllers to process events on each widget. 
 		 * These controllers are stateless, so they may be shared between all widgets. 
 		 */
-		Vector controllers = new Vector();
+        ArrayList controllers = new ArrayList();
 		controllers.add(PreventSelectionController.getInstance());
 		controllers.add(new Ex2_Controller());
 		for (Iterator iter = createSomeWidgets().iterator(); iter.hasNext();)
@@ -173,7 +168,7 @@ public class EventsPanel extends Composite
 		
 		public Ex2_Controller()
 		{
-			super(Event.ONDBLCLICK, Ex2_Controller.class);
+			super(Ex2_Controller.class, Event.ONDBLCLICK);
 		}
 		
 		public void onBrowserEvent(Widget widget, Event event)
@@ -185,8 +180,8 @@ public class EventsPanel extends Composite
 			Element e = widget.getElement();
 			
 			// get the current edit state and toggle it
-			boolean editing = ! DOM.getBooleanAttribute(e, ATTR_EDIT_STATE);
-			DOM.setBooleanAttribute(e, ATTR_EDIT_STATE, editing);
+			boolean editing = ! DOM.getElementPropertyBoolean(e, ATTR_EDIT_STATE);
+			DOM.setElementPropertyBoolean(e, ATTR_EDIT_STATE, editing);
 			
 			// update the element style
 			UIObject.setStyleName(e, STYLENAME_EDITING, editing);

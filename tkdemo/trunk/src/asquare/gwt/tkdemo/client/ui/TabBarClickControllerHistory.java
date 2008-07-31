@@ -15,7 +15,7 @@
  */
 package asquare.gwt.tkdemo.client.ui;
 
-import asquare.gwt.sb.client.fw.ListView;
+import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 
 import com.google.gwt.user.client.DOM;
@@ -29,16 +29,16 @@ public class TabBarClickControllerHistory extends ControllerAdaptor
 	
 	public TabBarClickControllerHistory(AppPanelCollection panels)
 	{
-		super(Event.ONMOUSEDOWN, TabBarClickControllerHistory.class);
+		super(TabBarClickControllerHistory.class, Event.ONMOUSEDOWN);
 		m_panels = panels;
 	}
 	
 	public void onBrowserEvent(Widget widget, Event event)
 	{
-		int index = ((ListView) widget).getIndexOf(DOM.eventGetTarget(event));
-		if (index != -1)
+		CellId cellId = ((ListView) widget).getCellId(DOM.eventGetTarget(event));
+		if (cellId != null)
 		{
-			String newToken = m_panels.getToken(index);
+			String newToken = m_panels.getToken(((IndexedCellId) cellId).getIndex());
 			History.newItem(newToken);
 		}
 	}

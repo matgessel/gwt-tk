@@ -15,16 +15,16 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import asquare.gwt.tk.client.ui.*;
-import asquare.gwt.tk.client.ui.behavior.FocusModel;
-import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
-import asquare.gwt.tk.client.util.DomUtil;
+import asquare.gwt.tk.client.ui.behavior.*;
+import asquare.gwt.tk.client.ui.resource.*;
+import asquare.gwt.tk.client.util.*;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.google.gwt.user.client.ui.HTMLTable.*;
 
 public class DialogPanel extends Composite
 {
@@ -146,19 +146,46 @@ public class DialogPanel extends Composite
 		});
 		panel.add(verboseDialog);
 		
-		final Button captionLessDialog = new Button("No caption");
-		captionLessDialog.addClickListener(new ClickListener()
-		{
-			public void onClick(Widget sender)
-			{
-				final ModalDialog dialog = new ModalDialog();
-				dialog.add(new Label("Captionless dialog"));
-				dialog.add(new CloseButton(dialog));
-				dialog.show(captionLessDialog);
-			}
-		});
-		panel.add(captionLessDialog);
-		
+        final Button captionLessDialog = new Button("No caption");
+        captionLessDialog.addClickListener(new ClickListener()
+        {
+            public void onClick(Widget sender)
+            {
+                final ModalDialog dialog = new ModalDialog();
+                dialog.add(new Label("Captionless dialog"));
+                dialog.add(new CloseButton(dialog));
+                dialog.show(captionLessDialog);
+            }
+        });
+        panel.add(captionLessDialog);
+        
+        final Button loadingDialog = new Button("Loading...");
+        loadingDialog.addClickListener(new ClickListener()
+        {
+            public void onClick(Widget sender)
+            {
+                final ModalDialog dialog = new ModalDialog();
+                final Label label = new Label("0% loaded");
+                dialog.add(label);
+                dialog.show(loadingDialog);
+                new Timer()
+                {
+                    private int m_count = 0;
+                    
+                    public void run()
+                    {
+                        label.setText(++m_count + "% loaded");
+                        if (m_count == 100)
+                        {
+                            dialog.hide();
+                            cancel();
+                        }
+                    }
+                }.scheduleRepeating(1);
+            }
+        });
+        panel.add(loadingDialog);
+        
 		final Button undraggableDialog = new Button("Drag disabled");
 		undraggableDialog.addClickListener(new ClickListener()
 		{
@@ -168,7 +195,7 @@ public class DialogPanel extends Composite
 				{
 					protected List createCaptionControllers()
 					{
-						List result = new Vector();
+						List result = new ArrayList();
 						result.add(PreventSelectionController.getInstance());
 						return result;
 					}
@@ -187,7 +214,9 @@ public class DialogPanel extends Composite
 			public void onClick(Widget sender)
 			{
 				final ModalDialog dialog = new ModalDialog();
-				DomUtil.setId(dialog, "dialog-dragstyle");
+				String oldPrimaryName = dialog.getStylePrimaryName();
+                dialog.setStylePrimaryName("dialog-dragstyle");
+                dialog.addStyleName(oldPrimaryName);
 				dialog.setCaption("Drag me", false);
 				dialog.add(new Label("This dialog employs the \"tk-ModalDialog-dragging\" style which is applied while dragging. "));
 				dialog.add(new CloseButton(dialog));
@@ -363,7 +392,7 @@ public class DialogPanel extends Composite
 			public void onClick(Widget sender)
 			{
 				final ModalDialog dialog = new ModalDialog();
-				DomUtil.setId(dialog, "dialog-styled");
+				dialog.addStyleName("dialog-styled");
 				HorizontalPanel caption = new HorizontalPanel();
 				caption.setWidth("100%");
 				Label captionText = new Label("Oopsie!");
@@ -440,10 +469,10 @@ public class DialogPanel extends Composite
 			public void onClick(Widget sender)
 			{
 				AlertDialog dialog = new AlertDialog();
-				DomUtil.setId(dialog, "alert-imageButtons");
+				dialog.addStyleName("alert-imageButtons");
 				dialog.setCaptionText("Caption text", false);
 				dialog.setMessage("Plain images are used instead of buttons. Since images cannot be focused, they are omitted from the focus cycle. ");
-				dialog.setIcon(new Icon("AlertIcon16.gif", 16, 16));
+				dialog.setIcon(TkImageFactory.getInstance().createAlertDialogImages().AlertIcon16().createImage());
 				Icon check = new Icon("CheckIcon32.png", 32, 32);
 				check.setTitle("OK");
 				dialog.addButton(check, (char) KeyboardListener.KEY_ENTER, null, AlertDialog.BUTTON_DEFAULT);
@@ -463,7 +492,7 @@ public class DialogPanel extends Composite
 				AlertDialog dialog = new AlertDialog();
 				dialog.setCaptionText("Caption text", false);
 				dialog.setMessage("Buttons can contain images and text. ");
-				dialog.setIcon(new Icon("AlertIcon16.gif", 16, 16));
+				dialog.setIcon(TkImageFactory.getInstance().createAlertDialogImages().AlertIcon16().createImage());
 				Button ok = new Button("<img src='CheckIcon16.png' title='OK' style='width: 16; height: 16; vertical-align: middle;'/>&nbsp;OK");
 				dialog.addButton(ok, 'o', null, AlertDialog.BUTTON_DEFAULT);
 				Button cancel = new Button("<img src='XIcon16.png' title='Cancel' style='width: 16; height: 16; vertical-align: middle;'/>&nbsp;Cancel");
@@ -479,12 +508,12 @@ public class DialogPanel extends Composite
 			public void onClick(Widget sender)
 			{
 				AlertDialog dialog = new AlertDialog();
-				DomUtil.setId(dialog, "alert-styled");
-				DomUtil.setId(dialog.getGlassPanel(), "alert-styled-glassPanel");
+				dialog.addStyleName("alert-styled");
+				dialog.getGlassPanel().addStyleName("alert-styled-glassPanel");
 				dialog.setCaptionText("Caption text", false);
 				ColumnPanel message = new ColumnPanel();
 				message.setWidth("100%");
-				message.add(new Icon("AlertIcon32.gif", 32, 32));
+				message.add(TkImageFactory.getInstance().createAlertDialogImages().AlertIcon32().createImage());
 				message.add(new HTML("&nbsp"));
 				message.add(new HTML("<b>Message summary</b><br/>Message detail"));
 				message.addCell();

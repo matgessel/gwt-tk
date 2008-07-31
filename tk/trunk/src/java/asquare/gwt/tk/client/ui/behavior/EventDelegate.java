@@ -28,18 +28,10 @@ import com.google.gwt.user.client.ui.Widget;
  * without autoclose). A solution is to have widget can delegate events to a
  * focus manager implementing EventDelegate.
  * </p>
+ * @deprecated use {@link BrowserEventHandler}
  */
-public interface EventDelegate
+public interface EventDelegate extends EventInterest
 {
-	/**
-	 * Get a bitmask representing events this delegate is interested in
-	 * processing. 
-	 *  
-	 * @return a bitmask of the events to process
-	 * @see Event
-	 */
-	int getEventBits();
-
 	/**
 	 * Call this from your widget's onBrowserEvent() method 
 	 * to to delegate events. 

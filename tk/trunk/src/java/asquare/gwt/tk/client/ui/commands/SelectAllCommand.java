@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.TextBoxBase;
 /**
  * Selects all the text in a widget. 
  * 
- * @see com.google.gwt.user.client.DeferredCommand#add(com.google.gwt.user.client.Command)
+ * @see com.google.gwt.user.client.DeferredCommand#addCommand(Command)
  */
 public class SelectAllCommand implements Command
 {
@@ -34,11 +34,6 @@ public class SelectAllCommand implements Command
 	
 	public void execute()
 	{
-		String text = m_textBox.getText();
-		int length = (text != null) ? text.length() : 0;
-		if (length > 0 && m_textBox.getSelectionLength() < length)
-		{
-			m_textBox.setSelectionRange(0, length);
-		}
+		m_textBox.selectAll();
 	}
 }

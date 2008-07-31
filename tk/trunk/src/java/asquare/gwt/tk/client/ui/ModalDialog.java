@@ -15,8 +15,8 @@
  */
 package asquare.gwt.tk.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import asquare.gwt.tk.client.ui.behavior.*;
 import asquare.gwt.tk.client.ui.commands.FocusCommand;
@@ -104,9 +104,8 @@ public class ModalDialog extends CPopupPanel
 	public static final String STYLENAME_GLASSPANEL = "tk-ModalDialog-glassPanel";
 	public static final String STYLENAME_CAPTION = "Caption";
 	public static final String STYLENAME_CONTENT = "tk-ModalDialog-content";
-	public static final String STYLENAME_DRAGGING = "tk-ModalDialog-dragging";
 	
-	protected static final FocusImpl s_focusImpl = (FocusImpl) GWT.create(FocusImpl.class);
+	protected static final FocusImpl s_focusImpl = FocusImpl.getFocusImplForPanel();
 	
 	private final Element m_focusable = s_focusImpl.createFocusable();
 	private final GlassPanel m_glassPanel = new GlassPanel();
@@ -123,7 +122,7 @@ public class ModalDialog extends CPopupPanel
 	{
 	    setFocusModel(new FocusModel());
 	    setStyleName(STYLENAME_DIALOG);
-		DOM.appendChild(getElement(), m_focusable);
+		DOM.appendChild(getContainerElement(), m_focusable);
 		m_glassPanel.addStyleName(STYLENAME_GLASSPANEL);
 		m_panel.addCell();
 		m_panel.addCellStyleName(STYLENAME_CONTENT);
@@ -137,11 +136,11 @@ public class ModalDialog extends CPopupPanel
 	 */
 	protected List createControllers()
 	{
-		List result = new Vector();
+		List result = new ArrayList();
 		result.add(GWT.create(PositionDialogController.class));
-		result.add(GWT.create(InitializeFocusController.class));
+		result.add(new InitializeFocusController());
 		result.add(GWT.create(TabFocusController.class));
-		result.add(GWT.create(FocusOnCloseController.class));
+		result.add(new FocusOnCloseController());
 		return result;
 	}
 	
@@ -153,9 +152,9 @@ public class ModalDialog extends CPopupPanel
 	 */
 	protected List createCaptionControllers()
 	{
-		List result = new Vector();
-		result.add(new DragStyleController(this, STYLENAME_DRAGGING));
-		result.add(new DragController(new MousePerformanceFilter(new MouseDragHandler(new DragFloatingObjectGesture(this)))));
+		List result = new ArrayList();
+		result.add(new DragController(new MousePerformanceFilter(new MouseDragHandler(new AdjustObjectGesture.Move(this)))));
+		result.add(new DragStyleController(this));
 		return result;
 	}
 	
@@ -172,6 +171,7 @@ public class ModalDialog extends CPopupPanel
 	 */
 	public void setFocusModel(FocusModel focusModel)
 	{
+		// TODO: apply IoC? I.e. let interested object register for change notifications
 		m_focusModel = focusModel;
 		TabFocusController tabFocusController = (TabFocusController) getController(TabFocusController.class);
 		if (tabFocusController != null)
@@ -230,7 +230,7 @@ public class ModalDialog extends CPopupPanel
 	 */
 	public void setContentWidth(String width)
 	{
-		DOM.setAttribute(m_contentTd, "width", width);
+		DOM.setElementProperty(m_contentTd, "width", width);
 	}
 	
 	/**
@@ -241,7 +241,7 @@ public class ModalDialog extends CPopupPanel
 	 */
 	public void setContentHeight(String height)
 	{
-		DOM.setAttribute(m_contentTd, "height", height);
+		DOM.setElementProperty(m_contentTd, "height", height);
 	}
 	
 	/**
@@ -252,7 +252,7 @@ public class ModalDialog extends CPopupPanel
 	 */
 	public int getContentOffsetWidth()
 	{
-		return DOM.getIntAttribute(m_contentTd, "offsetWidth");
+		return DOM.getElementPropertyInt(m_contentTd, "offsetWidth");
 	}
 	
 	/**
@@ -263,7 +263,7 @@ public class ModalDialog extends CPopupPanel
 	 */
 	public int getContentOffsetHeight()
 	{
-		return DOM.getIntAttribute(m_contentTd, "offsetHeight");
+		return DOM.getElementPropertyInt(m_contentTd, "offsetHeight");
 	}
 	
 	/**
@@ -533,7 +533,7 @@ public class ModalDialog extends CPopupPanel
 		public void plugIn(Widget widget)
 		{
 			final ModalDialog dialog = (ModalDialog) widget;
-			HasFocus focusWidget = dialog.getFocusModel().getFocusWidget();
+			HasFocus focusWidget = dialog.getFocusModel().getCurrentWidget();
 			Command focusCommand;
 			if (focusWidget != null)
 			{
@@ -549,7 +549,7 @@ public class ModalDialog extends CPopupPanel
 					}
 				};
 			}
-			DeferredCommand.add(focusCommand);
+			DeferredCommand.addCommand(focusCommand);
 		}
 	}
 	
@@ -568,7 +568,7 @@ public class ModalDialog extends CPopupPanel
 			HasFocus focusOnCloseWidget = ((ModalDialog) widget).getFocusOnCloseWidget();
 			if (focusOnCloseWidget != null)
 			{
-				DeferredCommand.add(new FocusCommand(focusOnCloseWidget));
+				DeferredCommand.addCommand(new FocusCommand(focusOnCloseWidget));
 			}
 		}
 	}
@@ -712,8 +712,8 @@ public class ModalDialog extends CPopupPanel
 		 */
 		protected void setDialogPosition(ModalDialog dialog, int dialogWidth, int dialogHeight)
 		{
-			int left = DomUtil.getViewportScrollX() + getViewportWidth() / 2 - dialogWidth / 2;
-			int top = DomUtil.getViewportScrollY() + getViewportHeight() / 2 - dialogHeight / 2;
+			int left = Window.getScrollLeft() + getViewportWidth() / 2 - dialogWidth / 2;
+			int top = Window.getScrollTop() + getViewportHeight() / 2 - dialogHeight / 2;
 			
 			// set the position
 			dialog.setPopupPosition((left < 0) ? 0 : left, (top < 0) ? 0 : top);
@@ -733,7 +733,7 @@ public class ModalDialog extends CPopupPanel
 			 * Guard against flicker when repositioning dialog. 
 			 * This may not be necessary, but it can't hurt. 
 			 */
-			DomUtil.setStyleAttribute(dialog, "visibility", "hidden");
+			dialog.setVisible(false);
 			
 			/*
 			 * This should eliminate scrollbar flicker in Opera/FF[Mac] unless
@@ -760,7 +760,7 @@ public class ModalDialog extends CPopupPanel
 			dialogHeight = updateContentHeight(dialog, applyMinHeightConstraint(dialog, dialog.getContentOffsetHeight()));
 			
 			setDialogPosition(dialog, dialogWidth, dialogHeight);
-			DomUtil.setStyleAttribute(dialog, "visibility", "visible");
+			dialog.setVisible(true);
 		}
 	}
 	

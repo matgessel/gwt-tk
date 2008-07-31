@@ -135,35 +135,35 @@ public class DebugUtil
 					break;
 					
 				case Event.ONCHANGE: 
-					result = "event[type=onChange,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onChange,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONFOCUS: 
-					result = "event[type=onFocus,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onFocus,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONBLUR: 
-					result = "event[type=onBlur,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onBlur,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONCLICK: 
-					result = "event[type=onClick,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onClick,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONDBLCLICK: 
-					result = "event[type=onDblClick,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onDblClick,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONERROR: 
-					result = "event[type=onError,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onError,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONLOAD: 
-					result = "event[type=onLoad,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onLoad,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONLOSECAPTURE: 
-					result = "event[type=onLoseCapture,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onLoseCapture,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				case Event.ONMOUSEDOWN: 
@@ -187,7 +187,7 @@ public class DebugUtil
 					break;
 					
 				case Event.ONSCROLL: 
-					result = "event[type=onScroll,element=" + getTagName(DOM.eventGetTarget(event)) + "]";
+					result = "event[type=onScroll,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
 					break;
 					
 				default: 
@@ -201,10 +201,10 @@ public class DebugUtil
 	private static String createKeyString(Event event)
 	{
 		return 
-		"element=" + getTagName(DOM.eventGetTarget(event)) + 
-		",char=" + (char) DOM.eventGetKeyCode(event) + 
+		"char=" + (char) DOM.eventGetKeyCode(event) + 
 		",keyCode=" + (int) DOM.eventGetKeyCode(event) + 
-		",modifiers=" + KeyboardListenerCollection.getKeyboardModifiers(event);
+		",modifiers=" + KeyboardListenerCollection.getKeyboardModifiers(event) + 
+		",target=" + getTagName(DOM.eventGetTarget(event));
 	}
 	
 	private static String createMouseString(Event event)
@@ -254,8 +254,8 @@ public class DebugUtil
 			return String.valueOf(element);
 		}
 		String tagName = getTagName(element);
-		String id = DOM.getAttribute(element, "id");
-		String classNames = DOM.getAttribute(element, "className");
+		String id = DOM.getElementProperty(element, "id");
+		String classNames = DOM.getElementProperty(element, "className");
 		String description = null;
 		
 		if ("div".equalsIgnoreCase(tagName) || "span".equalsIgnoreCase(tagName))
@@ -271,7 +271,7 @@ public class DebugUtil
 		}
 		else if (tagName.equalsIgnoreCase("button"))
 		{
-			description = DOM.getAttribute(element, "value");
+			description = DOM.getElementProperty(element, "value");
 		}
 		
 		return (description == null) ? tagName : tagName + "[" + description + "]";

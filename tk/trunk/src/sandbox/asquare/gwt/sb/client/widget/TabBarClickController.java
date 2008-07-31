@@ -15,9 +15,7 @@
  */
 package asquare.gwt.sb.client.widget;
 
-import asquare.gwt.sb.client.fw.ListModel;
-import asquare.gwt.sb.client.fw.ListSelectionModelSingle;
-import asquare.gwt.sb.client.fw.ListView;
+import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 
 import com.google.gwt.user.client.DOM;
@@ -31,17 +29,17 @@ public class TabBarClickController extends ControllerAdaptor
 	
 	public TabBarClickController(ListModel model)
 	{
-		super(Event.ONMOUSEDOWN, TabBarClickController.class);
+		super(TabBarClickController.class, Event.ONMOUSEDOWN);
 		m_model = model;
 		m_selectionModel = (ListSelectionModelSingle) model.getSelectionModel();
 	}
 	
 	public void onBrowserEvent(Widget widget, Event event)
 	{
-		int index = ((ListView) widget).getIndexOf(DOM.eventGetTarget(event));
-		if (index != -1)
+		CellId cellId = ((ListView) widget).getCellId(DOM.eventGetTarget(event));
+		if (cellId != null)
 		{
-			m_selectionModel.setSelectedIndex(index);
+			m_selectionModel.setSelectedIndex(((IndexedCellId) cellId).getIndex());
 		}
 		m_model.update();
 	}

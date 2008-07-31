@@ -20,6 +20,7 @@ import java.util.List;
 import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.ControllerSupport;
 import asquare.gwt.tk.client.ui.behavior.ControllerSupportDelegate;
+import asquare.gwt.tk.client.ui.behavior.AdjustObjectGesture.Positionable;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.GWT;
@@ -31,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * Adds controller support to popup panels. 
  */
-public class CPopupPanel extends PopupPanel implements ControllerSupport
+public class CPopupPanel extends PopupPanel implements ControllerSupport, Positionable
 {
 	private final ControllerSupportDelegate m_controllerSupport = new ControllerSupportDelegate(this);
 	private final EventPreviewDelegate m_eventPreview = (EventPreviewDelegate) GWT.create(EventPreviewDelegate.class);
@@ -161,6 +162,26 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport
 	public void onBrowserEvent(Event event)
 	{
 		m_controllerSupport.onBrowserEvent(event);
+	}
+	
+	public int getLeft()
+	{
+		return getPopupLeft();
+	}
+	
+	public void setLeft(int left)
+	{
+		DOM.setStyleAttribute(getElement(), "left", left + "px");
+	}
+	
+	public int getTop()
+	{
+		return getPopupTop();
+	}
+	
+	public void setTop(int top)
+	{
+		DOM.setStyleAttribute(getElement(), "top", top + "px");
 	}
 	
 	/**

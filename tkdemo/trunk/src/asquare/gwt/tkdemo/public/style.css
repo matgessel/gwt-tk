@@ -139,7 +139,7 @@ code {
 .tk-SideTab-selected .bg {
   background: #E8EEF7;
 }
-.tk-SideTab-selected .bg, .tk-SideTab.Active .bg {
+.tk-SideTab-selected .bg, .tk-SideTab-hover .bg {
   opacity: 1.0;
   filter: alpha(opacity=100);
 }
@@ -233,32 +233,32 @@ code {
   float: left;
 }
 
-#alert-imageButtons .tk-AlertDialog-buttons img {
+.alert-imageButtons .tk-AlertDialog-buttons img {
   border: outset gray 1px;
   margin-top: 4px;
 }
 
-#alert-imageButtons .tk-AlertDialog-buttons img:hover {
+.alert-imageButtons .tk-AlertDialog-buttons img:hover {
   border-style: inset;
 }
 
-#alert-imageButtons img.tk-AlertDialog-defaultButton {
+.alert-imageButtons img.tk-AlertDialog-defaultButton {
   border-color: black;
 }
 
-#dialog-dragstyle.tk-ModalDialog-dragging {
+.dialog-dragstyle-dragging {
   filter: alpha(opacity=50);
-  opacity: 0.8;
+  opacity: 0.7;
 }
 
-#dialog-styled.tk-ModalDialog {
+.dialog-styled {
   border: 1px solid black;
   border-top: none;
   background-color: rgb(230,230,236);
   padding: 0px;
 }
 
-#dialog-styled.tk-ModalDialog .Caption {
+.dialog-styled .Caption {
   font-family: Trebuchet MS, sans-serif;
   font-size: 90%;
   background-image: url("chrome.gif");
@@ -271,47 +271,47 @@ code {
   height: 26px;
 }
 
-#dialog-styled.tk-ModalDialog .Caption * {
+.dialog-styled .Caption * {
   text-align: left;
   vertical-align: middle;
   font-weight: bold;
 }
 
-#dialog-styled.tk-ModalDialog .Caption .gwt-Label {
+.dialog-styled .Caption .gwt-Label {
   margin-top: 2px;
 }
 
-#dialog-styled .tk-ModalDialog-content
+.dialog-styled .tk-ModalDialog-content
 {
   width: 16em;
 }
 
-#alert-styled {
-  border: 2px groove blue;
+.alert-styled {
+  border: 2px ridge blue;
 }
 
-#alert-styled.tk-ModalDialog .Caption {
+.alert-styled .Caption {
   color: black;
   background: #FFEA80;
 }
 
-#alert-styled .tk-AlertDialog-captionCenter {
+.alert-styled .tk-AlertDialog-captionCenter {
   text-align: right;
 }
 
-#alert-styled .tk-AlertDialog-captionRight {
+.alert-styled .tk-AlertDialog-captionRight {
   width: 0;
 }
 
-#alert-styled .tk-ModalDialog-content {
+.alert-styled .tk-ModalDialog-content {
   background: url("bg-vortex.jpg");
 }
 
-#alert-styled .tk-AlertDialog-message {
+.alert-styled .tk-AlertDialog-message {
   color: white;
 }
 
-#alert-styled-glassPanel {
+.alert-styled-glassPanel {
   background: yellow url("stripes.gif");
 }
 
@@ -323,6 +323,20 @@ code {
   border: 1px dashed gray;
   margin: 4px;
   padding: 4px;
+}
+
+.FocusStyleDecorator {
+  border: solid 2px transparent;
+}
+
+.FocusStyleDecorator-focused {
+  border-color: #aaeeff;
+  background-color: #aaeeff;
+}
+
+.FocusStyleDecorator-focusedInactive {
+  border-color: silver;
+  background-color: silver;
 }
 
 #rowPanelPanel .description {
@@ -355,72 +369,72 @@ code {
   margin-bottom: 4px;
 }
 
-#glasspanel-ex-dark {
+.glasspanel-ex-dark {
   cursor: pointer;
   background: black;
   filter: alpha(opacity=20);
   opacity: 0.2;
 }
 
-#glasspanel-ex-light {
+.glasspanel-ex-light {
   cursor: pointer;
   background: white;
   filter: alpha(opacity=50);
   opacity: 0.5;
 }
 
-#glasspanel-ex-opaque {
+.glasspanel-ex-opaque {
   cursor: pointer;
   background: white;
   filter: ;
   opacity: 1.0;
 }
 
-#glasspanel-ex-transparentPNG {
+.glasspanel-ex-transparentPNG {
   background: none;
   opacity: 1.0;
   /* load background image with transparency in IE */
   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='Gray20.png', sizingMethod='scale');
 }
 
-#glasspanel-ex-transparentPNG .Content {
+.glasspanel-ex-transparentPNG .Content {
   background-image: url('Gray20.png');
   cursor: pointer;
   /* suppress background image in IE */
   filter: alpha(opacity=0);
 }
 
-#glasspanel-ex-tiledBG {
+.glasspanel-ex-tiledBG {
   cursor: pointer;
   background: url('bg-vortex.jpg');
   filter: alpha(opacity=20);
   opacity: 0.2;
 }
 
-#glasspanel-ex-centeredBG {
+.glasspanel-ex-centeredBG {
   cursor: pointer;
   background: url('SeattleDusk.jpg') no-repeat center;
   filter: ;
   opacity: 1.0;
 }
 
-#glasspanel-ex-text {
+.glasspanel-ex-text {
   cursor: pointer;
   background: #87B3FF;
   filter: alpha(opacity=40);
   opacity: .4;
 }
 
-#glasspanel-ex-text h1 {
+.glasspanel-ex-text h1 {
   color: white;
   font-size: 6em;
 }
 
-#glasspanel-ex-text * {
+.glasspanel-ex-text * {
   margin: 0;
 }
 
-#glasspanel-ex-ieBodyBlur {
+.glasspanel-ex-ieBodyBlur {
   cursor: pointer;
   background: white;
   filter: alpha(opacity=20);

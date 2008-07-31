@@ -26,7 +26,7 @@ import asquare.gwt.sb.client.util.Properties;
  * <li>.tk-ListItem { an item in the list }</li>
  * </ul>
  */
-public interface ListView extends IndexedView
+public interface ListView extends CompositeCellView
 {
 	public static final String STYLENAME_LIST = "tk-ListView";
 	public static final String STYLENAME_LIST_ITEM = "tk-ListItem";
@@ -35,15 +35,19 @@ public interface ListView extends IndexedView
 	
 	void setRenderer(CellRenderer renderer);
 	
+//	int getIndexOf(Element eventTarget);
+	
 	void add(Object item, Properties cellProperties);
 	
-	void insert(int index, Object item, Properties cellProperties);
+	void insert(IndexedCellId cellId, Object item, Properties cellProperties);
 	
-	void remove(int index);
+	void remove(IndexedCellId cellId);
 	
 	void clear();
 	
 	int getSize();
 	
-	void renderCell(int index, Object item, Properties cellProperties);
+	void prepareElement(CellId cellId, Object item, Properties cellProperties);
+	
+	void renderContent(CellId cellId, Object item, Properties cellProperties);
 }

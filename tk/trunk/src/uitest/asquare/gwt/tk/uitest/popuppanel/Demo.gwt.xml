@@ -17,6 +17,8 @@
 	<inherits name="asquare.gwt.debug.Debug" /> 
 	
 	<inherits name="asquare.gwt.tk.Tk"/>
+
+	<inherits name="asquare.gwt.sb.Sandbox"/>
 	
 	<inherits name="asquare.gwt.tk.uitest.Common"/>
 	

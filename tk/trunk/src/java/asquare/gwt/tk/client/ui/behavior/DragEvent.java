@@ -26,67 +26,23 @@ package asquare.gwt.tk.client.ui.behavior;
  * example, a slider will process both mouse down and mouse drag (but not mouse
  * move).
  */
-public class DragEvent extends MouseEvent
+public interface DragEvent extends MouseEvent
 {
-	private static final long serialVersionUID = -60876731058183754L;
-	
-	private final int m_deltaX, m_deltaY;
-	private final int m_cumulativeX, m_cumulativeY;
-	
-	/**
-	 * @param receiver the widget which is receiving the mouse event
-	 * @param mouseEvent a <code>mousedown</code>, <code>mousemove</code> or <code>mouseup</code> event
-	 * @param previousEvent
-	 */
-	public DragEvent(MouseEvent mouseMove, MouseEvent mouseDown, MouseEvent previousEvent)
-	{
-		super(mouseMove);
-		
-		if (previousEvent != null)
-		{
-			/*
-			 * Calculate the delta relative to the last event, adjusting for a
-			 * possibly moving coordinate space
-			 */
-			m_deltaX = mouseMove.getWidgetLeft() - previousEvent.getWidgetLeft() + mouseMove.getWidgetX() - previousEvent.getWidgetX();
-			m_deltaY = mouseMove.getWidgetTop() - previousEvent.getWidgetTop() + mouseMove.getWidgetY() - previousEvent.getWidgetY();
-			m_cumulativeX = mouseMove.getWidgetX() - mouseDown.getWidgetX();
-			m_cumulativeY = mouseMove.getWidgetY() - mouseDown.getWidgetY();
-		}
-		else
-		{
-			m_deltaX = m_deltaY = 0;
-			m_cumulativeX = m_cumulativeY = 0;
-		}
-	}
-
 	/**
 	 * Get the distance moved horizontally, relative to the last event. Returns
 	 * a useful value even if the document is scrolled or the widget has moved
 	 * since the last event.
 	 */
-	public int getDeltaX()
-	{
-		return m_deltaX;
-	}
+	int getDeltaX();
 
 	/**
 	 * Get the distance moved vertically, relative to the last event. Returns
 	 * a useful value even if the document is scrolled or the widget has moved
 	 * since the last event.
 	 */
-	public int getDeltaY()
-	{
-		return m_deltaY;
-	}
+	int getDeltaY();
 
-	public int getCumulativeX()
-	{
-		return m_cumulativeX;
-	}
+	int getCumulativeX();
 
-	public int getCumulativeY()
-	{
-		return m_cumulativeY;
-	}
+	int getCumulativeY();
 }

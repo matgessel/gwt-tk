@@ -15,16 +15,31 @@
  */
 package asquare.gwt.sb.client.fw;
 
+import asquare.gwt.sb.client.util.Properties;
+
 import com.google.gwt.user.client.Element;
 
-public class ListViewDefault extends ListViewBase
+public class ListViewDefault extends CompositeCellViewBase implements ListView
 {
 	private final ListWidget m_structure;
 	
 	protected ListViewDefault(ListWidget structure, CellRenderer renderer)
 	{
-		super(structure, renderer);
+		super(renderer);
 		m_structure = structure;
+		initWidget(structure);
+		setStyleName(ListView.STYLENAME_LIST);
+	}
+	
+	protected CellRenderer createRenderer()
+	{
+        return new ListCellRendererDefault();
+	}
+	
+	public CellId getCellId(Element eventTarget)
+	{
+		int index = getIndexOf(eventTarget);
+		return index != -1 ? new IndexedCellIdImpl(index) : null;
 	}
 	
 	public Element getCellRootElement(Element element)
@@ -32,9 +47,19 @@ public class ListViewDefault extends ListViewBase
 		return m_structure.getCellRootElement(element);
 	}
 	
-	public Element getCellElement(int index)
+	public Element getCellRootElement(CellId cellId)
 	{
-		return m_structure.getCellElement(index);
+		return m_structure.getCellElement(((IndexedCellId) cellId).getIndex());
+	}
+	
+	public void add(Object item, Properties cellProperties)
+	{
+		insert(new IndexedCellIdImpl(getSize()), item, cellProperties);
+	}
+	
+	public void insert(IndexedCellId cellId, Object item, Properties cellProperties)
+	{
+		getRenderer(cellId).renderCell(insertCellStructure(cellId.getIndex()), item, cellProperties);
 	}
 	
 	protected Element insertCellStructure(int index)
@@ -57,8 +82,8 @@ public class ListViewDefault extends ListViewBase
 		return m_structure.getSize();
 	}
 	
-	public void remove(int index)
+	public void remove(IndexedCellId cellId)
 	{
-		m_structure.remove(index);
+		m_structure.remove(cellId.getIndex());
 	}
 }

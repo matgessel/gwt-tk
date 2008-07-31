@@ -58,6 +58,7 @@ public class Demo implements EntryPoint
 		tabPanel.setSize("100%", "100%");
 		
 		CTabBar tabbar = new CTabBar(new ListWidgetVTable(), new SideTabRenderer3());
+        tabbar.removeController(tabbar.getController(CompositeCellViewHoverController.class));
 		tabbar.setStyleName("DemoTabBar");
 		History.addHistoryListener(new TabModelUpdateController(panels, tabbar.getListModel()));
 		tabPanel.add(tabbar);
@@ -83,11 +84,11 @@ public class Demo implements EntryPoint
 		 * Incrementally add tabs to TabBar, allowing the UI to redraw to show
 		 * progress.
 		 */
-	    DeferredCommand.add(new LoadUICommand(panels, tabbar, initialIndex));
+	    DeferredCommand.addCommand(new LoadUICommand(panels, tabbar, initialIndex));
 	}
 	
 	/**
-	 * Generates a human-readable string representing the CSS rendering mode.
+	 * Gets a human-readable string representing the CSS rendering mode.
 	 * 
 	 * @see <a href="http://en.wikipedia.org/wiki/Quirks_mode">quirks mode</a>
 	 */
@@ -103,43 +104,44 @@ public class Demo implements EntryPoint
 		}
 		return result;
 	}-*/;
-	
-	private static class LoadUICommand implements Command
-	{
-		private final AppPanelCollection m_panels;
-		private final CTabBar m_tabbar;
-		private final ListModelDefault m_tabBarmodel;
-		private final ListSelectionModelSingle m_selectionModel;
-		private final int m_initialIndex;
-		
-		private int m_index = 0;
-		
-		public LoadUICommand(AppPanelCollection panels, CTabBar tabbar, int initialIndex)
-		{
-			m_panels = panels;
-			m_tabbar = tabbar;
-			m_tabBarmodel = (ListModelDefault) tabbar.getListModel();
-			m_selectionModel = (ListSelectionModelSingle) m_tabBarmodel.getSelectionModel();
-			m_initialIndex = initialIndex;
-		}
-		
-		public void execute()
-		{
-			if (m_index < m_panels.getSize())
-			{
-				m_panels.getWidget(m_index);
-				m_tabBarmodel.add(m_panels.getUIString(m_index));
-				m_tabBarmodel.update();
-				m_index++;
-				DeferredCommand.add(this);
-			}
-			else
-			{
-				m_selectionModel.setSelectedIndex(m_initialIndex);
-				m_tabBarmodel.update();
-				m_tabbar.addController(new IndexedViewHoverController(m_tabBarmodel));
-				m_tabbar.addController(new TabBarClickControllerHistory(m_panels));
-			}
-		}
-	}
+    
+    private static class LoadUICommand implements IncrementalCommand
+    {
+        private final AppPanelCollection m_panels;
+        private final CTabBar m_tabbar;
+        private final ListModelDefault m_tabBarmodel;
+        private final ListSelectionModelSingle m_selectionModel;
+        private final int m_initialIndex;
+        
+        private int m_index = 0;
+        
+        public LoadUICommand(AppPanelCollection panels, CTabBar tabbar, int initialIndex)
+        {
+            m_panels = panels;
+            m_tabbar = tabbar;
+            m_tabBarmodel = (ListModelDefault) tabbar.getListModel();
+            m_selectionModel = (ListSelectionModelSingle) m_tabBarmodel.getSelectionModel();
+            m_initialIndex = initialIndex;
+        }
+        
+        public boolean execute()
+        {
+            if (m_index < m_panels.getSize())
+            {
+                m_panels.getWidget(m_index);
+                m_tabBarmodel.add(m_panels.getUIString(m_index));
+                m_tabBarmodel.update();
+                m_index++;
+                return true;
+            }
+            else
+            {
+                m_selectionModel.setSelectedIndex(m_initialIndex);
+                m_tabBarmodel.update();
+                m_tabbar.addController(new CompositeCellViewHoverController(m_tabBarmodel));
+                m_tabbar.addController(new TabBarClickControllerHistory(m_panels));
+                return false;
+            }
+        }
+    }
 }

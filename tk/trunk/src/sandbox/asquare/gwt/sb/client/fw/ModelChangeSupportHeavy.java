@@ -17,19 +17,36 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.EventListener;
 
-public abstract class ModelChangeSupportHeavy extends ModelChangeSupportBase
+public class ModelChangeSupportHeavy extends ModelChangeSupportBase
 {
+	public ModelChangeSupportHeavy(Object source)
+	{
+		super(source);
+	}
+	
 	protected void notifyListeners(EventListener[] listeners)
 	{
-		ModelChangeEvent event = createChangeEvent();
+		Object source = getSource();
+		ModelChangeEvent event = createChangeEvent(source);
 		for (int i = 0; i < listeners.length; i++)
 		{
-			((ModelListener) listeners[i]).modelChanged(event);
+			notifyListener(listeners[i], source, event);
 		}
 	}
 	
 	/**
 	 * Template method to create the event 
 	 */
-	protected abstract ModelChangeEvent createChangeEvent();
+	protected ModelChangeEvent createChangeEvent(Object source)
+	{
+		return new ModelChangeEvent(source);
+	}
+
+	/**
+	 * Template method to cast and notify the listener
+	 */
+	protected void notifyListener(EventListener listener, Object source, ModelChangeEvent event)
+	{
+		((ModelListener) listener).modelChanged(event);
+	}
 }

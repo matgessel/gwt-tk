@@ -17,8 +17,8 @@ package asquare.gwt.tk.client.ui;
 
 import java.util.List;
 
-import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
-import asquare.gwt.tk.client.ui.behavior.FocusModel;
+import asquare.gwt.tk.client.ui.behavior.*;
+import asquare.gwt.tk.client.ui.resource.TkImageFactory;
 import asquare.gwt.tk.client.util.DomUtil;
 import asquare.gwt.tk.client.util.KeyMap;
 
@@ -136,7 +136,7 @@ public class AlertDialog extends ModalDialog
 		AlertDialog dialog = new AlertDialog();
 		dialog.setCaptionText(captionText, false);
 		dialog.setMessage(message);
-		dialog.setIcon(new Icon("InfoIcon16.gif", 16, 16));
+		dialog.setIcon(TkImageFactory.getInstance().createAlertDialogImages().InfoIcon16().createImage());
 		dialog.addButton(TEXT_OK, 'o', okCommand, BUTTON_DEFAULT | BUTTON_CANCEL);
 		return dialog;
 	}
@@ -154,7 +154,7 @@ public class AlertDialog extends ModalDialog
 		AlertDialog dialog = new AlertDialog();
 		dialog.setCaptionText(captionText, false);
 		dialog.setMessage(message);
-		dialog.setIcon(new Icon("AlertIcon16.gif", 16, 16));
+		dialog.setIcon(TkImageFactory.getInstance().createAlertDialogImages().AlertIcon16().createImage());
 		dialog.addButton(TEXT_OK, 'o', okCommand, BUTTON_DEFAULT);
 		dialog.addButton(TEXT_CANCEL, 'c', null, BUTTON_CANCEL);
 		return dialog;
@@ -173,7 +173,7 @@ public class AlertDialog extends ModalDialog
 		AlertDialog dialog = new AlertDialog();
 		dialog.setCaptionText(captionText, false);
 		dialog.setMessage(message);
-		dialog.setIcon(new Icon("ErrorIcon16.gif", 16, 16));
+		dialog.setIcon(TkImageFactory.getInstance().createAlertDialogImages().ErrorIcon16().createImage());
 		dialog.addButton(TEXT_OK, 'o', okCommand, BUTTON_DEFAULT | BUTTON_CANCEL);
 		return dialog;
 	}
@@ -436,7 +436,7 @@ public class AlertDialog extends ModalDialog
 	 *            <code>null</code>
 	 * @param type a constant representing special button behavior
 	 * @throws ClassCastException if <code>widget</code> does not implement
-	 *             {@link HasFocus}
+	 *             {@link SourcesClickEvents}
 	 */
 	public void addButton(Widget widget, char hotKey, final Command command, int type)
 	{
@@ -459,14 +459,14 @@ public class AlertDialog extends ModalDialog
 		{
 			widget.addStyleName("tk-AlertDialog-defaultButton");
 			m_defaultButton = widget;
-			if (focusable)
+			if (focusable && getFocusModel().contains((HasFocus) widget))
 			{
 				getFocusModel().setFocusWidget((HasFocus) widget);
 			}
 		}
 		if ((type & BUTTON_CANCEL) != 0)
 		{
-			m_keyMap.put((char) KeyboardListener.KEY_ESCAPE, command);
+			m_keyMap.put((char) KeyEvent.KEYCODE_ESCAPE, command);
 		}
 		if (hotKey > 0)
 		{
@@ -491,10 +491,6 @@ public class AlertDialog extends ModalDialog
 		}
 		if (button instanceof HasFocus)
 		{
-			if (getFocusModel().getFocusWidget() == button)
-			{
-				getFocusModel().setFocusWidget(null);
-			}
 			getFocusModel().remove(((HasFocus) button));
 		}
 	}
@@ -538,7 +534,7 @@ public class AlertDialog extends ModalDialog
 			m_dialog.hide();
 			if (m_command != null)
 			{
-				DeferredCommand.add(m_command);
+				DeferredCommand.addCommand(m_command);
 			}
 		}
 	}
@@ -551,13 +547,13 @@ public class AlertDialog extends ModalDialog
 	{
 		public HotKeyController()
 		{
-			super(Event.ONKEYDOWN, HotKeyController.class);
+			super(HotKeyController.class, Event.ONKEYDOWN);
 		}
 		
 		protected boolean doBrowserEvent(Widget widget, Event event)
 		{
 			final AlertDialog dialog = (AlertDialog) widget;
-			char keyCode = (char) DomUtil.eventGetKeyCode(event);
+			char keyCode = (char) KeyEventImpl.getKeyCode(event);
 			if (dialog.getKeyMap().containsKey(keyCode))
 			{
 				Command command = dialog.getKeyMap().get(keyCode);
@@ -575,7 +571,7 @@ public class AlertDialog extends ModalDialog
 	{
 		public ArrowKeyFocusController()
 		{
-			super(Event.ONKEYDOWN, ArrowKeyFocusController.class);
+			super(ArrowKeyFocusController.class, Event.ONKEYDOWN);
 		}
 		
 		protected boolean doBrowserEvent(Widget widget, Event event)
@@ -584,14 +580,14 @@ public class AlertDialog extends ModalDialog
 			FocusModel focusModel = ((ModalDialog) widget).getFocusModel();
 			if (focusModel != null && focusModel.getSize() > 1)
 			{
-				char keyCode = (char) DomUtil.eventGetKeyCode(event);
-				if (keyCode == KeyboardListener.KEY_RIGHT || keyCode == KeyboardListener.KEY_DOWN)
+				int keyCode = KeyEventImpl.getKeyCode(event);
+				if (keyCode == KeyEvent.KEYCODE_RIGHT || keyCode == KeyEvent.KEYCODE_DOWN)
 				{
 					// increment focus
 					focusModel.getNextWidget().setFocus(true);
 					result = false;
 				}
-				else if (keyCode == KeyboardListener.KEY_LEFT || keyCode == KeyboardListener.KEY_UP)
+				else if (keyCode == KeyEvent.KEYCODE_LEFT || keyCode == KeyEvent.KEYCODE_UP)
 				{
 					// decrement focus
 					focusModel.getPreviousWidget().setFocus(true);

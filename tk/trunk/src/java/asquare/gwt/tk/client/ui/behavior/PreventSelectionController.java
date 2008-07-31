@@ -42,6 +42,6 @@ public abstract class PreventSelectionController extends ControllerAdaptor
 	
 	public PreventSelectionController(int eventBits)
 	{
-		super(eventBits, PreventSelectionController.class);
+		super(PreventSelectionController.class, eventBits);
 	}
 }

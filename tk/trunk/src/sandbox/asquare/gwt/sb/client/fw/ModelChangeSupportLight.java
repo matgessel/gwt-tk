@@ -19,16 +19,21 @@ import java.util.EventListener;
 
 public abstract class ModelChangeSupportLight extends ModelChangeSupportBase
 {	
+	public ModelChangeSupportLight(Object source)
+	{
+		super(source);
+	}
+	
 	protected void notifyListeners(EventListener[] listeners)
 	{
 		for (int i = 0; i < listeners.length; i++)
 		{
-			notifyListener((EventListener) listeners[i]);
+			notifyListener(getSource(), listeners[i]);
 		}
 	}
 	
 	/**
-	 * Template method to create the event 
+	 * Template method to cast and notify the listener
 	 */
-	protected abstract void notifyListener(EventListener listener);
+	protected abstract void notifyListener(Object source, EventListener listener);
 }

@@ -26,8 +26,8 @@ import asquare.gwt.sb.client.fw.*;
  */
 public class CTabBar extends CList
 {
-	public CTabBar(ListWidget structure, CellRenderer formatter)
+	public CTabBar(ListWidget structure, CellRenderer renderer)
 	{
-		super(new ListModelDefault(new ListSelectionModelSingle()), new TabBarView(structure, formatter));
+		super(new ListModelDefault(new ListSelectionModelSingle()), new TabBarView(structure, renderer));
 	}
 }

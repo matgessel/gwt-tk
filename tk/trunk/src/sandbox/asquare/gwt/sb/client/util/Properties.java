@@ -16,7 +16,6 @@
 package asquare.gwt.sb.client.util;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JavaScriptException;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class Properties implements AssociativeArray
@@ -24,12 +23,12 @@ public class Properties implements AssociativeArray
 	/**
 	 * This has to be declared in "Java" to satisfy the hosted shell. 
 	 */
-	private JavaScriptObject m_array = createImpl();
+	private JavaScriptObject m_array = JavaScriptObject.createObject();
 	
-	private native JavaScriptObject createImpl() /*-{
-		// create a 'native' object so that we can modify it in JSNI
-		return new Object();
-	}-*/;
+//	private native JavaScriptObject createImpl() /*-{
+//		// create a 'native' object so that we can modify it in JSNI
+//		return new Object();
+//	}-*/;
 	
 	/*
 	 * (non-Javadoc)
@@ -76,16 +75,17 @@ public class Properties implements AssociativeArray
 			{
 				return getBoolean0(key);
 			}
-			catch (JavaScriptException e)
+			catch (RuntimeException e) // HostedModeException
 			{
-				throw new ClassCastException(e.getDescription());
+				throw new ClassCastException(e.getMessage());
 			}
 		}
 		return getBoolean0(key);
 	}
 	
 	private native boolean getBoolean0(String key) /*-{
-		return this.@asquare.gwt.sb.client.util.Properties::m_array[key] == true;
+		var result = this.@asquare.gwt.sb.client.util.Properties::m_array[key];
+		return result === undefined ? false : result;
 	}-*/;
 	
 	/*

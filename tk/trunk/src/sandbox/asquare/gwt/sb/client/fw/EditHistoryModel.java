@@ -142,14 +142,14 @@ public class EditHistoryModel
 	
 	public List getUndoItems()
 	{
-		List result = new Vector(m_undo);
+		List result = new ArrayList(m_undo);
 		Collections.reverse(result);
 		return result;
 	}
 	
 	public List getRedoItems()
 	{
-		List result = new Vector(m_redo);
+		List result = new ArrayList(m_redo);
 		Collections.reverse(result);
 		return result;
 	}

@@ -16,11 +16,10 @@
 package asquare.gwt.tkdemo.client.ui;
 
 import asquare.gwt.tk.client.ui.CWidget;
-import asquare.gwt.tkdemo.client.ui.behavior.LegacyMouseController;
+import asquare.gwt.tk.client.ui.behavior.*;
 
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.SourcesMouseEvents;
+import com.google.gwt.user.client.ui.*;
 
 /**
  * A widget which supports GWT mouse listeners via a
@@ -38,16 +37,11 @@ public class LegacyMouseWidget extends CWidget implements SourcesMouseEvents
 	
 	public void addMouseListener(MouseListener listener)
 	{
-		LegacyMouseController controller = (LegacyMouseController) getController(LegacyMouseController.class);
-		if (controller == null)
-			addController(new LegacyMouseController());
-		controller.addMouseListener(listener);
+		CMouseListenerAdaptor.addListener(this, listener);
 	}
 
 	public void removeMouseListener(MouseListener listener)
 	{
-		LegacyMouseController controller = (LegacyMouseController) getController(LegacyMouseController.class);
-		if (controller != null)
-			controller.removeMouseListener(listener);
+        CMouseListenerAdaptor.removeListener(this, listener);
 	}
 }

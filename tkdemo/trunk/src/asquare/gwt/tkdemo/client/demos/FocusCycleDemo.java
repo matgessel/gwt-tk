@@ -15,10 +15,10 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
+import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.tk.client.ui.BasicPanel;
 import asquare.gwt.tk.client.ui.CWrapper;
-import asquare.gwt.tk.client.ui.behavior.FocusModel;
-import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import asquare.gwt.tk.client.ui.behavior.*;
 import asquare.gwt.tk.client.util.DomUtil;
 import asquare.gwt.tkdemo.client.ui.FocusCyclePanel;
 
@@ -60,38 +60,38 @@ public class FocusCycleDemo extends BasicPanel
 		
 		cycle1.add(new Label("Cycle 1"));
 		
-		cycle1.add(new Button("Button"));
+		cycle1.add(new FocusStyleDecorator(new Button("Button")));
 		
 		Button buttonDisabled = new Button("disabled");
 		buttonDisabled.setEnabled(false);
-		cycle1.add(buttonDisabled);
+		cycle1.add(new FocusStyleDecorator(buttonDisabled));
 		
 		Button buttonNegativeTabIndex = new Button("tabIndex = -1");
 		buttonNegativeTabIndex.setTabIndex(-1);
-		cycle1.add(buttonNegativeTabIndex);
+		cycle1.add(new FocusStyleDecorator(buttonNegativeTabIndex));
 		
-		cycle1.add(new CheckBox("CheckBox"));
+		cycle1.add(new FocusStyleDecorator(new CheckBox("CheckBox")));
 		
-		cycle1.add(new FocusPanel(new Label("FocusPanel")));
+		cycle1.add(new FocusStyleDecorator(new FocusPanel(new Label("FocusPanel"))));
 		
 		ListBox listBox = new ListBox();
 		listBox.addItem("ListBox");
 		listBox.addItem("Item 1");
 		listBox.addItem("Item 2");
 		listBox.addItem("Item 3");
-		cycle1.add(listBox);
+		cycle1.add(new FocusStyleDecorator(listBox));
 		
 		TextBox textBox = new TextBox();
 		textBox.setText("TextBox");
-		cycle1.add(textBox);
+		cycle1.add(new FocusStyleDecorator(textBox));
 		
 		PasswordTextBox pwBox = new PasswordTextBox();
 		pwBox.setText("PasswordTextBox");
-		cycle1.add(pwBox);
+		cycle1.add(new FocusStyleDecorator(pwBox));
 		
 		TextArea textArea = new TextArea();
 		textArea.setText("TextArea");
-		cycle1.add(textArea);
+		cycle1.add(new FocusStyleDecorator(textArea));
 		
 		Tree tree = new Tree();
 		TreeItem treeRoot = new TreeItem("Tree");
@@ -105,8 +105,10 @@ public class FocusCycleDemo extends BasicPanel
 			treeRoot.addItem(branch);
 		}
 		tree.addItem(treeRoot);
-		cycle1.add(tree);
+		cycle1.add(new FocusStyleDecorator(tree));
 		
+        new WidgetFocusStyleController(cycle1.getFocusModel());
+        
 		return cycle1;
 	}
 	
@@ -123,10 +125,10 @@ public class FocusCycleDemo extends BasicPanel
 		cycle2.add(label);
 		HorizontalPanel containers = new HorizontalPanel();
 		
-		Button[] buttons = new Button[6];
+		FocusStyleDecorator[] buttons = new FocusStyleDecorator[6];
 		for (int i = 0; i < buttons.length; i++)
 		{
-			buttons[i] = new Button("index&nbsp;" + i);
+			buttons[i] = new FocusStyleDecorator(new Button("index&nbsp;" + i));
 		}
 		VerticalPanel container1 = new VerticalPanel();
 		container1.addStyleName("focus-container");
@@ -145,6 +147,131 @@ public class FocusCycleDemo extends BasicPanel
 		containers.add(new CWrapper(container2).addController(focusController));
 		cycle2.add(containers);
 		
-		return cycle2;
+		new WidgetFocusStyleController(focusModel);
+        
+        return cycle2;
 	}
+    
+    private static class FocusStyleDecorator extends SimplePanel implements HasFocus
+    {
+        private final DelegatingFocusListenerCollection m_focusListenerCollection;
+        private final DelegatingKeyboardListenerCollection m_keyboardListenerCollection;
+        
+        private HasFocus m_wrapped;
+        
+        public FocusStyleDecorator(HasFocus toWrap)
+        {
+            m_wrapped = toWrap;
+            m_focusListenerCollection = new DelegatingFocusListenerCollection(this, m_wrapped);
+            m_keyboardListenerCollection = new DelegatingKeyboardListenerCollection(this, m_wrapped);
+            setWidget((Widget) toWrap);
+            setStyleName("FocusStyleDecorator");
+        }
+
+        public void addFocusListener(FocusListener listener)
+        {
+            m_focusListenerCollection.add(listener);
+        }
+
+        public void removeFocusListener(FocusListener listener)
+        {
+            m_focusListenerCollection.remove(listener);
+        }
+
+        public void addKeyboardListener(KeyboardListener listener)
+        {
+            m_keyboardListenerCollection.add(listener);
+        }
+
+        public void removeKeyboardListener(KeyboardListener listener)
+        {
+            m_keyboardListenerCollection.remove(listener);
+        }
+
+        public int getTabIndex()
+        {
+            return m_wrapped.getTabIndex();
+        }
+
+        public void setAccessKey(char key)
+        {
+            m_wrapped.setAccessKey(key);
+        }
+
+        public void setFocus(boolean focused)
+        {
+            m_wrapped.setFocus(focused);
+        }
+
+        public void setTabIndex(int index)
+        {
+            m_wrapped.setTabIndex(index);
+        }
+        
+        public String toString()
+        {
+            return m_wrapped.toString();
+        }
+    }
+    
+    private static class WidgetFocusStyleController implements FocusModelListener
+    {
+        private UIObject m_current = null;
+        private UIObject m_previous = null;
+        
+        public WidgetFocusStyleController(FocusModel focusModel)
+        {
+            focusModel.addListener(this);
+            focusChanged(focusModel, focusModel.getBlurWidget(), focusModel.getCurrentWidget());
+        }
+        
+        public void focusChanged(FocusModel model, HasFocus previous, HasFocus current)
+        {
+            if (m_current != null)
+            {
+                m_current.removeStyleDependentName(StyleNames.FOCUSED);
+            }
+            else
+            {
+                if (m_previous != null)
+                {
+                    m_previous.removeStyleDependentName(StyleNames.FOCUSEDINACTIVE);
+                }
+            }
+            m_current = (UIObject) current;
+            m_previous = (UIObject) previous;
+            if (m_current != null)
+            {
+                m_current.addStyleDependentName(StyleNames.FOCUSED);
+            }
+            else
+            {
+                if (m_previous != null)
+                {
+                    m_previous.addStyleDependentName(StyleNames.FOCUSEDINACTIVE);
+                }
+            }
+        }
+        
+        public void widgetsAdded(FocusModel model, HasFocus[] added)
+        {
+        }
+        
+        public void widgetsRemoved(FocusModel model, HasFocus[] removed)
+        {
+            for (int i = 0; i < removed.length; i++)
+            {
+                if (removed[i] == m_current)
+                {
+                    m_current.removeStyleDependentName(StyleNames.FOCUSED);
+                    m_current = null;
+                }
+                if (removed[i] == m_previous)
+                {
+                    m_previous.removeStyleDependentName(StyleNames.FOCUSEDINACTIVE);
+                    m_previous = null;
+                }
+            }
+        }
+    }
 }

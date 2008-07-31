@@ -33,8 +33,6 @@
 	
 	<inherits name='asquare.gwt.tk.MousePerformanceFilter'/>
 	
-	<inherits name='asquare.gwt.tk.MouseDragHandler'/>
-	
 	<inherits name='asquare.gwt.tk.PreventDragController'/>
 	
 	<source path="client"/>

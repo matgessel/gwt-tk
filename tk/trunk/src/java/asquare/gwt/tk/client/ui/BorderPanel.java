@@ -43,11 +43,16 @@ public class BorderPanel extends SimplePanel
 	}
 	
 	/**
-	 * Creates an empty BorderPanel with the specified child widget. 
+	 * Creates a BorderPanel with the specified child widget. 
 	 */
 	public BorderPanel(Widget child)
 	{
-		addStyleName("tk-BorderPanel");
+		this(child, "tk-BorderPanel");
+	}
+	
+	public BorderPanel(Widget child, String styleName)
+	{
+		setStyleName(styleName);
 		if (child != null)
 		{
 			setWidget(child);

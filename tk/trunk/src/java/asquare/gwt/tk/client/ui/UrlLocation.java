@@ -66,7 +66,7 @@ public class UrlLocation extends TextBox implements FocusListener, KeyboardListe
 	// FocusListener methods
 	public void onFocus(Widget sender)
 	{
-		DeferredCommand.add(new SelectAllCommand(this));
+		DeferredCommand.addCommand(new SelectAllCommand(this));
 	}
 
 	public void onLostFocus(Widget sender) {}

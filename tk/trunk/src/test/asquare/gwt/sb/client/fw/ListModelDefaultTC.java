@@ -15,14 +15,16 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import junit.framework.TestCase;
 
-public class ListModelDefaultTC extends GWTTestCase
+public class ListModelDefaultTC extends TestCase
 {
 	private ListModelDefault m_model;
+	private ListModelListenerStub m_l1;
 	private Object m_a1;
 	private Object m_b2;
 	private Object m_c1;
+	private Object[] m_array;
 	
 	public String getModuleName()
 	{
@@ -32,9 +34,11 @@ public class ListModelDefaultTC extends GWTTestCase
 	protected void setupImpl()
 	{
 		m_model = new ListModelDefault(new ListSelectionModelSingle());
+		m_l1 = new ListModelListenerStub();
 		m_a1 = new Integer(1);
 		m_b2 = new Integer(2);
 		m_c1 = new Integer(1);
+		m_array = new Object[] {m_a1, m_b2, m_c1};
 	}
 	
 	public void testSet()
@@ -80,5 +84,76 @@ public class ListModelDefaultTC extends GWTTestCase
 		m_model.set(0, m_c1);
 		assertFalse(m_model.isChanged());
 		m_model.update();
+	}
+	
+	public void testInsert()
+	{
+		// update selection
+		setupImpl();
+		m_model.add(m_b2);
+		m_model.getSelectionModel().setSelectionRange(0, 0);
+		m_model.update();
+		assertTrue(m_model.isIndexSelected(0));
+		m_model.addListener(m_l1);
+		m_model.insert(0, m_a1);
+		m_model.update();
+		assertEquals(1, m_model.getSelectionModel().getSelectionSize());
+		assertEquals(1, m_model.getSelectionModel().getSelectedIndices()[0]);
+		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+	}
+	
+	public void testClear()
+	{
+		// reset selection
+		setupImpl();
+		m_model.add(m_a1);
+		m_model.getSelectionModel().setSelectionRange(0, 0);
+		m_model.update();
+		assertTrue(m_model.isIndexSelected(0));
+		m_model.addListener(m_l1);
+		m_model.clear();
+		m_model.update();
+		assertEquals(0, m_model.getSelectionModel().getSelectionSize());
+		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+	}
+	
+	public void testRemove()
+	{
+		// update/reset selection
+		setupImpl();
+		m_model.addAll(m_array);
+		m_model.getSelectionModel().setSelectionRange(2, 2);
+		m_model.update();
+		assertTrue(m_model.isIndexSelected(2));
+		m_model.remove(0);
+		m_model.update();
+		assertEquals(1, m_model.getSelectionModel().getSelectionSize());
+		assertEquals(1, m_model.getSelectionModel().getSelectedIndices()[0]);
+		m_model.addListener(m_l1);
+		m_model.remove(1);
+		m_model.update();
+		assertEquals(0, m_model.getSelectionModel().getSelectionSize());
+		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+		
+		// null selection model
+		ListModelDefault model = new ListModelDefault(null);
+		model.add(m_a1);
+		model.remove(0);
+		assertFalse(model.isIndexSelected(0));
+	}
+	
+	public void testSelection()
+	{
+		setupImpl();
+		m_model.getSelectionModel().setSelectionRange(0, 2);
+		m_model.resetChanges();
+		m_model.addListener(m_l1);
+		m_model.getSelectionModel().setSelectionRange(2, 3);
+		m_model.update();
+		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+		m_l1.init();
+		m_model.getSelectionModel().setSelectionRange(0, 1);
+		m_model.update();
+		assertEquals(2, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
 	}
 }

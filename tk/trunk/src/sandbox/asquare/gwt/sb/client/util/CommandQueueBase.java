@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.util;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.Command;
 
@@ -25,8 +25,8 @@ import com.google.gwt.user.client.Command;
  */
 public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 {
-	private final Vector m_listeners = new Vector();
-	private final Vector m_queue = new Vector();
+	private final ArrayList m_listeners = new ArrayList();
+	private final ArrayList m_queue = new ArrayList();
 	
 	public void addListener(CommandQueueListener listener)
 	{

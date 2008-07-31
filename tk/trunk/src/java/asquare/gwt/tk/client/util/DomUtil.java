@@ -15,17 +15,22 @@
  */
 package asquare.gwt.tk.client.util;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
+import asquare.gwt.tk.client.ui.behavior.KeyEvent;
+import asquare.gwt.tk.client.ui.behavior.KeyEventImpl;
 import asquare.gwt.tk.client.util.impl.DomUtilImpl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
 /**
  * Utility methods for working with DOM. 
+ * 
+ * <p><em>NOTICE: portions copied from Google Web Toolkit</em>
  */
 public class DomUtil
 {
@@ -119,14 +124,17 @@ public class DomUtil
 	}
 	
 	/**
-	 * Sets the id attribute of the specified UIObject's element. Useful if you
-	 * need to select a specific component in CSS.
+	 * Sets the id attribute of the specified UIObject's root element. Useful if
+	 * you need to select a specific component in CSS.
 	 * <p>
 	 * Usage notes:
 	 * <ul>
 	 * <li>The id should not be the same as the history token. See <a
 	 * href="http://code.google.com/p/google-web-toolkit/issues/detail?id=61">Issue
 	 * 61</a></li>
+	 * <li>in some GWT widgets the style element is different than the root
+	 * element (ex: {@link PopupPanel}). In these cases it is better to use
+	 * {@link UIObject#addStyleName(String)}</li>
 	 * </ul>
 	 * <h3>CSS Selection Example</h3>
 	 * 
@@ -153,7 +161,7 @@ public class DomUtil
 	 */
 	public static String getId(Element e)
 	{
-		return DOM.getAttribute(e, "id");
+		return DOM.getElementProperty(e, "id");
 	}
 	
 	/**
@@ -164,7 +172,7 @@ public class DomUtil
 	 */
 	public static void setId(Element e, String id)
 	{
-		DOM.setAttribute(e, "id", id);
+		DOM.setElementProperty(e, "id", id);
 	}
 	
 	/**
@@ -177,7 +185,7 @@ public class DomUtil
 	 */
 	public static String getAttribute(UIObject uio, String name)
 	{
-		return DOM.getAttribute(uio.getElement(), name);
+		return DOM.getElementProperty(uio.getElement(), name);
 	}
 	
 	/**
@@ -189,7 +197,7 @@ public class DomUtil
 	 */
 	public static void setAttribute(UIObject uio, String name, String value)
 	{
-		DOM.setAttribute(uio.getElement(), name, value);
+		DOM.setElementProperty(uio.getElement(), name, value);
 	}
 	
 	/**
@@ -201,7 +209,7 @@ public class DomUtil
 	 */
 	public static int getIntAttribute(UIObject uio, String name)
 	{
-		return DOM.getIntAttribute(uio.getElement(), name);
+		return DOM.getElementPropertyInt(uio.getElement(), name);
 	}
 	
 	/**
@@ -213,7 +221,7 @@ public class DomUtil
 	 */
 	public static void setIntAttribute(UIObject uio, String name, int value)
 	{
-		DOM.setIntAttribute(uio.getElement(), name, value);
+		DOM.setElementPropertyInt(uio.getElement(), name, value);
 	}
 	
 	/**
@@ -311,10 +319,10 @@ public class DomUtil
 	{
 		if (result == null)
 		{
-			result = new Vector();
+			result = new ArrayList();
 		}
 
-		String cls = DOM.getAttribute(element, "className");
+		String cls = DOM.getElementProperty(element, "className");
 		if (cls != null && cls.indexOf(className) >= 0)
 		{
 			result.add(element);
@@ -395,10 +403,11 @@ public class DomUtil
 	 * document.documentElement origin) to the left edge of the viewport.
 	 * 
 	 * @return 0 or a positive value in screen pixels 
+	 * @see Window#getScrollLeft()
 	 */
 	public static int getViewportScrollX()
 	{
-		return DOMExtenstion.getViewportScrollX();
+		return Window.getScrollLeft();
 	}
 	
 	/**
@@ -407,10 +416,11 @@ public class DomUtil
 	 * document.documentElement origin) to the top edge of the viewport.
 	 * 
 	 * @return 0 or a positive value in screen pixels 
+	 * @see Window#getScrollTop()
 	 */
 	public static int getViewportScrollY()
 	{
-		return DOMExtenstion.getViewportScrollY();
+		return Window.getScrollTop();
 	}
 	
 	/**
@@ -445,13 +455,11 @@ public class DomUtil
 	 * @return a char representing the key pressed
 	 * @throws IllegalArgumentException if event is other than onkeydown or
 	 *             onkeyup
+	 * @deprecated use {@link KeyEvent#getKeyCode(Event)}
 	 */
 	public static char eventGetKeyCode(Event event)
 	{
-		if ((DOM.eventGetType(event) & (Event.ONKEYDOWN | Event.ONKEYUP)) == 0)
-			throw new IllegalArgumentException();
-		
-		return (char) DOM.eventGetKeyCode(event);
+		return (char) KeyEventImpl.getKeyCode(event);
 	}
 	
 	/**
@@ -461,13 +469,11 @@ public class DomUtil
 	 * @param event a keypress event
 	 * @return a unicode character
 	 * @throws IllegalArgumentException if event is other than onkeypress
+	 * @deprecated use {@link KeyEvent#getKeyPressChar(Event)}
 	 */
 	public static char eventGetCharCode(Event event)
 	{
-		if (DOM.eventGetType(event) != Event.ONKEYPRESS)
-			throw new IllegalArgumentException();
-		
-		return (char) DOM.eventGetKeyCode(event);
+		return KeyEventImpl.getKeyPressChar(event);
 	}
 	
 	/**
@@ -480,7 +486,7 @@ public class DomUtil
 	 */
 	public static int eventGetAbsoluteX(Event event)
 	{
-		return DOMExtenstion.eventGetAbsoluteX(event);
+	    return DOM.eventGetClientX(event) + Window.getScrollLeft();
 	}
 	
 	/**
@@ -493,7 +499,7 @@ public class DomUtil
 	 */
 	public static int eventGetAbsoluteY(Event event)
 	{
-		return DOMExtenstion.eventGetAbsoluteY(event);
+	    return DOM.eventGetClientY(event) + Window.getScrollTop();
 	}
 	
 	/**

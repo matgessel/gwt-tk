@@ -17,5 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 public interface ExplicitUpdateModel
 {
+	void resetChanges();
+	
 	void update();
 }

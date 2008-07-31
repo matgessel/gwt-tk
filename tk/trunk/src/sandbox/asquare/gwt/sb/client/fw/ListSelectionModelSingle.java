@@ -15,9 +15,23 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ListSelectionModelSingle extends ListSelectionModelBase
+import asquare.gwt.sb.client.util.Range;
+
+public class ListSelectionModelSingle implements ListSelectionModel
 {
+	private final ListSelectionModelChangeSupport m_changeSupport = new ListSelectionModelChangeSupport(this);
+	
 	private int m_selectedIndex = -1;
+	
+	public void addListener(ListSelectionModelListener listener)
+	{
+		m_changeSupport.addListener(listener);
+	}
+	
+	public void removeListener(ListSelectionModelListener listener)
+	{
+		m_changeSupport.removeListener(listener);
+	}
 	
 	public boolean isIndexSelected(int index)
 	{
@@ -53,8 +67,7 @@ public class ListSelectionModelSingle extends ListSelectionModelBase
 	}
 	
 	/**
-	 * 
-	 * @param index a valid index in the corresponding list, or -1
+	 * @param index a valid index in the corresponding list, or <code>-1</code>
 	 */
 	public void setSelectedIndex(int index)
 	{
@@ -65,24 +78,20 @@ public class ListSelectionModelSingle extends ListSelectionModelBase
 		{
 			if (m_selectedIndex != -1)
 			{
-				fireSelectionChange(m_selectedIndex);
+				m_changeSupport.selectionRemoved(m_selectedIndex, 1);
 			}
 			m_selectedIndex = index;
 			if (m_selectedIndex != -1)
 			{
-				fireSelectionChange(m_selectedIndex);
+				m_changeSupport.selectionAdded(m_selectedIndex, 1);
 			}
+			m_changeSupport.update();
 		}
 	}
 	
 	public void clearSelection()
 	{
-		if (m_selectedIndex != -1)
-		{
-			int previouslySelectedIndex = m_selectedIndex;
-			m_selectedIndex = -1;
-			fireSelectionChange(previouslySelectedIndex);
-		}
+		setSelectedIndex(-1);
 	}
 	
 	public int getSelectionSize()
@@ -116,7 +125,47 @@ public class ListSelectionModelSingle extends ListSelectionModelBase
 		
 		if (m_selectedIndex >= Math.min(from, to) && m_selectedIndex <= Math.max(from, to))
 		{
-			clearSelection();
+			setSelectedIndex(-1);
+		}
+	}
+	
+	public void adjustForItemsInserted(int index, int count)
+	{
+		if (index < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(index));
+		
+		if (count <= 0)
+			throw new IllegalArgumentException(String.valueOf(index));
+		
+		if (index <= m_selectedIndex)
+		{
+			m_changeSupport.selectionRemoved(m_selectedIndex, 1);
+			m_selectedIndex += count;
+			m_changeSupport.selectionAdded(m_selectedIndex, 1);
+			m_changeSupport.update();
+		}
+	}
+	
+	public void adjustForItemsRemoved(int index, int count)
+	{
+		if (index < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(index));
+		
+		if (count <= 0)
+			throw new IllegalArgumentException(String.valueOf(index));
+		
+		if (m_selectedIndex != -1 && Range.contains(index, count, m_selectedIndex, 1))
+		{
+			m_changeSupport.selectionRemoved(m_selectedIndex, 1);
+			m_selectedIndex = -1;
+			m_changeSupport.update();
+		}
+		else if (index < m_selectedIndex)
+		{
+			m_changeSupport.selectionRemoved(m_selectedIndex, 1);
+			m_selectedIndex -= count;
+			m_changeSupport.selectionAdded(m_selectedIndex, 1);
+			m_changeSupport.update();
 		}
 	}
 }

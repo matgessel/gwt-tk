@@ -45,7 +45,7 @@ public class StyleNames
     /**
      * {@value}
      */
-    public static final String ACTIVE = "Active";
+    public static final String ACTIVE = "active";
     
     /**
      * {@value}
@@ -106,4 +106,54 @@ public class StyleNames
 	 * {@value}
 	 */
 	public static final String SE = "SE";
+	
+	/**
+	 * {@value}
+	 */
+	public static final String DRAGGING = "dragging";
+	
+    /**
+     * {@value}
+     */
+    public static final String DRAG_SOURCE = "dragSource";
+    
+    /**
+     * {@value}
+     */
+    public static final String DROP_TARGET = "dropTarget";
+    
+    /**
+     * {@value}
+     */
+    public static final String ASCENDING = "ascending";
+    
+    /**
+     * {@value}
+     */
+    public static final String DESCENDING = "descending";
+    
+    /**
+     * {@value}
+     */
+    public static final String SPACER = "spacer";
+    
+    /**
+     * {@value}
+     */
+    public static final String WAITING = "waiting";
+
+    /**
+     * {@value}
+     */
+    public static final String FOCUSED = "focused";
+    
+    /**
+     * {@value}
+     */
+    public static final String FOCUSEDINACTIVE = "focusedInactive";
+    
+    /**
+     * {@value}
+     */
+    public static final String RESIZING = "resizing";
 }

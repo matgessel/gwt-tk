@@ -15,34 +15,39 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.EventListener;
-
 import asquare.gwt.sb.client.util.Properties;
 
-public class PropertyModelLazy implements ExplicitUpdateModel
+/**
+ * A model of properties. Properties do not take up memory until set. 
+ */
+public class PropertyModelLazy implements ExplicitUpdateModel, SourcesModelChangeEventComplex
 {
-	private final ModelChangeSupportBase m_changeSupport = new ChangeSupport();
+	private final ModelChangeSupportComplex m_changeSupport;
 	private final Properties m_impl = new Properties();
 	
-	public void addListener(PropertyModelListener listener)
+	public PropertyModelLazy()
+	{
+		this(null);
+	}
+	
+	public PropertyModelLazy(ModelChangeSupportComplex changeSupport)
+	{
+		m_changeSupport = (changeSupport != null) ? changeSupport : createChangeSupport();
+	}
+	
+	protected ModelChangeSupportComplex createChangeSupport()
+	{
+		return new ModelChangeSupportComplex(this);
+	}
+	
+	public void addListener(ModelListenerComplex listener)
 	{
 		m_changeSupport.addListener(listener);
 	}
 	
-	public void removeListener(PropertyModelListener listener)
+	public void removeListener(ModelListenerComplex listener)
 	{
 		m_changeSupport.removeListener(listener);
-	}
-	
-	public void clear()
-	{
-		m_impl.clear();
-		m_changeSupport.setChanged();
-	}
-	
-	public Object get(String name)
-	{
-		return m_impl.get(name);
 	}
 	
 	public boolean getBoolean(String name)
@@ -50,40 +55,68 @@ public class PropertyModelLazy implements ExplicitUpdateModel
 		return m_impl.getBoolean(name);
 	}
 	
+	public int getInt(String name)
+	{
+		return m_impl.getInt(name);
+	}
+	
 	public String getString(String name)
 	{
 		return m_impl.getString(name);
 	}
 	
-	public void set(String name, boolean value)
+	public Object getObject(String name)
 	{
-		if (m_impl.getBoolean(name) != value)
-		{
-			m_impl.set(name, value);
-			m_changeSupport.setChanged();
-		}
+		return m_impl.get(name);
 	}
 	
-	public void set(String name, Object value)
+	public boolean set(String name, boolean value)
 	{
-		Object old = m_impl.get(name);
-		if (old == value || old != null && old.equals(value))
-			return;
-		
-		m_impl.set(name, value);
-		m_changeSupport.setChanged();
+		if (m_changeSupport.propertyChanged(name, m_impl.getBoolean(name), value))
+		{
+			m_impl.set(name, value);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean set(String name, int value)
+	{
+		if (m_changeSupport.propertyChanged(name, m_impl.getInt(name), value))
+		{
+			m_impl.set(name, value);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean set(String name, String value)
+	{
+		if (m_changeSupport.propertyChanged(name, m_impl.getString(name), value))
+		{
+			m_impl.set(name, value);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean set(String name, Object value)
+	{
+		if (m_changeSupport.propertyChanged(name, m_impl.get(name), value))
+		{
+			m_impl.set(name, value);
+			return true;
+		}
+		return false;
+	}
+	
+	public void resetChanges()
+	{
+		m_changeSupport.resetChanges();
 	}
 	
 	public void update()
 	{
 		m_changeSupport.update();
-	}
-	
-	private class ChangeSupport extends ModelChangeSupportLight
-	{
-		protected void notifyListener(EventListener listener)
-		{
-			((PropertyModelListener) listener).modelChanged(PropertyModelLazy.this);
-		}
 	}
 }

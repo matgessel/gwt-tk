@@ -147,25 +147,32 @@ public class Debug
 		
 		Debug.prettyPrint = $wnd.Debug.prettyPrint = function(object)
 		{
-			if (typeof object == "undefined")
+			try
 			{
-				Debug.println("undefined");
+				if (typeof object == "undefined")
+				{
+					Debug.println("undefined");
+				}
+				else if (object == null)
+				{
+					Debug.println("null");
+				}
+				else if (object instanceof Array)
+				{
+					Debug.println("[Array length=" + object.length + "]");
+				}
+				else if (object.nodeName)
+				{
+					Debug.println("[object " + object.nodeName + "]");
+				}
+				else
+				{
+					Debug.println(object);
+				}
 			}
-			else if (object == null)
+			catch(e)
 			{
-				Debug.println("null");
-			}
-			else if (object instanceof Array)
-			{
-				Debug.println("[Array length=" + object.length + "]");
-			}
-			else if (object.nodeName)
-			{
-				Debug.println("[object " + object.nodeName + "]");
-			}
-			else
-			{
-				Debug.println(object);
+				Debug.println("[caught exception in Debug.prettyPrint(): "  + e + " " + e.message + "]");
 			}
 		};
 		
@@ -184,14 +191,7 @@ public class Debug
 				for (var member in object)
 				{
 					Debug.print("  +" + member + "=");
-					try
-					{
-						Debug.prettyPrint(object[member]);
-					}
-					catch(e)
-					{
-						Debug.println("(Exception caught: " + e + ")");
-					}
+					Debug.prettyPrint(object[member]);
 				}
 			}
 		};

@@ -24,7 +24,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class Demo implements EntryPoint
 {
@@ -46,8 +46,8 @@ public class Demo implements EntryPoint
 				int absTop = DOM.getAbsoluteTop(target);
 				int offsetLeft = getOffsetLeft(target);
 				int offsetTop = getOffsetTop(target);
-				int docScrollX = DomUtil.getViewportScrollX();
-				int docScrollY = DomUtil.getViewportScrollY();
+				int docScrollX = Window.getScrollLeft();
+				int docScrollY = Window.getScrollTop();
 				Debug.println(
 						"screenX=" + screenX + 
 			    		",screenY=" + screenY + 
@@ -81,6 +81,27 @@ public class Demo implements EntryPoint
 		{
 			DebugConsole.getInstance().disable();
 		}
+		
+		final Button button = new Button();
+		button.setText("Default Info dialog");
+		button.addClickListener(new ClickListener()
+		{
+			public void onClick(final Widget aSender)
+			{
+				final AlertDialog alert =
+				AlertDialog.createInfo(new Command()
+				{
+					public void execute()
+					{
+						Debug.println("OK clicked");
+					}
+				},
+				"Info Dialog",
+				"this is a default info dialog");
+				alert.show();
+			}
+		});
+		RootPanel.get().add(button);
 
 		Command showDialog = new Command()
 		{
@@ -90,9 +111,15 @@ public class Demo implements EntryPoint
 			{
 				if (m_dialog == null)
 				{
-					m_dialog = AlertDialog.createWarning(this, "Caption text", "Message text");
-					m_dialog.setSize("400px", "200px");
-					m_dialog.addController(new ControllerAdaptor(Event.ONMOUSEDOWN, Controller.class)
+					m_dialog = AlertDialog.createWarning(this, "Caption text", null);
+					ScrollPanel message = new ScrollPanel();
+					message.setAlwaysShowScrollBars(true);
+					message.setWidth("100%");
+					message.setHeight("100px");
+					message.setWidget(new Label("These packages contain reference information about the main GWT user interface and utility classes. For higher-level explanations of how to take advantage of all this stuff, check out the Developer Guide. Among other things, there's a handy widget gallery and an explanation of how remote procedure calls work.These packages contain reference information about the main GWT user interface and utility classes. For higher-level explanations of how to take advantage of all this stuff, check out the Developer Guide. Among other things, there's a handy widget gallery and an explanation of how remote procedure calls work."));
+					m_dialog.setMessage(message);
+					m_dialog.setSize("400px", "300px");
+					m_dialog.addController(new ControllerAdaptor(Controller.class, Event.ONMOUSEDOWN)
 					{
 						public void onBrowserEvent(Widget widget, Event event)
 						{

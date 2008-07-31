@@ -26,36 +26,23 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class EventWrapper extends Composite
 {
-	private Widget m_widget;
-	
 	/**
 	 * Default constructor for convenience. You will need to call
 	 * {@link #initWidget(Widget)} before calling any {@link Widget} methods.
 	 */
 	public EventWrapper()
 	{
-		
+	}
+	
+	public EventWrapper(Widget w)
+	{
+		initWidget(w);
 	}
 	
 	public EventWrapper(Widget w, int eventMask)
 	{
 		initWidget(w);
 		sinkEvents(eventMask);
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.Composite#initWidget(com.google.gwt.user.client.ui.Widget)
-	 */
-	protected void initWidget(Widget widget)
-	{
-		super.initWidget(widget);
-		m_widget = widget;
-	}
-	
-	protected Widget getWidget()
-	{
-		return m_widget;
 	}
 	
 	/*
@@ -76,6 +63,6 @@ public abstract class EventWrapper extends Composite
 	 */
 	public void onBrowserEvent(Event event)
 	{
-		m_widget.onBrowserEvent(event);
+		getWidget().onBrowserEvent(event);
 	}
 }

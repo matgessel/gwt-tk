@@ -17,28 +17,30 @@ package asquare.gwt.tk.client.util;
 
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+
 /**
  * General utility methods for working with in GWT. 
  */
 public class GwtUtil
 {
 	/**
-	 * Checks that the specified index is valid for the list (the GWT emulation
-	 * of {@link java.util.Vector Vector} does not perform range checking). A
-	 * flag is passed to indicate whether the range should be extended by 1 to
-	 * allow for adding a last element. Throws an exception if the index is out
-	 * of bounds for the list.
+	 * Checks that the specified index is valid for the list (the GWT emulations
+	 * of {@link java.util.List List} do not perform range checking). A flag is
+	 * passed to indicate whether the range should be extended by 1 to allow for
+	 * adding a last element. Throws an exception if the index is out of bounds
+	 * for the list.
 	 * 
 	 * @param list the list to check against
 	 * @param index the index to range check
-	 * @param adding <code>true</code> to allow for
-	 *            {@link List#add(int, java.lang.Object) adding} at the index
-	 *            after last element in list
+	 * @param extend <code>true</code> to allow for
+	 *            {@link List#add(int, java.lang.Object) adding} at after last
+	 *            element in list (<code>list.size()</code>)
 	 * @throws IndexOutOfBoundsException if the index is out of range
 	 */
-	public static void rangeCheck(List list, int index, boolean adding) throws IndexOutOfBoundsException
+	public static void rangeCheck(List list, int index, boolean extend) throws IndexOutOfBoundsException
 	{
-		rangeCheck(0, list.size(), index, adding);
+		rangeCheck(0, list.size(), index, extend);
 	}
 	
 	/**
@@ -265,19 +267,6 @@ public class GwtUtil
 	}
 	
 	/**
-	 * Tests two Strings for equality. Same as {@link String#equals(Object)},
-	 * except that either argument may be <code>null</code>.
-	 * 
-	 * @param a a String, or <code>null</code>
-	 * @param b a String, or <code>null</code>
-	 * @return <code>true</code> if
-	 *         <code>(a == b || a != null && a.equals(b))</code>
-	 */
-	public static native boolean equals(String a, String b) /*-{
-		return a == b;
-	}-*/;
-	
-	/**
 	 * Tests two Objects for equality. Same as {@link Object#equals(Object)},
 	 * except that either argument may be <code>null</code>.
 	 * 
@@ -289,5 +278,47 @@ public class GwtUtil
 	public static boolean equals(Object a, Object b)
 	{
 		return a == b || a != null && a.equals(b); 
+	}
+	
+	public static boolean equals(Object[] a, Object[] b)
+	{
+		if (a == b)
+			return true;
+		
+		if (a == null || b == null || a.length != b.length)
+			return false;
+		
+		for (int i = 0; i < a.length; i++)
+		{
+			if (! equals(a[i], b[i]))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static String getClassSimpleName(Object o)
+	{
+        if (o == null)
+        	return "null";
+        
+		return getClassSimpleName(GWT.getTypeName(o));
+	}
+	
+	/**
+	 * 
+	 * @param fullyQualifiedName fully qualified class name
+	 */
+	public static String getClassSimpleName(String fullyQualifiedName)
+	{
+        int lastDot = fullyQualifiedName.lastIndexOf('.');
+        int last$ = fullyQualifiedName.lastIndexOf('$');
+        if (lastDot > 0 || last$ > 0)
+        {
+            // short class name
+            return fullyQualifiedName.substring(Math.max(lastDot, last$) + 1);
+        }
+        return fullyQualifiedName;
 	}
 }

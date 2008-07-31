@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This is a filter which enforces proper caching of the generated GWT script
- * files. It requires that serve your GWT application via a Java servlet
+ * files. It requires that you serve your GWT application via a Java servlet
  * container.
  * <p>
  * To use, add the jar to <code>WEB-INF/lib</code> and add the
@@ -34,27 +34,27 @@ import javax.servlet.http.HttpServletResponse;
  * &lt;filter&gt;
  *   &lt;filter-name&gt;GWTCacheFilter&lt;/filter-name&gt;
  *   &lt;filter-class&gt;asquare.gwt.tk.server.GWTCacheFilter&lt;/filter-class&gt;
- *   &lt;description&gt;Enforces proper caching of GWT script files&lt;/description&gt;
+ *   &lt;description&gt;Enforces proper caching of GWT files&lt;/description&gt;
  * &lt;/filter&gt;
  * 
  * &lt;filter-mapping&gt;
  *   &lt;filter-name&gt;GWTCacheFilter&lt;/filter-name&gt;
- *   &lt;url-pattern&gt;*.html&lt;/url-pattern&gt;
+ *   &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
  * &lt;/filter-mapping&gt;</pre>
  * 
- * By default, files ending in <code>.cache.html</code> are cached and files
- * ending in <code>.nocache.html</code> are not cached. You can override the
+ * By default, files ending in <code>.cache.*</code> are cached and files
+ * ending in <code>.nocache.*</code> are not cached. You can override the
  * defaults by specifying file name patterns in filter init-params. The pattern
  * is parsed as a JDK regular expression. The defaults are below: 
  * 
  * <pre>
  * &lt;init-param&gt;
  *   &lt;param-name&gt;forceDontCache&lt;/param-name&gt;
- *   &lt;param-value&gt;.+\.nocache.html&lt;/param-value&gt;
+ *   &lt;param-value&gt;.+\.nocache\..+&lt;/param-value&gt;
  * &lt;/init-param&gt;
  * &lt;init-param&gt;
  *   &lt;param-name&gt;forceCache&lt;/param-name&gt;
- *   &lt;param-value&gt;.+\.cache.html&lt;/param-value&gt;
+ *   &lt;param-value&gt;.+\.cache\..+&lt;/param-value&gt;
  * &lt;/init-param&gt;</pre>
  * 
  * <p>
@@ -101,13 +101,13 @@ public class GWTCacheFilter implements Filter
 	 * The default value of the <code>forceCache</code> init-param. 
 	 * The value is <code>{@value}</code>. 
 	 */
-	public static final String DEFAULT_FORCEDONTCACHE = ".+\\.nocache.html";
+	public static final String DEFAULT_FORCEDONTCACHE = ".+\\.nocache\\..+";
 	
 	/**
 	 * The default value of the <code>forceDontCache</code> init-param. 
 	 * The value is <code>{@value}</code>. 
 	 */
-	public static final String DEFAULT_FORCECACHE = ".+\\.cache.html";
+	public static final String DEFAULT_FORCECACHE = ".+\\.cache\\..+";
 	
 	private Pattern forceDontCachePattern;
 	private Pattern forceCachePattern;
@@ -144,8 +144,8 @@ public class GWTCacheFilter implements Filter
 			if (forceDontCachePattern.matcher(hRequest.getRequestURL()).matches())
 			{
 				HttpServletResponse hResponse = (HttpServletResponse) response;
-				hResponse.addHeader("Cache-Control", "no-cache no-store must-revalidate");
-				hResponse.addHeader("Pragma", "no-cache"); // HTTP/1.0
+				hResponse.setHeader("Cache-Control", "no-cache no-store must-revalidate");
+				hResponse.setHeader("Pragma", "no-cache"); // HTTP/1.0
 				hResponse.setDateHeader("Expires", 0l);
 			}
 			else if (forceCachePattern.matcher(hRequest.getRequestURL()).matches())
@@ -153,7 +153,11 @@ public class GWTCacheFilter implements Filter
 				HttpServletResponse hresponse = (HttpServletResponse) response;
 				
 				// the w3c spec requires a maximum age of 1 year
-				hresponse.addHeader("Cache-Control", "max-age=31536000");
+				hresponse.setHeader("Cache-Control", "max-age=31536000");
+				
+				// necessary to overwrite "Pragma: no-cache" header
+				hresponse.setHeader("Pragma", "temp");
+				hresponse.setHeader("Pragma", "");
 				hresponse.setDateHeader("Expires", System.currentTimeMillis() + 31536000000l);
 			}
 		}

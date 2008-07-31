@@ -49,20 +49,30 @@ public class TableUtil
 		DOM.insertChild(tr, td, tdIndex);
 		return td;
 	}
-
-	public static void setTableCellPadding(Element table, int value)
+	
+	public static int getTableCellPadding(Element table)
 	{
-		DOM.setIntAttribute(table, "cellPadding", value);
+		return DOM.getElementPropertyInt(table, "cellPadding");
+	}
+
+	public static void setTableCellPadding(Element table, int px)
+	{
+		DOM.setElementPropertyInt(table, "cellPadding", px);
 	}
 	
-	public static void setTableCellSpacing(Element table, int value)
+	public static int getTableCellSpacing(Element table)
 	{
-		DOM.setIntAttribute(table, "cellSpacing", value);
+		return DOM.getElementPropertyInt(table, "cellSpacing");
+	}
+
+	public static void setTableCellSpacing(Element table, int px)
+	{
+		DOM.setElementPropertyInt(table, "cellSpacing", px);
 	}
 	
 	public static void setTdHorizontalAlignment(Element td, HorizontalAlignmentConstant hAlign)
 	{
-		DOM.setAttribute(td, "align", hAlign.getTextAlignString());
+		DOM.setElementProperty(td, "align", hAlign.getTextAlignString());
 	}
 	
 	public static void setTdVerticalAlignment(Element td, VerticalAlignmentConstant vAlign)
@@ -72,11 +82,31 @@ public class TableUtil
 	
 	public static void setTdWidth(Element td, String width)
 	{
-		DOM.setAttribute(td, "width", width);
+		DOM.setElementProperty(td, "width", width);
 	}
 	
 	public static void setTdHeight(Element td, String height)
 	{
-		DOM.setAttribute(td, "height", height);
+		DOM.setElementProperty(td, "height", height);
+	}
+	
+	public static void setLayoutFixed(Element table)
+	{
+		DOM.setStyleAttribute(table, "tableLayout", "fixed");
+	}
+	
+	public static void setLayoutAuto(Element table)
+	{
+		DOM.setStyleAttribute(table, "tableLayout", "auto");
+	}
+	
+	public static void setEmptyCellsShow(Element table)
+	{
+		DOM.setStyleAttribute(table, "emptyCells", "show");
+	}
+	
+	public static void setEmptyCellsHide(Element table)
+	{
+		DOM.setStyleAttribute(table, "emptyCells", "hide");
 	}
 }

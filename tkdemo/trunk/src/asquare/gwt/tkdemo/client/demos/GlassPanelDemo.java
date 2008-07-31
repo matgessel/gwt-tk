@@ -15,15 +15,10 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.GlassPanel;
-import asquare.gwt.tk.client.ui.SimpleHyperLink;
-import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
-import asquare.gwt.tk.client.util.DomUtil;
+import asquare.gwt.tk.client.ui.*;
+import asquare.gwt.tk.client.ui.behavior.*;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class GlassPanelDemo extends BasicPanel
@@ -66,7 +61,7 @@ public class GlassPanelDemo extends BasicPanel
 			public void onClick(Widget sender)
 			{
 				final GlassPanel gp = new GlassPanel(m_bodyStyleName);
-				DomUtil.setId(gp, m_cssId);
+                gp.addStyleName(m_cssId);
 				gp.addController(new HideGlassPanelController());
 				gp.show();
 			}
@@ -89,11 +84,11 @@ public class GlassPanelDemo extends BasicPanel
 			public void onClick(Widget sender)
 			{
 				final GlassPanel gp = new GlassPanel();
-				DomUtil.setId(gp, "glasspanel-ex-transparentPNG");
+				gp.addStyleName("glasspanel-ex-transparentPNG");
 				Label content = new Label();
 				content.setStyleName("Content");
 				content.setSize("100%", "100%");
-				gp.add(content);
+				gp.setWidget(content);
 				gp.addController(new HideGlassPanelController());
 				gp.show();
 			}
@@ -105,12 +100,12 @@ public class GlassPanelDemo extends BasicPanel
 			public void onClick(Widget sender)
 			{
 				final GlassPanel gp = new GlassPanel();
-				DomUtil.setId(gp, "glasspanel-ex-text");
+				gp.addStyleName("glasspanel-ex-text");
 				HTML contents = new HTML("<table cellspacing='0' cellpadding='0' style='width: 100%; height: 100%;'>" +
 						"<td align='center' valign='middle'><h1>Wham!</h1></td>" +
 						"</tr></table>");
 				contents.setSize("100%", "100%");
-				gp.add(contents);
+				gp.setWidget(contents);
 				gp.addController(new HideGlassPanelController());
 				gp.show();
 			}
@@ -122,13 +117,13 @@ public class GlassPanelDemo extends BasicPanel
 	{
 		public HideGlassPanelController()
 		{
-			super(Event.ONCLICK, HideGlassPanelController.class);
+			super(HideGlassPanelController.class, Event.ONCLICK);
 		}
 		
 		protected boolean doBrowserEvent(Widget widget, Event event)
 		{
 			final GlassPanel gp = (GlassPanel) widget;
-			DeferredCommand.add(new Command()
+			DeferredCommand.addCommand(new Command()
 			{
 				public void execute()
 				{

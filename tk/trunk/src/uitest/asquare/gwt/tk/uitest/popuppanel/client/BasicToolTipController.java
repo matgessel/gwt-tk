@@ -28,7 +28,7 @@ public class BasicToolTipController extends ControllerAdaptor
 	
 	public BasicToolTipController(ToolTipModel toolTip)
 	{
-		super(Event.ONMOUSEOVER | Event.ONMOUSEOUT | Event.ONMOUSEMOVE, BasicToolTipController.class);
+		super(BasicToolTipController.class, Event.ONMOUSEOVER | Event.ONMOUSEOUT | Event.ONMOUSEMOVE);
 		m_toolTip = toolTip;
 	}
 	

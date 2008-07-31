@@ -15,18 +15,15 @@
  */
 package asquare.gwt.tk.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
+import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 import asquare.gwt.tk.client.ui.behavior.GlassPanelController;
-import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.impl.PopupImpl;
 
 /**
  * A panel which covers the entire viewport or document, whichever is larger.
@@ -82,28 +79,18 @@ import com.google.gwt.user.client.ui.impl.PopupImpl;
  * @see <a href="http://msdn2.microsoft.com/en-us/library/ms532853.aspx">Filters
  *      for IE</a>
  */
-public class GlassPanel extends CComplexPanel
+public class GlassPanel extends CWindow
 {
 	public static final String DEFAULT_BODY_STYLENAME = "body-GlassPanelShowing";
-	
-	private static final PopupImpl m_impl = (PopupImpl) GWT.create(PopupImpl.class);
 	
 	private String m_bodyStyleName;
 	
 	/**
-	 * Creates a GlassPanel based on a div. 
+	 * Creates a GlassPanel with the default options. 
 	 */
 	public GlassPanel()
 	{
 		this(DEFAULT_BODY_STYLENAME);
-	}
-	
-	/**
-	 * Creates a GlassPanel based the specified element. 
-	 */
-	public GlassPanel(Element element)
-	{
-		this(element, DEFAULT_BODY_STYLENAME);
 	}
 	
 	/**
@@ -115,20 +102,7 @@ public class GlassPanel extends CComplexPanel
 	 */
 	public GlassPanel(String bodyStyleName)
 	{
-		this(DOM.createDiv(), bodyStyleName);
-	}
-	
-	/**
-	 * Creates a GlassPanel based the specified element. If not null,
-	 * <code>bodyStyleName</code> will applied to the body element for the
-	 * duration that the GlassPanel is visible.
-	 * 
-	 * @param element an element
-	 * @param bodyStyleName a CSS class name, or <code>null</code>
-	 */
-	public GlassPanel(Element element, String bodyStyleName)
-	{
-		super(element);
+		super();
 		m_bodyStyleName = bodyStyleName;
 		setStyleName("tk-GlassPanel");
 	}
@@ -139,8 +113,9 @@ public class GlassPanel extends CComplexPanel
 	 */
 	protected List createControllers()
 	{
-		List result = new Vector();
+		List result = new ArrayList();
 		result.add(GWT.create(GlassPanelController.class));
+		result.add(new GlassPanelBodyStyleController());
 		return result;
 	}
 	
@@ -166,46 +141,40 @@ public class GlassPanel extends CComplexPanel
 		m_bodyStyleName = bodyStyleName;
 	}
 	
-	/*
-	 *  (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.HasWidgets#add(com.google.gwt.user.client.ui.Widget)
+	/**
+	 * Sets the single widget in the panel. (GlassPanel no longer supports
+	 * multiple widgets)
+	 * 
+	 * @deprecated use {@link #setWidget(Widget)}
 	 */
 	public void add(Widget w)
 	{
-		add(w, getElement());
+		super.setWidget(w);
 	}
 	
-	/**
-	 * Positions the GlassPanel, then makes it visible by appending it to the
-	 * RootPanel. 
-	 */
-	public void show()
+	public static class GlassPanelBodyStyleController extends ControllerAdaptor
 	{
-		if (m_bodyStyleName != null)
+		public GlassPanelBodyStyleController()
 		{
-			RootPanel.get().addStyleName(m_bodyStyleName);
+			super(GlassPanelBodyStyleController.class);
 		}
-		/*
-		 * Need to set the position to (0,0) first, so that the panel itself does 
-		 * not alter document size measurements made later. 
-		 */ 
-		DomUtil.setStyleAttribute(this, "position", "absolute");
-		DomUtil.setStyleAttribute(this, "left", "0px");
-		DomUtil.setStyleAttribute(this, "top", "0px");
-		RootPanel.get().add(this);
-		m_impl.onShow(getElement());
-	}
-	
-	/**
-	 * Hides the GlassPanel by detaching it from the RootPanel.
-	 */
-	public void hide()
-	{
-		m_impl.onHide(getElement());
-		RootPanel.get().remove(this);
-		if (m_bodyStyleName != null)
+		
+		public void plugIn(Widget widget)
 		{
-			RootPanel.get().removeStyleName(m_bodyStyleName);
+			String bodyStyle = ((GlassPanel) widget).getBodyStyleName();
+			if (bodyStyle != null)
+			{
+				RootPanel.get().addStyleName(bodyStyle);
+			}
+		}
+		
+		public void unplug(Widget widget)
+		{
+			String bodyStyle = ((GlassPanel) widget).getBodyStyleName();
+			if (bodyStyle != null)
+			{
+				RootPanel.get().removeStyleName(bodyStyle);
+			}
 		}
 	}
 }

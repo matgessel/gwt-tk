@@ -15,19 +15,15 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
-import java.util.Vector;
+import java.util.*;
 
-import asquare.gwt.debug.client.Debug;
-import asquare.gwt.debug.client.DebugConsole;
-import asquare.gwt.debug.client.DebugEventListener;
-import asquare.gwt.tk.client.ui.BasicPanel;
-import asquare.gwt.tk.client.ui.ColumnPanel;
-import asquare.gwt.tk.client.ui.RowPanel;
-import asquare.gwt.tk.client.util.DomUtil;
+import asquare.gwt.debug.client.*;
+import asquare.gwt.tk.client.ui.*;
+import asquare.gwt.tk.client.util.*;
 
-import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.google.gwt.user.client.ui.FlexTable.*;
 
 public class DebugPanel extends Composite
 {
@@ -153,25 +149,25 @@ public class DebugPanel extends Composite
 	
 	private static class EventToMask
 	{
-		public final String m_event;
-		public final int m_mask;
+		public final String m_eventString;
+		public final int m_eventMask;
 		
-		public EventToMask(String event, int mask)
+		public EventToMask(String eventString, int eventMask)
 		{
-			m_event = event;
-			m_mask = mask;
+			m_eventString = eventString;
+			m_eventMask = eventMask;
 		}
 
-		public boolean equals(Object obj)
-		{
-			return m_event.equals(obj);
-		}
+        public String toString()
+        {
+            return m_eventString;
+        }
 	}
 	
 	private Widget createCheckBoxes()
 	{
 		// can't use HashMap because it does not preserve order
-		final Vector eventToMask = new Vector();
+		final ArrayList eventToMask = new ArrayList();
 		eventToMask.add(new EventToMask("onfocus", Event.ONFOCUS));
 		eventToMask.add(new EventToMask("onblur", Event.ONBLUR));
 		eventToMask.add(new EventToMask("onchange", Event.ONCHANGE));
@@ -193,15 +189,25 @@ public class DebugPanel extends Composite
 			public void onClick(Widget sender)
 			{
 				CheckBox cb = (CheckBox) sender;
-				EventToMask mapping = (EventToMask) eventToMask.get(eventToMask.indexOf(cb.getText()));
+				String eventText = cb.getText();
+                EventToMask mapping = null;
+                for (int i = 0, size = eventToMask.size(); i < size; i++)
+                {
+                    EventToMask candidate = (EventToMask) eventToMask.get(i);
+                    if (candidate.m_eventString.equals(eventText))
+                    {
+                        mapping = candidate;
+                        break;
+                    }
+                }
 				int traceEventMask = m_eventListener.getEventMask();
 				if (cb.isChecked())
 				{
-					traceEventMask |= mapping.m_mask;
+					traceEventMask |= mapping.m_eventMask;
 				}
 				else
 				{
-					traceEventMask &= ~mapping.m_mask;
+					traceEventMask &= ~mapping.m_eventMask;
 				}
 				m_eventListener.setEventMask(traceEventMask);
 			}
@@ -215,7 +221,7 @@ public class DebugPanel extends Composite
 				panel.addCell();
 			}
 			EventToMask mapping = (EventToMask) eventToMask.get(i);
-			addCheckBox(panel, mapping.m_event, mapping.m_mask, checkBoxController);
+			addCheckBox(panel, mapping.m_eventString, mapping.m_eventMask, checkBoxController);
 		}
 		
 		return panel;
@@ -246,15 +252,29 @@ public class DebugPanel extends Composite
 		widgets.add(listBox);
 		
 		TreeItem treeRoot = new TreeItem("Tree");
-		TreeItem treeItem = new TreeItem("foo");
+		final TreeItem treeItem = new TreeItem("foo");
 		treeRoot.addItem(treeItem);
 		treeRoot.addItem("bar");
 		treeRoot.addItem("baz");
-		Tree tree = new Tree();
+		final Tree tree = new Tree();
 		tree.addItem(treeRoot);
-		tree.setSelectedItem(treeItem);
-		tree.ensureSelectedItemVisible();
-		widgets.add(tree);
+		/*
+         * This crashes the hosted shell
+         * http://code.google.com/p/google-web-toolkit/issues/detail?id=1785
+		 */
+//        /*
+//         * Defer selection so that Tree does not break Opera
+//         * http://code.google.com/p/google-web-toolkit/issues/detail?id=1784
+//		 */
+//        DeferredCommand.addCommand(new Command()
+//        {
+//            public void execute()
+//            {
+//                tree.setSelectedItem(treeItem);
+//                tree.ensureSelectedItemVisible();
+//            }
+//        });
+        widgets.add(tree);
 		
 		Image image = new Image("icecube.jpg");
 		ScrollPanel scrollPanel = new ScrollPanel(image);

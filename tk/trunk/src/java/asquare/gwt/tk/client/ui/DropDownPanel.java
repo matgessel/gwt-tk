@@ -15,9 +15,9 @@
  */
 package asquare.gwt.tk.client.ui;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
@@ -56,7 +56,7 @@ public class DropDownPanel extends CComplexPanel
 	public static final String PROPERTY_OPEN = "DropDownPanel-open";
 	public static final String PROPERTY_INTERACTIVE = "DropDownPanel-interactive";
 	
-	private final Vector m_listeners = new Vector();
+	private final ArrayList m_listeners = new ArrayList();
 	private final Element m_contentDiv;
 	private HTML m_header = null;
 	private boolean m_interactive = true;
@@ -103,7 +103,7 @@ public class DropDownPanel extends CComplexPanel
 	
 	protected List createHeaderControllers()
 	{
-		List result = new Vector();
+		List result = new ArrayList();
 		result.add(new OpenerController(this));
 		result.add(PreventSelectionController.getInstance());
 		return result;
@@ -165,8 +165,7 @@ public class DropDownPanel extends CComplexPanel
 				m_header = new HTML();
 				m_header.setStyleName("tk-DropDownPanelHeader");
 				CWrapper headerWrapper = new CWrapper(m_header, createHeaderControllers());
-				super.add(headerWrapper, null);
-				DOM.insertChild(getElement(), headerWrapper.getElement(), 0);
+				insert(headerWrapper, getElement(), 0, true);
 			}
 			if (asHTML)
 			{
@@ -275,7 +274,7 @@ public class DropDownPanel extends CComplexPanel
 		
 		public OpenerController(DropDownPanel dd)
 		{
-			super(Event.ONCLICK, OpenerController.class);
+			super(OpenerController.class, Event.ONCLICK);
 			m_dd = dd;
 		}
 		

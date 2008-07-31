@@ -15,10 +15,11 @@
  */
 package asquare.gwt.tk.uitest.popuppanel.client;
 
-import com.google.gwt.user.client.DOM;
+import asquare.gwt.tk.client.ui.CWindow;
+
 import com.google.gwt.user.client.ui.Widget;
 
-public class BasicToolTip extends AbsolutePositionPanel implements ToolTipModel
+public class BasicToolTip extends CWindow implements ToolTipModel
 {
 	private final ToolTipRenderer m_renderer;
 	
@@ -35,7 +36,6 @@ public class BasicToolTip extends AbsolutePositionPanel implements ToolTipModel
 	
 	public BasicToolTip(ToolTipRenderer renderer)
 	{
-		super(DOM.createDiv());
 		m_renderer = renderer;
 		setStyleName("popup");
 	}
@@ -75,7 +75,7 @@ public class BasicToolTip extends AbsolutePositionPanel implements ToolTipModel
 		{
 			if (m_toolTipWidget != null)
 			{
-				clear();
+				setWidget(null);
 				m_renderer.render(this, this);
 				show();
 			}

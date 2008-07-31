@@ -15,23 +15,32 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
+import java.util.ArrayList;
 
-public class ListUpdateController implements ModelListener
+import asquare.gwt.sb.client.fw.ListModelEvent.*;
+import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
+import asquare.gwt.sb.client.util.*;
+
+public class ListUpdateController implements ListModelListener
 {
+	private final ListModel m_model;
 	private final ListView m_view;
+	private final ArrayList m_styleProperties = new ArrayList();
+	private final ArrayList m_contentProperties = new ArrayList();
 	
 	public ListUpdateController(ListModel model, ListView view)
 	{
+		m_model = model;
 		m_view = view;
-		model.addListener(this);
-		
-		// populate view if model is not empty
-		int changeEnd = model.getSize() - 1;
-		if (changeEnd > -1)
-		{
-			modelChanged(model, 0, changeEnd);
-		}
+		m_contentProperties.add(ListModel.ITEM_PROPERTY_VALUE);
+		m_styleProperties.add(ListModel.ITEM_PROPERTY_HOVER);
+		m_styleProperties.add(ListModel.ITEM_PROPERTY_SELECTION);
+		init();
+	}
+	
+	protected ListModel getModel()
+	{
+		return m_model;
 	}
 	
 	protected ListView getView()
@@ -39,49 +48,238 @@ public class ListUpdateController implements ModelListener
 		return m_view;
 	}
 	
-	public void modelChanged(ModelChangeEvent e)
+	public void addStylePropertyChange(String propertyName)
 	{
-		IndexedModelEvent lme = (IndexedModelEvent) e;
-		modelChanged((ListModel) lme.getSource(), lme.getBeginInterval(), lme.getEndInterval());
+		if (propertyName == null)
+			throw new IllegalArgumentException();
+		
+		m_styleProperties.add(propertyName);
 	}
 	
-	private void modelChanged(ListModel model, int changeStart, int changeEnd)
+	public void removeStylePropertyChange(String propertyName)
+	{
+		if (propertyName == null)
+			throw new IllegalArgumentException();
+		
+		m_styleProperties.remove(propertyName);
+	}
+	
+	public void addContentPropertyChange(String propertyName)
+	{
+		if (propertyName == null)
+			throw new IllegalArgumentException();
+		
+		m_contentProperties.add(propertyName);
+	}
+	
+	public void removeContentPropertyChange(String propertyName)
+	{
+		if (propertyName == null)
+			throw new IllegalArgumentException();
+		
+		m_contentProperties.remove(propertyName);
+	}
+	
+	private void init()
+	{
+		m_model.addListener(this);
+		initializeView();
+	}
+	
+	public void dispose()
+	{
+		m_model.removeListener(this);
+	}
+	
+	protected void initializeView()
+	{
+		int size = m_model.getSize();
+		if (size > 0)
+		{
+			Properties tempProperties = new Properties();
+			IndexedCellId cellId = new IndexedCellIdImpl();
+			for (int index = 0; index < size; index++)
+			{
+				cellId.setIndex(index);
+				m_view.insert(cellId, m_model.get(index), configureCellProperties(index, m_model, tempProperties));
+			}
+		}
+	}
+	
+	public void modelChanged(ListModelEvent event)
 	{
 		Properties tempProperties = new Properties();
-		int newSize = model.getSize();
-		int oldSize = m_view.getSize();
+		IntRangeCollection renderStyleItems = new IntRangeCollection();
+		IntRangeCollection renderContentItems = new IntRangeCollection();
 		
-		// ensure view has enough items
-		for (int i = oldSize; i < newSize; i++)
+		for (int i = 0, size = event.getChangeCount(); i < size; i++)
 		{
-			m_view.insert(i, model.get(i), configureCellProperties(i, model, tempProperties));
+			processChange(event.getChangeAt(i), tempProperties, renderStyleItems, renderContentItems);
 		}
 		
-		// remove extra view items
-		for (int i = oldSize - 1; i >= newSize; i--)
+		IntRangeCollection removedItems = new IntRangeCollection();
+		for (int i = 0, size = event.getChangeCount(); i < size; i++)
 		{
-			m_view.remove(i);
+			ChangeBase change = event.getChangeAt(i);
+			if (change instanceof ListChangeItemRemoval)
+			{
+				ListChangeItemRemoval removal = (ListChangeItemRemoval) change;
+				removedItems.add(removal.getIndex(), removal.getCount());
+			}
 		}
 		
-		/*
-		 * Re-render previously existing view items. 
-		 * Don't render items that were just inserted. 
-		 * Don't render items that were removed. 
-		 */
-		for (int i = changeStart; i < oldSize && i < newSize && i < changeEnd + 1; i++)
+		IndexedCellId tempCellId = new IndexedCellIdImpl();
+		for (int i = 0, size = renderStyleItems.getSize(); i < size; i++)
 		{
-			m_view.renderCell(i, model.get(i), configureCellProperties(i, model, tempProperties));
+			Range range = renderStyleItems.get(i);
+			for (int index = range.getStartIndex(), terminus = index + range.getLength(); index < terminus; index++)
+			{
+				// TODO: add exclusion method to RangeCollection
+				if (! removedItems.contains(index, 1))
+				{
+					m_view.prepareElement(tempCellId.setIndex(index), m_model.get(index), configureCellProperties(index, m_model, tempProperties));
+				}
+			}
+		}
+		for (int i = 0, size = renderContentItems.getSize(); i < size; i++)
+		{
+			Range range = renderContentItems.get(i);
+			for (int index = range.getStartIndex(), terminus = index + range.getLength(); index < terminus; index++)
+			{
+				if (! removedItems.contains(index, 1))
+				{
+					m_view.renderContent(tempCellId.setIndex(index), m_model.get(index), configureCellProperties(index, m_model, tempProperties));
+				}
+			}
+		}
+	}
+	
+	protected void processChange(ChangeBase change, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	{
+		if (change instanceof IndexedChangeBase)
+		{
+			processListChange((IndexedChangeBase) change, tempProperties, renderStyleItems, renderContentItems);
+		}
+	}
+	
+	protected void processListChange(IndexedChangeBase listChange, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	{
+		if (listChange instanceof ListChangeItemInsertion)
+		{
+			ListChangeItemInsertion itemInsertion = (ListChangeItemInsertion) listChange;
+			IndexedCellId cellId = new IndexedCellIdImpl();
+			for (int index = itemInsertion.getIndex(), terminus = index + itemInsertion.getCount(); index < terminus; index++)
+			{
+				cellId.setIndex(index);
+				configureCellProperties(index, m_model, tempProperties);
+				m_view.insert(cellId, m_model.get(index), tempProperties);
+			}
+		}
+		else if (listChange instanceof ListChangeItemRemoval)
+		{
+			ListChangeItemRemoval itemRemoval = (ListChangeItemRemoval) listChange;
+			IndexedCellId cellId = new IndexedCellIdImpl();
+			for (int first = itemRemoval.getIndex(), index = first + itemRemoval.getCount() - 1; index >= first; index--)
+			{
+				cellId.setIndex(index);
+				m_view.remove(cellId);
+			}
+		}
+		else if (listChange instanceof ListItemPropertyChange)
+		{
+			processItemPropertyChange((ListItemPropertyChange) listChange, tempProperties, renderStyleItems, renderContentItems);
+		}
+	}
+	
+	protected void processItemPropertyChange(ListItemPropertyChange itemPropertyChange, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	{
+		int index = itemPropertyChange.getIndex();
+		int count = itemPropertyChange.getCount();
+		if (m_styleProperties.contains(itemPropertyChange.getName()))
+		{
+			renderStyleItems.add(index, count);
+		}
+		if (m_contentProperties.contains(itemPropertyChange.getName()))
+		{
+			renderContentItems.add(index, count);
 		}
 	}
 	
 	protected Properties configureCellProperties(int index, ListModel model, Properties properties)
 	{
-		properties.set(CellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index));
-		properties.set(CellRenderer.PROPERTY_HOVER, model.isIndexHovering(index));
-		properties.set(CellRenderer.PROPERTY_DISABLED, model.isIndexDisabled(index));
-		properties.set(CellRenderer.PROPERTY_FIRST, index == 0);
-		properties.set(CellRenderer.PROPERTY_LAST, index == model.getSize() - 1);
-		properties.set(CellRenderer.PROPERTY_INDEX, index);
+		int hoverIndex = model.getHoverCell() != null ? ((IndexedCellId) model.getHoverCell()).getIndex() : -1;
+		boolean odd = (index + 1) % 2 == 1; // index 0 = first item = odd
+		properties.set(ListCellRenderer.PROPERTY_HOVER_INDEX, hoverIndex);
+		properties.set(ListCellRenderer.PROPERTY_HOVER, hoverIndex == index);
+		properties.set(ListCellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index));
+		properties.set(ListCellRenderer.PROPERTY_DISABLED, ! model.isIndexEnabled(index));
+		properties.set(ListCellRenderer.PROPERTY_FIRST, index == 0);
+		properties.set(ListCellRenderer.PROPERTY_LAST, index == model.getSize() - 1);
+		properties.set(ListCellRenderer.PROPERTY_INDEX, index);
+		properties.set(ListCellRenderer.PROPERTY_ODD, odd);
+		properties.set(ListCellRenderer.PROPERTY_EVEN, ! odd);
 		return properties;
 	}
+	
+//	public void modelChanged(ListModelEvent event)
+//	{
+//		int first = -1;
+//		int last = -1;
+//		for (int i = 0, size = event.getChangeCount(); i < size; i++)
+//		{
+//			ChangeBase change = event.getChangeAt(i);
+//			
+//			// instanceof is very fast in GWT
+//			if (change instanceof ListChangeBase)
+//			{
+//				ListChangeBase listChange = (ListChangeBase) change;
+//				if (first == -1)
+//				{
+//					first = listChange.getIndex();
+//					last = listChange.getLastIndex();
+//				}
+//				else
+//				{
+//					first = Math.min(first, listChange.getIndex());
+//					last = Math.max(last, listChange.getLastIndex());
+//				}
+//			}
+//		}
+//		
+//		if (first != -1)
+//		{
+//			modelChanged(event.getListModel(), m_view, first, last);
+//		}
+//	}
+//	
+//	private void modelChanged(ListModel model, ListView view, int changeStart, int changeEnd)
+//	{
+//		Properties tempProperties = new Properties();
+//		int newSize = model.getSize();
+//		int oldSize = m_view.getSize();
+//		
+//		// ensure view has enough items
+//		for (int i = oldSize; i < newSize; i++)
+//		{
+//			m_view.insert(i, model.get(i), configureCellProperties(i, model, tempProperties));
+//		}
+//		
+//		// remove extra view items
+//		for (int i = oldSize - 1; i >= newSize; i--)
+//		{
+//			m_view.remove(i);
+//		}
+//		
+//		/*
+//		 * Re-render previously existing view items. 
+//		 * Don't render items that were just inserted. 
+//		 * Don't render items that were removed. 
+//		 */
+//		IndexedCellId cellId = new IndexedCellId();
+//		for (int i = changeStart; i < oldSize && i < newSize && i < changeEnd + 1; i++)
+//		{
+//			cellId.setIndex(i);
+//			m_view.renderCell(cellId, model.get(i), configureCellProperties(i, model, tempProperties));
+//		}
+//	}
 }

@@ -24,12 +24,12 @@ public abstract interface DragGesture
 	 * Called at beginning of the input operation. This may be triggered by a
 	 * mousedown, or may be triggered by a hotkey during the middle of a drag.
 	 */
-	void start(MouseEvent event);
+	void start(MouseEvent e);
 	
 	/**
 	 * Called for each mouse movement during the input operation.
 	 */
-	void step(DragEvent event);
+	void step(DragEvent e);
 	
 	/**
 	 * Called at the end of the input operation, after the last movement. This

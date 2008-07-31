@@ -39,13 +39,13 @@ import com.google.gwt.user.client.ui.Widget;
  * <ul>
  * <li>controllers should only be notified of events which are declared by 
  * {@link asquare.gwt.tk.client.ui.behavior.EventDelegate#getEventBits() getEventBits()}</li>
- * <li>controller notification order indeterminate</li>
+ * <li>controller notification order is indeterminate</li>
  * <li>controllers instantiated via deferred binding must have a default
  * constructor</li>
  * <li>stateless controllers can be shared</li>
  * </ul>
  */
-public interface Controller extends EventDelegate
+public interface Controller extends BrowserEventHandler, PluggableEventHandler
 {
 	/**
 	 * Get the id of this controller. Used for looking up a controller in a
@@ -54,20 +54,4 @@ public interface Controller extends EventDelegate
 	 * return the class of the interface or base class.
 	 */
 	public Class getId();
-
-	/**
-	 * Called when the widget is attached to the DOM. Use to initialize widget,
-	 * install special hooks and attach listeners. 
-	 * 
-	 * @param widget the view to control
-	 */
-	void plugIn(Widget widget);
-	
-	/**
-	 * Called when the widget is detached from the DOM. Use to remove listeners
-	 * and null out any references set on the DOM.
-	 * 
-	 * @param widget
-	 */
-	void unplug(Widget widget);
 }

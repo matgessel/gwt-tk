@@ -15,12 +15,9 @@
  */
 package asquare.gwt.tkdemo.client.ui;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
-
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 /**
  * A collection which associates each added widget to a history token and a
@@ -28,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class AppPanelCollection
 {
-	private final Vector m_entries = new Vector();
+	private final ArrayList m_entries = new ArrayList();
 	
 	public void add(String primaryToken, String uiString, WidgetProvider tabBody)
 	{

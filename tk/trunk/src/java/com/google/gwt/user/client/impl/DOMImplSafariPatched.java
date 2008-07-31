@@ -15,8 +15,6 @@
  */
 package com.google.gwt.user.client.impl;
 
-import com.google.gwt.user.client.DOMExtenstion;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 
 /**
@@ -25,52 +23,6 @@ import com.google.gwt.user.client.Event;
 class DOMImplSafariPatched extends DOMImplSafari
 {
 	private static final boolean VERSION2 = isSafari2();
-	
-	public native int getAbsoluteLeft(Element element) /*-{
-		var absolutelyPositioned = element.style.position == 'absolute';
-		var left = 0;
-		var parent = element.offsetParent;
-		while (parent && ! (absolutelyPositioned && parent == $doc.body))
-		{
-			left += element.offsetLeft - element.scrollLeft;
-			element = parent;
-			parent = element.offsetParent;
-		}
-		left += element.offsetLeft; // this may not be necessary; can the documentElement have a margin?
-		return left;
-	}-*/;
-	
-	public native int getAbsoluteTop(Element element) /*-{
-		var absolutelyPositioned = element.style.position == 'absolute';
-		var top = 0;
-		var parent = element.offsetParent;
-		while (parent && ! (absolutelyPositioned && parent == $doc.body))
-		{
-			top += element.offsetTop - element.scrollTop;
-			element = parent;
-			parent = element.offsetParent;
-		}
-		top += element.offsetTop; // this may not be necessary; can the documentElement have a margin?
-		return top;
-	}-*/;
-
-	public int eventGetClientX(Event evt)
-	{
-		return eventGetClientX0(evt) - DOMExtenstion.getViewportScrollX();
-	}
-
-	private native int eventGetClientX0(Event evt) /*-{
-		return evt.clientX;
-	}-*/;
-
-	public int eventGetClientY(Event evt)
-	{
-		return eventGetClientY0(evt) - DOMExtenstion.getViewportScrollY();
-	}
-
-	private native int eventGetClientY0(Event evt) /*-{
-		return evt.clientY;
-	}-*/;
 	
 	public native int eventGetButton(Event evt) /*-{
 		var button = evt.button;

@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface ListSelectionModel
+public interface ListSelectionModel extends SourcesModelChangeEventComplex
 {
 	/**
 	 * Add a listener to be notified when indexes are added or removed from this
@@ -72,8 +72,8 @@ public interface ListSelectionModel
 	 * less than or equal to <code>from</code>.
 	 * <p>
 	 * The meaning of <code>from</code> and <code>to</code> will vary by
-	 * implementation. Generally, <code>to</code> is associated with the user
-	 * click and is the value used for single selection mode.
+	 * implementation. Generally, <code>to</code> is associated with the mouse
+	 * up and is the value used for single selection mode.
 	 */
 	void addSelectionRange(int from, int to);
 	
@@ -82,8 +82,8 @@ public interface ListSelectionModel
 	 * may be less than or equal to <code>from</code>.
 	 * <p>
 	 * The meaning of <code>from</code> and <code>to</code> will vary by
-	 * implementation. Generally, <code>to</code> is associated with the user
-	 * click and is the value used for single selection mode.
+	 * implementation. Generally, <code>to</code> is associated with the mouse
+	 * up and is the value used for single selection mode.
 	 */
 	void removeSelectionRange(int from, int to);
 	
@@ -92,8 +92,8 @@ public interface ListSelectionModel
 	 * <code>to</code> may be less than or equal to <code>from</code>.
 	 * <p>
 	 * The meaning of <code>from</code> and <code>to</code> will vary by
-	 * implementation. Generally, <code>to</code> is associated with the user
-	 * click and is the value used for single selection mode.
+	 * implementation. Generally, <code>to</code> is associated with the mouse
+	 * up and is the value used for single selection mode.
 	 */
 	void setSelectionRange(int from, int to);
 	
@@ -101,4 +101,26 @@ public interface ListSelectionModel
 	 * Removes all indexes from this model. Has no effect if the model is empty.
 	 */
 	void clearSelection();
+	
+	/**
+	 * Updates the selection model to reflect the insertion of a contiguous
+	 * range of items in the data model.
+	 * 
+	 * @param index the index items were inserted at
+	 * @param count the number of items inserted
+	 * @throws IndexOutOfBoundsException if <code>index < 0</code>
+	 * @throws IllegalArgumentException if <code>count <= 0</code>
+	 */
+	void adjustForItemsInserted(int index, int count);
+	
+	/**
+	 * Updates the selection model to reflect the removal of a contiguous range
+	 * of items in the data model.
+	 * 
+	 * @param index the index items were inserted at
+	 * @param count the number of items inserted
+	 * @throws IndexOutOfBoundsException if <code>index < 0</code>
+	 * @throws IllegalArgumentException if <code>count <= 0</code>
+	 */
+	void adjustForItemsRemoved(int index, int count);
 }

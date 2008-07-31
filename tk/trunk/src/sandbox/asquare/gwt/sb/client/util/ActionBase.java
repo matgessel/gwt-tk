@@ -18,6 +18,7 @@ package asquare.gwt.sb.client.util;
 import java.util.EventListener;
 
 import asquare.gwt.sb.client.fw.ModelChangeSupportLight;
+import asquare.gwt.tk.client.util.GwtUtil;
 
 public abstract class ActionBase extends UICommandBase implements Action
 {
@@ -71,19 +72,27 @@ public abstract class ActionBase extends UICommandBase implements Action
 	
 	public void setUiString(String uiString)
 	{
-		super.setUiString(uiString);
-		if (m_changeSupport != null)
-		{
-			m_changeSupport.setChanged();
-			m_changeSupport.update();
-		}
+		if (! GwtUtil.equals(getUIString(), uiString))
+        {
+            super.setUiString(uiString);
+            if (m_changeSupport != null)
+            {
+                m_changeSupport.setChanged();
+                m_changeSupport.update();
+            }
+        }
 	}
 	
 	private class ChangeSupport extends ModelChangeSupportLight
 	{
-		protected void notifyListener(EventListener listener)
+		public ChangeSupport()
 		{
-			((ActionPropertyListener) listener).actionPropertiesChanged(ActionBase.this);
+			super(ActionBase.this);
+		}
+		
+		protected void notifyListener(Object source, EventListener listener)
+		{
+			((ActionPropertyListener) listener).actionPropertiesChanged((ActionBase) source);
 		}
 	}
 }

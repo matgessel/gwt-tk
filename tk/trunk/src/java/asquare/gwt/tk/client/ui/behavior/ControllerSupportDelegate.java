@@ -15,8 +15,8 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -88,11 +88,14 @@ public class ControllerSupportDelegate
 	
 	public Controller getController(Class id)
 	{
-		for (int i = 0, size = m_controllers.size(); i < size; i++)
+		if (m_controllers != null)
 		{
-			if (((Controller) m_controllers.get(i)).getId() == id)
+			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
-				return (Controller) m_controllers.get(i);
+				if (((Controller) m_controllers.get(i)).getId() == id)
+				{
+					return (Controller) m_controllers.get(i);
+				}
 			}
 		}
 		return null;
@@ -108,7 +111,7 @@ public class ControllerSupportDelegate
 		
 		if (m_controllers == null)
 		{
-			m_controllers = new Vector();
+			m_controllers = new ArrayList();
 		}
 		m_controllers.add(controller);
 		DOM.sinkEvents(m_widget.getElement(), 
@@ -121,10 +124,14 @@ public class ControllerSupportDelegate
 	}
 	
 	/**
+	 * @throws IllegalArgumentException if <code>controller</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>controller</code> is not present
 	 */
 	public Widget removeController(Controller controller)
 	{
+		if (controller == null)
+			throw new IllegalArgumentException();
+		
 		int index = -1;
 		if (m_controllers != null)
 		{
@@ -149,23 +156,19 @@ public class ControllerSupportDelegate
 		{
 			unplugControllers();
 		}
-		
 		m_controllers = null;
-		
 		if (controllers != null)
 		{
-			m_controllers = new Vector();
+			m_controllers = new ArrayList();
 			for (int i = 0, size = controllers.size(); i < size; i++)
 			{
 				m_controllers.add((Controller) controllers.get(i));
 			}
+			if (m_widget.isAttached())
+			{
+				plugInControllers();
+			}
 		}
-		
-		if (m_widget.isAttached())
-		{
-			plugInControllers();
-		}
-		
 		sinkAllBits();
 	}
 	
@@ -203,17 +206,49 @@ public class ControllerSupportDelegate
 	
 	public void onBrowserEvent(Event event)
 	{
+		/*
+		 * Avoid processing the same event twice (issue with the GWT dispatcher). 
+		 * If you sink events on a child, but do not set a listener (as in the case of UIObjects), 
+		 * the following will happen:
+		 *
+		 * 1) child element's onXXX event handler is invoked
+		 * 2) $wnd.__dispatchEvent() is called with the event and child element
+		 * 3) this crawls up the heirarchy until it finds a GWT event listener (i.e. CComposite)
+		 * 4) CComposite.onBrowserEvent() is called (e.target = child, e.currentTarget = child)
+		 * 5) the event bubbles up to the parent element
+		 * 6) parent element's onXXX event handler is invoked
+		 * 7) $wnd.__dispatchEvent() is called with the event and the parent element
+		 * 8) CComposite.onBrowserEvent() is called (e.target = child, e.currentTarget = parent)
+		 * 
+		 * @see DOMImplStandard#init()
+		 * @see Tree#onBrowserEvent(Event)
+		 * 
+		 * Note: don't test current target when capturing. DOM.eventGetCurrentTarget() returns $wnd 
+		 * when capturing in Firefox and $wnd.equals() blows up. 
+		 * @see http://groups.google.com/group/Google-Web-Toolkit-Contributors/browse_thread/thread/41f12a9def68f97a
+		 * 
+		 * Note: eventGetCurrentTarget(event) is wrong in FocusImplOld (Safari, old Mozilla, Opera)--it returns the 
+		 * nested INPUT. Focus events don't bubble anyway, so bypass the check in this case. Bleh. 
+		 */
 		if (m_controllers != null)
 		{
 			int eventType = DOM.eventGetType(event);
-			for (int i = 0, size = m_controllers.size(); i < size; i++)
+			if (DOM.getCaptureElement() != null || (eventType & Event.FOCUSEVENTS) != 0 || DOM.eventGetCurrentTarget(event).equals(m_widget.getElement()))
 			{
-				Controller controller = (Controller) m_controllers.get(i);
-				if ((controller.getEventBits() & eventType) != 0)
+				for (int i = 0, size = m_controllers.size(); i < size; i++)
 				{
-					controller.onBrowserEvent(m_widget, event);
+					Controller controller = (Controller) m_controllers.get(i);
+					if ((controller.getEventBits() & eventType) != 0)
+					{
+						controller.onBrowserEvent(m_widget, event);
+					}
 				}
 			}
 		}
+	}
+	
+	public String toString()
+	{
+		return m_controllers.toString();
 	}
 }

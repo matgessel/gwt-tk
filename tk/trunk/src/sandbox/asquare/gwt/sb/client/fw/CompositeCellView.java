@@ -15,6 +15,8 @@
  */
 package asquare.gwt.sb.client.fw;
 
+import asquare.gwt.sb.client.util.Properties;
+
 import com.google.gwt.user.client.Element;
 
 /**
@@ -22,5 +24,18 @@ import com.google.gwt.user.client.Element;
  */
 public interface CompositeCellView
 {
-	Element getCellRootElement(Element eventTarget);
+	CellRenderer getRenderer(CellId cellid);
+	
+	/**
+	 * TODO: consider renaming to something appropriate for hit testing / event
+	 * handling. Implementations often "new" a CellId to return, which is fine
+	 * in user time, but not in a tight loop.
+	 * 
+	 * @param eventTarget
+	 */
+	CellId getCellId(Element eventTarget);
+	
+	Element getCellRootElement(CellId cellId);
+
+	void renderCell(CellId cellId, Object item, Properties cellProperties);
 }

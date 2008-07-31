@@ -15,6 +15,7 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -24,7 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
  * or 
  * {@link asquare.gwt.tk.client.ui.behavior.EventDelegate#onBrowserEvent(Widget, Event) onBrowserEvent()}.
  */
-public abstract class ControllerAdaptor extends EventDelegateAdaptor implements Controller
+public abstract class ControllerAdaptor extends PluggableEventHandlerAdaptor implements Controller
 {
 	private final Class m_id;
 	
@@ -35,17 +36,26 @@ public abstract class ControllerAdaptor extends EventDelegateAdaptor implements 
 	 */
 	public ControllerAdaptor(Class id)
 	{
-		this(0, id);
+		this(id, 0);
+	}
+	
+	/**
+	 * @deprecated
+	 * @see #ControllerAdaptor(Class, int)
+	 */
+	public ControllerAdaptor(int eventBits, Class id)
+	{
+		this(id, eventBits);
 	}
 	
 	/**
 	 * Creates a ControllerAdaptor with the specified event mask and id.
 	 * 
+	 * @param id the controller id
 	 * @param eventBits a bitmask representing the events this controller is
 	 *            interested in
-	 * @param id the controller id
 	 */
-	public ControllerAdaptor(int eventBits, Class id)
+	public ControllerAdaptor(Class id, int eventBits)
 	{
 		super(eventBits);
 		m_id = id;
@@ -62,17 +72,25 @@ public abstract class ControllerAdaptor extends EventDelegateAdaptor implements 
 	
 	/*
 	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.Controller#plugIn(com.google.gwt.user.client.ui.Widget)
+	 * @see asquare.gwt.tk.client.ui.behavior.EventDelegate#onBrowserEvent(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Event)
 	 */
-	public void plugIn(Widget widget)
+	public void onBrowserEvent(Widget widget, Event event)
 	{
+		if (! doBrowserEvent(widget, event))
+		{
+			DOM.eventPreventDefault(event);
+			DOM.eventCancelBubble(event, true);
+		}
 	}
 	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.behavior.Controller#unplug(com.google.gwt.user.client.ui.Widget)
+	/**
+	 * A convenience method for processing events. The event is cancelled if the
+	 * return value is false.
+	 * 
+	 * @return false to cancel the event
 	 */
-	public void unplug(Widget widget)
+	protected boolean doBrowserEvent(Widget widget, Event event)
 	{
+		return true;
 	}
 }

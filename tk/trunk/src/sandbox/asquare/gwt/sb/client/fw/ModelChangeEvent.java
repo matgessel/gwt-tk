@@ -15,17 +15,27 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ModelChangeEvent extends Object
+import com.google.gwt.core.client.GWT;
+
+public class ModelChangeEvent
 {
 	private final Object m_source;
 	
 	public ModelChangeEvent(Object source)
 	{
+		if (source == null)
+			throw new IllegalArgumentException();
+		
 		m_source = source;
 	}
-
+	
 	public Object getSource()
 	{
 		return m_source;
+	}
+	
+	public String toString()
+	{
+		return GWT.getTypeName(this) + "[source=" + m_source + ']';
 	}
 }

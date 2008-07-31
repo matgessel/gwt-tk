@@ -124,6 +124,14 @@ public class DebugEventListener
 	}
 	
 	/**
+	 * Get the name of this tool
+	 */
+	public String getName()
+	{
+		return m_name;
+	}
+	
+	/**
 	 * Get the key used to enable processing of events. 
 	 * 
 	 * @return a unicode character code corresponding the key

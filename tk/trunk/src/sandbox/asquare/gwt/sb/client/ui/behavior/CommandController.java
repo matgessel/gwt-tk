@@ -27,7 +27,7 @@ public class CommandController extends ControllerAdaptor
     
     public CommandController(int eventBits, Command command)
     {
-        super(eventBits, CommandController.class);
+        super(CommandController.class, eventBits);
         m_command = command;
     }
     

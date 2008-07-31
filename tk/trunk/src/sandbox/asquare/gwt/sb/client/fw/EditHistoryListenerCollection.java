@@ -15,10 +15,12 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-public class EditHistoryListenerCollection extends Vector
+public class EditHistoryListenerCollection extends ArrayList
 {
+	private static final long serialVersionUID = -8965877059437741858L;
+
 	public void addListener(EditHistoryListener listener)
 	{
 		add(listener);

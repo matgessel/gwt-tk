@@ -20,50 +20,71 @@ import asquare.gwt.tk.client.util.DomUtil;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 
-public class MousePerformanceFilter extends MouseHandlerWrapper
+public class MousePerformanceFilter extends EventController
 {
 	private static final MoveStrategy s_defaultImpl = (MoveStrategy) GWT.create(MoveStrategy.class);
 	
-	private MoveStrategy m_MoveStrategy = s_defaultImpl;
+	private MoveStrategy m_moveStrategy = s_defaultImpl;
 	
-	public MousePerformanceFilter(MouseHandler delegate)
+	public MousePerformanceFilter(EventHandler handler)
 	{
-		super(delegate);
+		this(0, handler);
+	}
+	
+	public MousePerformanceFilter(int eventBits)
+	{
+		this(eventBits, null);
+	}
+	
+	/**
+	 * @param eventBits additional events to sink, or to use the event bits
+	 *            <code>0</code> from the handlers
+	 * @param handler an PluggableEventHandler or <code>null</code>
+	 */
+	public MousePerformanceFilter(int eventBits, EventHandler handler)
+	{
+		super(MousePerformanceFilter.class, eventBits, handler);
 	}
 	
 	public MoveStrategy getMoveStrategy()
 	{
-		return m_MoveStrategy;
+		return m_moveStrategy;
 	}
 
 	public void setMoveStrategy(MoveStrategy impl)
 	{
-		m_MoveStrategy = impl;
+		m_moveStrategy = impl;
 	}
 	
-	public void onMouseMove(MouseEvent e)
+	public void processMouseMove(MouseEvent e)
 	{
-		getMoveStrategy().step(getDelegate(), e);
+		// NO SUPER
+		getMoveStrategy().step(this, e);
 	}
 	
-    public void onMouseUp(MouseEvent e)
+	private void superProcessMouseMove(MouseEvent e)
+	{
+		super.processMouseMove(e);
+	}
+	
+    public void processMouseUp(MouseEvent e)
     {
         getMoveStrategy().finish();
-    	super.onMouseUp(e);
+    	super.processMouseUp(e);
     }
-	
+    
 	public static abstract class MoveStrategy
 	{
-		protected abstract void step(MouseHandler handler, MouseEvent e);
+		protected abstract void step(MousePerformanceFilter handler, MouseEvent e);
 		
 		protected abstract void finish();
 	}
 	
 	public static class MoveStrategyImmediate extends MoveStrategy
 	{
-		protected void step(MouseHandler handler, MouseEvent e)
+		protected void step(MousePerformanceFilter handler, MouseEvent e)
 		{
-			handler.onMouseMove(e);
+			handler.superProcessMouseMove(e);
 		}
 		
 		protected void finish()
@@ -78,7 +99,7 @@ public class MousePerformanceFilter extends MouseHandlerWrapper
 		 */
 		private StepTimer m_timer = null;
 		
-		protected void step(MouseHandler handler, MouseEvent moveEvent)
+		protected void step(MousePerformanceFilter handler, MouseEvent moveEvent)
 		{
 			if (m_timer != null)
 			{
@@ -102,13 +123,13 @@ public class MousePerformanceFilter extends MouseHandlerWrapper
 		
 		private class StepTimer extends Timer
 		{
-			private final MouseHandler m_handler;
+			private final MousePerformanceFilter m_handler;
 			
 			private MouseEvent m_moveEvent;
 			
-			public StepTimer(MouseHandler gesture, MouseEvent moveEvent)
+			public StepTimer(MousePerformanceFilter handler, MouseEvent moveEvent)
 			{
-				m_handler = gesture;
+				m_handler = handler;
 				update(moveEvent);
 			}
 			
@@ -120,7 +141,7 @@ public class MousePerformanceFilter extends MouseHandlerWrapper
 			public void run()
 			{
 				m_timer = null;
-				m_handler.onMouseMove(m_moveEvent);
+				m_handler.superProcessMouseMove(m_moveEvent);
 			}
 		}
 	}
@@ -141,7 +162,7 @@ public class MousePerformanceFilter extends MouseHandlerWrapper
 			}
 		}
 		
-		protected void step(MouseHandler handler, MouseEvent moveEvent)
+		protected void step(MousePerformanceFilter handler, MouseEvent moveEvent)
 		{
 			m_strategy.step(handler, moveEvent);
 		}

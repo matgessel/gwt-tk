@@ -15,6 +15,11 @@
  */
 package asquare.gwt.sb.client.util;
 
+/**
+ * TODO: shouldn't action get a refrence to it's caller? Useful for returning
+ * focus to a button after closing a dialog triggered by the action. Possibly
+ * refactory UICommand.execute() to receive source reference.
+ */
 public interface Action extends UICommand
 {
 	boolean isEnabled();

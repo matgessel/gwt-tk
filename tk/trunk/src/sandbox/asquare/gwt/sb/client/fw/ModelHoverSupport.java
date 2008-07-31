@@ -17,7 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 public interface ModelHoverSupport extends ExplicitUpdateModel
 {
-	boolean isIndexHovering(int index);
+	CellId getHoverCell();
 	
-	void setHoverIndex(int index);
+	void setHoverCell(CellId cellId);
 }

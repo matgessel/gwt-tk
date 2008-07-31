@@ -28,6 +28,7 @@ public class ActionButton extends Button implements ActionPropertyListener
 	
 	public ActionButton()
 	{
+		this(null);
 	}
 	
 	public ActionButton(Action action)
@@ -50,8 +51,26 @@ public class ActionButton extends Button implements ActionPropertyListener
 		if (m_action != null)
 		{
 			m_action.addListener(this);
-			actionPropertiesChanged(action);
 		}
+		updateState();
+	}
+	
+	private void updateState()
+	{
+		String text;
+		boolean enabled;
+		if (m_action != null)
+		{
+			text = m_action.getUIString();
+			enabled = m_action.isEnabled();
+		}
+		else
+		{
+			text = "";
+			enabled = false;
+		}
+		setText(text);
+		setEnabled(enabled);
 	}
 	
 	public void onBrowserEvent(Event event)
@@ -64,9 +83,8 @@ public class ActionButton extends Button implements ActionPropertyListener
 	}
 	
 	// ActionPropertyListener methods
-	public void actionPropertiesChanged(Action action)
+	public void actionPropertiesChanged(Action m_action)
 	{
-		setText(action.getUIString());
-		setEnabled(action.isEnabled());
+		updateState();
 	}
 }

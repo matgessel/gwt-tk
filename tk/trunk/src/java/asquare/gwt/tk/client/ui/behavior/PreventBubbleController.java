@@ -15,26 +15,45 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import java.util.HashMap;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
-
 public class PreventBubbleController extends ControllerAdaptor
 {
+	private static HashMap s_pool = new HashMap(); 
+	
 	private int m_eventBits;
 	
-	public PreventBubbleController()
+	protected PreventBubbleController()
 	{
 		this(0);
 	}
 	
-	public PreventBubbleController(int eventBits)
+	protected PreventBubbleController(int eventBits)
 	{
 		super(PreventBubbleController.class);
 		m_eventBits = eventBits;
+	}
+	
+	public static final PreventBubbleController getInstance(int eventBits)
+	{
+		String key = String.valueOf(eventBits);
+		PreventBubbleController result = (PreventBubbleController) s_pool.get(key);
+		if (result == null)
+		{
+			result = new PreventBubbleController(eventBits);
+			s_pool.put(key, result);
+		}
+		return result;
+	}
+	
+	public static final PreventBubbleController getMouseEventInstance()
+	{
+		return getInstance(Event.MOUSEEVENTS);
 	}
 	
 	public int getEventBits()
@@ -43,9 +62,9 @@ public class PreventBubbleController extends ControllerAdaptor
 	}
 	
 	/**
-	 * Supports creation via default constructor &amp; {@link GWT#create(Class)}.
-	 * <strong>Note: set event bits before attaching to a widget so that the
-	 * events will be sunk</strong>
+     * Supports creation via default constructor &amp; {@link GWT#create(Class)}. 
+     * <p><strong>Note: set event bits before attaching to a widget so that the
+     * events will be sunk</strong></p>
 	 * 
 	 * @param eventBits
 	 */

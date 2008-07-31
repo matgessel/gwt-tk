@@ -55,13 +55,15 @@ public class DebugConsole extends DialogBox
 	
 	private boolean m_initialized = false;
 	private boolean m_enabled = true;
+	private int m_left, m_top;
 	
 	/**
 	 * Creates the console, installs the enabler key listener. 
-	 * The console is not attached to the DOM yet. 
+	 * The console is not yet attached to the DOM. 
 	 */
 	protected DebugConsole()
 	{
+		super(false, false);
 		setStyleName("tk-DebugConsole");
 		DOM.setStyleAttribute(getElement(), "border", "solid black 1px");
 		DOM.setStyleAttribute(getElement(), "background", "white");
@@ -92,16 +94,16 @@ public class DebugConsole extends DialogBox
 		controls.add(controlsRight);
 		controls.setCellHorizontalAlignment(controlsRight, HorizontalPanel.ALIGN_RIGHT);
 		
-		final Button taggleDebugButton = new Button("Toggle&nbsp;Debug");
-		DOM.setAttribute(taggleDebugButton.getElement(), "title", "Toggles output of debug statements");
-		controlsLeft.add(taggleDebugButton);
+		final Button toggleDebugButton = new Button("Toggle&nbsp;Debug");
+		DOM.setElementProperty(toggleDebugButton.getElement(), "title", "Toggles output of debug statements");
+		controlsLeft.add(toggleDebugButton);
 		
 		updateDisableButtonText();
-		DOM.setAttribute(m_disableButton.getElement(), "title", "Prevents this console from appearing when debug statements are printed");
+		DOM.setElementProperty(m_disableButton.getElement(), "title", "Prevents this console from appearing when debug statements are printed");
 		controlsLeft.add(m_disableButton);
 		
 		final Button clearButton = new Button("Clear");
-		DOM.setAttribute(clearButton.getElement(), "title", "Clears all messages in the console");
+		DOM.setElementProperty(clearButton.getElement(), "title", "Clears all messages in the console");
 		controlsRight.add(clearButton);
 		
 		final Button hideButton = new Button("Hide");
@@ -109,9 +111,8 @@ public class DebugConsole extends DialogBox
 		controlsRight.add(hideButton);
 		
 		setWidget(outer);
-		int x = Window.getClientWidth() / 2 - 640 / 2;
-		int y = Window.getClientHeight() / 2;
-		setPopupPosition(x, y);
+		m_left = Window.getClientWidth() / 2 - 640 / 2;
+		m_top = Window.getClientHeight() / 2;
 		
 		m_enabler.install();
 		
@@ -131,7 +132,7 @@ public class DebugConsole extends DialogBox
 				{
 					disable();
 				}
-				else if (sender == taggleDebugButton)
+				else if (sender == toggleDebugButton)
 				{
 					if (Debug.isEnabled())
 					{
@@ -148,7 +149,7 @@ public class DebugConsole extends DialogBox
 				}
 			}
 		};
-		taggleDebugButton.addClickListener(controller);
+		toggleDebugButton.addClickListener(controller);
 		m_disableButton.addClickListener(controller);
 		clearButton.addClickListener(controller);
 		hideButton.addClickListener(controller);
@@ -329,6 +330,9 @@ public class DebugConsole extends DialogBox
 	{
 		if (m_enabled && ! isAttached())
 		{
+		    // have to do this every time b/c AbsolutePanel likes to clear our position
+			DOM.setStyleAttribute(getElement(), "position", "absolute");
+			setPopupPosition(m_left, m_top);
 			RootPanel.get().add(this);
 		}
 	}
@@ -341,6 +345,8 @@ public class DebugConsole extends DialogBox
 	{
 		if (isAttached())
 		{
+			m_left = getAbsoluteLeft();
+			m_top = getAbsoluteTop();
 			RootPanel.get().remove(this);
 		}
 	}

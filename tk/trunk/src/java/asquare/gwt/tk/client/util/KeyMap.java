@@ -26,6 +26,8 @@ import com.google.gwt.user.client.Command;
  */
 public class KeyMap extends HashMap
 {
+	private static final long serialVersionUID = -4705847631304175265L;
+
 	/**
 	 * Create a mapping between a hot key and a command. To ensure case
 	 * consistency across keypress and keydown/keyup events you can convert hot

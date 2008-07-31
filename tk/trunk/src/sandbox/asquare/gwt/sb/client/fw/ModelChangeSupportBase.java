@@ -16,36 +16,26 @@
 package asquare.gwt.sb.client.fw;
 
 import java.util.EventListener;
-import java.util.Vector;
 
 import asquare.gwt.tk.client.util.GwtUtil;
 
-public abstract class ModelChangeSupportBase
+public abstract class ModelChangeSupportBase extends ChangeSupportBase
 {
-	private Vector m_listeners = null;
 	private boolean m_changed = false;
+	
+	public ModelChangeSupportBase(Object source)
+	{
+		super(source);
+	}
 	
 	public void addListener(EventListener listener)
 	{
-		if (listener == null)
-			throw new NullPointerException();
-		
-		if (m_listeners == null)
-		{
-			m_listeners = new Vector();
-		}
-		m_listeners.add(listener);
+		addListenerImpl(listener);
 	}
 	
 	public void removeListener(EventListener listener)
 	{
-		if (listener == null)
-			throw new NullPointerException();
-		
-		if (m_listeners != null)
-		{
-			m_listeners.remove(listener);
-		}
+		removeListenerImpl(listener);
 	}
 	
 	/**
@@ -61,7 +51,47 @@ public abstract class ModelChangeSupportBase
 		m_changed = true;
 	}
 	
-	protected void resetChanges()
+	public boolean setChanged(int oldValue, int newValue)
+	{
+		if (oldValue != newValue)
+		{
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean setChanged(float oldValue, float newValue)
+	{
+		if (oldValue != newValue)
+		{
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean setChanged(boolean oldValue, boolean newValue)
+	{
+		if (oldValue != newValue)
+		{
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean setChanged(Object oldValue, Object newValue)
+	{
+		if (! GwtUtil.equals(oldValue, newValue))
+		{
+			setChanged();
+			return true;
+		}
+		return false;
+	}
+	
+	public void resetChanges()
 	{
 		m_changed = false;
 	}
@@ -70,11 +100,9 @@ public abstract class ModelChangeSupportBase
 	{
 		if (isChanged())
 		{
-			if (m_listeners != null && m_listeners.size() > 0)
+			if (hasListeners())
 			{
-				EventListener[] listeners = new EventListener[m_listeners.size()];
-				GwtUtil.toArray(m_listeners, listeners);
-				notifyListeners(listeners);
+				notifyListeners(getListeners());
 			}
 			resetChanges();
 		}

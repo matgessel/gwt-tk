@@ -23,8 +23,7 @@ package asquare.gwt.tk.client.ui.behavior;
  */
 public class DragThresholdFilter extends DragGestureWrapper
 {
-	private final int m_threshold;
-	
+	private int m_threshold;
 	private MouseEvent m_start;
 	private boolean m_started = false;
 	
@@ -43,6 +42,16 @@ public class DragThresholdFilter extends DragGestureWrapper
 			throw new IllegalArgumentException(String.valueOf(distance));
 		
 		m_threshold = distance;
+	}
+
+	public int getThreshold()
+	{
+		return m_threshold;
+	}
+
+	public void setThreshold(int threshold)
+	{
+		m_threshold = threshold;
 	}
 	
 	protected boolean equalsThreshold(int deltaX, int deltaY)
@@ -65,10 +74,11 @@ public class DragThresholdFilter extends DragGestureWrapper
 	
 	public void step(DragEvent e)
 	{
-		if (! m_started && equalsThreshold(e.getDeltaX(), e.getDeltaY()))
+		if (! m_started && equalsThreshold(e.getCumulativeX(), e.getCumulativeY()))
 		{
 			m_started = true;
 			super.start(m_start);
+			m_start = null;
 		}
 		if (m_started)
 		{
@@ -78,8 +88,11 @@ public class DragThresholdFilter extends DragGestureWrapper
 	
 	public void finish()
 	{
-		super.finish();
-		m_started = false;
-		m_start = null;
+		if (m_started)
+		{
+			super.finish();
+			m_started = false;
+			m_start = null;
+		}
 	}
 }

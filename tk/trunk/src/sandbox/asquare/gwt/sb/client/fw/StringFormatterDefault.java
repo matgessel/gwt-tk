@@ -36,10 +36,12 @@ public class StringFormatterDefault implements StringFormatter
 	}
 
 	/**
-	 * @return <code>{@link String#valueOf(Object)}</code>
+	 * @return <code>{@link Object#toString() modelElement.toString()}</code>,
+	 *         or <code>""</code> if <code>modelElement</code> is
+	 *         <code>null</code>
 	 */
 	public String getString(Object modelElement)
 	{
-		return String.valueOf(modelElement);
+		return modelElement != null ? modelElement.toString() : "";
 	}
 }

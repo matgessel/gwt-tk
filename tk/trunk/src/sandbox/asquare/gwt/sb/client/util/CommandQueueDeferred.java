@@ -46,7 +46,7 @@ public class CommandQueueDeferred extends CommandQueueBase
 		
 		m_runScheduled = true;
 		
-		DeferredCommand.add(new Command()
+		DeferredCommand.addCommand(new Command()
 		{
 			public void execute()
 			{

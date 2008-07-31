@@ -15,107 +15,206 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * A controller which converts native DOM mouse events to framework
  * {@link MouseEvent}s.
+ * @deprecated use {@link EventController}
  */
-public class MouseController extends ControllerAdaptor
+public class MouseController// extends ControllerAdaptor
 {
-	private final MouseHandler m_handler;
-	
-	public MouseController(Class id, MouseHandler handler)
-	{
-		this(0, id, handler);
-	}
-	
-	public MouseController(int eventBits, Class id, MouseHandler handler)
-	{
-		super(eventBits, id);
-		m_handler = handler;
-	}
-	
-	public int getEventBits()
-	{
-		int result = super.getEventBits();
-		if (result == 0)
-		{
-			result = (m_handler != null) ? m_handler.getEventBits() : 0;
-		}
-		return result;
-	}
-	
-	public void onBrowserEvent(Widget widget, Event event)
-	{
-		processEvent(widget, event);
-	}
-	
-	protected void processEvent(Widget widget, Event event)
-	{
-		switch (DOM.eventGetType(event))
-		{
-			case Event.ONMOUSEDOWN:
-				onMouseDown(new MouseEvent(widget, event));
-				break;
-			
-			case Event.ONMOUSEMOVE:
-				onMouseMove(new MouseEvent(widget, event));
-				break;
-			
-			case Event.ONMOUSEUP:
-				onMouseUp(new MouseEvent(widget, event));
-				break;
-				
-			case Event.ONMOUSEOVER: 
-				onMouseOver(new MouseEvent(widget, event));
-				break;
-				
-			case Event.ONMOUSEOUT: 
-				onMouseOut(new MouseEvent(widget, event));
-				break;
-		}
-	}
-	
-	protected void onMouseDown(MouseEvent e)
-	{
-		if (m_handler != null)
-		{
-			m_handler.onMouseDown(e);
-		}
-	}
-	
-	protected void onMouseMove(MouseEvent e)
-	{
-		if (m_handler != null)
-		{
-			m_handler.onMouseMove(e);
-		}
-	}
-	
-	protected void onMouseUp(MouseEvent e)
-	{
-		if (m_handler != null)
-		{
-			m_handler.onMouseUp(e);
-		}
-	}
-	
-	protected void onMouseOver(MouseEvent e)
-	{
-		if (m_handler != null)
-		{
-			m_handler.onMouseOver(e);
-		}
-	}
-	
-	protected void onMouseOut(MouseEvent e)
-	{
-		if (m_handler != null)
-		{
-			m_handler.onMouseOut(e);
-		}
-	}
+//	private MouseHandlerCollection m_handlers = new MouseHandlerCollection();
+//	
+//	public MouseController(Class id)
+//	{
+//		this(id, 0, null);
+//	}
+//	
+//	public MouseController(Class id, MouseHandler handler)
+//	{
+//		this(id, 0, handler);
+//	}
+//	
+//	public MouseController(Class id, int eventBits)
+//	{
+//		this(id, eventBits, null);
+//	}
+//	
+//	/**
+//	 * @param eventBits <code>0</code>, or a positive integer to override
+//	 *            handler's event bits
+//	 * @param handler a MouseHandler or <code>null</code>
+//	 */
+//	public MouseController(Class id, int eventBits, MouseHandler handler)
+//	{
+//		super(id, eventBits);
+//		if (handler != null)
+//		{
+//			addHandler(handler);
+//		}
+//	}
+//	
+//	protected boolean hasHandlers()
+//	{
+//		return m_handlers != null && m_handlers.size() > 0;
+//	}
+//	
+//	public int getEventBits()
+//	{
+//		int result = super.getEventBits();
+//		if (result == 0 && hasHandlers())
+//		{
+//			result = m_handlers.getEventBits();
+//		}
+//		return result;
+//	}
+//	
+//	public void addHandler(MouseHandler handler)
+//	{
+//		if (m_handlers == null)
+//		{
+//			m_handlers = new MouseHandlerCollection();
+//		}
+//		m_handlers.add(handler);
+//	}
+//	
+//	public void onBrowserEvent(Widget widget, Event event)
+//	{
+//		processEvent(widget, event);
+//	}
+//	
+//	protected void processEvent(Widget widget, Event event)
+//	{
+//		int eventType = DOM.eventGetType(event);
+//		switch (eventType)
+//		{
+//			case Event.ONMOUSEDOWN:
+//				onMouseDown(new MouseEventImpl(widget, event, eventType, false));
+//				break;
+//			
+//			case Event.ONMOUSEMOVE:
+//				onMouseMove(new MouseEventImpl(widget, event, eventType, false));
+//				break;
+//			
+//			case Event.ONMOUSEUP:
+//				onMouseUp(new MouseEventImpl(widget, event, eventType, false));
+//				break;
+//				
+//			case Event.ONMOUSEOVER: 
+//				onMouseOver(new MouseEventImpl(widget, event, eventType, false));
+//				break;
+//				
+//			case Event.ONMOUSEOUT: 
+//				onMouseOut(new MouseEventImpl(widget, event, eventType, false));
+//				break;
+//		}
+//	}
+//	
+//	protected void onMouseDown(MouseEvent e)
+//	{
+//		if (hasHandlers())
+//		{
+//			for (int i = 0, size = m_handlers.size(); i < size; i++)
+//			{	
+//				MouseHandler handler = (MouseHandler) m_handlers.get(i);
+//				if ((handler.getEventBits() & Event.ONMOUSEDOWN) != 0)
+//				{
+//					handler.onMouseDown(e);
+//				}
+//			}
+//		}
+//	}
+//	
+//	protected void onMouseMove(MouseEvent e)
+//	{
+//		if (hasHandlers())
+//		{
+//			for (int i = 0, size = m_handlers.size(); i < size; i++)
+//			{	
+//				MouseHandler handler = (MouseHandler) m_handlers.get(i);
+//				if ((handler.getEventBits() & Event.ONMOUSEMOVE) != 0)
+//				{
+//					handler.onMouseMove(e);
+//				}
+//			}
+//		}
+//	}
+//	
+//	protected void onMouseUp(MouseEvent e)
+//	{
+//		if (hasHandlers())
+//		{
+//			for (int i = 0, size = m_handlers.size(); i < size; i++)
+//			{	
+//				MouseHandler handler = (MouseHandler) m_handlers.get(i);
+//				if ((handler.getEventBits() & Event.ONMOUSEUP) != 0)
+//				{
+//					handler.onMouseUp(e);
+//				}
+//			}
+//		}
+//	}
+//	
+//	protected void onMouseOver(MouseEvent e)
+//	{
+//		if (hasHandlers())
+//		{
+//			for (int i = 0, size = m_handlers.size(); i < size; i++)
+//			{	
+//				MouseHandler handler = (MouseHandler) m_handlers.get(i);
+//				if ((handler.getEventBits() & Event.ONMOUSEOVER) != 0)
+//				{
+//					handler.onMouseOver(e);
+//				}
+//			}
+//		}
+//	}
+//	
+//	protected void onMouseOut(MouseEvent e)
+//	{
+//		if (hasHandlers())
+//		{
+//			for (int i = 0, size = m_handlers.size(); i < size; i++)
+//			{	
+//				MouseHandler handler = (MouseHandler) m_handlers.get(i);
+//				if ((handler.getEventBits() & Event.ONMOUSEOUT) != 0)
+//				{
+//					handler.onMouseOut(e);
+//				}
+//			}
+//		}
+//	}
+//	
+//	private static class MouseHandlerCollection extends ArrayList
+//	{
+//		private static final long serialVersionUID = 1L;
+//
+//		// -1 means cache is invalid
+//		private int m_eventBitsCache = 0;
+//		
+//		public void add(MouseHandler handler)
+//		{
+//			super.add(handler);
+//			m_eventBitsCache |= handler.getEventBits();
+//		}
+//		
+//		public void remove(MouseHandler handler)
+//		{
+//			m_eventBitsCache = -1;
+//			super.remove(handler);
+//		}
+//		
+//		public int getEventBits()
+//		{
+//			if (m_eventBitsCache == -1)
+//			{
+//				int m_eventBitsCache = 0;
+//				for (int i = 0, size = size(); i < size; i++)
+//				{
+//					m_eventBitsCache |= ((MouseHandler) get(i)).getEventBits();
+//				}
+//			}
+//			return m_eventBitsCache;
+//		}
+//	}
 }

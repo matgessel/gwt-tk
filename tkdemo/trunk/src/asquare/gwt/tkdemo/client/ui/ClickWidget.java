@@ -15,15 +15,12 @@
  */
 package asquare.gwt.tkdemo.client.ui;
 
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
-import asquare.gwt.tk.client.ui.CWidget;
-import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
-import asquare.gwt.tkdemo.client.ui.behavior.LegacyClickController;
+import asquare.gwt.tk.client.ui.*;
+import asquare.gwt.tk.client.ui.behavior.*;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
 /**
@@ -47,9 +44,8 @@ public class ClickWidget extends CWidget implements HasText, HasHTML, SourcesCli
 	
 	protected List createControllers()
 	{
-		Vector result = new Vector();
+        List result = new ArrayList();
 		result.add(PreventSelectionController.getInstance());
-		result.add(new LegacyClickController());
 		return result;
 	}
 	
@@ -76,15 +72,11 @@ public class ClickWidget extends CWidget implements HasText, HasHTML, SourcesCli
 	// SourcesClickEvents methods
 	public void addClickListener(ClickListener listener)
 	{
-		LegacyClickController controller = (LegacyClickController) getController(LegacyClickController.class);
-		if (controller != null)
-			controller.addClickListener(listener);
+		CClickListenerAdaptor.addListener(this, listener);
 	}
 	
 	public void removeClickListener(ClickListener listener)
 	{
-		LegacyClickController controller = (LegacyClickController) getController(LegacyClickController.class);
-		if (controller != null)
-			controller.removeClickListener(listener);
+        CClickListenerAdaptor.removeListener(this, listener);
 	}
 }

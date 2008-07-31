@@ -15,32 +15,12 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ModelListenerStub implements ModelListener
+import asquare.gwt.tk.client.ui.behavior.ModelListenerStubBase;
+
+public class ModelListenerStub extends ModelListenerStubBase
 {
-	private int m_notificationCount;
-	
-	public ModelListenerStub()
-	{
-		init();
-	}
-	
-	public void init()
-	{
-		m_notificationCount = 0;
-	}
-	
-	public boolean isChanged()
-	{
-		return m_notificationCount > 0;
-	}
-	
-	public int getNotificationCount()
-	{
-		return m_notificationCount;
-	}
-	
 	public void modelChanged(ModelChangeEvent e)
 	{
-		m_notificationCount++;
+		incrementNotificationCount();
 	}
 }

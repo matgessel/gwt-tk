@@ -15,20 +15,45 @@
  */
 package asquare.gwt.sb.client.widget;
 
-import asquare.gwt.tk.client.ui.CWrapper;
+import asquare.gwt.tk.client.ui.CComposite;
 
 import com.google.gwt.user.client.ui.Widget;
 
-public class CComponent extends CWrapper
+public class CComponent extends CComposite
 {
 	private final Object m_model;
 	private final Widget m_view;
 	
+	public CComponent(Object model)
+	{
+		this(model, null);
+	}
+	
+	public CComponent(Widget view)
+	{
+		this(null, view);
+	}
+	
+	/**
+	 * @param model a model, or <code>null</code> to invoke {@link #createModel()}
+	 * @param view a view, or <code>null</code> to invoke {@link #createView()}
+	 */
 	public CComponent(Object model, Widget view)
 	{
-		super(view, null, false);
-		m_model = model;
-		m_view = view;
+		super(false);
+		m_model = model != null ? model : createModel();
+		m_view = view != null ? view : createView();
+		initWidget(view);
+	}
+	
+	protected Object createModel()
+	{
+		throw new UnsupportedOperationException("not implemented");
+	}
+	
+	protected Widget createView()
+	{
+		throw new UnsupportedOperationException("not implemented");
 	}
 	
 	public Object getModel()

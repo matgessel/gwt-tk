@@ -19,7 +19,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class EventDelegateAdaptor extends EventDelegateAdaptorBase implements EventDelegate
+public abstract class EventDelegateAdaptor extends EventInterestAdaptor implements BrowserEventHandler, EventDelegate
 {
 	/**
 	 * Default constructor for convienence. Subclasses must override

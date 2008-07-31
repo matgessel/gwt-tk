@@ -42,6 +42,11 @@ public class FocusCyclePanel extends BasicPanel
 		focusController.setModel(m_focusModel);
 		addController(focusController);
 	}
+    
+    public FocusModel getFocusModel()
+    {
+        return m_focusModel;
+    }
 	
 	public void add(Widget w)
 	{

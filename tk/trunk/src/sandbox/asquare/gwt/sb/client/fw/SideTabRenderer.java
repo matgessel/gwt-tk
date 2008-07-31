@@ -33,7 +33,7 @@ import com.google.gwt.user.client.Element;
  * "layout" for Alpha and AlphaImageLoader filters)</li>
  * </ul>
  */
-public class SideTabRenderer extends CellRendererDefault
+public class SideTabRenderer extends ListCellRendererDefault
 {
 	public static final String STYLENAME = "tk-SideTab";
 	
@@ -49,7 +49,7 @@ public class SideTabRenderer extends CellRendererDefault
 	
 	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
-		DOM.setAttribute(viewElement, "className", buildStyleName(modelElement, properties));
+		DOM.setElementProperty(viewElement, "className", buildStyleName(modelElement, properties));
 		final String newHtml = 
 			"<div class='Content'>" + String.valueOf(modelElement) + "</div>"; 
 		DOM.setInnerHTML(viewElement, newHtml);

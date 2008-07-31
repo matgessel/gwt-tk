@@ -15,23 +15,28 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
+import asquare.gwt.sb.client.util.IntRange;
+import asquare.gwt.sb.client.util.IntRangeCollection;
+import asquare.gwt.sb.client.util.RangeCollection;
 
-import asquare.gwt.tk.client.util.GwtUtil;
-
-public class ListSelectionModelArbitrary extends ListSelectionModelBase
+public class ListSelectionModelArbitrary implements ListSelectionModel
 {
-	private static final Object SELECTED = Boolean.TRUE;
-	private static final Object NOTSELECTED = null;
+	private final ListSelectionModelChangeSupport m_changeSupport = new ListSelectionModelChangeSupport(this);
+	private final IntRangeCollection m_selectedRanges = new IntRangeCollection();
 	
-	/*
-	 * Acts as an int to object map. Int = index, Boolean.TRUE = selected. 
-	 */
-	private Vector m_selection = new Vector();
+	public void addListener(ListSelectionModelListener listener)
+	{
+		m_changeSupport.addListener(listener);
+	}
+	
+	public void removeListener(ListSelectionModelListener listener)
+	{
+		m_changeSupport.removeListener(listener);
+	}
 	
 	public boolean hasSelection()
 	{
-		return getMinSelectedIndex() != -1;
+		return m_selectedRanges.getSize() > 0;
 	}
 	
 	public boolean isIndexSelected(int index)
@@ -39,92 +44,74 @@ public class ListSelectionModelArbitrary extends ListSelectionModelBase
 		if (index < 0)
 			throw new IndexOutOfBoundsException(String.valueOf(index));
 		
-		return m_selection.size() > index && m_selection.get(index) == SELECTED;
+		return m_selectedRanges.get(index, 1) != null;
 	}
 	
 	public int[] getSelectedIndices()
 	{
-		int[] temp = new int[m_selection.size()];
-		int count = 0;
-		for (int i = 0, size = m_selection.size(); i < size; i++)
-		{
-			if (m_selection.get(i) == SELECTED)
-			{
-				temp[count++] = i;
-			}
-		}
-		int[] result = new int[count];
-		GwtUtil.arrayCopy(temp, 0, result, 0, count);
-		return result;
+		return m_selectedRanges.toIntArray();
 	}
 	
 	public int getMinSelectedIndex()
 	{
-		for (int i = 0, size = m_selection.size(); i < size; i++)
+		if (m_selectedRanges.getSize() > 0)
 		{
-			if (m_selection.get(i) == SELECTED)
-				return i;
+			return m_selectedRanges.get(0).getStartIndex();
 		}
 		return -1;
 	}
 	
 	public int getMaxSelectedIndex()
 	{
-		for (int i = m_selection.size() - 1; i >= 0; i--)
+		int size = m_selectedRanges.getSize();
+		if (size > 0)
 		{
-			if (m_selection.get(i) == SELECTED)
-				return i;
+			return m_selectedRanges.get(size - 1).getEndIndex();
 		}
 		return -1;
 	}
 	
-	public void setIndexSelected(int index, boolean selected)
-	{
-		if (selected)
-		{
-			if (m_selection.size() <= index)
-			{
-				m_selection.setSize(index + 1);
-			}
-			if (m_selection.get(index) != SELECTED)
-			{
-				m_selection.set(index, SELECTED);
-				fireSelectionChange(index);
-			}
-		}
-		else 
-		{
-			if (isIndexSelected(index))
-			{
-				// must call set(). remove() will shift elements down. 
-				m_selection.set(index, NOTSELECTED);
-				fireSelectionChange(index);
-			}
-		}
-	}
+//	public void setIndexSelected(int index, boolean selected)
+//	{
+//		if (selected)
+//		{
+//			if (! m_selectedRanges.contains(index, 1))
+//			{
+//				m_selectedRanges.add(index, 1);
+//				fireSelectionChange(index);
+//			}
+//		}
+//		else 
+//		{
+//			if (m_selectedRanges.contains(index, 1))
+//			{
+//				m_selectedRanges.remove(index, 1);
+//				fireSelectionChange(index);
+//			}
+//		}
+//	}
 	
 	public void clearSelection()
 	{
-		for (int i = m_selection.size() - 1; i >=0; i--)
+		clearSelectionImpl();
+		m_changeSupport.update();
+	}
+	
+	private void clearSelectionImpl()
+	{
+		if (m_selectedRanges.getSize() > 0)
 		{
-			if (m_selection.remove(i) == SELECTED)
+			for (int i = 0, size = m_selectedRanges.getSize(); i < size; i++)
 			{
-				fireSelectionChange(i);
+				m_changeSupport.selectionRemoved(m_selectedRanges.get(i));
 			}
+			m_selectedRanges.clear();
 		}
 	}
 	
 	public int getSelectionSize()
 	{
-		int result = 0;
-		for (int i = 0, size = m_selection.size(); i < size; i++)
-		{
-			if (m_selection.get(i) == SELECTED)
-			{
-				result++;
-			}
-		}
-		return result;
+		return m_selectedRanges.getTotalCount();
 	}
 	
 	public void addSelectionRange(int from, int to)
@@ -140,7 +127,7 @@ public class ListSelectionModelArbitrary extends ListSelectionModelBase
 		if (to < 0)
 			throw new IndexOutOfBoundsException(String.valueOf(to));
 		
-		clearSelection();
+		clearSelectionImpl();
 		setRangeSelected(from, to, true);
 	}
 	
@@ -157,9 +144,60 @@ public class ListSelectionModelArbitrary extends ListSelectionModelBase
 		if (to < 0)
 			throw new IndexOutOfBoundsException(String.valueOf(to));
 		
-		for (int i = Math.min(from, to), max = Math.max(from, to); i <= max; i++)
+		int min = Math.min(from, to);
+		int max = Math.max(from, to);
+		int length = max - min + 1;
+		if (selected)
 		{
-			setIndexSelected(i, selected);
+			RangeCollection rangesToSelect = new RangeCollection();
+			rangesToSelect.add(new IntRange(min, length));
+			rangesToSelect.removeAll(m_selectedRanges);
+			if (! rangesToSelect.isEmpty())
+			{
+				m_selectedRanges.addAll(rangesToSelect);
+				m_changeSupport.selectionAdded(rangesToSelect);
+			}
 		}
+		else
+		{
+			RangeCollection rangesToDeselect = m_selectedRanges.intersect(min, length);
+			if (! rangesToDeselect.isEmpty())
+			{
+				m_selectedRanges.removeAll(rangesToDeselect);
+				m_changeSupport.selectionRemoved(rangesToDeselect);
+			}
+		}
+		m_changeSupport.update();
+	}
+	
+	public void adjustForItemsInserted(int index, int count)
+	{
+		if (count <= 0)
+			throw new IllegalArgumentException(String.valueOf(index));
+		
+		updateForItemsShifted(index, count);
+	}
+	
+	public void adjustForItemsRemoved(int index, int count)
+	{
+		if (count <= 0)
+			throw new IllegalArgumentException(String.valueOf(index));
+		
+		updateForItemsShifted(index + count, -count);
+	}
+	
+	private void updateForItemsShifted(int index, int count)
+	{
+		if (index < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(index));
+		
+		RangeCollection deselectedChanges = (RangeCollection) m_selectedRanges.duplicate();
+		m_selectedRanges.shift(index, count);
+		RangeCollection selectedChanges = (RangeCollection) m_selectedRanges.duplicate();
+		selectedChanges.removeAll(deselectedChanges);
+		deselectedChanges.removeAll(m_selectedRanges);
+		m_changeSupport.selectionAdded(selectedChanges);
+		m_changeSupport.selectionRemoved(deselectedChanges);
+		m_changeSupport.update();
 	}
 }

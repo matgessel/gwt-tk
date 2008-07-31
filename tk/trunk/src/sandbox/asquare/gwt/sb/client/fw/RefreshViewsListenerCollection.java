@@ -15,10 +15,12 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
-public class RefreshViewsListenerCollection extends Vector
+public class RefreshViewsListenerCollection extends ArrayList
 {
+	private static final long serialVersionUID = -1840555495831347763L;
+
 	public void addListener(RefreshViewsListener listener)
 	{
 		add(listener);

@@ -15,13 +15,14 @@
  */
 package asquare.gwt.tk.uitest.popuppanel.client;
 
-import com.google.gwt.user.client.ui.ComplexPanel;
+import asquare.gwt.tk.client.ui.CWindow;
+
 import com.google.gwt.user.client.ui.Label;
 
 public class ToolTipRendererString implements ToolTipRenderer
 {
-	public void render(ComplexPanel toolTip, ToolTipModel model)
+	public void render(CWindow toolTip, ToolTipModel model)
 	{
-		toolTip.add(new Label((String) ((HasToolTip) model.getToolTipWidget()).getToolTipContent()));
+		toolTip.setWidget(new Label((String) ((HasToolTip) model.getToolTipWidget()).getToolTipContent()));
 	}
 }

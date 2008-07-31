@@ -35,6 +35,7 @@ public class SerializableTC extends GWTTestCase
 	{
 		class MyBO implements Serializable, IsSerializable
 		{
+			private static final long serialVersionUID = 5818224461582854302L;
 		}
 		Object o = new MyBO();
 		assertTrue(o instanceof MyBO);

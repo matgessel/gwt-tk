@@ -15,31 +15,75 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public abstract class ListModelBase implements ListModel
+import java.util.EventListener;
+
+import asquare.gwt.sb.client.util.RangeCollection;
+
+public abstract class ListModelBase implements ListModel, SourcesModelChangeEventComplex
 {
-	private final ChangeSupport m_changeSupport = new ChangeSupport();
+	private final ListModelChangeSupport m_changeSupport;
 	private final ListSelectionModel m_selectionModel;
 	
-	private int m_hoverIndex = -1;
+	private IndexedCellId m_hoverCell = null;
 	
 	public ListModelBase(ListSelectionModel selectionModel)
 	{
+		this(selectionModel, null);
+	}
+	
+	protected ListModelBase(ListSelectionModel selectionModel, ListModelChangeSupport changeSupport)
+	{
+		m_changeSupport = changeSupport != null ? changeSupport : new ListModelChangeSupport(this);
 		m_selectionModel = selectionModel;
 		if (m_selectionModel != null)
 		{
 			m_selectionModel.addListener(new ListSelectionModelListener()
 			{
-				public void listSelectionModelChanged(ListSelectionModel model, int index)
+				public void listSelectionModelChanged(ListSelectionModelEvent e)
 				{
-					m_changeSupport.addChange(index);
+					RangeCollection selectedRanges = e.getSelectedRanges();
+					for (int i = 0, size = selectedRanges.getSize(); i < size; i++)
+					{
+						addItemPropertyChange(ListModel.ITEM_PROPERTY_SELECTION, selectedRanges.get(i).getStartIndex(), selectedRanges.get(i).getLength());
+					}
+					RangeCollection deselectedRanges = e.getDeselectedRanges();
+					for (int i = 0, size = deselectedRanges.getSize(); i < size; i++)
+					{
+						addItemPropertyChange(ListModel.ITEM_PROPERTY_SELECTION, deselectedRanges.get(i).getStartIndex(), deselectedRanges.get(i).getLength());
+					}
 				}
 			});
 		}
 	}
 	
-	protected void addChange(int index)
+	protected ListModelChangeSupport getChangeSupport()
 	{
-		m_changeSupport.addChange(index);
+		return m_changeSupport;
+	}
+	
+	protected void addChange(IndexedChangeBase change)
+	{
+		m_changeSupport.addChange(change);
+	}
+	
+	protected void addItemPropertyChange(String name, int index, int count)
+	{
+		m_changeSupport.addItemPropertyChange(name, index, count);
+	}
+	
+	public void resetChanges()
+	{
+		m_changeSupport.resetChanges();
+	}
+	
+	public void addListener(ListModelListener listener)
+	{
+		m_changeSupport.addListener(listener);
+	}
+
+	public void removeListener(ListModelListener listener)
+	{
+		m_changeSupport.removeListener(listener);
 	}
 	
 	boolean isChanged()
@@ -47,16 +91,6 @@ public abstract class ListModelBase implements ListModel
 		return m_changeSupport.isChanged();
 	}
 
-	public void addListener(ModelListener listener)
-	{
-		m_changeSupport.addListener(listener);
-	}
-
-	public void removeListener(ModelListener listener)
-	{
-		m_changeSupport.removeListener(listener);
-	}
-	
 	public ListSelectionModel getSelectionModel()
 	{
 		return m_selectionModel;
@@ -67,28 +101,33 @@ public abstract class ListModelBase implements ListModel
 		return m_selectionModel != null && m_selectionModel.isIndexSelected(index);
 	}
 	
-	public boolean isIndexDisabled(int index)
+	public boolean isIndexEnabled(int index)
 	{
-		return false;
+		return true;
 	}
 	
-	public boolean isIndexHovering(int index)
+	public CellId getHoverCell()
 	{
-		return index == m_hoverIndex;
+		return m_hoverCell;
 	}
 	
-	public void setHoverIndex(int index)
+	public void setHoverCell(CellId cellId)
 	{
-		if (m_hoverIndex != index)
+		setHoverCell((IndexedCellId) cellId);
+	}
+	
+	public void setHoverCell(IndexedCellId cellId)
+	{
+		if (m_hoverCell != cellId)
 		{
-			if (m_hoverIndex > -1)
+			if (m_hoverCell != null)
 			{
-				m_changeSupport.addChange(m_hoverIndex);
+				addItemPropertyChange(ListModel.ITEM_PROPERTY_HOVER, m_hoverCell.getIndex(), 1);
 			}
-			m_hoverIndex = index;
-			if (m_hoverIndex > -1)
+			m_hoverCell = cellId;
+			if (m_hoverCell != null)
 			{
-				m_changeSupport.addChange(m_hoverIndex);
+				addItemPropertyChange(ListModel.ITEM_PROPERTY_HOVER, m_hoverCell.getIndex(), 1);
 			}
 		}
 	}
@@ -98,45 +137,36 @@ public abstract class ListModelBase implements ListModel
 		m_changeSupport.update();
 	}
 	
-	private class ChangeSupport extends ModelChangeSupportHeavy
+	public static class ListModelChangeSupport extends ModelChangeSupportComplex
 	{
-		private int m_changeStart = -1;
-		private int m_changeEnd = -1;
-		
-		public boolean isChanged()
+		public ListModelChangeSupport(SourcesModelChangeEventComplex source)
 		{
-			return m_changeEnd > -1;
+			super(source);
 		}
 		
-		public void setChanged()
+		public void addListener(ListModelListener listener)
 		{
-			throw new UnsupportedOperationException();
+			addListenerImpl(listener);
 		}
 		
-		protected void resetChanges()
+		public void removeListener(ListModelListener listener)
 		{
-			m_changeStart = -1;
-			m_changeEnd = -1;
+			removeListenerImpl(listener);
 		}
 		
-		protected void addChange(int index)
+		public void addItemPropertyChange(String name, int index, int count)
 		{
-			if (index < 0)
-				throw new IndexOutOfBoundsException(String.valueOf(index));
-			
-			if (index < m_changeStart || m_changeStart == -1)
-			{
-				m_changeStart = index;
-			}
-			if (index > m_changeEnd)
-			{
-				m_changeEnd = index;
-			}
+			((ListModelEvent) getEvent()).addItemPropertyChange(name, index, count);
 		}
 		
-		protected ModelChangeEvent createChangeEvent()
+		protected ModelChangeEventComplex createChangeEvent(SourcesModelChangeEventComplex source)
 		{
-			return new IndexedModelEvent(ListModelBase.this, m_changeStart, m_changeEnd);
+			return new ListModelEvent(source);
+		}
+		
+		protected void notifyListener(EventListener listener, Object source, ModelChangeEventComplex event)
+		{
+			((ListModelListener) listener).modelChanged((ListModelEvent) event);
 		}
 	}
 }

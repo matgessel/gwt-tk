@@ -186,7 +186,6 @@ public class CWidget extends Widget implements ControllerSupport
 	 */
 	public void onBrowserEvent(Event event)
 	{
-		super.onBrowserEvent(event);
 		m_controllerSupport.onBrowserEvent(event);
 	}
 }

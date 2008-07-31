@@ -15,138 +15,45 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import java.util.EventObject;
-
-import asquare.gwt.tk.client.util.DomUtil;
-
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Widget;
 
-/**
- * Contains information used by drag operations to position elements in the UI.
- * Different drag operations require different coordinates, so we pass all
- * coordinates to operations using this object. Also encapsulates coordinate
- * calulations.
- */
-public class MouseEvent extends EventObject
+public interface MouseEvent extends EventBase
 {
-	private static final long serialVersionUID = 2294143695886173892L;
+	int MOUSE_DOWN = Event.ONMOUSEDOWN;
+	int MOUSE_UP = Event.ONMOUSEUP;
+	int MOUSE_CLICK = Event.ONCLICK;
+	int MOUSE_DOUBLECLICK = Event.ONDBLCLICK;
+	int MOUSE_MOVE = Event.ONMOUSEMOVE;
+	int MOUSE_OVER = Event.ONMOUSEOVER;
+	int MOUSE_OUT = Event.ONMOUSEOUT;
+	int MOUSE_EVENTS = MOUSE_DOWN | MOUSE_UP | MOUSE_CLICK | MOUSE_DOUBLECLICK | MOUSE_MOVE | MOUSE_OVER | MOUSE_OUT;
 	
-	private final Event m_domEvent;
-	private final Element m_target, m_to, m_from;
-	private final int m_clientX, m_clientY;
-	private final int m_absoluteX, m_absoluteY;
-	private final int m_widgetLeft, m_widgetTop;
-	private final int m_widgetX, m_widgetY;
+	int getClientX();
+
+	int getClientY();
 	
-	protected MouseEvent(MouseEvent e)
-	{
-		super(e.getSource());
-		m_domEvent = e.m_domEvent;
-		m_target = e.m_target;
-		m_to = e.m_to;
-		m_from = e.m_from;
-		m_clientX = e.m_clientX;
-		m_clientY = e.m_clientY;
-		m_absoluteX = e.m_absoluteX;
-		m_absoluteY = e.m_absoluteY;
-		m_widgetLeft = e.m_widgetLeft;
-		m_widgetTop = e.m_widgetTop;
-		m_widgetX = e.m_widgetX;
-		m_widgetY = e.m_widgetY;
-	}
+	int getScreenX();
 	
-	/**
-	 * @param receiver the widget which is receiving the mouse event
-	 * @param mouseEvent a <code>mousedown</code>, <code>mousemove</code> or <code>mouseup</code> event
-	 * @param previousEvent
-	 */
-	public MouseEvent(Widget receiver, Event mouseEvent)
-	{
-		super(receiver);
-		m_domEvent = mouseEvent;
-		m_target = DOM.eventGetTarget(mouseEvent);
-		m_to = DOM.eventGetToElement(mouseEvent);
-		m_from = DOM.eventGetFromElement(mouseEvent);
-		m_clientX = DOM.eventGetClientX(mouseEvent);
-		m_clientY = DOM.eventGetClientY(mouseEvent);
-		m_absoluteX = DomUtil.getViewportScrollX() + m_clientX;
-		m_absoluteY = DomUtil.getViewportScrollY() + m_clientY;
-		m_widgetLeft = DOM.getAbsoluteLeft(receiver.getElement());
-		m_widgetTop = DOM.getAbsoluteTop(receiver.getElement());
-		
-		/*
-		 * Translate the coordinates into the source widget's coordinate space
-		 * see MouseListenerCollection.fireMouseEvent()
-		 */
-		m_widgetX = m_absoluteX - m_widgetLeft;
-		m_widgetY = m_absoluteY - m_widgetTop;
-	}
+	int getScreenY();
 
-	protected int getWidgetLeft()
-	{
-		return m_widgetLeft;
-	}
+	int getWidgetX();
 
-	protected int getWidgetTop()
-	{
-		return m_widgetTop;
-	}
+	int getWidgetY();
 
-	public int getClientX()
-	{
-		return m_clientX;
-	}
+	Element getFrom();
 
-	public int getClientY()
-	{
-		return m_clientY;
-	}
+	Element getTo();
 
-	public int getWidgetX()
-	{
-		return m_widgetX;
-	}
+	int getAbsoluteX();
 
-	public int getWidgetY()
-	{
-		return m_widgetY;
-	}
+	int getAbsoluteY();
 
-	public Widget getReceiver()
-	{
-		return (Widget) getSource();
-	}
-
-	public Element getTarget()
-	{
-		return m_target;
-	}
-
-	public Element getFrom()
-	{
-		return m_from;
-	}
-
-	public Element getTo()
-	{
-		return m_to;
-	}
-
-	public int getAbsoluteX()
-	{
-		return m_absoluteX;
-	}
-
-	public int getAbsoluteY()
-	{
-		return m_absoluteY;
-	}
-
-	public Event getDomEvent()
-	{
-		return m_domEvent;
-	}
+	boolean isShiftDown();
+	
+	boolean isControlDown();
+	
+	boolean isMetaDown();
+	
+	boolean isAltDown();
 }

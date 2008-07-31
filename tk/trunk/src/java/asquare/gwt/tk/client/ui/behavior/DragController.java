@@ -16,66 +16,45 @@
 package asquare.gwt.tk.client.ui.behavior;
 
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Widget;
 
-/**
- * A controller which interprets drag events and delegates the mouse drag
- * operation to a delegate.
- * 
- * @see asquare.gwt.tk.client.ui.behavior.DragGesture
- */
-public class DragController extends MouseController
+public class DragController extends EventController
 {
-	private MouseEvent m_previousEvent;
+	private boolean m_mouseDown;
+	
+	public DragController(EventHandler handler)
+	{
+		this(0, handler);
+	}
+	
+	public DragController(int eventBits)
+	{
+		this(eventBits, null);
+	}
 	
 	/**
-	 * Creates a new DragController which delegates to the specified
-	 * handler.
-	 * 
-	 * @param handler a delegate object, or <code>null</code>
+	 * @param eventBits additional events to sink, or to use the event bits
+	 *            <code>0</code> from the handlers
+	 * @param handler an PluggableEventHandler or <code>null</code>
 	 */
-	public DragController(MouseHandler handler)
+	public DragController(int eventBits, EventHandler handler)
 	{
-		super(handler.getEventBits() | Event.ONLOSECAPTURE, DragController.class, handler);
+		super(DragController.class, eventBits | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP, handler);
+		addHandler(PreventDragController.getInstance());
 	}
 	
-	public void onBrowserEvent(Widget widget, Event event)
+	public void onMouseDown(MouseEvent e)
 	{
-		super.onBrowserEvent(widget, event);
-		if (DOM.eventGetType(event) == Event.ONLOSECAPTURE)
-		{
-			/*
-			 * Firefox loses the mouseup if released outside the client area.
-			 * But we do get an onlosecapture event. Not ideal, but it prevents
-			 * a invalid state (dragging while mouse is released).
-			 * http://code.google.com/p/google-web-toolkit/issues/detail?id=243
-			 */ 
-			onMouseUp(m_previousEvent);
-		}
+		m_mouseDown = true;
+		DOM.setCapture(getPluggedInWidget().getElement());
 	}
 	
-	protected void onMouseDown(MouseEvent e)
+	public void onMouseUp(MouseEvent e)
 	{
-		DOM.setCapture(e.getReceiver().getElement());
-		m_previousEvent = e;
-		super.onMouseDown(e);
-	}
-	
-	protected void onMouseMove(MouseEvent e)
-	{
-		m_previousEvent = e;
-		super.onMouseMove(e);
-	}
-	
-	protected void onMouseUp(MouseEvent e)
-	{
-		if (m_previousEvent != null)
+		if (m_mouseDown)
 		{
 			// do last to prevent reentrancy via ONLOSECAPTURE
-			DOM.releaseCapture(e.getReceiver().getElement());
+			DOM.releaseCapture(getPluggedInWidget().getElement());
 		}
-		super.onMouseUp(e);
-		m_previousEvent = null;
+		m_mouseDown = false;
 	}
 }

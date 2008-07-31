@@ -59,7 +59,7 @@ public class Demo implements EntryPoint
 	{
 		public HideGlassPanelController()
 		{
-			super(Event.ONCLICK, HideGlassPanelController.class);
+			super(HideGlassPanelController.class, Event.ONCLICK);
 		}
 		
 		public void onBrowserEvent(Widget widget, Event event)

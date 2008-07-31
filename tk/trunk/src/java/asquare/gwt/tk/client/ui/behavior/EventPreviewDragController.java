@@ -15,7 +15,6 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 
 /**
@@ -24,35 +23,57 @@ import com.google.gwt.user.client.Event;
  * 
  * @see asquare.gwt.tk.client.ui.behavior.DragGesture
  */
-public class EventPreviewDragController extends EventPreviewMouseController
+public class EventPreviewDragController extends EventController
 {
-	private boolean m_mouseDown = true;
+	private final EventPreviewControllerTemporary m_preview;
 	
 	/**
 	 * Creates a new EventPreviewDragController which delegates to the specified
 	 * handler.
 	 * 
-	 * @param handler a delegate object
+	 * @param dragHandler a delegate object
 	 */
-	public EventPreviewDragController(MouseHandler handler)
+	public EventPreviewDragController(EventHandler dragHandler)
 	{
-		super(Event.ONMOUSEDOWN | handler.getEventBits(), DragController.class, handler);
+		super(DragController.class, Event.ONMOUSEDOWN, dragHandler);
+		m_preview = new PreviewController();
+		addHandler(PreventDragController.getInstance());
 	}
 	
-	protected void onMouseDown(MouseEvent e)
+	public void onMouseDown(MouseEvent e)
 	{
-		DOM.addEventPreview(this);
-		m_mouseDown = true;
-		super.onMouseDown(e);
+		m_preview.start(getPluggedInWidget());
 	}
 	
-	protected void onMouseUp(MouseEvent e)
+	private class PreviewController extends EventPreviewControllerTemporary
 	{
-		if (m_mouseDown)
+		public PreviewController()
 		{
-			m_mouseDown = false;
-			super.onMouseUp(e);
-			DOM.removeEventPreview(this);
+			super(MouseEvent.MOUSE_UP);
+		}
+		
+		public int getEventBits()
+		{
+			return super.getEventBits() | EventPreviewDragController.this.getEventBits();
+		}
+		
+		/**
+		 * @deprecated unsupported
+		 */
+		public void addHandler(PluggableEventHandler handler)
+		{
+			throw new UnsupportedOperationException();
+		}
+		
+		public void onMouseUp(MouseEvent e)
+		{
+			stop();
+		}
+		
+		protected void processEvent(EventBase event)
+		{
+			EventPreviewDragController.this.processEvent(event);
+			super.processEvent(event);
 		}
 	}
 }

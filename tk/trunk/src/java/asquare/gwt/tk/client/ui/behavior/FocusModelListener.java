@@ -34,4 +34,13 @@ public interface FocusModelListener
 	 * @param removed an array of 1 or more widgets
 	 */
 	void widgetsRemoved(FocusModel model, HasFocus[] removed);
+	
+	/**
+	 * Called when the focused widget property changes. 
+	 * 
+	 * @param model the focus model that originated the event
+	 * @param previous the widget that was previously focused, or <code>null</code>
+	 * @param current the widget that is currently focused, or <code>null</code>
+	 */
+	void focusChanged(FocusModel model, HasFocus previous, HasFocus current);
 }

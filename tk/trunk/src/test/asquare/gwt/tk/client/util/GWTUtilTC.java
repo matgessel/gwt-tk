@@ -15,8 +15,8 @@
  */
 package asquare.gwt.tk.client.util;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import asquare.gwt.tk.client.Tests;
 
@@ -38,7 +38,7 @@ public class GWTUtilTC extends GWTTestCase
 	{
 		m_sInt = new int[] {1, 2, 3, 4};
 		m_dInt = new int[4];
-		m_list = new Vector();
+		m_list = new ArrayList();
 		for (int i = 1; i <= 4; i++)
 		{
 			m_list.add(new Integer(i));
@@ -432,7 +432,7 @@ public class GWTUtilTC extends GWTTestCase
 		}
 		
 		// 0 length list
-		Vector emptyList = new Vector();
+		ArrayList emptyList = new ArrayList();
 		result = GwtUtil.toArray(emptyList, new Object[emptyList.size()]);
 		
 		// array.length > list.size()
