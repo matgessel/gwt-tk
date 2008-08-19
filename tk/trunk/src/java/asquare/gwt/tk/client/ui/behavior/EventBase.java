@@ -74,11 +74,4 @@ public interface EventBase
 	 * @throws IllegalStateException if this event is in preview phase
 	 */
 	void stopPropagation();
-	
-	/**
-	 * Prevents the default browser action (text selection, image drag, etc...)
-	 * 
-	 * @throws IllegalStateException if this event is in preview phase
-	 */
-	void preventDefault();
 }

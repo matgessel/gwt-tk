@@ -15,7 +15,7 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-public class KeyEventStub extends EventBaseStub implements KeyEvent
+public class KeyEventStub extends InputEventStub implements KeyEvent
 {
 	private final int m_keyCode;
     private final boolean m_autoRepeat;

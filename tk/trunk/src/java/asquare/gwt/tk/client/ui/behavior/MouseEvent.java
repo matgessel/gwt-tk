@@ -18,7 +18,7 @@ package asquare.gwt.tk.client.ui.behavior;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 
-public interface MouseEvent extends EventBase
+public interface MouseEvent extends InputEvent
 {
 	int MOUSE_DOWN = Event.ONMOUSEDOWN;
 	int MOUSE_UP = Event.ONMOUSEUP;

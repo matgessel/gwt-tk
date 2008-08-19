@@ -34,7 +34,7 @@ public class EventBaseImpl extends EventObject implements EventBase
 	
 	private boolean m_killPreviewEvent = false;
 	
-	public EventBaseImpl(EventBaseImpl e)
+	protected EventBaseImpl(EventBaseImpl e)
 	{
 		super(e.getSource());
 		m_domEvent = e.m_domEvent;
@@ -85,31 +85,15 @@ public class EventBaseImpl extends EventObject implements EventBase
 		return m_previewPhase;
 	}
 	
-	/**
-	 * @return <code>true</code> if the occured in the specified UIObject or
-	 *         its child elements
-	 */
 	public boolean didEventOccurIn(UIObject uio)
 	{
 		return didEventOccurIn(uio.getElement());
 	}
 
-	/**
-	 * @return <code>true</code> if the occured in the specified element or
-	 *         its children
-	 */
 	public boolean didEventOccurIn(Element e)
 	{
 		return DOM.isOrHasChild(e, m_target);
 	}
-	
-	/**
-	 * Prevents a preview event from continuing on to the normal phase. Also
-	 * does {@link #preventDefault()} (this is a GWT behavior).
-	 * 
-	 * @throws IllegalStateException if this event is <strong>not</strong> in
-	 *             preview phase
-	 */
 	
 	public void killPreviewEvent()
 	{
@@ -119,30 +103,12 @@ public class EventBaseImpl extends EventObject implements EventBase
 		m_killPreviewEvent = true;
 	}
 
-	/**
-	 * Stops the event from bubbling up the DOM tree
-	 * 
-	 * @throws IllegalStateException if this event is in preview phase
-	 */
 	public void stopPropagation()
 	{
 		if (m_previewPhase)
 			throw new IllegalStateException();
 		
 		DOM.eventCancelBubble(m_domEvent, true);
-	}
-	
-	/**
-	 * Prevents the default browser action (text selection, image drag, etc...)
-	 * 
-	 * @throws IllegalStateException if this event is in preview phase
-	 */
-	public void preventDefault()
-	{
-		if (m_previewPhase)
-			throw new IllegalStateException();
-		
-		DOM.eventPreventDefault(m_domEvent);
 	}
 	
 	public boolean isKillPreviewEvent()

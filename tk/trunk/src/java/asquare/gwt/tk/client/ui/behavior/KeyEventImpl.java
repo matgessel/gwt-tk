@@ -19,7 +19,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
-public class KeyEventImpl extends EventBaseImpl implements KeyEvent
+public class KeyEventImpl extends InputEventImpl implements KeyEvent
 {
 	private static final long serialVersionUID = 1L;
 	

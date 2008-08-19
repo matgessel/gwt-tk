@@ -18,7 +18,7 @@ package asquare.gwt.tk.client.ui.behavior;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MouseEventImpl extends EventBaseImpl implements MouseEvent
+public class MouseEventImpl extends InputEventImpl implements MouseEvent
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -141,26 +141,6 @@ public class MouseEventImpl extends EventBaseImpl implements MouseEvent
 		return m_absoluteY;
 	}
 
-	public boolean isShiftDown()
-	{
-		return DOM.eventGetShiftKey(getDomEvent());
-	}
-	
-	public boolean isControlDown()
-	{
-		return DOM.eventGetCtrlKey(getDomEvent());
-	}
-	
-	public boolean isMetaDown()
-	{
-		return DOM.eventGetMetaKey(getDomEvent());
-	}
-	
-	public boolean isAltDown()
-	{
-		return DOM.eventGetAltKey(getDomEvent());
-	}
-	
 	protected String dumpProperties()
 	{
 		return "client(" + m_clientX + ',' + m_clientY + "),widget(" + m_widgetX + ',' + m_widgetY + ")," + super.dumpProperties();

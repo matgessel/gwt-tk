@@ -18,7 +18,7 @@ package asquare.gwt.tk.client.ui.behavior;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
 
-public interface KeyEvent extends EventBase
+public interface KeyEvent extends InputEvent
 {
 	int KEY_DOWN = Event.ONKEYDOWN;
 	int KEY_PRESSED = Event.ONKEYPRESS;
