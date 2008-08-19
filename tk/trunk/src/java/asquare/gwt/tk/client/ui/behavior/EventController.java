@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
  * <p>
  * TODO: add support for all event types
  */
-public class EventController extends EventControllerBase implements Controller, EventHandler
+public class EventController extends EventControllerBase implements Controller
 {
 	private final Class m_id;
 
