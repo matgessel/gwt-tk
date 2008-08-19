@@ -20,18 +20,18 @@ import asquare.gwt.tk.client.util.DomUtil;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Timer;
 
-public class MousePerformanceFilter extends EventController
+public class MouseMoveFilter extends EventController
 {
 	private static final MoveStrategy s_defaultImpl = (MoveStrategy) GWT.create(MoveStrategy.class);
 	
 	private MoveStrategy m_moveStrategy = s_defaultImpl;
 	
-	public MousePerformanceFilter(EventHandler handler)
+	public MouseMoveFilter(EventHandler handler)
 	{
 		this(0, handler);
 	}
 	
-	public MousePerformanceFilter(int eventBits)
+	public MouseMoveFilter(int eventBits)
 	{
 		this(eventBits, null);
 	}
@@ -41,9 +41,9 @@ public class MousePerformanceFilter extends EventController
 	 *            <code>0</code> from the handlers
 	 * @param handler an PluggableEventHandler or <code>null</code>
 	 */
-	public MousePerformanceFilter(int eventBits, EventHandler handler)
+	public MouseMoveFilter(int eventBits, EventHandler handler)
 	{
-		super(MousePerformanceFilter.class, eventBits, handler);
+		super(MouseMoveFilter.class, eventBits, handler);
 	}
 	
 	public MoveStrategy getMoveStrategy()
@@ -75,14 +75,14 @@ public class MousePerformanceFilter extends EventController
     
 	public static abstract class MoveStrategy
 	{
-		protected abstract void step(MousePerformanceFilter handler, MouseEvent e);
+		protected abstract void step(MouseMoveFilter handler, MouseEvent e);
 		
 		protected abstract void finish();
 	}
 	
 	public static class MoveStrategyImmediate extends MoveStrategy
 	{
-		protected void step(MousePerformanceFilter handler, MouseEvent e)
+		protected void step(MouseMoveFilter handler, MouseEvent e)
 		{
 			handler.superProcessMouseMove(e);
 		}
@@ -99,7 +99,7 @@ public class MousePerformanceFilter extends EventController
 		 */
 		private StepTimer m_timer = null;
 		
-		protected void step(MousePerformanceFilter handler, MouseEvent moveEvent)
+		protected void step(MouseMoveFilter handler, MouseEvent moveEvent)
 		{
 			if (m_timer != null)
 			{
@@ -123,11 +123,11 @@ public class MousePerformanceFilter extends EventController
 		
 		private class StepTimer extends Timer
 		{
-			private final MousePerformanceFilter m_handler;
+			private final MouseMoveFilter m_handler;
 			
 			private MouseEvent m_moveEvent;
 			
-			public StepTimer(MousePerformanceFilter handler, MouseEvent moveEvent)
+			public StepTimer(MouseMoveFilter handler, MouseEvent moveEvent)
 			{
 				m_handler = handler;
 				update(moveEvent);
@@ -162,7 +162,7 @@ public class MousePerformanceFilter extends EventController
 			}
 		}
 		
-		protected void step(MousePerformanceFilter handler, MouseEvent moveEvent)
+		protected void step(MouseMoveFilter handler, MouseEvent moveEvent)
 		{
 			m_strategy.step(handler, moveEvent);
 		}

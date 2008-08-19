@@ -153,7 +153,7 @@ public class ModalDialog extends CPopupPanel
 	protected List createCaptionControllers()
 	{
 		List result = new ArrayList();
-		result.add(new DragController(new MousePerformanceFilter(new MouseDragHandler(new AdjustObjectGesture.Move(this)))));
+		result.add(new DragController(new MouseMoveFilter(new MouseDragHandler(new AdjustObjectGesture.Move(this)))));
 		result.add(new DragStyleController(this));
 		return result;
 	}

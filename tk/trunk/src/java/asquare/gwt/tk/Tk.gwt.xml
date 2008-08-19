@@ -31,7 +31,7 @@
 	
 	<inherits name='asquare.gwt.tk.ModalDialog'/>
 	
-	<inherits name='asquare.gwt.tk.MousePerformanceFilter'/>
+	<inherits name='asquare.gwt.tk.MouseMoveFilter'/>
 	
 	<inherits name='asquare.gwt.tk.PreventDragController'/>
 	

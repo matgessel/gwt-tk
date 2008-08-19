@@ -19,7 +19,7 @@ import com.google.gwt.user.client.Event;
 
 public class EventInterestAdaptor implements EventInterest
 {
-	private final int m_eventBits;
+	private int m_eventBits;
 	
 	/**
 	 * Default constructor for convienence. Subclasses must override
@@ -45,4 +45,16 @@ public class EventInterestAdaptor implements EventInterest
 	{
 		return m_eventBits;
 	}
+
+    /**
+     * Supports creation via default constructor &amp; {@link GWT#create(Class)}. 
+     * <p><strong>Note: set event bits before attaching to a widget so that the
+     * events will be sunk</strong></p>
+     * 
+     * @param eventBits
+     */
+    public void setEventBits(int eventBits)
+    {
+        m_eventBits = eventBits;
+    }
 }
