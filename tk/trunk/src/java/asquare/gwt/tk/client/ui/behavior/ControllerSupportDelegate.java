@@ -76,8 +76,7 @@ public class ControllerSupportDelegate
 	public void sinkEvents(int eventBits)
 	{
 		m_legacyEventBits |= eventBits;
-		DOM.sinkEvents(m_widget.getElement(), 
-				DOM.getEventsSunk(m_widget.getElement()) | m_legacyEventBits);
+		DOM.sinkEvents(m_widget.getElement(), DOM.getEventsSunk(m_widget.getElement()) | m_legacyEventBits);
 	}
 	
 	public void unsinkEvents(int eventBits)
