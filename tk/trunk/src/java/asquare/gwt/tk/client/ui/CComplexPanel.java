@@ -154,8 +154,14 @@ public class CComplexPanel extends ComplexPanel implements ControllerSupport
 		if(! isAttached())
 			return;
 		
-		super.onDetach();
-		m_controllerSupport.onDetach();
+		try
+		{
+			super.onDetach();
+		}
+		finally
+		{
+			m_controllerSupport.onDetach();
+		}
 	}
 	
 	/*

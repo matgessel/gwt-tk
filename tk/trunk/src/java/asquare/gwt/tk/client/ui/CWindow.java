@@ -237,8 +237,17 @@ public class CWindow extends CComposite implements Positionable
 	
 	protected void onDetach()
 	{
-		super.onDetach();
-		m_localRoot = null;
+		if(! isAttached())
+			return;
+		
+		try
+		{
+			super.onDetach();
+		}
+		finally
+		{
+			m_localRoot = null;
+		}
 	}
 	
 	private static class Window extends SimplePanel
@@ -298,11 +307,17 @@ public class CWindow extends CComposite implements Positionable
 		
 		protected void onDetach()
 		{
-			if (! isAttached())
+			if(! isAttached())
 				return;
 			
-			super.onDetach();
-			m_popupImpl.onHide(getElement());
+			try
+			{
+				super.onDetach();
+			}
+			finally
+			{
+				m_popupImpl.onHide(getElement());
+			}
 		}
 	}
 }

@@ -155,29 +155,12 @@ public class CWidget extends Widget implements ControllerSupport
 		
 		try
 		{
-			onUnload();
+			super.onDetach();
 		}
 		finally
 		{
-			super.onDetach();
 			m_controllerSupport.onDetach();
 		}
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.Widget#onLoad()
-	 */
-	protected void onLoad()
-	{
-	}
-	
-	/**
-	 * This method is called just before the widget is detached from the
-	 * browser's document.
-	 */
-	protected void onUnload()
-	{
 	}
 	
 	/*

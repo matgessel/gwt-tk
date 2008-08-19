@@ -170,8 +170,14 @@ public class CComposite extends EventWrapper implements ControllerSupport
 		if(! isAttached())
 			return;
 		
-		super.onDetach();
-		getControllerSupport().onDetach();
+		try
+		{
+			super.onDetach();
+		}
+		finally
+		{
+			getControllerSupport().onDetach();
+		}
 	}
 	
 	/*
