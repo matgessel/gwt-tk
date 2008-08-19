@@ -37,7 +37,7 @@ public class EventPreviewDragController extends EventController
 	{
 		super(DragController.class, Event.ONMOUSEDOWN, dragHandler);
 		m_preview = new PreviewController();
-		addHandler(PreventDragController.getInstance());
+		addHandler(ControlSurfaceController.getInstance());
 	}
 	
 	public void onMouseDown(MouseEvent e)
