@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public class ListSelectionModelNone implements ListSelectionModel
+public final class ListSelectionModelNone implements ListSelectionModel
 {
 	private static final int[] s_selectedIndices = new int[0];
 	
@@ -42,6 +42,16 @@ public class ListSelectionModelNone implements ListSelectionModel
 	public void removeListener(ListSelectionModelListener listener)
 	{
 		// NOOP
+	}
+	
+	public int getAnchorIndex()
+	{
+		return -1;
+	}
+	
+	public int getLeadIndex()
+	{
+		return -1;
 	}
 	
 	public boolean isIndexSelected(int index)

@@ -20,8 +20,13 @@ import asquare.gwt.sb.client.util.Properties;
 import com.google.gwt.user.client.Element;
 
 /**
- * This class takes a model element as input and renders the contents of a view 
- * cell.
+ * A renderer is a view delegate which interprets a model element and sets the
+ * content and style of a view cell. Since renderer is an interface, it can be
+ * implemented as a discrete object, or as a call back to a controller which can
+ * select an appropriate rendering strategy for the specified cell.
+ * <p>
+ * Note: the cell identifier is not passed to the render method, however it can 
+ * be passed as a property by the controller. 
  * 
  * @see <a href="http://developer.apple.com/documentation/Cocoa/Reference/ApplicationKit/Classes/NSCell_Class/index.html">AppKit NSCell</a>
  * @see <a href="http://java.sun.com/j2se/1.4.2/docs/api/javax/swing/ListCellRenderer.html">Swing ListCellRenderer</a>

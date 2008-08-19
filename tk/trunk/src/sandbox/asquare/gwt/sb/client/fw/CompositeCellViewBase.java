@@ -42,28 +42,32 @@ public abstract class CompositeCellViewBase extends CComposite implements Compos
 		return m_renderer;
 	}
 	
-	public CellRenderer getRenderer(CellId cellId)
-	{
-		return m_renderer;
-	}
-	
 	public void setRenderer(CellRenderer renderer)
 	{
 		m_renderer = renderer;
 	}
 	
-	public void renderCell(CellId cellId, Object item, Properties cellProperties)
+	/**
+	 * Template method which allows the view to override the default renderer
+	 * for a particular cell.
+	 */
+	protected CellRenderer getRenderer(CellId cellId, Object modelElement, Properties cellProperties)
 	{
-		getRenderer(cellId).renderCell(getCellRootElement(cellId), item, cellProperties);
+		return m_renderer;
 	}
 	
-	public void prepareElement(CellId cellId, Object item, Properties cellProperties)
+	public void renderCell(CellId cellId, Object modelElement, Properties cellProperties)
 	{
-		getRenderer(cellId).prepareElement(getCellRootElement(cellId), item, cellProperties);
+		getRenderer(cellId, modelElement, cellProperties).renderCell(getCellRootElement(cellId), modelElement, cellProperties);
 	}
 	
-	public void renderContent(CellId cellId, Object item, Properties cellProperties)
+	public void prepareElement(CellId cellId, Object modelElement, Properties cellProperties)
 	{
-		getRenderer(cellId).renderContent(getCellRootElement(cellId), item, cellProperties);
+		getRenderer(cellId, modelElement, cellProperties).prepareElement(getCellRootElement(cellId), modelElement, cellProperties);
+	}
+	
+	public void renderContent(CellId cellId, Object modelElement, Properties cellProperties)
+	{
+		getRenderer(cellId, modelElement, cellProperties).renderContent(getCellRootElement(cellId), modelElement, cellProperties);
 	}
 }

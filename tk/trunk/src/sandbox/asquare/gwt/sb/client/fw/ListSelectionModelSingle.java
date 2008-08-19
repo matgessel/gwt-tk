@@ -33,6 +33,16 @@ public class ListSelectionModelSingle implements ListSelectionModel
 		m_changeSupport.removeListener(listener);
 	}
 	
+	public int getAnchorIndex()
+	{
+		return m_selectedIndex;
+	}
+	
+	public int getLeadIndex()
+	{
+		return m_selectedIndex;
+	}
+	
 	public boolean isIndexSelected(int index)
 	{
 		if (index < 0)
@@ -76,6 +86,8 @@ public class ListSelectionModelSingle implements ListSelectionModel
         
 		if (m_selectedIndex != index)
 		{
+			m_changeSupport.propertyChanged(PROPERTY_ANCHORINDEX, m_selectedIndex, index);
+			m_changeSupport.propertyChanged(PROPERTY_LEADINDEX, m_selectedIndex, index);
 			if (m_selectedIndex != -1)
 			{
 				m_changeSupport.selectionRemoved(m_selectedIndex, 1);
@@ -139,10 +151,7 @@ public class ListSelectionModelSingle implements ListSelectionModel
 		
 		if (index <= m_selectedIndex)
 		{
-			m_changeSupport.selectionRemoved(m_selectedIndex, 1);
-			m_selectedIndex += count;
-			m_changeSupport.selectionAdded(m_selectedIndex, 1);
-			m_changeSupport.update();
+			setSelectedIndex(m_selectedIndex + count);
 		}
 	}
 	
@@ -156,16 +165,11 @@ public class ListSelectionModelSingle implements ListSelectionModel
 		
 		if (m_selectedIndex != -1 && Range.contains(index, count, m_selectedIndex, 1))
 		{
-			m_changeSupport.selectionRemoved(m_selectedIndex, 1);
-			m_selectedIndex = -1;
-			m_changeSupport.update();
+			setSelectedIndex(-1);
 		}
 		else if (index < m_selectedIndex)
 		{
-			m_changeSupport.selectionRemoved(m_selectedIndex, 1);
-			m_selectedIndex -= count;
-			m_changeSupport.selectionAdded(m_selectedIndex, 1);
-			m_changeSupport.update();
+			setSelectedIndex(m_selectedIndex - count);
 		}
 	}
 }

@@ -24,6 +24,9 @@ public class ListSelectionModelArbitrary implements ListSelectionModel
 	private final ListSelectionModelChangeSupport m_changeSupport = new ListSelectionModelChangeSupport(this);
 	private final IntRangeCollection m_selectedRanges = new IntRangeCollection();
 	
+	private int m_anchorIndex = -1;
+	private int m_leadIndex = -1;
+	
 	public void addListener(ListSelectionModelListener listener)
 	{
 		m_changeSupport.addListener(listener);
@@ -71,29 +74,37 @@ public class ListSelectionModelArbitrary implements ListSelectionModel
 		return -1;
 	}
 	
-//	public void setIndexSelected(int index, boolean selected)
-//	{
-//		if (selected)
-//		{
-//			if (! m_selectedRanges.contains(index, 1))
-//			{
-//				m_selectedRanges.add(index, 1);
-//				fireSelectionChange(index);
-//			}
-//		}
-//		else 
-//		{
-//			if (m_selectedRanges.contains(index, 1))
-//			{
-//				m_selectedRanges.remove(index, 1);
-//				fireSelectionChange(index);
-//			}
-//		}
-//	}
+	public int getAnchorIndex()
+	{
+		return m_anchorIndex;
+	}
+	
+	private void setAnchorIndexImpl(int anchorIndex)
+	{
+		if (m_changeSupport.propertyChanged(PROPERTY_ANCHORINDEX, m_anchorIndex, anchorIndex))
+		{
+			m_anchorIndex = anchorIndex;
+		}
+	}
+	
+	public int getLeadIndex()
+	{
+		return m_leadIndex;
+	}
+	
+	private void setLeadIndexImpl(int leadIndex)
+	{
+		if (m_changeSupport.propertyChanged(PROPERTY_LEADINDEX, m_leadIndex, leadIndex))
+		{
+			m_leadIndex = leadIndex;
+		}
+	}
 	
 	public void clearSelection()
 	{
 		clearSelectionImpl();
+		setAnchorIndexImpl(-1);
+		setLeadIndexImpl(-1);
 		m_changeSupport.update();
 	}
 	
@@ -167,6 +178,8 @@ public class ListSelectionModelArbitrary implements ListSelectionModel
 				m_changeSupport.selectionRemoved(rangesToDeselect);
 			}
 		}
+		setAnchorIndexImpl(from);
+		setLeadIndexImpl(to);
 		m_changeSupport.update();
 	}
 	
@@ -175,6 +188,15 @@ public class ListSelectionModelArbitrary implements ListSelectionModel
 		if (count <= 0)
 			throw new IllegalArgumentException(String.valueOf(index));
 		
+		if (m_anchorIndex >= index)
+		{
+			setAnchorIndexImpl(m_anchorIndex + count);
+		}
+		if (m_leadIndex >= index)
+		{
+			setLeadIndexImpl(m_leadIndex + count);
+		}
+		
 		updateForItemsShifted(index, count);
 	}
 	
@@ -182,6 +204,15 @@ public class ListSelectionModelArbitrary implements ListSelectionModel
 	{
 		if (count <= 0)
 			throw new IllegalArgumentException(String.valueOf(index));
+		
+		if (m_anchorIndex > index)
+		{
+			setAnchorIndexImpl(Math.max(-1, m_anchorIndex - count));
+		}
+		if (m_leadIndex > index)
+		{
+			setLeadIndexImpl(Math.max(-1, m_leadIndex - count));
+		}
 		
 		updateForItemsShifted(index + count, -count);
 	}

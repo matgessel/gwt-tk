@@ -59,7 +59,7 @@ public class ListViewDefault extends CompositeCellViewBase implements ListView
 	
 	public void insert(IndexedCellId cellId, Object item, Properties cellProperties)
 	{
-		getRenderer(cellId).renderCell(insertCellStructure(cellId.getIndex()), item, cellProperties);
+		getRenderer(cellId, item, cellProperties).renderCell(insertCellStructure(cellId.getIndex()), item, cellProperties);
 	}
 	
 	protected Element insertCellStructure(int index)

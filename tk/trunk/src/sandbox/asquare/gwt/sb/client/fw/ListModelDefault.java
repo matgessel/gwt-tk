@@ -20,7 +20,7 @@ import java.util.List;
 
 import asquare.gwt.tk.client.util.GwtUtil;
 
-public class ListModelDefault extends ListModelBase implements MutableIndexedDataSource
+public class ListModelDefault extends ListModelBase implements MutableListModel
 {
 	private final ArrayList m_items = new ArrayList();
 	

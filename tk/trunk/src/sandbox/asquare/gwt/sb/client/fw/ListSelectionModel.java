@@ -17,6 +17,9 @@ package asquare.gwt.sb.client.fw;
 
 public interface ListSelectionModel extends SourcesModelChangeEventComplex
 {
+	String PROPERTY_ANCHORINDEX = "anchorIndex";
+	String PROPERTY_LEADINDEX = "leadIndex";
+	
 	/**
 	 * Add a listener to be notified when indexes are added or removed from this
 	 * model.
@@ -59,6 +62,24 @@ public interface ListSelectionModel extends SourcesModelChangeEventComplex
 	 * @return the index, or <code>-1</code> if the model is empty
 	 */
 	int getMaxSelectedIndex();
+	
+	/**
+	 * In a multiple selection opertation, the anchor index is the index of the
+	 * mouse down.
+	 * 
+	 * @return the <code>from</code> of the last selection change, or
+	 *         <code>-1</code>
+	 */
+	int getAnchorIndex();
+	
+	/**
+	 * In a multiple selection opertation, the lead index is the index of the
+	 * current mouse position.
+	 * 
+	 * @return the <code>to</code> of the last selection change, or
+	 *         <code>-1</code>
+	 */
+	int getLeadIndex();
 	
 	/**
 	 * Get all of the selected indexes. 

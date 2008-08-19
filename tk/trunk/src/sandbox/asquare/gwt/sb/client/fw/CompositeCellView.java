@@ -24,8 +24,6 @@ import com.google.gwt.user.client.Element;
  */
 public interface CompositeCellView
 {
-	CellRenderer getRenderer(CellId cellid);
-	
 	/**
 	 * TODO: consider renaming to something appropriate for hit testing / event
 	 * handling. Implementations often "new" a CellId to return, which is fine
@@ -37,5 +35,5 @@ public interface CompositeCellView
 	
 	Element getCellRootElement(CellId cellId);
 
-	void renderCell(CellId cellId, Object item, Properties cellProperties);
+	void renderCell(CellId cellId, Object modelElement, Properties cellProperties);
 }

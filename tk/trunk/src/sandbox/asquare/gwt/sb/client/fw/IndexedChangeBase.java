@@ -30,7 +30,7 @@ public abstract class IndexedChangeBase extends ChangeBase
 	
 	public abstract boolean addChange(ChangeBase change);
 	
-	protected boolean addListChange(IndexedChangeBase change)
+	protected boolean addIndexedChange(IndexedChangeBase change)
     {
         if (m_range.intersectsOrNeighbors(change.m_range))
         {

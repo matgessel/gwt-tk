@@ -17,14 +17,15 @@ package asquare.gwt.sb.client.widget;
 
 import java.util.*;
 
-import com.google.gwt.user.client.Event;
+import asquare.gwt.sb.client.fw.*;
+import asquare.gwt.tk.client.ui.behavior.ControlSurfaceController;
+import asquare.gwt.tk.client.ui.behavior.MouseEvent;
+
 import com.google.gwt.user.client.ui.Widget;
 
-import asquare.gwt.sb.client.fw.*;
-import asquare.gwt.tk.client.ui.behavior.MouseEvent;
-import asquare.gwt.tk.client.ui.behavior.PreventDefaultController;
-import asquare.gwt.tk.client.ui.behavior.PreventDragController;
-
+/**
+ * @see ListSelectionController
+ */
 public class CList extends CComponent
 {
 	public CList()
@@ -32,11 +33,11 @@ public class CList extends CComponent
 		this(null, null);
 	}
 	
-	public CList(ListModel model, ListViewDefault view)
+	public CList(ListModel model, ListView view)
 	{
-		super(model, view);
-		addController(new CompositeCellViewHoverController(model));
-		createUpdateController(model, view);
+		super(model, (Widget) view);
+		createUpdateController(getListModel(), getListView());
+		addController(new CompositeCellViewHoverController(getListModel()));
 	}
 	
 	protected Object createModel()
@@ -52,13 +53,12 @@ public class CList extends CComponent
 	protected List createControllers()
 	{
 		List result = new ArrayList();
-		result.add(PreventDragController.getInstance());
-		result.add(new PreventDefaultController(Event.ONDBLCLICK));
+		result.add(ControlSurfaceController.getInstance());
 		result.add(new ListController(this));
 		return result;
 	}
 	
-	protected void createUpdateController(ListModel model, ListViewDefault view)
+	protected void createUpdateController(ListModel model, ListView view)
 	{
 		new ListUpdateController(model, view);
 	}

@@ -13,24 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.sb.client.widget;
+package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.fw.*;
-import asquare.gwt.tk.client.ui.behavior.EventBase;
-
-public class ListSelectionController extends ListSelectionControllerBase
+public interface MutableListModel extends ListModel, MutableIndexedDataSource
 {
-	private final ListView m_view;
-	
-	public ListSelectionController(ListSelectionModel selectionModel, ListModel updateModel, ListView view)
-	{
-		super(selectionModel, updateModel);
-		m_view = view;
-	}
-	
-	protected int getIndex(EventBase e)
-	{
-		IndexedCellId cellId = ((IndexedCellId) m_view.getCellId(e.getTarget()));
-		return cellId != null ? cellId.getIndex() : -1;
-	}
+    void add(Object value);
+    
+    void insert(int index, Object value);
+    
+    void remove(int index);
+    
+    void set(int index, Object value);
+    
+    void clear();
 }

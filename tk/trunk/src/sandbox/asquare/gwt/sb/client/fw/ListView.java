@@ -47,7 +47,7 @@ public interface ListView extends CompositeCellView
 	
 	int getSize();
 	
-	void prepareElement(CellId cellId, Object item, Properties cellProperties);
+	void prepareElement(CellId cellId, Object modelElement, Properties cellProperties);
 	
-	void renderContent(CellId cellId, Object item, Properties cellProperties);
+	void renderContent(CellId cellId, Object modelElement, Properties cellProperties);
 }

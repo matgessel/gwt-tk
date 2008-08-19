@@ -172,6 +172,13 @@ public class ListSelectionModelSingleTC extends TestCase
 		m_model.addListener(m_l1);
 		m_model.clearSelection();
 		assertTrue(m_l1.isChanged());
+		
+		// anchor & lead indices updated
+		setupImpl();
+		m_model.addSelectionRange(0, 0);
+		m_model.clearSelection();
+		assertEquals(-1, m_model.getAnchorIndex());
+		assertEquals(-1, m_model.getLeadIndex());
 	}
 	
 	public void testGetSelectionSize()
@@ -239,6 +246,18 @@ public class ListSelectionModelSingleTC extends TestCase
 		m_l1.init();
 		m_model.addSelectionRange(0, 0);
 		assertFalse(m_l1.isChanged());
+		
+		// anchor & lead indices updated
+		setupImpl();
+		m_model.addSelectionRange(0, 0);
+		assertEquals(0, m_model.getAnchorIndex());
+		assertEquals(0, m_model.getLeadIndex());
+		m_model.addSelectionRange(2, 5);
+		assertEquals(5, m_model.getAnchorIndex());
+		assertEquals(5, m_model.getLeadIndex());
+		m_model.addSelectionRange(5, 2);
+		assertEquals(2, m_model.getAnchorIndex());
+		assertEquals(2, m_model.getLeadIndex());
 	}
 	
 	public void testSetSelectionRange()
@@ -292,6 +311,18 @@ public class ListSelectionModelSingleTC extends TestCase
 		assertFalse(m_l1.isChanged());
 		m_model.setSelectionRange(1, 1);
 		assertTrue(m_l1.isChanged());
+		
+		// anchor & lead indices updated
+		setupImpl();
+		m_model.setSelectionRange(0, 0);
+		assertEquals(0, m_model.getAnchorIndex());
+		assertEquals(0, m_model.getLeadIndex());
+		m_model.setSelectionRange(2, 5);
+		assertEquals(5, m_model.getAnchorIndex());
+		assertEquals(5, m_model.getLeadIndex());
+		m_model.setSelectionRange(5, 2);
+		assertEquals(2, m_model.getAnchorIndex());
+		assertEquals(2, m_model.getLeadIndex());
 	}
 	
 	public void testRemoveSelectionRange()
@@ -363,6 +394,21 @@ public class ListSelectionModelSingleTC extends TestCase
 		assertFalse(m_l1.isChanged());
 		m_model.removeSelectionRange(0, 0);
 		assertTrue(m_l1.isChanged());
+		
+		// anchor & lead indices updated
+		setupImpl();
+		m_model.setSelectionRange(0, 0);
+		m_model.removeSelectionRange(0, 0);
+		assertEquals(-1, m_model.getAnchorIndex());
+		assertEquals(-1, m_model.getLeadIndex());
+		m_model.setSelectionRange(2, 2);
+		m_model.removeSelectionRange(2, 5);
+		assertEquals(-1, m_model.getAnchorIndex());
+		assertEquals(-1, m_model.getLeadIndex());
+		m_model.setSelectionRange(2, 2);
+		m_model.removeSelectionRange(5, 2);
+		assertEquals(-1, m_model.getAnchorIndex());
+		assertEquals(-1, m_model.getLeadIndex());
 	}
 	
 	public void testAdjustForItemsInserted()
@@ -437,6 +483,19 @@ public class ListSelectionModelSingleTC extends TestCase
 		{
 			// EXPECTED
 		}
+		
+		// anchor & lead indices updated
+		setupImpl();
+		m_model.setSelectionRange(0, 0);
+		m_model.adjustForItemsInserted(0, 1);
+		assertEquals(1, m_model.getAnchorIndex());
+		assertEquals(1, m_model.getLeadIndex());
+		m_model.adjustForItemsInserted(0, 1);
+		assertEquals(2, m_model.getAnchorIndex());
+		assertEquals(2, m_model.getLeadIndex());
+		m_model.adjustForItemsInserted(3, 1);
+		assertEquals(2, m_model.getAnchorIndex());
+		assertEquals(2, m_model.getLeadIndex());
 	}
 	
 	public void testAdjustForItemsRemoved()
@@ -528,5 +587,18 @@ public class ListSelectionModelSingleTC extends TestCase
 		{
 			// EXPECTED
 		}
+		
+		// anchor & lead indices updated
+		setupImpl();
+		m_model.setSelectionRange(1, 1);
+		m_model.adjustForItemsRemoved(0, 1);
+		assertEquals(0, m_model.getAnchorIndex());
+		assertEquals(0, m_model.getLeadIndex());
+		m_model.adjustForItemsRemoved(1, 1);
+		assertEquals(0, m_model.getAnchorIndex());
+		assertEquals(0, m_model.getLeadIndex());
+		m_model.adjustForItemsRemoved(0, 1);
+		assertEquals(-1, m_model.getAnchorIndex());
+		assertEquals(-1, m_model.getLeadIndex());
 	}
 }

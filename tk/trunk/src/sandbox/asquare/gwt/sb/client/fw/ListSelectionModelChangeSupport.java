@@ -21,7 +21,7 @@ import asquare.gwt.sb.client.util.IntRange;
 import asquare.gwt.sb.client.util.Range;
 import asquare.gwt.sb.client.util.RangeCollection;
 
-public class ListSelectionModelChangeSupport extends ChangeSupportBase
+public class ListSelectionModelChangeSupport extends ModelChangeSupportComplex
 {
 	private ArrayList m_listeners = null;
 	
@@ -68,7 +68,7 @@ public class ListSelectionModelChangeSupport extends ChangeSupportBase
 		}
 	}
 	
-	private ListSelectionModelEvent getEvent()
+	private ListSelectionModelEvent getEvent0()
 	{
 		if (m_event == null)
 		{
@@ -89,7 +89,7 @@ public class ListSelectionModelChangeSupport extends ChangeSupportBase
 	
 	public void selectionAdded(RangeCollection collection)
 	{
-		ListSelectionModelEvent event = getEvent();
+		ListSelectionModelEvent event = getEvent0();
 		for (int i = 0, size = collection.getSize(); i < size; i++)
 		{
 			event.selectionAdded(collection.get(i));
@@ -98,17 +98,17 @@ public class ListSelectionModelChangeSupport extends ChangeSupportBase
 
 	public void selectionAdded(Range range)
 	{
-		getEvent().selectionAdded(range);
+		getEvent0().selectionAdded(range);
 	}
 	
 	public void selectionAdded(int startIndex, int length)
 	{
-		getEvent().selectionAdded(new IntRange(startIndex, length));
+		getEvent0().selectionAdded(new IntRange(startIndex, length));
 	}
 
 	public void selectionRemoved(RangeCollection collection)
 	{
-		ListSelectionModelEvent event = getEvent();
+		ListSelectionModelEvent event = getEvent0();
 		for (int i = 0, size = collection.getSize(); i < size; i++)
 		{
 			event.selectionRemoved(collection.get(i));
@@ -117,12 +117,12 @@ public class ListSelectionModelChangeSupport extends ChangeSupportBase
 
 	public void selectionRemoved(Range range)
 	{
-		getEvent().selectionRemoved(range);
+		getEvent0().selectionRemoved(range);
 	}
 
 	public void selectionRemoved(int startIndex, int length)
 	{
-		getEvent().selectionRemoved(new IntRange(startIndex, length));
+		getEvent0().selectionRemoved(new IntRange(startIndex, length));
 	}
 
 	public void update()

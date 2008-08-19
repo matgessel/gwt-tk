@@ -16,9 +16,7 @@
 package asquare.gwt.sb.client.widget;
 
 import asquare.gwt.sb.client.fw.*;
-import asquare.gwt.tk.client.ui.behavior.EventBase;
-import asquare.gwt.tk.client.ui.behavior.EventController;
-import asquare.gwt.tk.client.ui.behavior.MouseEvent;
+import asquare.gwt.tk.client.ui.behavior.*;
 
 public abstract class ListSelectionControllerBase extends EventController
 {
@@ -28,10 +26,13 @@ public abstract class ListSelectionControllerBase extends EventController
 	
 	public ListSelectionControllerBase(ListSelectionModel selectionModel, ExplicitUpdateModel model)
 	{
-		super(ListSelectionControllerBase.class, MouseEvent.MOUSE_DOWN);
+		super(ListSelectionControllerBase.class);
+		addHandler(new DragController(new ListDragHandler()));
 		m_selectionModel = selectionModel;
 		m_model = model;
 	}
+	
+	protected abstract int getIndex(EventBase e);
 	
 	public ListSelectionModel getSelectionModel()
 	{
@@ -43,40 +44,120 @@ public abstract class ListSelectionControllerBase extends EventController
 		m_selectionModel = selectionModel;
 	}
 	
-	public void onMouseDown(MouseEvent e)
+	private class ListDragHandler extends EventControllerBase
 	{
-        int index = getIndex(e);
-        if (index != -1)
-        {
-            if (e.isControlDown())
-            {
-                if (m_selectionModel.isIndexSelected(index))
-                {
-                    m_selectionModel.removeSelectionRange(index, index);
-                }
-                else
-                {
-                    m_selectionModel.addSelectionRange(index, index);
-                }
-            }
-            else if (e.isShiftDown() && m_selectionModel.hasSelection())
-            {
-                if (index < m_selectionModel.getMinSelectedIndex())
-                {
-                    m_selectionModel.addSelectionRange(m_selectionModel.getMaxSelectedIndex(), index);
-                }
-                else
-                {
-                    m_selectionModel.addSelectionRange(m_selectionModel.getMinSelectedIndex(), index);
-                }
-            }
-            else
-            {
-                m_selectionModel.setSelectionRange(index, index);
-            }
-            m_model.update();
-        }
+		private int m_anchorIndex = -1;
+		private Strategy m_strategy = null;
+		
+		public ListDragHandler()
+		{
+			super(MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_UP);
+		}
+		
+		public void onMouseDown(MouseEvent e)
+		{
+	        m_anchorIndex = getIndex(e);
+	        if (m_anchorIndex != -1)
+	        {
+	            if (e.isShiftDown())
+	            {
+	                m_strategy = new AddStrategy();
+	            }
+	            else if (e.isControlDown())
+	            {
+	                m_strategy = new ToggleStrategy();
+	            }
+	            else
+	            {
+	                m_strategy = new DefaultStrategy();
+	            }
+	            m_strategy.doMouseDown(m_selectionModel, m_anchorIndex, m_anchorIndex, e);
+	            m_model.update();
+	        }
+		}
+		
+		public void onMouseOver(MouseEvent e)
+		{
+	        if (m_anchorIndex != -1)
+	        {
+	        	int leadIndex = getIndex(e);
+	        	if (leadIndex != -1)
+	        	{
+	        		m_strategy.doMouseOver(m_selectionModel, m_anchorIndex, leadIndex, e);
+	        		m_model.update();
+	        	}
+	        }
+		}
+		
+		public void onMouseUp(MouseEvent e)
+		{
+			m_strategy = null;
+			m_anchorIndex = -1;
+		}
 	}
 	
-	protected abstract int getIndex(EventBase e);
+	private static interface Strategy
+	{
+		void doMouseDown(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e);
+
+		void doMouseOver(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e);
+	}
+	
+	private static class DefaultStrategy implements Strategy
+	{
+		public void doMouseDown(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e)
+		{
+			selectionModel.setSelectionRange(anchorIndex, leadIndex);
+        }
+		
+		public void doMouseOver(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e)
+		{
+            selectionModel.setSelectionRange(anchorIndex, leadIndex);
+		}
+	}
+	
+	private static class AddStrategy implements Strategy
+	{
+		public void doMouseDown(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e)
+		{
+			if (selectionModel.hasSelection())
+        	{
+        		anchorIndex = (leadIndex < selectionModel.getMinSelectedIndex()) ? selectionModel.getMaxSelectedIndex() : selectionModel.getMinSelectedIndex();
+        	}
+			selectionModel.addSelectionRange(anchorIndex, leadIndex);
+		}
+		
+		public void doMouseOver(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e)
+		{
+			selectionModel.addSelectionRange(anchorIndex, leadIndex);
+		}
+	}
+	
+	private static class ToggleStrategy implements Strategy
+	{
+		private boolean m_adding;
+		
+		public void doMouseDown(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e)
+		{
+			m_adding = ! selectionModel.isIndexSelected(leadIndex);
+			doToggle(selectionModel, anchorIndex, leadIndex, m_adding);
+		}
+		
+		public void doMouseOver(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, MouseEvent e)
+		{
+			doToggle(selectionModel, anchorIndex, leadIndex, m_adding);
+		}
+		
+		public void doToggle(ListSelectionModel selectionModel, int anchorIndex, int leadIndex, boolean adding)
+		{
+			if (adding)
+        	{
+				selectionModel.addSelectionRange(anchorIndex, leadIndex);
+        	}
+        	else
+        	{
+        		selectionModel.removeSelectionRange(anchorIndex, leadIndex);
+        	}
+		}
+	}
 }

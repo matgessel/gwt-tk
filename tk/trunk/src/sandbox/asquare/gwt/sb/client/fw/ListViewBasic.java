@@ -34,6 +34,6 @@ public class ListViewBasic extends ListViewDefault
 	
 	public ListViewBasic(String listElement, String itemElement, CellRenderer renderer)
 	{
-		super(new ListWidgetBasic(), renderer);
+		super(new ListWidgetBasic(listElement, itemElement), renderer);
 	}
 }

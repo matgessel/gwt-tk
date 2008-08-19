@@ -27,24 +27,41 @@ public class ListModelEvent extends ModelChangeEventComplex
 		addChange(new ListItemPropertyChange(propertyName, index, count));
 	}
 	
+	public boolean hasItemPropertyChange(String itemPropertyName)
+	{
+        return getIndexOfItemPropertyChange(itemPropertyName) != -1;
+	}
+	
+	/**
+	 * @return the <em>first</em> item change with the specified property id, or <code>null</code>
+	 */
 	public ListItemPropertyChange getItemPropertyChange(String itemPropertyName)
 	{
-        int searchIndex = getIndexOfChange(ListItemPropertyChange.class);
+        int index = getIndexOfItemPropertyChange(itemPropertyName);
+        return (index != -1) ? (ListItemPropertyChange) getChangeAt(index) : null;
+	}
+	
+	public int getIndexOfItemPropertyChange(String itemPropertyName)
+	{
+		return getIndexOfItemPropertyChange(itemPropertyName, 0);
+	}
+	
+	public int getIndexOfItemPropertyChange(String itemPropertyName, int fromIndex)
+	{
+		if (itemPropertyName == null)
+			throw new IllegalArgumentException();
+		
+        int searchIndex = getIndexOfChange(ListItemPropertyChange.class, fromIndex);
 		while (searchIndex != -1)
 		{
             ListItemPropertyChange candidate = (ListItemPropertyChange) getChangeAt(searchIndex);
 			if (candidate.getName().equals(itemPropertyName))
             {
-            	return candidate;
+            	return searchIndex;
             }
             searchIndex = getIndexOfChange(ListItemPropertyChange.class, searchIndex + 1);
 		}
-        return null;
-	}
-	
-	public boolean hasItemPropertyChange(String itemPropertyName)
-	{
-        return getItemPropertyChange(itemPropertyName) != null;
+        return -1;
 	}
 	
 	public static class ListChangeItemInsertion extends IndexedChangeBase
@@ -56,7 +73,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 		
 		public boolean addChange(ChangeBase change)
 		{
-			return change instanceof ListChangeItemInsertion && addListChange((IndexedChangeBase) change);
+			return change instanceof ListChangeItemInsertion && addIndexedChange((IndexedChangeBase) change);
 		}
 	}
 	
@@ -69,7 +86,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 		
 		public boolean addChange(ChangeBase change)
 		{
-			return change instanceof ListChangeItemRemoval && addListChange((IndexedChangeBase) change);
+			return change instanceof ListChangeItemRemoval && addIndexedChange((IndexedChangeBase) change);
 		}
 	}
 	
@@ -99,7 +116,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 				ListItemPropertyChange change0 = (ListItemPropertyChange) change;
 				if (m_name.equals(change0.m_name))
 				{
-					return addListChange((IndexedChangeBase) change);
+					return addIndexedChange((IndexedChangeBase) change);
 				}
 			}
 			return false;

@@ -17,7 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 import asquare.gwt.sb.client.util.*;
 
-public class ListSelectionModelEvent extends ModelChangeEvent
+public class ListSelectionModelEvent extends ModelChangeEventComplex
 {
 	private final RangeCollection m_selected = new RangeCollection();
 	private final RangeCollection m_deselected = new RangeCollection();
@@ -34,13 +34,13 @@ public class ListSelectionModelEvent extends ModelChangeEvent
 	
 	public void selectionAdded(Range range)
 	{
-		m_selected.add(range);
+		m_selected.add(range.duplicate());
 		sweep(range, m_deselected);
 	}
 	
 	public void selectionRemoved(Range range)
 	{
-		m_deselected.add(range);
+		m_deselected.add(range.duplicate());
 		sweep(range, m_selected);
 	}
 
