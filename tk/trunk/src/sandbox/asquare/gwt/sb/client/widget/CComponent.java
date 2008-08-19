@@ -43,7 +43,7 @@ public class CComponent extends CComposite
 		super(false);
 		m_model = model != null ? model : createModel();
 		m_view = view != null ? view : createView();
-		initWidget(view);
+		initWidget(m_view);
 	}
 	
 	protected Object createModel()
