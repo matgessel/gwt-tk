@@ -196,7 +196,7 @@ public class DialogPanel extends Composite
 					protected List createCaptionControllers()
 					{
 						List result = new ArrayList();
-						result.add(PreventSelectionController.getInstance());
+						result.add(ControlSurfaceController.getInstance());
 						return result;
 					}
 				};

@@ -17,6 +17,10 @@ package asquare.gwt.tk.client.ui.behavior;
 
 import com.google.gwt.core.client.GWT;
 
+/**
+ * Since this is typically used as a singleton it is not allowed to have
+ * children.
+ */
 public abstract class PreventDragController extends EventController
 {
 	private static PreventDragController s_instance = null;
@@ -30,8 +34,17 @@ public abstract class PreventDragController extends EventController
 		return s_instance;
 	}
 	
-	public PreventDragController(int eventBits)
+	protected PreventDragController(int eventBits)
 	{
 		super(PreventDragController.class, eventBits);
+	}
+
+	/**
+	 * @deprecated not supported
+	 * @throws UnsupportedOperationException
+	 */
+	public void addHandler(EventHandler handler)
+	{
+		throw new UnsupportedOperationException();
 	}
 }

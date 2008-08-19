@@ -20,9 +20,13 @@ import com.google.gwt.core.client.GWT;
 /**
  * A marker interface for the prevent selection controller. Used to instantiate
  * the controller via deferred binding.
- * <p>This controller prevents text selection within it's associated widget. 
+ * <p>
+ * This controller prevents text selection within it's associated widget.
+ * <p>
+ * Since this is typically used as a singleton it is not allowed to have
+ * children.
  */
-public abstract class PreventSelectionController extends ControllerAdaptor
+public abstract class PreventSelectionController extends EventController
 {
 	/**
 	 * A shared instance of the controller.
@@ -40,8 +44,17 @@ public abstract class PreventSelectionController extends ControllerAdaptor
 		return INSTANCE;
 	}
 	
-	public PreventSelectionController(int eventBits)
+	protected PreventSelectionController(int eventBits)
 	{
 		super(PreventSelectionController.class, eventBits);
+	}
+	
+	/**
+	 * @deprecated not supported
+	 * @throws UnsupportedOperationException
+	 */
+	public void addHandler(EventHandler handler)
+	{
+		throw new UnsupportedOperationException();
 	}
 }

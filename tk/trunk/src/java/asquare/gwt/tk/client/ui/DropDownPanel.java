@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import asquare.gwt.tk.client.ui.behavior.ControlSurfaceController;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
-import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -105,7 +105,7 @@ public class DropDownPanel extends CComplexPanel
 	{
 		List result = new ArrayList();
 		result.add(new OpenerController(this));
-		result.add(PreventSelectionController.getInstance());
+		result.add(ControlSurfaceController.getInstance());
 		return result;
 	}
 	

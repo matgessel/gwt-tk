@@ -32,14 +32,13 @@ public class DragController extends EventController
 	}
 	
 	/**
-	 * @param eventBits additional events to sink, or to use the event bits
-	 *            <code>0</code> from the handlers
-	 * @param handler an PluggableEventHandler or <code>null</code>
+	 * @param eventBits additional events to sink, (pass <code>0</code> to just use the event bits from the handlers)
+	 * @param handler an EventHandler or <code>null</code>
 	 */
 	public DragController(int eventBits, EventHandler handler)
 	{
 		super(DragController.class, eventBits | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP, handler);
-		addHandler(PreventDragController.getInstance());
+		addHandler(ControlSurfaceController.getInstance());
 	}
 	
 	public void onMouseDown(MouseEvent e)

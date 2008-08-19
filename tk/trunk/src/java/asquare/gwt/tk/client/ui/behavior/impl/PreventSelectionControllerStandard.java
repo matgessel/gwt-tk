@@ -15,11 +15,10 @@
  */
 package asquare.gwt.tk.client.ui.behavior.impl;
 
+import asquare.gwt.tk.client.ui.behavior.MouseEvent;
 import asquare.gwt.tk.client.ui.behavior.PreventSelectionController;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.Widget;
 
 public class PreventSelectionControllerStandard extends PreventSelectionController 
 {
@@ -28,9 +27,8 @@ public class PreventSelectionControllerStandard extends PreventSelectionControll
 		super(Event.ONMOUSEDOWN);
 	}
 	
-	public void onBrowserEvent(Widget widget, Event event)
+	public void onMouseDown(MouseEvent e)
 	{
-        // prevents text selection in Mozilla, Safari & Opera
-        DOM.eventPreventDefault(event);
+		e.preventDefault();
 	}
 }

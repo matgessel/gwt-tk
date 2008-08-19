@@ -148,7 +148,7 @@ public class EventsPanel extends Composite
 		 * These controllers are stateless, so they may be shared between all widgets. 
 		 */
         ArrayList controllers = new ArrayList();
-		controllers.add(PreventSelectionController.getInstance());
+		controllers.add(ControlSurfaceController.getInstance());
 		controllers.add(new Ex2_Controller());
 		for (Iterator iter = createSomeWidgets().iterator(); iter.hasNext();)
 		{
