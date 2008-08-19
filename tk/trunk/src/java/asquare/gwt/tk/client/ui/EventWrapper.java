@@ -47,12 +47,13 @@ public abstract class EventWrapper extends Composite
 	
 	/*
 	 *  (non-Javadoc)
-	 * Hijacks events intended for the wrapped widget's element. 
 	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
 	 */
 	protected void onAttach()
 	{
 		super.onAttach();
+		// Hijacks events intended for the wrapped widget's element. 
+		// Must be after super call. 
 		DOM.setEventListener(getElement(), this);
 	}
 	
