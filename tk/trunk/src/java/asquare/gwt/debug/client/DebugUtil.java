@@ -115,87 +115,68 @@ public class DebugUtil
 	 */
 	public static String prettyPrintEvent(Event event)
 	{
-		String result = String.valueOf((Object) null);
+		if (event == null)
+			return String.valueOf(event);
 		
-		if (event != null)
+        switch(DOM.eventGetType(event))
 		{
-	        int eventType = DOM.eventGetType(event);
-			switch(eventType)
-			{
-				case Event.ONKEYDOWN: 
-					result = "event[type=onKeyDown," + createKeyString(event) + "]";
-					break;
-					
-				case Event.ONKEYUP: 
-					result = "event[type=onKeyUp," + createKeyString(event) + "]";
-					break;
-					
-				case Event.ONKEYPRESS: 
-					result = "event[type=onKeyPress," + createKeyString(event) + "]";
-					break;
-					
-				case Event.ONCHANGE: 
-					result = "event[type=onChange,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONFOCUS: 
-					result = "event[type=onFocus,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONBLUR: 
-					result = "event[type=onBlur,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONCLICK: 
-					result = "event[type=onClick,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONDBLCLICK: 
-					result = "event[type=onDblClick,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONERROR: 
-					result = "event[type=onError,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONLOAD: 
-					result = "event[type=onLoad,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONLOSECAPTURE: 
-					result = "event[type=onLoseCapture,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				case Event.ONMOUSEDOWN: 
-					result = "event[type=onMouseDown," + createMouseString(event) + "]";
-					break;
-					
-				case Event.ONMOUSEUP: 
-					result = "event[type=onMouseUp," + createMouseString(event) + "]";
-					break;
-					
-				case Event.ONMOUSEOVER: 
-					result = "event[type=onMouseOver," + createMouseString(event) + "]";
-					break;
-					
-				case Event.ONMOUSEOUT: 
-					result = "event[type=onMouseOut," + createMouseString(event) + "]";
-					break;
-					
-				case Event.ONMOUSEMOVE: 
-					result = "event[type=onMouseMove," + createMouseString(event) + "]";
-					break;
-					
-				case Event.ONSCROLL: 
-					result = "event[type=onScroll,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
-					break;
-					
-				default: 
-					result = DOM.eventToString(event);
-			}
+			case Event.ONKEYDOWN: 
+				return "event[type=onKeyDown," + createKeyString(event) + "]";
+				
+			case Event.ONKEYUP: 
+				return "event[type=onKeyUp," + createKeyString(event) + "]";
+				
+			case Event.ONKEYPRESS: 
+				return "event[type=onKeyPress," + createKeyString(event) + "]";
+				
+			case Event.ONCHANGE: 
+				return "event[type=onChange,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONFOCUS: 
+				return "event[type=onFocus,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONBLUR: 
+				return "event[type=onBlur,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONCLICK: 
+				return "event[type=onClick,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONDBLCLICK: 
+				return "event[type=onDblClick,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONERROR: 
+				return "event[type=onError,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONLOAD: 
+				return "event[type=onLoad,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONLOSECAPTURE: 
+				return "event[type=onLoseCapture,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			case Event.ONMOUSEDOWN: 
+				return "event[type=onMouseDown," + createMouseString(event) + "]";
+				
+			case Event.ONMOUSEUP: 
+				return "event[type=onMouseUp," + createMouseString(event) + "]";
+				
+			case Event.ONMOUSEOVER: 
+				return "event[type=onMouseOver," + createMouseString(event) + "]";
+				
+			case Event.ONMOUSEOUT: 
+				return "event[type=onMouseOut," + createMouseString(event) + "]";
+				
+			case Event.ONMOUSEMOVE: 
+				return "event[type=onMouseMove," + createMouseString(event) + "]";
+				
+			case Event.ONMOUSEWHEEL: 
+				return "event[type=onMouseWheel," + createMouseString(event) + "]";
+				
+			case Event.ONSCROLL: 
+				return "event[type=onScroll,target=" + getTagName(DOM.eventGetTarget(event)) + "]";
+				
+			default: 
+				return DOM.eventToString(event);
 		}
-		
-		return result;
 	}
 	
 	private static String createKeyString(Event event)
@@ -215,6 +196,7 @@ public class DebugUtil
 		",screenX=" + DOM.eventGetScreenX(event) + 
 		",screenY=" + DOM.eventGetScreenY(event) + 
 		",buttons=" + DOM.eventGetButton(event) + 
+		",modifiers=" + KeyboardListenerCollection.getKeyboardModifiers(event) + 
 		",target=" + getTagName(DOM.eventGetTarget(event));
 	}
 	
