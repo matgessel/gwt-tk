@@ -21,9 +21,7 @@ public interface MutableListModel extends ListModel, MutableIndexedDataSource
     
     void insert(int index, Object value);
     
-    void remove(int index);
-    
-    void set(int index, Object value);
+    Object remove(int index);
     
     void clear();
 }

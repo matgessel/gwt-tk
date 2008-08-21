@@ -263,6 +263,18 @@ public class ModelChangeEventComplex extends ModelChangeEvent
         	return m_type == change.m_type;
         }
     }
+	
+	/**
+	 * Indicates that the model changed and the entire view needs to be
+	 * revalidated.
+	 */
+    public static class ModelChanged extends ChangeBase
+    {
+    	public ModelChanged()
+		{
+    		super(ModelChanged.class);
+		}
+    }
 
     public static abstract class PropertyChangeBase extends ChangeBase
     {

@@ -17,6 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.EventListener;
 
+import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
 import asquare.gwt.sb.client.util.RangeCollection;
 
 public abstract class ListModelBase implements ListModel, SourcesModelChangeEventComplex
@@ -61,7 +62,7 @@ public abstract class ListModelBase implements ListModel, SourcesModelChangeEven
 		return m_changeSupport;
 	}
 	
-	protected void addChange(IndexedChangeBase change)
+	protected void addChange(ChangeBase change)
 	{
 		m_changeSupport.addChange(change);
 	}

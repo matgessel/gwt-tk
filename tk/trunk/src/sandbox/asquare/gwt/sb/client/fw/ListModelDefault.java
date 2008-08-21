@@ -44,6 +44,17 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		return m_items.indexOf(o);
 	}
 	
+	public Object[] getSelectedItems()
+	{
+		int[] indices = getSelectionModel().getSelectedIndices();
+		Object[] result = new Object[indices.length];
+		for (int i = 0; i < result.length; i++)
+		{
+			result[i] = m_items.get(indices[i]);
+		}
+		return result;
+	}
+	
 	public void add(Object o)
 	{
 		insert(m_items.size(), o);
@@ -97,15 +108,16 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		}
 	}
 	
-	public void remove(int index)
+	public Object remove(int index)
 	{
-		m_items.remove(index);
+		Object result = m_items.remove(index);
 		addChange(new ListModelEvent.ListChangeItemRemoval(index, 1));
 		ListSelectionModel selectionModel = getSelectionModel();
 		if (selectionModel != null)
 		{
 			selectionModel.adjustForItemsRemoved(index, 1);
 		}
+		return result;
 	}
 	
 	/**
