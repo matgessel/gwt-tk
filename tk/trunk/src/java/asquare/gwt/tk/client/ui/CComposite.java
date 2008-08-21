@@ -86,6 +86,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 * default controller creation.
 	 * 
 	 * @return a List with 0 or more controllers, or <code>null</code>
+	 * @deprecated add controllers in subclass constructor instead 
 	 */
 	protected List createControllers()
 	{
@@ -130,6 +131,11 @@ public class CComposite extends EventWrapper implements ControllerSupport
 		getControllerSupport().setControllers(controllers);
 	}
 	
+	protected void setControllerDisablable(Class id, boolean disablable)
+	{
+		getControllerSupport().setControllerDisablable(id, disablable);
+	}
+	
 	/*
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#sinkEvents(int)
@@ -146,6 +152,16 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	public void unsinkEvents(int eventBits)
 	{
 		getControllerSupport().unsinkEvents(eventBits);
+	}
+	
+	protected boolean isEnabled()
+	{
+		return getControllerSupport().isEnabled();
+	}
+	
+	protected void setEnabled(boolean enabled)
+	{
+		getControllerSupport().setEnabled(enabled);
 	}
 	
 	/*

@@ -15,9 +15,6 @@
  */
 package asquare.gwt.tk.client.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 import asquare.gwt.tk.client.ui.behavior.GlassPanelController;
 
@@ -105,18 +102,8 @@ public class GlassPanel extends CWindow
 		super();
 		m_bodyStyleName = bodyStyleName;
 		setStyleName("tk-GlassPanel");
-	}
-	
-	/*
-	 *  (non-Javadoc)
-	 * @see asquare.gwt.tk.client.ui.CComplexPanel#createControllers()
-	 */
-	protected List createControllers()
-	{
-		List result = new ArrayList();
-		result.add(GWT.create(GlassPanelController.class));
-		result.add(new GlassPanelBodyStyleController());
-		return result;
+		addController((GlassPanelController) GWT.create(GlassPanelController.class));
+		addController(new GlassPanelBodyStyleController());
 	}
 	
 	/**

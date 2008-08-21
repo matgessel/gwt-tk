@@ -15,7 +15,8 @@
  */
 package asquare.gwt.sb.client.widget;
 
-import java.util.*;
+import java.util.EventListener;
+import java.util.EventObject;
 
 import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.tk.client.ui.behavior.ControlSurfaceController;
@@ -38,6 +39,10 @@ public class CList extends CComponent
 		super(model, (Widget) view);
 		createUpdateController(getListModel(), getListView());
 		addController(new CompositeCellViewHoverController(getListModel()));
+		addController(ControlSurfaceController.getInstance());
+		ListController listController = new ListController(this);
+		setControllerDisablable(listController.getId(), true);
+		addController(listController);
 	}
 	
 	protected Object createModel()
@@ -48,14 +53,6 @@ public class CList extends CComponent
 	protected Widget createView()
 	{
 		return new ListViewBasic();
-	}
-	
-	protected List createControllers()
-	{
-		List result = new ArrayList();
-		result.add(ControlSurfaceController.getInstance());
-		result.add(new ListController(this));
-		return result;
 	}
 	
 	protected void createUpdateController(ListModel model, ListView view)
@@ -106,6 +103,22 @@ public class CList extends CComponent
 		if (controller != null)
 		{
 			controller.removeDoubleClickHandler(handler);
+		}
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		if (isEnabled() != enabled)
+		{
+			if (enabled)
+			{
+				removeStyleDependentName(StyleNames.DISABLED);
+			}
+			else
+			{
+				addStyleDependentName(StyleNames.DISABLED);
+			}
+			super.setEnabled(enabled);
 		}
 	}
 	

@@ -27,13 +27,17 @@ import com.google.gwt.user.client.ui.Widget;
  * A delegate class which manages controller bookkeeping and lifecycle. 
  * Ideally, this fuctionality would be in a superclass like
  * {@link com.google.gwt.user.client.ui.Widget Widget}.
+ * 
+ * TODO: unplug (remove) controllers when disabling?
  */
 public class ControllerSupportDelegate
 {
 	private final Widget m_widget;
 	
 	private List m_controllers = null;
+	private List m_disablableControllerIds = null;
 	private int m_legacyEventBits = 0;
+	private boolean m_enabled = true;
 	
 	/**
 	 * Creates a delegate for the specified widget. 
@@ -171,6 +175,39 @@ public class ControllerSupportDelegate
 		sinkAllBits();
 	}
 	
+	public boolean isControllerDisablable(Class id)
+	{
+		return m_disablableControllerIds != null && m_disablableControllerIds.contains(id);
+	}
+	
+	/**
+	 * @param id a non-null controller id
+	 * @param disablable <code>true</code> to disable the specified controller
+	 *            when the component is disabled
+	 * @throws IllegalArgumentException if <code>id</code> is <code>null</code>
+	 */
+	public void setControllerDisablable(Class id, boolean disablable)
+	{
+		if (id == null)
+			throw new IllegalArgumentException();
+		
+		if (disablable)
+		{
+			if (m_disablableControllerIds == null)
+			{
+				m_disablableControllerIds = new ArrayList();
+			}
+			m_disablableControllerIds.add(id);
+		}
+		else
+		{
+			if (m_disablableControllerIds != null)
+			{
+				m_disablableControllerIds.remove(id);
+			}
+		}
+	}
+	
 	private void plugInControllers()
 	{
 		if (m_controllers != null)
@@ -191,6 +228,16 @@ public class ControllerSupportDelegate
 				((Controller) m_controllers.get(i)).unplug(m_widget);
 			}
 		}
+	}
+	
+	public boolean isEnabled()
+	{
+		return m_enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		m_enabled = enabled;
 	}
 	
 	public void onAttach()
@@ -237,7 +284,7 @@ public class ControllerSupportDelegate
 				for (int i = 0, size = m_controllers.size(); i < size; i++)
 				{
 					Controller controller = (Controller) m_controllers.get(i);
-					if ((controller.getEventBits() & eventType) != 0)
+					if ((controller.getEventBits() & eventType) != 0 && (m_enabled || ! isControllerDisablable(controller.getId())))
 					{
 						controller.onBrowserEvent(m_widget, event);
 					}

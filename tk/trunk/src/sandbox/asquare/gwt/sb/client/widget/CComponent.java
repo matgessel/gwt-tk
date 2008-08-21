@@ -65,4 +65,34 @@ public class CComponent extends CComposite
 	{
 		return m_view;
 	}
+	
+	/*
+	 * Override for visibility. 
+	 * (non-Javadoc)
+	 * @see asquare.gwt.tk.client.ui.CComposite#setControllerDisablable(java.lang.Class, boolean)
+	 */
+	public void setControllerDisablable(Class id, boolean disablable)
+	{
+		super.setControllerDisablable(id, disablable);
+	}
+	
+	/*
+	 * Override for visibility. 
+	 * (non-Javadoc)
+	 * @see asquare.gwt.tk.client.ui.CComposite#isEnabled()
+	 */
+	public boolean isEnabled()
+	{
+		return super.isEnabled();
+	}
+	
+	/*
+	 * Override for visibility. 
+	 * (non-Javadoc)
+	 * @see asquare.gwt.tk.client.ui.CComposite#setEnabled(boolean)
+	 */
+	public void setEnabled(boolean enabled)
+	{
+		super.setEnabled(enabled);
+	}
 }
