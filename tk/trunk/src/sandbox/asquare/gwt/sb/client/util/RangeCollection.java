@@ -223,6 +223,31 @@ public class RangeCollection
 		}
 	}
 	
+	/**
+	 * Removes any entries after <code>size</code>
+	 * 
+	 * @param size
+	 */
+	public void truncate(int size)
+	{
+		for (int i = m_ranges.size() - 1; i >= 0; i--)
+		{
+			Range range = (Range) m_ranges.get(i);
+			if (range.getTerminus() <= size)
+			{
+				break;
+			}
+			if (range.getStartIndex() >= size)
+			{
+				m_ranges.remove(i);
+			}
+			else if (range.contains(size))
+			{
+				range.subtract(size, range.getLength() - size);
+			}
+		}
+	}
+	
 	public void clear()
 	{
 		m_ranges.clear();

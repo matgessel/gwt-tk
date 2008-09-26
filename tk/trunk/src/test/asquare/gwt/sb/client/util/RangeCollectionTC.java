@@ -21,7 +21,9 @@ import asquare.gwt.tk.testutil.TkTestUtil;
 public class RangeCollectionTC extends TestCase
 {
     private RangeCollection m_collection;
+	private Object[] m_0_0;
 	private Object[] m_0_1;
+	private Object[] m_0_2;
 	private Object[] m_3_4;
 	private Object[] m_6_7;
 	private Object[] m_0_4;
@@ -30,7 +32,9 @@ public class RangeCollectionTC extends TestCase
 	private Object[] m_5_14;
 	private Object[] m_10_14;
 	private Object[] m_10_19;
+    private ObjectArrayRange m_range0_0;
     private ObjectArrayRange m_range0_1;
+    private ObjectArrayRange m_range0_2;
     private ObjectArrayRange m_range3_4;
     private ObjectArrayRange m_range6_7;
     private ObjectArrayRange m_range0_9;
@@ -43,7 +47,9 @@ public class RangeCollectionTC extends TestCase
     protected void setupImpl()
     {
         m_collection = new RangeCollection();
+        m_0_0 = TkTestUtil.createIntegerArray(0, 1);
         m_0_1 = TkTestUtil.createIntegerArray(0, 2);
+        m_0_2 = TkTestUtil.createIntegerArray(0, 3);
         m_3_4 = TkTestUtil.createIntegerArray(3, 2);
         m_6_7 = TkTestUtil.createIntegerArray(6, 2);
 		m_0_9 = TkTestUtil.createIntegerArray(0, 10);
@@ -53,7 +59,9 @@ public class RangeCollectionTC extends TestCase
 		m_10_14 = TkTestUtil.createIntegerArray(10, 5);
 		m_10_19 = TkTestUtil.createIntegerArray(10, 10);
 		
+		m_range0_0 = new ObjectArrayRange(0, m_0_0);
 		m_range0_1 = new ObjectArrayRange(0, m_0_1);
+		m_range0_2 = new ObjectArrayRange(0, m_0_2);
 		m_range3_4 = new ObjectArrayRange(3, m_3_4);
 		m_range6_7 = new ObjectArrayRange(6, m_6_7);
 		m_range0_9 = new ObjectArrayRange(0, m_0_9);
@@ -449,6 +457,52 @@ public class RangeCollectionTC extends TestCase
     	// empty collection
     	m_collection.removeAll(new RangeCollection());
     	assertRangeValues(new ObjectArrayRange[] {m_range6_7});
+    }
+    
+    public void testTruncate()
+    {
+    	// truncate to 0
+    	setupImpl();
+    	m_collection.add(m_range0_4);
+    	m_collection.add(m_range10_14);
+    	m_collection.truncate(0);
+    	assertRangeValues(new ObjectArrayRange[] {});
+    	
+    	// truncate greater than current size
+    	setupImpl();
+    	m_collection.add(m_range0_4);
+    	m_collection.truncate(6);
+    	assertRangeValues(new ObjectArrayRange[] {m_range0_4});
+    	
+    	// truncate at between two ranges
+    	setupImpl();
+    	m_collection.add(m_range0_2);
+    	m_collection.truncate(2);
+    	assertRangeValues(new ObjectArrayRange[] {m_range0_1});
+    	
+    	// truncate at middle of a range
+    	setupImpl();
+    	m_collection.add(m_range0_9);
+    	m_collection.truncate(5);
+    	assertRangeValues(new ObjectArrayRange[] {m_range0_4});
+    	
+    	// truncate at last range entry
+    	setupImpl();
+    	m_collection.add(m_range0_2);
+    	m_collection.truncate(2);
+    	assertRangeValues(new ObjectArrayRange[] {m_range0_1});
+    	
+    	// truncate at last range entry + 1
+    	setupImpl();
+    	m_collection.add(m_range0_2);
+    	m_collection.truncate(3);
+    	assertRangeValues(new ObjectArrayRange[] {m_range0_2});
+    	
+    	// truncate at first range entry
+    	setupImpl();
+    	m_collection.add(m_range0_4);
+    	m_collection.truncate(1);
+    	assertRangeValues(new ObjectArrayRange[] {m_range0_0});
     }
     
     public void testShift_asserts()
