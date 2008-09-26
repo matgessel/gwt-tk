@@ -17,7 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 import asquare.gwt.sb.client.util.*;
 
-public class ListSelectionModelEvent extends ModelChangeEventComplex
+public class ListSelectionModelEvent extends ModelChangeEvent
 {
 	private final RangeCollection m_selected = new RangeCollection();
 	private final RangeCollection m_deselected = new RangeCollection();

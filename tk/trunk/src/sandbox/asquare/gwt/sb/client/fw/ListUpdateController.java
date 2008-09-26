@@ -21,6 +21,11 @@ import asquare.gwt.sb.client.fw.ListModelEvent.*;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
 import asquare.gwt.sb.client.util.*;
 
+/**
+ * Note: does not set even/odd properties because row removal is done by
+ * removing rows in the view. Row removal would invalidate the even/odd property
+ * of each view item.
+ */
 public class ListUpdateController implements ListModelListener
 {
 	private final ListModel m_model;
@@ -48,6 +53,11 @@ public class ListUpdateController implements ListModelListener
 		return m_view;
 	}
 	
+	protected Object getModelObject(int index)
+	{
+		return m_model.get(index);
+	}
+
 	public void addStylePropertyChange(String propertyName)
 	{
 		if (propertyName == null)
@@ -101,7 +111,7 @@ public class ListUpdateController implements ListModelListener
 			for (int index = 0; index < size; index++)
 			{
 				cellId.setIndex(index);
-				m_view.insert(cellId, m_model.get(index), configureCellProperties(index, m_model, tempProperties));
+				m_view.insert(cellId, getModelObject(index), configureCellProperties(index, m_model, tempProperties));
 			}
 		}
 	}
@@ -117,14 +127,47 @@ public class ListUpdateController implements ListModelListener
 			processChange(event.getChangeAt(i), tempProperties, renderStyleItems, renderContentItems);
 		}
 		
+		IntRangeCollection insertedItems = new IntRangeCollection();
 		IntRangeCollection removedItems = new IntRangeCollection();
 		for (int i = 0, size = event.getChangeCount(); i < size; i++)
 		{
 			ChangeBase change = event.getChangeAt(i);
+			if (change instanceof ListChangeItemInsertion)
+			{
+				ListChangeItemInsertion insertion = (ListChangeItemInsertion) change;
+				insertedItems.add(insertion.getIndex(), insertion.getCount());
+			}
 			if (change instanceof ListChangeItemRemoval)
 			{
 				ListChangeItemRemoval removal = (ListChangeItemRemoval) change;
 				removedItems.add(removal.getIndex(), removal.getCount());
+			}
+		}
+		
+		if (insertedItems.getSize() > 0)
+		{
+			// update all following items (for even/odd/first/last properties)
+			int min = insertedItems.getMinValue();
+			if (min < m_model.getSize())
+			{
+				renderStyleItems.add(new IntRange(min, m_model.getSize() - min));
+			}
+		}
+		
+		if (removedItems.getSize() > 0)
+		{
+			// don't render the removed items
+			renderStyleItems.removeAll(removedItems);
+			renderContentItems.removeAll(removedItems);
+			
+			renderStyleItems.truncate(m_model.getSize());
+			renderContentItems.truncate(m_model.getSize());
+			
+			// update all following items (for even/odd/first/last properties)
+			int min = removedItems.getMinValue();
+			if (min < m_model.getSize())
+			{
+				renderStyleItems.add(new IntRange(min, m_model.getSize() - min));
 			}
 		}
 		
@@ -134,11 +177,7 @@ public class ListUpdateController implements ListModelListener
 			Range range = renderStyleItems.get(i);
 			for (int index = range.getStartIndex(), terminus = index + range.getLength(); index < terminus; index++)
 			{
-				// TODO: add exclusion method to RangeCollection
-				if (! removedItems.contains(index, 1))
-				{
-					m_view.prepareElement(tempCellId.setIndex(index), m_model.get(index), configureCellProperties(index, m_model, tempProperties));
-				}
+				m_view.prepareElement(tempCellId.setIndex(index), getModelObject(index), configureCellProperties(index, m_model, tempProperties));
 			}
 		}
 		for (int i = 0, size = renderContentItems.getSize(); i < size; i++)
@@ -146,10 +185,7 @@ public class ListUpdateController implements ListModelListener
 			Range range = renderContentItems.get(i);
 			for (int index = range.getStartIndex(), terminus = index + range.getLength(); index < terminus; index++)
 			{
-				if (! removedItems.contains(index, 1))
-				{
-					m_view.renderContent(tempCellId.setIndex(index), m_model.get(index), configureCellProperties(index, m_model, tempProperties));
-				}
+				m_view.renderContent(tempCellId.setIndex(index), getModelObject(index), configureCellProperties(index, m_model, tempProperties));
 			}
 		}
 	}
@@ -172,7 +208,7 @@ public class ListUpdateController implements ListModelListener
 			{
 				cellId.setIndex(index);
 				configureCellProperties(index, m_model, tempProperties);
-				m_view.insert(cellId, m_model.get(index), tempProperties);
+				m_view.insert(cellId, getModelObject(index), tempProperties);
 			}
 		}
 		else if (listChange instanceof ListChangeItemRemoval)
@@ -208,7 +244,6 @@ public class ListUpdateController implements ListModelListener
 	protected Properties configureCellProperties(int index, ListModel model, Properties properties)
 	{
 		int hoverIndex = model.getHoverCell() != null ? ((IndexedCellId) model.getHoverCell()).getIndex() : -1;
-		boolean odd = (index + 1) % 2 == 1; // index 0 = first item = odd
 		properties.set(ListCellRenderer.PROPERTY_HOVER_INDEX, hoverIndex);
 		properties.set(ListCellRenderer.PROPERTY_HOVER, hoverIndex == index);
 		properties.set(ListCellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index));
@@ -216,8 +251,6 @@ public class ListUpdateController implements ListModelListener
 		properties.set(ListCellRenderer.PROPERTY_FIRST, index == 0);
 		properties.set(ListCellRenderer.PROPERTY_LAST, index == model.getSize() - 1);
 		properties.set(ListCellRenderer.PROPERTY_INDEX, index);
-		properties.set(ListCellRenderer.PROPERTY_ODD, odd);
-		properties.set(ListCellRenderer.PROPERTY_EVEN, ! odd);
 		return properties;
 	}
 	

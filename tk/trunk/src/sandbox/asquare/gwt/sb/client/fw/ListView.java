@@ -37,9 +37,9 @@ public interface ListView extends CompositeCellView
 	
 //	int getIndexOf(Element eventTarget);
 	
-	void add(Object item, Properties cellProperties);
+	void add(Object modelElement, Properties cellProperties);
 	
-	void insert(IndexedCellId cellId, Object item, Properties cellProperties);
+	void insert(IndexedCellId cellId, Object modelElement, Properties cellProperties);
 	
 	void remove(IndexedCellId cellId);
 	
