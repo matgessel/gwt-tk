@@ -15,6 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
+import asquare.gwt.tk.testutil.TkTestUtil;
 import junit.framework.TestCase;
 
 public class ListModelDefaultTC extends TestCase
@@ -155,5 +156,33 @@ public class ListModelDefaultTC extends TestCase
 		m_model.getSelectionModel().setSelectionRange(0, 1);
 		m_model.update();
 		assertEquals(2, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+	}
+	
+	public void testGetUnselectedItems()
+	{
+		ListModelDefault model = new ListModelDefault(new ListSelectionModelArbitrary());
+		ListSelectionModel selectionModel = model.getSelectionModel();
+		
+		// basic test
+		model.setItems(new String[] {"0", "1", "2", "3", "4"});
+		selectionModel.addSelectionRange(1, 1);
+		selectionModel.addSelectionRange(3, 3);
+		TkTestUtil.assertEqualValues(new String[] {"0", "2", "4"}, model.getUnselectedItems());
+		selectionModel.setSelectionRange(0, 0);
+		selectionModel.addSelectionRange(2, 2);
+		selectionModel.addSelectionRange(4, 4);
+		TkTestUtil.assertEqualValues(new String[] {"1", "3"}, model.getUnselectedItems());
+		
+		// selection inconsistent w/ model
+		selectionModel.addSelectionRange(model.getSize(), model.getSize());
+		try
+		{
+			model.getUnselectedItems();
+			fail();
+		}
+		catch (Exception e)
+		{
+			// EXPECTED
+		}
 	}
 }

@@ -42,6 +42,7 @@ public class ModelListenerComplexStub extends ModelListenerStub implements Model
 	public void modelChanged(ModelChangeEventComplex event)
 	{
 		modelChanged((ModelChangeEvent) event);
+		m_changes.clear();
         for (int i = 0, size = event.getChangeCount(); i < size; i++)
         {
             ChangeBase change = event.getChangeAt(i);
