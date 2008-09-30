@@ -22,7 +22,7 @@ public class TkImageFactory implements Localizable
 {
 	private static TkImageFactory s_instance = null;
 	
-	private AlertDialogImages m_images = null;
+	private AlertDialogImages m_alertDialogImages = null;
 	
 	public static TkImageFactory getInstance()
 	{
@@ -40,10 +40,10 @@ public class TkImageFactory implements Localizable
 	
 	public AlertDialogImages createAlertDialogImages()
 	{
-		if (m_images == null)
+		if (m_alertDialogImages == null)
 		{
-			m_images = (AlertDialogImages) GWT.create(AlertDialogImages.class);
+			m_alertDialogImages = (AlertDialogImages) GWT.create(AlertDialogImages.class);
 		}
-		return m_images;
+		return m_alertDialogImages;
 	}
 }
