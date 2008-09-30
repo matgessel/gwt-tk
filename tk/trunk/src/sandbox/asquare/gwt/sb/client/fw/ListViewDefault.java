@@ -23,7 +23,7 @@ public class ListViewDefault extends CompositeCellViewBase implements ListView
 {
 	private final ListWidget m_structure;
 	
-	protected ListViewDefault(ListWidget structure, CellRenderer renderer)
+	public ListViewDefault(ListWidget structure, CellRenderer renderer)
 	{
 		super(renderer);
 		m_structure = structure;
