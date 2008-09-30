@@ -53,13 +53,15 @@ public class ButtonBorderRenderer extends CellRendererDefault
 	
 	public void renderCell(Element viewElement, Object modelElement, Properties properties)
 	{
-		DOM.setElementProperty(viewElement, "className", buildStyleName(modelElement, properties));
-		
 		// enables Content div to be absolutely positioned
 		DOM.setStyleAttribute(viewElement, "position", "relative");
+		super.renderCell(viewElement, modelElement, properties);
+	}
+	
+	protected String getCellString(String valueString, Properties properties)
+	{
 //		DOM.setStyleAttribute(viewElement, "width", "100%");
 //		DOM.setStyleAttribute(viewElement, "height", "100%");
-		String valueString = String.valueOf(modelElement);
 		final String newHtml = 
 			"<table class='bg' style='empty-cells: show;' cellSpacing='0' cellPadding='0'>" + 
 				"<tr>" + 
@@ -79,9 +81,6 @@ public class ButtonBorderRenderer extends CellRendererDefault
 				"</tr>" + 
 			"</table>" + 
 			"<div class='Content' style='position:absolute;'>" + valueString + "</div>";
-//		if (! DOM.getInnerHTML(itemElement).equals(newHtml))
-		{
-			DOM.setInnerHTML(viewElement, newHtml);
-		}
+		return newHtml;
 	}
 }

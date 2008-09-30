@@ -28,14 +28,6 @@ public class StringFormatterDefault implements StringFormatter
 	}
 
 	/**
-	 * @return <code>null</code> to indcate that <code>{@link #getString(Object)}</code> should be used. 
-	 */
-	public String getHtml(Object modelElement)
-	{
-		return null;
-	}
-
-	/**
 	 * @return <code>{@link Object#toString() modelElement.toString()}</code>,
 	 *         or <code>""</code> if <code>modelElement</code> is
 	 *         <code>null</code>

@@ -23,8 +23,21 @@ package asquare.gwt.sb.client.fw;
 public interface StringFormatter
 {
 	/**
-	 * Get the String value to be displayed in a view cell. 
+	 * Get the String value to be displayed in a view cell. Strings may contain
+	 * html decorations.
 	 * 
+	 * <pre>
+	 * String getString(Object modelElement)
+	 * {
+	 *   String result = String.valueOf(modelElement);
+	 *   boolean valid = validate(modelElement);
+	 *   if (! valid)
+	 *   {
+	 *     return "&lt;span style='color:red;'&gt;" + result + "&lt;/span&gt;"
+	 *   }
+	 *   return result;
+	 * }
+	 * </pre>
 	 * @param modelElement the model element being displayed
 	 * @return the String representation of <code>modelElement</code>
 	 */
@@ -40,25 +53,4 @@ public interface StringFormatter
 	 *         {@link #getString(Object)} value
 	 */
 	String getEditingString(Object modelElement);
-	
-	/**
-	 * Get the HTML representation of the model element. E.g use this method
-	 * to decorate erroneous input. 
-	 * <pre>
-	 * String getHtml(Object modelElement)
-	 * {
-	 *   boolean valid = validate(modelElement);
-	 *   if (! valid)
-	 *   {
-	 *     return &lt;span style='color:red;'&gt;getString(modelElement)&lt;/span&gt;
-	 *   }
-	 *   return null;
-	 * }
-	 * </pre>
-	 * 
-	 * @param modelElement the model element being displayed
-	 * @return the HTML representation of <code>modelElement</code>, or
-	 *         <code>null</code> to use the {@link #getString(Object)} value
-	 */
-	String getHtml(Object modelElement);
 }

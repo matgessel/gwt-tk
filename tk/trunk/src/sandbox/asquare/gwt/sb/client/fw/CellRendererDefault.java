@@ -210,45 +210,32 @@ public class CellRendererDefault implements CellRendererString
 		return styleIn;
 	}
 	
-//	protected String getFormattedHtml(Object modelElement)
-//	{
-//		return m_formatter.getHtml(modelElement);
-//	}
-//	
-//	/**
-//	 * Template method which gives subclasses the opportunity to alter a
-//	 * formatted String before it is rendered. E.g. a table cell renderer may
-//	 * want to strip out line breaks.
-//	 */
-//	protected String getFormattedString(Object modelElement)
-//	{
-//		return m_formatter.getString(modelElement);
-//	}
-//	
-//	protected String getFormattedEditingString(Object modelElement)
-//	{
-//		return m_formatter.getEditingString(modelElement);
-//	}
-//	
 	public void renderContent(Element viewElement, Object modelElement, Properties properties)
 	{
-		String newHtml = m_formatter.getHtml(modelElement);
-		if (newHtml != null)
-		{
-			DOM.setInnerHTML(viewElement, newHtml);
-		}
-		else
-		{
-			String newText = m_formatter.getString(modelElement);
-			if (newText.length() == 0)
-			{
-				DOM.setInnerHTML(viewElement, "&nbsp;");
-			}
-			else
-			{
-				DOM.setInnerText(viewElement, newText);
-			}
-		}
+		final String valueString = getValueString(modelElement, properties);
+		final String cellString = getCellString(valueString, properties);
+		DOM.setInnerHTML(viewElement, cellString);
+	}
+	
+	/**
+	 * Template method for creating complicated cells.  
+	 * 
+	 * @param valueString
+	 * @return an HTML snippet describing the entire content of the cell
+	 */
+	protected String getCellString(String valueString, Properties properties)
+	{
+		return valueString;
+	}
+	
+	/**
+	 * Wraps the formatter methods. 
+	 * @return an HTML snippet representing <code>modelElement</code>
+	 */
+	protected String getValueString(Object modelElement, Properties properties)
+	{
+		String result = m_formatter.getString(modelElement);
+		return (result.length() > 0) ? result : "&nbsp;";
 	}
 	
 	private static class StyleRuleCollection
