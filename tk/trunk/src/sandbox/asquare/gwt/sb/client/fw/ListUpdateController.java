@@ -17,7 +17,9 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.ArrayList;
 
-import asquare.gwt.sb.client.fw.ListModelEvent.*;
+import asquare.gwt.sb.client.fw.ListModelEvent.ListChangeItemInsertion;
+import asquare.gwt.sb.client.fw.ListModelEvent.ListChangeItemRemoval;
+import asquare.gwt.sb.client.fw.ListModelEvent.ListItemPropertyChange;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
 import asquare.gwt.sb.client.util.*;
 
@@ -26,7 +28,7 @@ import asquare.gwt.sb.client.util.*;
  * removing rows in the view. Row removal would invalidate the even/odd property
  * of each view item.
  */
-public class ListUpdateController implements ListModelListener
+public class ListUpdateController extends UpdateControllerBase implements ListModelListener
 {
 	private final ListModel m_model;
 	private final ListView m_view;
@@ -40,7 +42,6 @@ public class ListUpdateController implements ListModelListener
 		m_contentProperties.add(ListModel.ITEM_PROPERTY_VALUE);
 		m_styleProperties.add(ListModel.ITEM_PROPERTY_HOVER);
 		m_styleProperties.add(ListModel.ITEM_PROPERTY_SELECTION);
-		init();
 	}
 	
 	protected ListModel getModel()
@@ -57,7 +58,11 @@ public class ListUpdateController implements ListModelListener
 	{
 		return m_model.get(index);
 	}
-
+	
+	/**
+	 * Directs the controller to restyle an item if the specified model
+	 * property changes.
+	 */
 	public void addStylePropertyChange(String propertyName)
 	{
 		if (propertyName == null)
@@ -74,6 +79,10 @@ public class ListUpdateController implements ListModelListener
 		m_styleProperties.remove(propertyName);
 	}
 	
+	/**
+	 * Directs the controller to redraw item content if the specified model
+	 * property changes.
+	 */
 	public void addContentPropertyChange(String propertyName)
 	{
 		if (propertyName == null)
@@ -90,19 +99,9 @@ public class ListUpdateController implements ListModelListener
 		m_contentProperties.remove(propertyName);
 	}
 	
-	private void init()
+	protected void initImpl()
 	{
 		m_model.addListener(this);
-		initializeView();
-	}
-	
-	public void dispose()
-	{
-		m_model.removeListener(this);
-	}
-	
-	protected void initializeView()
-	{
 		int size = m_model.getSize();
 		if (size > 0)
 		{
@@ -114,6 +113,11 @@ public class ListUpdateController implements ListModelListener
 				m_view.insert(cellId, getModelObject(index), configureCellProperties(index, m_model, tempProperties));
 			}
 		}
+	}
+	
+	public void disposeImpl()
+	{
+		m_model.removeListener(this);
 	}
 	
 	public void modelChanged(ListModelEvent event)

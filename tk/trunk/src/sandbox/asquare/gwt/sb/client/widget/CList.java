@@ -21,6 +21,7 @@ import java.util.EventObject;
 import asquare.gwt.sb.client.fw.*;
 import asquare.gwt.tk.client.ui.behavior.ControlSurfaceController;
 import asquare.gwt.tk.client.ui.behavior.MouseEvent;
+import asquare.gwt.tk.client.ui.behavior.Pluggable;
 
 import com.google.gwt.user.client.ui.Widget;
 
@@ -31,13 +32,23 @@ public class CList extends CComponent
 {
 	public CList()
 	{
-		this(null, null);
+		this(null, null, null);
 	}
 	
 	public CList(ListModel model, ListView view)
 	{
+		this(model, view, null);
+	}
+	
+	public CList(ListModel model, ListView view, Pluggable updateController)
+	{
 		super(model, (Widget) view);
-		createUpdateController(getListModel(), getListView());
+		
+		if (updateController == null)
+		{
+			updateController = new ListUpdateController(getListModel(), getListView()).init();
+		}
+		setUpdateController(updateController);
 		addController(new CompositeCellViewHoverController(getListModel()));
 		addController(ControlSurfaceController.getInstance());
 		ListController listController = new ListController(this);
@@ -53,11 +64,6 @@ public class CList extends CComponent
 	protected Widget createView()
 	{
 		return new ListViewBasic();
-	}
-	
-	protected void createUpdateController(ListModel model, ListView view)
-	{
-		new ListUpdateController(model, view);
 	}
 	
 	public ListModel getListModel()

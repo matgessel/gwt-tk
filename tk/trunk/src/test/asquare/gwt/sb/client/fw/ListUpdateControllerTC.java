@@ -15,14 +15,13 @@
  */
 package asquare.gwt.sb.client.fw;
 
-
-
 import com.google.gwt.junit.client.GWTTestCase;
+
 public class ListUpdateControllerTC extends GWTTestCase
 {
 	private ListModelDefault m_model;
 	private ListViewStub m_view;
-//	private ListUpdateController m_controller;
+	private ListUpdateController m_controller;
 	private Object m_0;
 	private Object m_1;
 	private Object m_2;
@@ -39,7 +38,12 @@ public class ListUpdateControllerTC extends GWTTestCase
 	{
 		m_model = new ListModelDefault(new ListSelectionModelArbitrary());
 		m_view = new ListViewStub();
-		new ListUpdateController(m_model, m_view);
+		if (m_controller != null)
+		{
+			m_controller.dispose();
+		}
+		m_controller = new ListUpdateController(m_model, m_view);
+		m_controller.init();
 		m_0 = "0";
 		m_1 = "1";
 		m_2 = "2";

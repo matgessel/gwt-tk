@@ -15,6 +15,9 @@
  */
 package asquare.gwt.tk.client.util.impl;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+
 public class DomUtilImpl
 {
 	private static final boolean QUIRKS_MODE = isQuirksMode0();
@@ -79,4 +82,9 @@ public class DomUtilImpl
 	private static native boolean isWin0() /*-{
 		return navigator.userAgent.toLowerCase().indexOf("win") != -1;
 	}-*/;
+	
+	public void clean(Element element)
+	{
+		DOM.setInnerHTML(element, "");
+	}
 }

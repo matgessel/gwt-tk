@@ -505,18 +505,14 @@ public class DomUtil
 	/**
 	 * Removes all of the element's children. 
 	 * 
-	 * @param parent a DOM element
+	 * @param element a DOM element
 	 * @throws IllegalArgumentException if <code>parent</code> is null
 	 */
-	public static void clean(Element parent)
+	public static void clean(Element element)
 	{
-		if (parent == null)
+		if (element == null)
 			throw new IllegalArgumentException();
 		
-		Element firstChild;
-		while((firstChild = DOM.getFirstChild(parent)) != null)
-		{
-			DOM.removeChild(parent, firstChild);
-		}
+		s_impl.clean(element);
 	}
 }

@@ -103,7 +103,7 @@ public class ListWidgetVTableShell extends ListWidget
 
 		public void clear()
 		{
-			DOM.setInnerHTML(m_tBody, "");
+			DomUtil.clean(m_tBody);
 		}
 
 		public Element getCellElement(int index)

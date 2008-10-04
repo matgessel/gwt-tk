@@ -235,7 +235,7 @@ public class CellRendererDefault implements CellRendererString
 	protected String getValueString(Object modelElement, Properties properties)
 	{
 		String result = m_formatter.getString(modelElement);
-		return (result.length() > 0) ? result : "&nbsp;";
+		return (result != null && result.length() > 0) ? result : "&nbsp;";
 	}
 	
 	private static class StyleRuleCollection
