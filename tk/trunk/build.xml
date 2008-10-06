@@ -14,10 +14,7 @@
  License for the specific language governing permissions and limitations under
  the License.
  -->
-<project name="GWT Project" default="collect" basedir=".">
-	<description>
-		A GWT build file which can be used for multiple projects. 
-	</description>
+<project name="GWT Tk" default="full" basedir=".">
 	
 	<condition property="dev.jar.name" value="gwt-dev-mac.jar">
 		<os family="mac"/>
@@ -42,11 +39,7 @@
 	<property file="global.properties"/>
 	
 	<!-- fallback on default prperties if not already set -->
-	<property name="logLevel" value="INFO"/>
-	<property name="project.name" value="MyProject"/>
-	<property name="project.sourcepath" value="${project.dir}/src"/>
-	<property name="project.librarypath" value="${gwt.tk.lib.path}"/>
-	<property name="javadoc.linksource" value="false"/>
+	<property name="javadoc.linksource" value="true"/>
 	<property name="javadoc.doctitle" value="${project.name} API Documentation"/>
 	<property name="javadoc.windowtitle" value="${project.name}"/>
 	<property name="javadoc.bottom" value=" "/>
@@ -56,14 +49,6 @@
 		<pathelement location="${gwt.lib.location}/gwt-user.jar"/>
 		<pathelement location="${gwt.lib.location}/${dev.jar.name}"/>
 	</path>
-	
-	<path id="project.full.classpath">
-		<pathelement path="${project.sourcepath}"/>
-		<pathelement path="${project.librarypath}"/>
-		<path refid="gwt.classpath"/>
-	</path>
-	
-	<echo level="info" message="Project: ${project.name}"/>
 	
 	<target name="assertModuleProperty">
 		<fail unless="module" message="'module' property must be specified"/>
@@ -81,18 +66,16 @@
 	</target>
 	
 	<target name="compileModule" depends="assertModuleProperty">
-		<condition property="src.dir.actual" value="${src.dir}" else="src/${module}">
-			<isset property="src.dir"/>
-		</condition>
-		<echo level="info" message="src.dir.actual=${src.dir.actual}"/>
+		<property name="src.dir" value="src/${module}"/>
+		<echo level="info" message="src.dir=${src.dir}"/>
 		<mkdir dir="build/${module}/classes"/>
-		<javac source="1.4" target="1.4" destdir="build/${module}/classes" srcdir="${src.dir.actual}">
+		<javac source="1.4" target="1.4" destdir="build/${module}/classes" srcdir="${src.dir}">
 			<classpath>
-				<path refid="gwt.classpath"/>
-				<pathelement path="${module.classpath}"/>
+				<pathelement path="${module.classpath}"/><!-- optional -->
 				<fileset dir="build">
 					<include name="**/*.jar"/>
 				</fileset>
+				<path refid="gwt.classpath"/>
 			</classpath>
 		</javac>
 	</target>
@@ -115,6 +98,57 @@
 		<antcall target="jarModule"/>
 	</target>
 	
+	<target name="gwtCompileModuleBoth">
+		<antcall target="gwtCompileModuleDebug">
+			<param name="gwt.out" value=""/>
+		</antcall>
+		<antcall target="gwtCompileModule"/>
+	</target>
+
+	<target name="gwtCompileModuleDebug">
+		<description>Compiles to human readable script with debug statements</description>
+		<antcall target="gwtCompileModule">
+			<param name="gwt.style" value="PRETTY"/>
+			<param name="gwt.out" value="build/${module}/www-debug"/>
+			<param name="gwttk.debug" value="true"/>
+		</antcall>
+	</target>
+
+	<target name="gwtCompileModule">
+		<description>Compiles obfuscated code without debug statments</description>
+		<property name="src.dir" value="src/${module}"/>
+		<property name="gwt.logLevel" value="INFO"/>
+		<property name="gwt.out" value="build/${module}/www"/>
+		<property name="gwt.style" value="OBF"/>
+		<property name="gwt.module" value="${gwt.module.package}.${gwt.module.name}"/>
+		<condition property="debug.jar.location" value="build/debug" else="build/debugstub">
+			<istrue value="${gwttk.debug}"/>
+		</condition>
+		
+		<java classname="com.google.gwt.dev.GWTCompiler" fork="true" jvmargs="-client">
+			<classpath>
+				<path location="${src.dir}"/>
+				<pathelement path="${module.classpath}"/><!-- optional -->
+				<fileset dir="${debug.jar.location}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="build">
+					<include name="**/*.jar"/>
+					<exclude name="*debug*"/>
+					<exclude name="out"/>
+				</fileset>
+				<path refid="gwt.classpath"/>
+			</classpath>
+			<arg value="-logLevel"/>
+			<arg value="${gwt.logLevel}"/>
+			<arg value="-out"/>
+			<arg value="${gwt.out}"/>
+			<arg value="-style"/>
+			<arg value="${gwt.style}"/>
+			<arg value="${gwt.module}"/>
+		</java>
+	</target>
+
 	<target name="patch">
 		<antcall target="cleanCompileJarModule">
 			<param name="module" value="patch"/>
@@ -162,7 +196,9 @@
 		</antcall>
 	</target>
 	
-	<target name="test" depends="patch,emulation,debug,core,sandbox,testutil">
+	<target name="test-dependencies" depends="patch,emulation,core,sandbox,debug,testutil"/>
+	
+	<target name="test">
 		<antcall target="cleanModule">
 			<param name="module" value="test"/>
 		</antcall>
@@ -170,18 +206,22 @@
 			<param name="module" value="test"/>
 			<param name="module.classpath" value="${junit.lib}"/>
 		</antcall>
-		<junit printsummary="true" fork="true" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
+		<!-- Windows likes to keep the jars file-locked after the tests complete, so we make a copy for testing only -->
+		<delete dir="build/test/jars"/>
+		<copy todir="build/test/jars" flatten="true">
+			<fileset dir="build" includes="**/*.jar" excludes="**/*debugstub*"/>
+		</copy>
+		<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
             <sysproperty key="gwt.args" value="-port 8889 -out test" />
+  	        <jvmarg value="-client"/>
 			<!-- uncomment for Mac
 			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"/>
-  	        <jvmarg line="-server -XstartOnFirstThread"/>
+  	        <jvmarg line="-XstartOnFirstThread"/>
 			-->
 			<classpath>
 				<pathelement location="build/test/classes"/>
 				<pathelement location="src/test"/>
-				<fileset dir="build">
-					<include name="**/*.jar"/>
-				</fileset>
+				<fileset dir="build/test/jars" includes="*"/>
 				<path refid="gwt.classpath"/>
                 <pathelement location="${junit.lib}" />
 			</classpath>
@@ -194,22 +234,42 @@
 		</junit>
 	</target>
 	
-	<target name="uitest" depends="core,sandbox">
+	<target name="uitest" depends="core,sandbox,debugstub,debug">
 		<antcall target="cleanModule">
 			<param name="module" value="uitest"/>
 		</antcall>
 		<antcall target="compileModule">
 			<param name="module" value="uitest"/>
 		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.alertdialog.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.glasspanel.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.isvisible.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.onload.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.popuppanel.Demo"/>
+		</antcall>
 	</target>
 	
-	<target name="collect" depends="initBuildDir,patch,core,sandbox,debug,debugstub,testutil">
+	<target name="collect" depends="patch,core,sandbox,debug,debugstub,testutil">
 		<delete dir="build/out"/>
 		<mkdir dir="build/out"/>
 		<mkdir dir="build/out/components"/>
-		<move todir="build/out/components" flatten="true">
-			<fileset dir="build" includes="**/*.jar"/>
-		</move>
+		<copy todir="build/out/components" flatten="true">
+			<fileset dir="build" includes="**/*.jar" excludes="**/test/**"/>
+		</copy>
 		<delete file="build/out/gwttk-dev-${project.version}.jar"/>
 		<jar destfile="build/out/gwttk-dev-${project.version}.jar" duplicate="preserve">
 			<zipgroupfileset dir="build/out/components" includes="**/*.jar" excludes="*-debugstub-*.jar"/>
@@ -220,30 +280,8 @@
 		</jar>
 	</target>
 	
-	<target name="full" depends="initBuildDir,patch,core,sandbox,debug,debugstub,testutil,test,uitest,collect"/>
+	<target name="full" depends="initBuildDir,patch,emulation,core,sandbox,debug,debugstub,testutil,test-dependencies,test,uitest,collect"/>
 	
-	<target name="compileDeliverable">
-		<description>Compiles obfuscated code without debug statments</description>
-		<property name="deliverableDir" value="${project.dir}/export/www"/>
-		<mkdir dir="${deliverableDir}"/>
-		<delete>
-			<fileset dir="${deliverableDir}" includes="**/*"/>
-		</delete>
-		<java classname="com.google.gwt.dev.GWTCompiler" fork="true">
-			<classpath>
-				<pathelement path="${debug.stub.path}"/>
-				<path refid="project.full.classpath"/>
-			</classpath>
-			<arg value="-logLevel"/>
-			<arg value="${logLevel}"/>
-			<arg value="-out"/>
-			<arg value="${deliverableDir}"/>
-			<arg value="-style"/>
-			<arg value="OBF"/>
-			<arg value="${module.package}.${module.name}"/>
-		</java>
-	</target>
-
 	<target name="compileDemo">
 		<description>Compiles obfuscated code *with* debug statments</description>
 		<property name="deliverableDir" value="${project.dir}/export/www"/>
@@ -251,11 +289,9 @@
 		<delete>
 			<fileset dir="${deliverableDir}" includes="**/*"/>
 		</delete>
-		<java classname="com.google.gwt.dev.GWTCompiler" 
-				classpathref="project.full.classpath"
-				fork="true">
+		<java classname="com.google.gwt.dev.GWTCompiler" classpathref="project.full.classpath" fork="true">
 			<arg value="-logLevel"/>
-			<arg value="${logLevel}"/>
+			<arg value="${gwt.logLevel}"/>
 			<arg value="-out"/>
 			<arg value="${deliverableDir}"/>
 			<arg value="-style"/>
@@ -264,26 +300,9 @@
 		</java>
 	</target>
 	
-	<target name="compileForDevelopment">
-		<description>Compiles to human readable script with debug statements</description>
-		<java classname="com.google.gwt.dev.GWTCompiler" 
-				classpathref="project.full.classpath"
-				fork="true">
-			<arg value="-logLevel"/>
-			<arg value="${logLevel}"/>
-			<arg value="-out"/>
-			<arg value="${project.dir}/www"/>
-			<arg value="-style"/>
-			<arg value="PRETTY"/>
-			<arg value="${module.package}.${module.name}"/>
-		</java>
-	</target>
-
-	<target name="shell">
+	<target name="gwtShell">
 		<description>Runs the hosted shell for the specified project and entry point</description>
-		<java classname="com.google.gwt.dev.GWTShell" 
-				classpathref="project.full.classpath"
-				fork="true" spawn="true">
+		<java classname="com.google.gwt.dev.GWTShell" classpathref="project.full.classpath" fork="true" spawn="true">
 			<jvmarg value="-enableassertions"/>
 			<arg value="-out"/>
 			<arg value="${project.dir}/www"/>
@@ -295,20 +314,16 @@
 
 	<target name="createApplication">
 		<description>Creates a new GWT stub application with the specified properties</description>
-		<java classname="com.google.gwt.dev.ApplicationCreator" 
-				classpathref="gwt.classpath"
-				fork="true">
+		<java classname="com.google.gwt.dev.ApplicationCreator" classpathref="gwt.classpath" fork="true">
 			<arg value="-out"/>
 			<arg value="${project.dir}"/>
 			<arg value="${module}.client.${entryPoint.className}"/>
 		</java>
 	</target>
 
-	<target name="usage">
+	<target name="gwtToolUsage">
 		<description>Prints usage messages for GWT tools</description>
-		<java classname="com.google.gwt.dev.GWTCompiler" 
-				 classpathref="gwt.classpath"
-				 fork="true">
+		<java classname="com.google.gwt.dev.GWTCompiler" classpathref="gwt.classpath" fork="true">
 			<arg value="-help"/>
 		</java>
 		<echo message="*************************"/>
@@ -447,39 +462,4 @@
 			</packageset>
 		</javadoc>
 	</target>
-	
-	<target name="jarGwtTk">
-		<delete file="gwttk-${project.version}.jar"/>
-		<jar destfile="gwttk-${project.version}.jar">
-			<fileset dir="${project.dir}/src/java"/>
-			<fileset dir="${project.dir}/src/super"/>
-			<fileset dir="${project.dir}/bin/java" includes="**/*.class" excludes="asquare/gwt/sb/**"/>
-		</jar>
-	</target>
-	
-	<target name="jarGwtTkServer">
-		<delete file="gwttk-server-${project.version}.jar"/>
-		<jar destfile="gwttk-server-${project.version}.jar">
-			<fileset dir="${project.dir}/bin/java" includes="*.txt"/>
-			<fileset dir="${project.dir}/bin/java" includes="**/server/**"/>
-		</jar>
-	</target>
-    
-    <target name="jarSandbox">
-        <delete file="gwttk-sandbox-${project.version}.jar"/>
-        <jar destfile="gwttk-sandbox-${project.version}.jar">
-            <fileset dir="${project.dir}/src/java" includes="*.txt"/>
-            <fileset dir="${project.dir}/src/sandbox"/>
-            <fileset dir="${project.dir}/bin/java" includes="asquare/gwt/sb/**"/>
-        </jar>
-    </target>
-    
-    <target name="jarTestUtil">
-        <delete file="gwttk-testutil-${project.version}.jar"/>
-        <jar destfile="gwttk-testutil-${project.version}.jar">
-            <fileset dir="${project.dir}/src/java" includes="*.txt"/>
-            <fileset dir="${project.dir}/src/testutil"/>
-            <fileset dir="${project.dir}/bin/testutil"/>
-        </jar>
-    </target>
 </project>
