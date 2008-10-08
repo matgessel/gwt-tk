@@ -41,10 +41,10 @@ public class DomUtilTC extends GWTTestCase
 		
 		// HTML container with inline element
 		HTML htmlContainer = new HTML("<PRE>A</PRE>");
-		assertEquals("<PRE>A</PRE>", htmlContainer.getHTML());
+		assertTrue("<PRE>A</PRE>".equalsIgnoreCase(htmlContainer.getHTML()));
 		assertEquals("A", htmlContainer.getText());
 		DomUtil.appendText(htmlContainer.getElement(), "B", false);
-		assertEquals("<PRE>AB</PRE>", htmlContainer.getHTML());
+		assertTrue("<PRE>AB</PRE>".equalsIgnoreCase(htmlContainer.getHTML()));
 		assertEquals("AB", htmlContainer.getText());
 		
 		// null element

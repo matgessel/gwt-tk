@@ -430,7 +430,9 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		return DOM.getElementAttribute(getCellElement(cellIndex), "className");
+		// TODO: remove null check in 1.5, http://code.google.com/p/google-web-toolkit/issues/detail?id=1770
+		String result = DOM.getElementProperty(getCellElement(cellIndex), "className");
+		return result != null ? result : "";
 	}
 	
 	/**
