@@ -46,7 +46,7 @@ public class CList extends CComponent
 		
 		if (updateController == null)
 		{
-			updateController = new ListUpdateController(getListModel(), getListView()).init();
+			updateController = new ListUpdateController(getListModel(), getListView());
 		}
 		setUpdateController(updateController);
 		addController(new CompositeCellViewHoverController(getListModel()));

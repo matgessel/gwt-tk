@@ -94,12 +94,12 @@ public class CComponent extends CComposite
 	
 	public void setUpdateController(Pluggable updateController)
 	{
-		if (m_updateController != null && isAttached())
+		if (m_updateController != null)
 		{
 			m_updateController.unplug(this);
 		}
 		m_updateController = updateController;
-		if (m_updateController != null && isAttached())
+		if (m_updateController != null)
 		{
 			m_updateController.plugIn(this);
 		}
@@ -147,6 +147,10 @@ public class CComponent extends CComposite
 		super.onAttach();
 	}
 	
+	/*
+	 * The idea here is to ensure the update controller gets automatically
+	 * disposed when the view is disposed.
+	 */
 	protected void onDetach()
 	{
 		if(! isAttached())
