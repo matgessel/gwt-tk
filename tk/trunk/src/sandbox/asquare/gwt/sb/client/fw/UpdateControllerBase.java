@@ -65,11 +65,11 @@ public abstract class UpdateControllerBase implements Pluggable
 	
 	public final UpdateControllerBase dispose()
 	{
-		if (! m_initialized)
-			throw new IllegalStateException();
-		
-		disposeImpl();
-		m_initialized = false;
+		if (m_initialized)
+		{
+			disposeImpl();
+			m_initialized = false;
+		}
 		return this;
 	}
 	
