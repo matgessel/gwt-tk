@@ -121,7 +121,7 @@ public class ListController extends EventController
 				{
 					if (clickEvent == null)
 					{
-						clickEvent = new ListClickEventImpl(m_list, ListEvent.LIST_CLICK, index, e);
+						clickEvent = new ListClickEventImpl(m_list, ListEvent.LIST_DOUBLECLICK, index, e);
 					}
 					((ListDoubleClickHandler) m_handlers.getValue(i)).onListDoubleClick(clickEvent);
 				}
