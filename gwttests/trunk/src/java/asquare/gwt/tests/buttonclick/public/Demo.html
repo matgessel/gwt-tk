@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>Button Click Bug</title>
+	<meta name='gwt:module' content='asquare.gwt.tests.buttonclick.Demo'>
+	<LINK rel="stylesheet" type="text/css"/ href="style.css">
+</head>
+
+<body>
+<script language="javascript" src="gwt.js"></script>
+<iframe id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
+<DIV id="bugReport">
+	<h2>Button Click Bug</h2>
+	<P class="module"><code>asquare.gwt.tests.buttonclick.client.Demo</code></P>
+	
+	<H4>Description</H4>
+	<P>Button.click() does nothing in Safari</P>
+	
+	<H4>GWT Version</H4>
+	<P>Windows 1.1</P>
+	
+	<H4>Platforms Tested</H4>
+	<p>Hosted Browser (XP), IE6 (XP), FFox 1.5 (XP), Opera (XP), Safari 2.0.4 (OS 10.4.7)</p>
+	
+	<H4>Platforms Affected</H4>
+	<P>Safari 2.0.4 (OS 10.4.7)</P>
+
+	<H4>Reproduction</H4>
+	<pre>
+	1. click the first button
+	
+	Expected: an alert dialog is shown
+	
+	Actual: nothing happens
+	
+	The first button calls the second button's click() method. 
+	</pre>
+</DIV>
+</body>
+</html>

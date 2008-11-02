@@ -1,0 +1,8 @@
+<module>
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="asquare.gwt.tests.common.CommonResources"/>
+	
+	<source path="client"/>
+	
+	<entry-point class="asquare.gwt.tests.focusevent.client.Demo"/>
+</module>

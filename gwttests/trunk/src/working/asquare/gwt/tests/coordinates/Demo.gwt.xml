@@ -1,0 +1,9 @@
+<module>
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="asquare.gwt.tests.common.CommonResources"/>
+	<inherits name="asquare.gwt.debug.Debug"/>
+	
+	<source path="client"/>
+	
+	<entry-point class="asquare.gwt.tests.coordinates.client.Demo"/>
+</module>

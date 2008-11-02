@@ -1,0 +1,14 @@
+@CHARSET "ISO-8859-1";
+
+BODY {
+  text-align: center;
+}
+
+table {
+  border: solid black 1px;
+}
+
+.gwt-Button {
+}
+
+/*-----------------------------------------------------*/

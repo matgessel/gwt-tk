@@ -1,0 +1,14 @@
+<module>
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name="asquare.gwt.tests.common.CommonResources"/>
+	
+	<source path="client"/>
+	
+	<source path="test"/>
+	
+	<entry-point class="asquare.gwt.tests.circularbinding.client.Demo"/>
+
+	<replace-with class="asquare.gwt.tests.circularbinding.client.DOM2ImplIE6Patched">
+		<when-type-is class="asquare.gwt.tests.circularbinding.client.DOM2Impl"/>
+	</replace-with>
+</module>
