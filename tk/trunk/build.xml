@@ -125,7 +125,8 @@
 			<istrue value="${gwttk.debug}"/>
 		</condition>
 		
-		<java classname="com.google.gwt.dev.GWTCompiler" fork="true" jvmargs="-client">
+		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true" jvmargs="-client">
+			<sysproperty key="java.awt.headless" value="true"/>
 			<classpath>
 				<path location="${src.dir}"/>
 				<pathelement path="${module.classpath}"/><!-- optional -->
@@ -214,10 +215,8 @@
 		<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
             <sysproperty key="gwt.args" value="-port 8889 -out test" />
   	        <jvmarg value="-client"/>
-			<!-- uncomment for Mac
 			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"/>
   	        <jvmarg line="-XstartOnFirstThread"/>
-			-->
 			<classpath>
 				<pathelement location="build/test/classes"/>
 				<pathelement location="src/test"/>
