@@ -1,0 +1,459 @@
+<?xml version="1.0"?>
+<!-- 
+ Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ 
+ Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ use this file except in compliance with the License. You may obtain a copy of
+ the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ License for the specific language governing permissions and limitations under
+ the License.
+ -->
+<project name="GWT Tk" default="full" basedir=".">
+	
+	<condition property="dev.jar.name" value="gwt-dev-mac.jar">
+		<os family="mac"/>
+	</condition>
+	<condition property="dev.jar.name" value="gwt-dev-windows.jar">
+		<os family="windows"/>
+	</condition>
+	<!-- assume linux if not mac or win -->
+	<property name="dev.jar.name" value="gwt-dev-linux.jar"/>
+	
+	<property file="build.properties"/>
+	
+	<path id="gwt.classpath">
+		<pathelement location="${gwt.lib.location}/gwt-user.jar"/>
+		<pathelement location="${gwt.lib.location}/${dev.jar.name}"/>
+	</path>
+	
+	<target name="assertModuleProperty">
+		<fail unless="module" message="'module' property must be specified"/>
+	</target>
+	
+	<target name="initBuildDir">
+		<delete dir="build"/>
+		<mkdir dir="build"/>
+		<echoproperties destfile="build/properties.txt"/>
+	</target>
+	
+	<target name="cleanModule" depends="assertModuleProperty">
+		<delete dir="build/${module}"/>
+		<mkdir dir="build/${module}"/>
+	</target>
+	
+	<target name="compileModule" depends="assertModuleProperty">
+		<property name="src.dir" value="src/${module}"/>
+		<echo level="info" message="src.dir=${src.dir}"/>
+		<mkdir dir="build/${module}/classes"/>
+		<javac source="1.4" target="1.4" destdir="build/${module}/classes" srcdir="${src.dir}">
+			<classpath>
+				<pathelement path="${module.classpath}"/><!-- optional -->
+				<fileset dir="build">
+					<include name="**/*.jar"/>
+				</fileset>
+				<path refid="gwt.classpath"/>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="jarModule" depends="assertModuleProperty">
+		<condition property="src.dir.actual" value="${src.dir}" else="src/${module}">
+			<isset property="src.dir"/>
+		</condition>
+		<delete file="build/${module}/gwttk-${module}-${project.version}.jar"/>
+		<mkdir dir="build/${module}/classes"/>
+		<jar destfile="build/${module}/gwttk-${module}-${project.version}.jar">
+			<fileset dir="${src.dir.actual}"/>
+			<fileset dir="build/${module}/classes"/>
+		</jar>
+	</target>
+	
+	<target name="cleanCompileJarModule" depends="assertModuleProperty">
+		<antcall target="cleanModule"/>
+		<antcall target="compileModule"/>
+		<antcall target="jarModule"/>
+	</target>
+	
+	<target name="gwtCompileModuleBoth">
+		<antcall target="gwtCompileModuleDebug">
+			<param name="gwt.out" value=""/>
+		</antcall>
+		<antcall target="gwtCompileModule"/>
+	</target>
+
+	<target name="gwtCompileModuleDebug">
+		<description>Compiles to human readable script with debug statements</description>
+		<antcall target="gwtCompileModule">
+			<param name="gwt.style" value="PRETTY"/>
+			<param name="gwt.out" value="build/${module}/www-debug"/>
+			<param name="gwttk.debug" value="true"/>
+		</antcall>
+	</target>
+
+	<target name="gwtCompileModule">
+		<description>Compiles obfuscated code without debug statments</description>
+		<property name="src.dir" value="src/${module}"/>
+		<property name="gwt.logLevel" value="INFO"/>
+		<property name="gwt.out" value="build/${module}/www"/>
+		<property name="gwt.style" value="OBF"/>
+		<property name="gwt.module" value="${gwt.module.package}.${gwt.module.name}"/>
+		<condition property="debug.jar.location" value="build/debug" else="build/debugstub">
+			<istrue value="${gwttk.debug}"/>
+		</condition>
+		
+		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true" jvmargs="-client">
+			<sysproperty key="java.awt.headless" value="true"/>
+			<classpath>
+				<path location="${src.dir}"/>
+				<pathelement path="${module.classpath}"/><!-- optional -->
+				<fileset dir="${debug.jar.location}">
+					<include name="*.jar"/>
+				</fileset>
+				<fileset dir="build">
+					<include name="**/*.jar"/>
+					<exclude name="*debug*"/>
+					<exclude name="out"/>
+				</fileset>
+				<path refid="gwt.classpath"/>
+			</classpath>
+			<arg value="-logLevel"/>
+			<arg value="${gwt.logLevel}"/>
+			<arg value="-out"/>
+			<arg value="${gwt.out}"/>
+			<arg value="-style"/>
+			<arg value="${gwt.style}"/>
+			<arg value="${gwt.module}"/>
+		</java>
+	</target>
+
+	<target name="patch">
+		<antcall target="cleanCompileJarModule">
+			<param name="module" value="patch"/>
+		</antcall>
+	</target>
+	
+	<target name="emulation">
+		<antcall target="cleanModule">
+			<param name="module" value="emulation"/>
+		</antcall>
+		<antcall target="jarModule">
+			<param name="module" value="emulation"/>
+		</antcall>
+	</target>
+	
+	<target name="core">
+		<antcall target="cleanCompileJarModule">
+			<param name="module" value="core"/>
+			<param name="src.dir" value="src/java"/>
+		</antcall>
+	</target>
+	
+	<target name="sandbox" depends="core">
+		<antcall target="cleanCompileJarModule">
+			<param name="module" value="sandbox"/>
+		</antcall>
+	</target>
+	
+	<target name="debug">
+		<antcall target="cleanCompileJarModule">
+			<param name="module" value="debug"/>
+		</antcall>
+	</target>
+	
+	<target name="debugstub">
+		<antcall target="cleanCompileJarModule">
+			<param name="module" value="debugstub"/>
+		</antcall>
+	</target>
+	
+	<target name="testutil" depends="sandbox">
+		<antcall target="cleanCompileJarModule">
+			<param name="module" value="testutil"/>
+			<param name="module.classpath" value="${junit.lib}"/>
+		</antcall>
+	</target>
+	
+	<target name="test-dependencies" depends="patch,emulation,core,sandbox,debug,testutil"/>
+	
+	<target name="test">
+		<antcall target="cleanModule">
+			<param name="module" value="test"/>
+		</antcall>
+		<antcall target="compileModule">
+			<param name="module" value="test"/>
+			<param name="module.classpath" value="${junit.lib}"/>
+		</antcall>
+		<!-- Windows likes to keep the jars file-locked after the tests complete, so we make a copy for testing only -->
+		<delete dir="build/test/jars"/>
+		<copy todir="build/test/jars" flatten="true">
+			<fileset dir="build" includes="**/*.jar" excludes="**/*debugstub*"/>
+		</copy>
+		<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
+            <sysproperty key="gwt.args" value="-port 8889 -out test" />
+  	        <jvmarg value="-client"/>
+			<!-- uncomment for Mac
+			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"/>
+  	        <jvmarg line="-XstartOnFirstThread"/>
+			-->
+			<classpath>
+				<pathelement location="build/test/classes"/>
+				<pathelement location="src/test"/>
+				<fileset dir="build/test/jars" includes="*"/>
+				<path refid="gwt.classpath"/>
+                <pathelement location="${junit.lib}" />
+			</classpath>
+			<formatter type="plain"/>
+			<batchtest todir="build/test">
+				<fileset dir="build/test/classes">
+					<include name="**/*TC.class"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+	
+	<target name="uitest" depends="core,sandbox,debugstub,debug">
+		<antcall target="cleanModule">
+			<param name="module" value="uitest"/>
+		</antcall>
+		<antcall target="compileModule">
+			<param name="module" value="uitest"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.alertdialog.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.glasspanel.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.isvisible.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.onload.Demo"/>
+		</antcall>
+		<antcall target="gwtCompileModuleBoth">
+			<param name="module" value="uitest"/>
+			<param name="gwt.module" value="asquare.gwt.tk.uitest.popuppanel.Demo"/>
+		</antcall>
+	</target>
+	
+	<target name="jars" depends="patch,core,sandbox,debug,debugstub,testutil">
+		<delete dir="build/out"/>
+		<mkdir dir="build/out"/>
+		<mkdir dir="build/out/components"/>
+		<copy todir="build/out/components" flatten="true">
+			<fileset dir="build" includes="**/*.jar" excludes="**/test/**"/>
+		</copy>
+		<delete file="build/out/gwttk-dev-${project.version}.jar"/>
+		<jar destfile="build/out/gwttk-dev-${project.version}.jar" duplicate="preserve">
+			<zipgroupfileset dir="build/out/components" includes="**/*.jar" excludes="*-debugstub-*.jar"/>
+		</jar>
+		<delete file="build/out/gwttk-${project.version}.jar"/>
+		<jar destfile="build/out/gwttk-${project.version}.jar" duplicate="preserve">
+			<zipgroupfileset dir="build/out/components" includes="**/*.jar" excludes="*-debug-*.jar"/>
+		</jar>
+	</target>
+	
+	<target name="javadoc">
+		<description>Creates javadocs for the specified project</description>
+		<property name="javadoc.dest.dir" value="build/javadoc"/>
+		<property name="javadoc.linksource" value="true"/>
+		<property name="javadoc.doctitle" value="${project.name} API Documentation"/>
+		<property name="javadoc.windowtitle" value="${project.name}"/>
+		<property name="javadoc.bottom" value="${copyright}"/>
+		<delete dir="${javadoc.dest.dir}"/>
+		<mkdir dir="${javadoc.dest.dir}"/>
+		<javadoc 
+				access="protected" 
+				additionalparam=" -breakiterator" 
+				author="true" 
+				destdir="${javadoc.dest.dir}" 
+				doctitle="${javadoc.doctitle}"
+				excludepackagenames="${javadoc.exclude.packagenames}"
+				header="${project.name} ${project.version}"
+				includenosourcepackages="true"
+				linksource="${javadoc.linksource}"
+				packagenames="*"
+				source="1.4"
+				use="true"
+				windowtitle="${javadoc.windowtitle}">
+			<classpath>
+				<fileset dir="build">
+					<include name="**/*.jar"/>
+				</fileset>
+				<path refid="gwt.classpath"/>
+				<path location="D:/tools/junit3.8.2/junit.jar"/>
+			</classpath>
+			<bottom>${javadoc.bottom}</bottom>
+			<packageset dir="src/debug"/>
+				<packageset dir="src/debug"/>
+				<packageset dir="src/java"/>
+				<packageset dir="src/sandbox"/>
+				<packageset dir="src/testutil"/>
+			<link href="${gwt.javadoc.url}"/>
+			<link href="http://junit.sourceforge.net/javadoc/"/>
+			<link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
+			<link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+		</javadoc>
+		<!-- TODO: copy javadocs to /doc -->
+	</target>
+	
+	<target name="full" depends="initBuildDir,patch,emulation,core,sandbox,debug,debugstub,testutil,test-dependencies,test,uitest,jars,javadoc"/>
+	
+	<target name="compileDemo">
+		<description>Compiles obfuscated code *with* debug statments</description>
+		<property name="deliverableDir" value="${project.dir}/export/www"/>
+		<mkdir dir="${deliverableDir}"/>
+		<delete>
+			<fileset dir="${deliverableDir}" includes="**/*"/>
+		</delete>
+		<java classname="com.google.gwt.dev.GWTCompiler" classpathref="project.full.classpath" fork="true">
+			<arg value="-logLevel"/>
+			<arg value="${gwt.logLevel}"/>
+			<arg value="-out"/>
+			<arg value="${deliverableDir}"/>
+			<arg value="-style"/>
+			<arg value="OBF"/>
+			<arg value="${module.package}.${module.name}"/>
+		</java>
+	</target>
+	
+	<target name="gwtShell">
+		<description>Runs the hosted shell for the specified project and entry point</description>
+		<java classname="com.google.gwt.dev.GWTShell" classpathref="project.full.classpath" fork="true" spawn="true">
+			<jvmarg value="-enableassertions"/>
+			<arg value="-out"/>
+			<arg value="${project.dir}/www"/>
+			<arg value="-style"/>
+			<arg value="${style}"/>
+			<arg value="${module.package}.${module.name}/${entry.point.page.name}"/>
+		</java>
+	</target>
+
+	<target name="createApplication">
+		<description>Creates a new GWT stub application with the specified properties</description>
+		<java classname="com.google.gwt.dev.ApplicationCreator" classpathref="gwt.classpath" fork="true">
+			<arg value="-out"/>
+			<arg value="${project.dir}"/>
+			<arg value="${module}.client.${entryPoint.className}"/>
+		</java>
+	</target>
+
+	<target name="gwtToolUsage">
+		<description>Prints usage messages for GWT tools</description>
+		<java classname="com.google.gwt.dev.GWTCompiler" classpathref="gwt.classpath" fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<java classname="com.google.gwt.dev.GWTShell" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<java classname="com.google.gwt.user.tools.ApplicationCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<java classname="com.google.gwt.user.tools.ProjectCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<java classname="com.google.gwt.junit.tools.JUnitCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<java classname="com.google.gwt.i18n.tools.I18NCreator" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<java classname="com.google.gwt.dev.util.NetProxy" 
+				classpathref="gwt.classpath"
+				fork="true">
+			<arg value="-help"/>
+		</java>
+		<echo message="*************************"/>
+		
+		<!-- for some reason a test case has to be loaded to print the the usage message -->
+		<java classname="junit.textui.TestRunner" fork="true">
+			<sysproperty key="gwt.args" value="-help"/>
+			<arg value="asquare.gwt.tk.client.JUnitShellDocTC"/>
+			<classpath>
+				<!-- not exactly portable, but is this worth a build property? -->
+				<pathelement location="${project.dir}/bin/test"/>
+				<pathelement location="${project.dir}/src/test"/>
+				<pathelement location="${project.dir}/bin/testutil"/>
+				<pathelement location="${project.dir}/src/testutil"/>
+				<pathelement location="${project.dir}/bin/java"/>
+				<pathelement location="${project.dir}/src/java"/>
+				<pathelement location="${junit.lib}"/>
+				<path refid="gwt.classpath"/>
+			</classpath>
+		</java>
+		<echo level="info" message="(Ignore the preceding exception. We have to pass JUnitShell an invalid arg so it prints the usage message.)"/>
+		<echo message="*************************"/>
+	</target>
+	
+	<target name="javadocGwt" depends="initBuildDir">
+		<description>Creates javadocs for the GWT user library in the standard format</description>
+		<unjar src="${gwt.lib.location}/gwt-user.jar" dest="${build.dir}">
+			<patternset>
+				<include name="com/google/**"/>
+			</patternset>
+		</unjar>
+		<unjar src="${gwt.lib.location}/${dev.jar.name}" dest="${build.dir}">
+			<patternset>
+				<include name="com/google/gwt/core/**"/>
+			</patternset>
+		</unjar>
+		<mkdir dir="${gwt.doc.destination.dir}"/>
+		<delete>
+			<fileset dir="${gwt.doc.destination.dir}" includes="**/*"/>
+		</delete>
+		<javadoc 
+				access="protected" 
+				additionalparam=" -breakiterator" 
+				author="true" 
+				classpathref="gwt.classpath"
+				destdir="${gwt.doc.destination.dir}" 
+				doctitle="Google Web Toolkit (GWT) API Documentation"
+				includenosourcepackages="true"
+				linksource="true"
+				source="1.4"
+				use="true"
+				windowtitle="GWT API Documentation">
+			<bottom>
+				<![CDATA[This javadoc distribution was not produced by Google. The official documentation is <a href="http://code.google.com/webtoolkit/" target="_parent">here</a>.]]>
+			</bottom>
+			<link href="http://www.junit.org/junit/javadoc/3.8.1/"/>
+			<link href="http://java.sun.com/j2ee/1.4/docs/api/"/>
+			<link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+			<packageset dir="${build.dir}" defaultexcludes="yes">
+				<include name="com/google/**"/>
+			</packageset>
+		</javadoc>
+	</target>
+</project>

@@ -1,0 +1,39 @@
+/*
+ * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package asquare.gwt.sb.client.fw;
+
+import asquare.gwt.sb.client.util.Properties;
+
+import com.google.gwt.user.client.Element;
+
+/**
+ * A view which displays model data in cells. 
+ */
+public interface CompositeCellView
+{
+	/**
+	 * TODO: consider renaming to something appropriate for hit testing / event
+	 * handling. Implementations often "new" a CellId to return, which is fine
+	 * in user time, but not in a tight loop.
+	 * 
+	 * @param eventTarget
+	 */
+	CellId getCellId(Element eventTarget);
+	
+	Element getCellRootElement(CellId cellId);
+
+	void renderCell(CellId cellId, Object modelElement, Properties cellProperties);
+}
