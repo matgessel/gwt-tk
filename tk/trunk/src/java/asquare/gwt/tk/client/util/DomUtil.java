@@ -455,7 +455,7 @@ public class DomUtil
 	 * @return a char representing the key pressed
 	 * @throws IllegalArgumentException if event is other than onkeydown or
 	 *             onkeyup
-	 * @deprecated use {@link KeyEvent#getKeyCode(Event)}
+	 * @deprecated use {@link KeyEvent#getKeyCode()}
 	 */
 	public static char eventGetKeyCode(Event event)
 	{
@@ -469,7 +469,7 @@ public class DomUtil
 	 * @param event a keypress event
 	 * @return a unicode character
 	 * @throws IllegalArgumentException if event is other than onkeypress
-	 * @deprecated use {@link KeyEvent#getKeyPressChar(Event)}
+	 * @deprecated use {@link KeyEvent#getKeyPressChar()}
 	 */
 	public static char eventGetCharCode(Event event)
 	{

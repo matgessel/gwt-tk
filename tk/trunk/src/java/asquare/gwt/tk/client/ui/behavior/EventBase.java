@@ -15,6 +15,7 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.UIObject;
@@ -54,7 +55,7 @@ public interface EventBase
 	
 	/**
 	 * Prevents a preview event from continuing on to the normal phase. Also
-	 * does {@link #preventDefault()} (this is a GWT behavior).
+	 * does {@link DOM#eventPreventDefault(Event)} (this is a GWT behavior).
 	 * 
 	 * @throws IllegalStateException if this event is <strong>not</strong> in
 	 *             preview phase

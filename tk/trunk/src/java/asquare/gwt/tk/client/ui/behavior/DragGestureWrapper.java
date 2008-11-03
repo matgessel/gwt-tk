@@ -17,8 +17,8 @@ package asquare.gwt.tk.client.ui.behavior;
 
 /**
  * A base class for wrapping a DragGesture. By default, the
- * {@link #start(int, int)}, {@link #step(int, int)} and
- * {@link #finish(int, int)} methods called the delegate implementation.
+ * {@link #start(MouseEvent)}, {@link #step(DragEvent)} and
+ * {@link #finish()} methods called the delegate implementation.
  */
 public class DragGestureWrapper implements DragGesture
 {

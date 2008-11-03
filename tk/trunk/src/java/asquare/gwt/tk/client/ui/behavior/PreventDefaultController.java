@@ -15,8 +15,10 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
-import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Widget;
 
 public class PreventDefaultController extends ControllerAdaptor
 {

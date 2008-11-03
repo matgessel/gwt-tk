@@ -15,6 +15,7 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
 
 public class EventInterestAdaptor implements EventInterest

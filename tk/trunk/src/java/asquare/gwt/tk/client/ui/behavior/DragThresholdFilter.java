@@ -32,7 +32,7 @@ public class DragThresholdFilter extends DragGestureWrapper
 	 * 
 	 * @param distance the distance in screen pixels to move before taking an
 	 *            action, or <code>0</code>
-	 * @param gesture a delegate object
+	 * @param delegate an object to handle the drag gesture
 	 */
 	public DragThresholdFilter(int distance, DragGesture delegate)
 	{
