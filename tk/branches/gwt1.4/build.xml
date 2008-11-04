@@ -107,7 +107,8 @@
 			<istrue value="${gwttk.debug}"/>
 		</condition>
 		
-		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true" jvmargs="-client">
+		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true">
+  	        <jvmarg value="-client"/>
 			<sysproperty key="java.awt.headless" value="true"/>
 			<classpath>
 				<path location="${src.dir}"/>
@@ -198,9 +199,9 @@
             <sysproperty key="gwt.args" value="-port 8889 -out test" />
   	        <jvmarg value="-client"/>
 			<!-- uncomment for Mac
+			-->
 			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"/>
   	        <jvmarg line="-XstartOnFirstThread"/>
-			-->
 			<classpath>
 				<pathelement location="build/test/classes"/>
 				<pathelement location="src/test"/>
@@ -291,7 +292,7 @@
 					<include name="**/*.jar"/>
 				</fileset>
 				<path refid="gwt.classpath"/>
-				<path location="D:/tools/junit3.8.2/junit.jar"/>
+				<path location="${junit.lib}"/>
 			</classpath>
 			<bottom>${javadoc.bottom}</bottom>
 			<packageset dir="src/debug"/>
