@@ -73,6 +73,17 @@ public class JSNITC extends GWTTestCase
 		assertEquals(VAL1, map.getString(KEY1));
 	}
 	
+	public void testStringIdentity()
+	{
+		final String KEY1 = "key1";
+		final String VAL1 = "val1";
+		AssociativeArray map = new AssociativeArray();
+		
+		map.set(KEY1, VAL1);
+		assertSame(VAL1, map.get(KEY1));
+		assertSame(VAL1, map.getString(KEY1));
+	}
+	
 	private static class AssociativeArray
 	{
 		JavaScriptObject m_impl;
