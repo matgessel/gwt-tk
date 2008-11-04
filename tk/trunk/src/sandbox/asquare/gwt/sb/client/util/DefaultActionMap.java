@@ -20,16 +20,16 @@ import java.util.HashMap;
 
 public class DefaultActionMap implements ActionMap
 {
-	private final HashMap m_map = new HashMap();
+	private final HashMap<String, Action> m_map = new HashMap<String, Action>();
 	
 	public Action get(char keyCode)
 	{
-		return (Action) m_map.get(encodeKey(keyCode, 0));
+		return m_map.get(encodeKey(keyCode, 0));
 	}
 	
 	public Action get(char keyCode, int modifiers)
 	{
-		return (Action) m_map.get(encodeKey(keyCode, modifiers));
+		return m_map.get(encodeKey(keyCode, modifiers));
 	}
 	
 	public void put(char keyCode, Action command)

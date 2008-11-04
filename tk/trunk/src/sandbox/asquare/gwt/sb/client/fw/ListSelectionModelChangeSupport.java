@@ -23,7 +23,7 @@ import asquare.gwt.sb.client.util.RangeCollection;
 
 public class ListSelectionModelChangeSupport extends ModelChangeSupportComplex
 {
-	private ArrayList m_listeners = null;
+	private ArrayList<ListSelectionModelListener> m_listeners = null;
 	
 	private ListSelectionModelEvent m_event = null;
 	
@@ -49,7 +49,7 @@ public class ListSelectionModelChangeSupport extends ModelChangeSupportComplex
 		
 		if (m_listeners == null)
 		{
-			m_listeners = new ArrayList();
+			m_listeners = new ArrayList<ListSelectionModelListener>();
 		}
 		m_listeners.add(listener);
 	}

@@ -13,24 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package asquare.gwt.sb.client.widget;
+package com.google.gwt.dom.client;
 
-import asquare.gwt.sb.client.fw.*;
-import asquare.gwt.tk.client.ui.behavior.EventBase;
-
-public class ListSelectionController extends ListSelectionControllerBase
+public class DOMImplIE6Patched extends DOMImplIE6
 {
-	private final ListView m_view;
-	
-	public ListSelectionController(ListSelectionModel selectionModel, ExplicitUpdateModel updateModel, ListView view)
+	@Override
+	public String imgGetSrc(Element img)
 	{
-		super(selectionModel, updateModel);
-		m_view = view;
+		return ImageSrcIE6Patched.getImgSrc(img);
 	}
 	
-	protected int getIndex(EventBase e)
+	@Override
+	public void imgSetSrc(Element img, String src)
 	{
-		IndexedCellId cellId = ((IndexedCellId) m_view.getCellId(e.getTarget()));
-		return cellId != null ? cellId.getIndex() : -1;
+		ImageSrcIE6Patched.setImgSrc(img, src);
 	}
 }

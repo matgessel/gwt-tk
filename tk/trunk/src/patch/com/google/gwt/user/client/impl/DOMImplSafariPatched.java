@@ -22,8 +22,10 @@ import com.google.gwt.user.client.Event;
  */
 class DOMImplSafariPatched extends DOMImplSafari
 {
+	@SuppressWarnings("unused")
 	private static final boolean VERSION2 = isSafari2();
 	
+	@Override
 	public native int eventGetButton(Event evt) /*-{
 		var button = evt.button;
 		if (@com.google.gwt.user.client.impl.DOMImplSafariPatched::VERSION2)

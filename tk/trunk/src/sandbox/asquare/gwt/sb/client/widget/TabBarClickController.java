@@ -24,10 +24,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TabBarClickController extends ControllerAdaptor
 {
-	private final ListModel m_model;
+	private final ExplicitUpdateModel m_model;
 	private final ListSelectionModelSingle m_selectionModel;
 	
-	public TabBarClickController(ListModel model)
+	public TabBarClickController(ListModel<?> model)
 	{
 		super(TabBarClickController.class, Event.ONMOUSEDOWN);
 		m_model = model;

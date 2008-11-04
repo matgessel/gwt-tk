@@ -111,12 +111,12 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 	 * @param type a class literal used to identify a type of change
 	 * @return the change, or <code>null</code>
 	 */
-    public ChangeBase getChange(Class type)
+    public ChangeBase getChange(Class<? extends ChangeBase> type)
     {
         return (ChangeBase) m_changes.getValue(type);
     }
     
-    public int getIndexOfChange(Class type)
+    public int getIndexOfChange(Class<? extends ChangeBase> type)
     {
     	 return getIndexOfChange(type, 0);
     }
@@ -128,12 +128,12 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 	 * @param type a class literal used to identify a type of change
 	 * @return the index, or <code>-1</code>
 	 */
-    public int getIndexOfChange(Class type, int fromIndex)
+    public int getIndexOfChange(Class<? extends ChangeBase> type, int fromIndex)
     {
     	 return m_changes.getIndexOfType(type, fromIndex);
     }
     
-    public boolean hasChange(Class type)
+    public boolean hasChange(Class<? extends ChangeBase> type)
     {
     	return m_changes.containsType(type);
     }
@@ -215,9 +215,9 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 		 * Design note: using the Class to specify the type ensures quick ==
 		 * comparison (in GWT 1.5 anyway) and consistency across networked VMs.
 		 */
-    	private final Class m_type;
+    	private final Class<? extends ChangeBase> m_type;
         
-    	public ChangeBase(Class type)
+    	public ChangeBase(Class<? extends ChangeBase> type)
         {
             m_type = type;
         }
@@ -238,7 +238,7 @@ public class ModelChangeEventComplex extends ModelChangeEvent
         /**
 		 * Gets a Class which is used to identify the type of change.
 		 */
-        public Class getType()
+        public Class<? extends ChangeBase> getType()
         {
             return m_type;
         }

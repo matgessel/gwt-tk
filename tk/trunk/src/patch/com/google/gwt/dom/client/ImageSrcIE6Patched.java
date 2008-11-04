@@ -13,9 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.google.gwt.user.client.impl;
-
-import com.google.gwt.user.client.Element;
+package com.google.gwt.dom.client;
 
 /**
  * Works around an IE problem where multiple images trying to load at the same

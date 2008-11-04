@@ -27,14 +27,14 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public abstract class ControllerAdaptor extends PluggableEventHandlerAdaptor implements Controller
 {
-	private final Class m_id;
+	private final Class<? extends Controller> m_id;
 	
 	/**
 	 * Creates a ControllerAdaptor with the specified id. 
 	 * 
 	 * @param id the controller id
 	 */
-	public ControllerAdaptor(Class id)
+	public ControllerAdaptor(Class<? extends Controller> id)
 	{
 		this(id, 0);
 	}
@@ -43,7 +43,7 @@ public abstract class ControllerAdaptor extends PluggableEventHandlerAdaptor imp
 	 * @deprecated
 	 * @see #ControllerAdaptor(Class, int)
 	 */
-	public ControllerAdaptor(int eventBits, Class id)
+	public ControllerAdaptor(int eventBits, Class<? extends Controller> id)
 	{
 		this(id, eventBits);
 	}
@@ -55,7 +55,7 @@ public abstract class ControllerAdaptor extends PluggableEventHandlerAdaptor imp
 	 * @param eventBits a bitmask representing the events this controller is
 	 *            interested in
 	 */
-	public ControllerAdaptor(Class id, int eventBits)
+	public ControllerAdaptor(Class<? extends Controller> id, int eventBits)
 	{
 		super(eventBits);
 		m_id = id;
@@ -65,7 +65,7 @@ public abstract class ControllerAdaptor extends PluggableEventHandlerAdaptor imp
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.Controller#getId()
 	 */
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return m_id;
 	}

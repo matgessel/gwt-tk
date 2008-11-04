@@ -119,7 +119,7 @@ public class ListWidgetVTableShell extends ListWidget
 	            if ("TR".equals(DomUtil.getElementName(candidate)))
 	            {
 	                Element candidateTBody = DOM.getParent(candidate);
-	                if (DOM.compare(m_tBody, candidateTBody))
+	                if (m_tBody == candidateTBody)
 	                {
 	                    return candidate;
 	                }
@@ -131,7 +131,7 @@ public class ListWidgetVTableShell extends ListWidget
 	            }
 	            candidate = DOM.getParent(candidate);
 	        }
-	        while (candidate != null && ! DOM.compare(m_tBody, candidate));
+	        while (candidate != null && m_tBody != candidate);
 	        return null;
 	    }
 

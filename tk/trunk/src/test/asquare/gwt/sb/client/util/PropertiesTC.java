@@ -63,7 +63,7 @@ public class PropertiesTC extends GWTTestCase
 		
 		// runtime type of String
 		m_properties.set(KEY_O, (Object) m_s);
-		assertSame(m_s, m_properties.get(KEY_O));
+		assertEquals(m_s, m_properties.get(KEY_O));
 		
 		// null key
 		try
@@ -117,7 +117,7 @@ public class PropertiesTC extends GWTTestCase
 		assertNull(m_properties.getString(KEY_S));
 		
 		m_properties.set(KEY_S, m_s);
-		assertSame(m_s, m_properties.getString(KEY_S));
+		assertEquals(m_s, m_properties.getString(KEY_S));
 		
 		// null key
 		try

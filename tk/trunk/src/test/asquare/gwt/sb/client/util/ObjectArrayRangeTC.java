@@ -16,9 +16,9 @@
 package asquare.gwt.sb.client.util;
 
 import junit.framework.TestCase;
-import asquare.gwt.tk.client.util.GwtUtil;
 import asquare.gwt.tk.testutil.TkTestUtil;
 
+@SuppressWarnings("unused")
 public class ObjectArrayRangeTC extends TestCase
 {
 	private Object[] m_0_4;

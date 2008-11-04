@@ -179,6 +179,7 @@ public class Demo implements EntryPoint
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static class TraceDelegate
 	{
 		private static final String ON_ATTACH = "onAttach";

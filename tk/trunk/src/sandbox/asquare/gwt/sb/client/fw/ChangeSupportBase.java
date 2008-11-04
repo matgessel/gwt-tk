@@ -24,7 +24,7 @@ public abstract class ChangeSupportBase
 {
 	private final Object m_source;
 	
-	private ArrayList m_listeners = null;
+	private ArrayList<EventListener> m_listeners = null;
 	
 	public ChangeSupportBase(Object source)
 	{
@@ -38,7 +38,7 @@ public abstract class ChangeSupportBase
 		
 		if (m_listeners == null)
 		{
-			m_listeners = new ArrayList();
+			m_listeners = new ArrayList<EventListener>();
 		}
 		m_listeners.add(listener);
 	}

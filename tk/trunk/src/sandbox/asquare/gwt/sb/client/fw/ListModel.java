@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface ListModel extends IndexedDataSource, ModelHoverSupport, SourcesModelChangeEventComplex
+public interface ListModel<E> extends IndexedDataSource<E>, ModelHoverSupport, SourcesModelChangeEventComplex
 {
 	String ITEM_PROPERTY_VALUE = "listItemValue";
 	String ITEM_PROPERTY_HOVER = "listItemHover";

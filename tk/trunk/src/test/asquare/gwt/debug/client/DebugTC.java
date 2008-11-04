@@ -37,7 +37,7 @@ public class DebugTC extends GWTTestCase
 		Debug.dump("testPrettyPrint");
 		Debug.dump(new Integer(1));
 		Debug.dump(new Integer[] {new Integer(0), new Integer(1), new Integer(2)});
-		Debug.dump(new ArrayList());
+		Debug.dump(new ArrayList<Object>());
 		Debug.dump(null);
 		Debug.dump(DOM.createLabel());
 		Debug.dump((Object) DOM.createLabel());
@@ -50,7 +50,7 @@ public class DebugTC extends GWTTestCase
 		_testDumpNative("testPrettyPrint");
 		_testDumpNative(new Integer(1));
 		_testDumpNative(new Integer[] {new Integer(0), new Integer(1), new Integer(2)});
-		_testDumpNative(new ArrayList());
+		_testDumpNative(new ArrayList<Object>());
 		_testDumpNative(null);
 		_testDumpNative(DOM.createLabel());
 		_testDumpNative((Object) DOM.createLabel());

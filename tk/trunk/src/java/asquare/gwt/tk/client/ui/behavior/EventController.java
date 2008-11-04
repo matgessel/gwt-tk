@@ -34,19 +34,19 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class EventController extends EventControllerBase implements Controller
 {
-	private final Class m_id;
+	private final Class<? extends Controller> m_id;
 
-	public EventController(Class id)
+	public EventController(Class<? extends Controller> id)
 	{
 		this(id, 0, null);
 	}
 	
-	public EventController(Class id, EventHandler handler)
+	public EventController(Class<? extends Controller> id, EventHandler handler)
 	{
 		this(id, 0, handler);
 	}
 	
-	public EventController(Class id, int eventBits)
+	public EventController(Class<? extends Controller> id, int eventBits)
 	{
 		this(id, eventBits, null);
 	}
@@ -56,13 +56,13 @@ public class EventController extends EventControllerBase implements Controller
 	 *            <code>0</code> from the handlers
 	 * @param handler an PluggableEventHandler or <code>null</code>
 	 */
-	public EventController(Class id, int eventBits, EventHandler handler)
+	public EventController(Class<? extends Controller> id, int eventBits, EventHandler handler)
 	{
 		super(eventBits, handler);
 		m_id = id;
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return m_id;
 	}

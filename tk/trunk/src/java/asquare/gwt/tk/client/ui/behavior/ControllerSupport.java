@@ -35,7 +35,7 @@ public interface ControllerSupport extends EventListener
 	 * 
 	 * @param controllers a list of 0 or more controllers, or <code>null</code>
 	 */
-	void setControllers(List controllers);
+	void setControllers(List<Controller> controllers);
 	
 	/**
 	 * Gets a controller with the specified id. The id is often an interface or
@@ -45,7 +45,7 @@ public interface ControllerSupport extends EventListener
 	 * @param id a Class identifying the type of controller to get
 	 * @return the first controller matching the id, or <code>null</code>
 	 */
-	Controller getController(Class id);
+	Controller getController(Class<? extends Controller> id);
 	
 	/**
 	 * Adds a controller to process events on this widget. Multiple controllers

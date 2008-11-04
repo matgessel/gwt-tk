@@ -32,7 +32,7 @@ public final class EventPreviewDispatcher implements EventPreview
 {
 	private static EventPreviewDispatcher s_instance = new EventPreviewDispatcher();
 	
-	private final ArrayList m_listeners = new ArrayList();
+	private final ArrayList<DebugEventListener> m_listeners = new ArrayList<DebugEventListener>();
 	
 	private boolean m_installed = false;
 	
@@ -79,11 +79,10 @@ public final class EventPreviewDispatcher implements EventPreview
 	{
 		if (m_listeners.size() > 0)
 		{
-			Object[] listeners = m_listeners.toArray();
+			DebugEventListener[] listeners = m_listeners.toArray(new DebugEventListener[m_listeners.size()]);
 			for (int i = 0; i < listeners.length; i++)
 			{
-				DebugEventListener listener = (DebugEventListener) listeners[i];
-				listener.eventDispatched(event);
+				listeners[i].eventDispatched(event);
 			}
 		}
 		return true;

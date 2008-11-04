@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import com.google.gwt.core.client.GWT;
-
 public class ModelChangeEvent
 {
 	private final Object m_source;
@@ -36,6 +34,6 @@ public class ModelChangeEvent
 	
 	public String toString()
 	{
-		return GWT.getTypeName(this) + "[source=" + m_source + ']';
+		return getClass().getName() + "[source=" + m_source + ']';
 	}
 }

@@ -17,29 +17,19 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.ArrayList;
 
-public class RefreshViewsListenerCollection extends ArrayList
+public class RefreshViewsListenerCollection extends ArrayList<RefreshViewsListener>
 {
 	private static final long serialVersionUID = -1840555495831347763L;
 
-	public void addListener(RefreshViewsListener listener)
-	{
-		add(listener);
-	}
-	
-	public void removeListener(RefreshViewsListener listener)
-	{
-		remove(listener);
-	}
-	
 	public void fireUpdate()
 	{
 		if (size() == 0)
 			return;
 		
-		Object[] listeners = toArray();
+		RefreshViewsListener[] listeners = toArray(new RefreshViewsListener[size()]);
 		for (int i = 0; i < listeners.length; i++)
 		{
-			((RefreshViewsListener) listeners[i]).refreshViews();
+			listeners[i].refreshViews();
 		}
 	}
 }

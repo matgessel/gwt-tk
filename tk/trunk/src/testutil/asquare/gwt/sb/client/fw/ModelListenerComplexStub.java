@@ -55,7 +55,7 @@ public class ModelListenerComplexStub extends ModelListenerStub implements Model
         return m_changes.getSize();
     }
     
-    public int getChangeCount(Class type)
+    public int getChangeCount(Class<? extends ChangeBase> type)
     {
         return m_changes.getValueCountFor(type);
     }
@@ -74,7 +74,7 @@ public class ModelListenerComplexStub extends ModelListenerStub implements Model
     	return false;
     }
     
-    public ChangeBase getChange(Class type)
+    public ChangeBase getChange(Class<? extends ChangeBase> type)
     {
         return (ChangeBase) m_changes.getValue(type);
     }

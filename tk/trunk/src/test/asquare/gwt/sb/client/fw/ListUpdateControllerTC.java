@@ -19,7 +19,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 
 public class ListUpdateControllerTC extends GWTTestCase
 {
-	private ListModelDefault m_model;
+	private ListModelDefault<Object> m_model;
 	private ListViewStub m_view;
 	private ListUpdateController m_controller;
 	private Object m_0;
@@ -36,7 +36,7 @@ public class ListUpdateControllerTC extends GWTTestCase
 	
 	protected void setupImpl()
 	{
-		m_model = new ListModelDefault(new ListSelectionModelArbitrary());
+		m_model = new ListModelDefault<Object>(new ListSelectionModelArbitrary());
 		m_view = new ListViewStub();
 		if (m_controller != null)
 		{

@@ -24,8 +24,8 @@ public class EditHistoryModel
 	public static final int MAXSIZE_DEFAULT = 50;
 	
 	private final EditHistoryListenerCollection m_listeners = new EditHistoryListenerCollection();
-	private final Stack m_undo = new Stack();
-	private final Stack m_redo = new Stack();
+	private final Stack<UndoableCommand> m_undo = new Stack<UndoableCommand>();
+	private final Stack<UndoableCommand> m_redo = new Stack<UndoableCommand>();
 	
 	private int m_maxSize;
 	private boolean m_changed = false;
@@ -42,12 +42,12 @@ public class EditHistoryModel
 	
 	public void addListener(EditHistoryListener listener)
 	{
-		m_listeners.addListener(listener);
+		m_listeners.add(listener);
 	}
 	
 	public void removeListener(EditHistoryListener listener)
 	{
-		m_listeners.removeListener(listener);
+		m_listeners.remove(listener);
 	}
 	
 	public int getMaxSize()
@@ -140,16 +140,16 @@ public class EditHistoryModel
 //		m_listeners.fireHistoryChanged(this);
 //	}
 	
-	public List getUndoItems()
+	public List<UndoableCommand> getUndoItems()
 	{
-		List result = new ArrayList(m_undo);
+		List<UndoableCommand> result = new ArrayList<UndoableCommand>(m_undo);
 		Collections.reverse(result);
 		return result;
 	}
 	
-	public List getRedoItems()
+	public List<UndoableCommand> getRedoItems()
 	{
-		List result = new ArrayList(m_redo);
+		List<UndoableCommand> result = new ArrayList<UndoableCommand>(m_redo);
 		Collections.reverse(result);
 		return result;
 	}

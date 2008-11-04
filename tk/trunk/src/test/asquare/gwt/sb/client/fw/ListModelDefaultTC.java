@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 public class ListModelDefaultTC extends TestCase
 {
-	private ListModelDefault m_model;
+	private ListModelDefault<Object> m_model;
 	private ListModelListenerStub m_l1;
 	private Object m_a1;
 	private Object m_b2;
@@ -34,7 +34,7 @@ public class ListModelDefaultTC extends TestCase
 	
 	protected void setupImpl()
 	{
-		m_model = new ListModelDefault(new ListSelectionModelSingle());
+		m_model = new ListModelDefault<Object>(new ListSelectionModelSingle());
 		m_l1 = new ListModelListenerStub();
 		m_a1 = new Integer(1);
 		m_b2 = new Integer(2);
@@ -137,7 +137,7 @@ public class ListModelDefaultTC extends TestCase
 		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
 		
 		// null selection model
-		ListModelDefault model = new ListModelDefault(null);
+		ListModelDefault<Object> model = new ListModelDefault<Object>(null);
 		model.add(m_a1);
 		model.remove(0);
 		assertFalse(model.isIndexSelected(0));
@@ -160,7 +160,7 @@ public class ListModelDefaultTC extends TestCase
 	
 	public void testGetUnselectedItems()
 	{
-		ListModelDefault model = new ListModelDefault(new ListSelectionModelArbitrary());
+		ListModelDefault<String> model = new ListModelDefault<String>(new ListSelectionModelArbitrary());
 		ListSelectionModel selectionModel = model.getSelectionModel();
 		
 		// basic test

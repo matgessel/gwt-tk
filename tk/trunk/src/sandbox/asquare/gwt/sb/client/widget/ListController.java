@@ -36,7 +36,7 @@ public class ListController extends EventController
 		m_list = list;
 	}
 	
-	protected void addHandler(Class cls, EventListener handler)
+	protected void addHandler(Class<?> cls, EventListener handler)
 	{
 		if (m_handlers == null)
 		{

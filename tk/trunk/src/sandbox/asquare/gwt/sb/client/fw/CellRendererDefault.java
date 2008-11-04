@@ -240,18 +240,18 @@ public class CellRendererDefault implements CellRendererString
 	
 	private static class StyleRuleCollection
 	{
-		private final ArrayList m_rendererProperties = new ArrayList();
-		private final ArrayList m_cssProperties = new ArrayList();
-		private final ArrayList m_values = new ArrayList();
+		private final ArrayList<String> m_rendererProperties = new ArrayList<String>();
+		private final ArrayList<String> m_cssProperties = new ArrayList<String>();
+		private final ArrayList<Object> m_values = new ArrayList<Object>();
 		
 		public String getRendererProperty(int index)
 		{
-			return (String) m_rendererProperties.get(index);
+			return m_rendererProperties.get(index);
 		}
 		
 		public String getCssProperty(int index)
 		{
-			return (String) m_cssProperties.get(index);
+			return m_cssProperties.get(index);
 		}
 		
 		/**

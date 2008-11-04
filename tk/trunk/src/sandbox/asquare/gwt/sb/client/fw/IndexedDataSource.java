@@ -15,9 +15,9 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface IndexedDataSource
+public interface IndexedDataSource<E>
 {
 	int getSize();
 	
-	Object get(int index);
+	E get(int index);
 }

@@ -34,8 +34,8 @@ public class ControllerSupportDelegate
 {
 	private final Widget m_widget;
 	
-	private List m_controllers = null;
-	private List m_disablableControllerIds = null;
+	private List<Controller> m_controllers = null;
+	private List<Class<? extends Controller>> m_disablableControllerIds = null;
 	private int m_legacyEventBits = 0;
 	private boolean m_enabled = true;
 	
@@ -71,7 +71,7 @@ public class ControllerSupportDelegate
 		{
 			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
-				controllerEventBits |= ((Controller) m_controllers.get(i)).getEventBits();
+				controllerEventBits |= m_controllers.get(i).getEventBits();
 			}
 		}
 		DOM.sinkEvents(m_widget.getElement(), m_legacyEventBits | controllerEventBits);
@@ -89,15 +89,15 @@ public class ControllerSupportDelegate
 		sinkAllBits();
 	}
 	
-	public Controller getController(Class id)
+	public Controller getController(Class<? extends Controller> id)
 	{
 		if (m_controllers != null)
 		{
 			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
-				if (((Controller) m_controllers.get(i)).getId() == id)
+				if (m_controllers.get(i).getId() == id)
 				{
-					return (Controller) m_controllers.get(i);
+					return m_controllers.get(i);
 				}
 			}
 		}
@@ -114,7 +114,7 @@ public class ControllerSupportDelegate
 		
 		if (m_controllers == null)
 		{
-			m_controllers = new ArrayList();
+			m_controllers = new ArrayList<Controller>();
 		}
 		m_controllers.add(controller);
 		DOM.sinkEvents(m_widget.getElement(), 
@@ -153,7 +153,7 @@ public class ControllerSupportDelegate
 		return m_widget;
 	}
 	
-	public void setControllers(List controllers)
+	public void setControllers(List<? extends Controller> controllers)
 	{
 		if (m_widget.isAttached())
 		{
@@ -162,7 +162,7 @@ public class ControllerSupportDelegate
 		m_controllers = null;
 		if (controllers != null)
 		{
-			m_controllers = new ArrayList();
+			m_controllers = new ArrayList<Controller>();
 			for (int i = 0, size = controllers.size(); i < size; i++)
 			{
 				m_controllers.add((Controller) controllers.get(i));
@@ -175,7 +175,7 @@ public class ControllerSupportDelegate
 		sinkAllBits();
 	}
 	
-	public boolean isControllerDisablable(Class id)
+	public boolean isControllerDisablable(Class<? extends Controller> id)
 	{
 		return m_disablableControllerIds != null && m_disablableControllerIds.contains(id);
 	}
@@ -186,7 +186,7 @@ public class ControllerSupportDelegate
 	 *            when the component is disabled
 	 * @throws IllegalArgumentException if <code>id</code> is <code>null</code>
 	 */
-	public void setControllerDisablable(Class id, boolean disablable)
+	public void setControllerDisablable(Class<? extends Controller> id, boolean disablable)
 	{
 		if (id == null)
 			throw new IllegalArgumentException();
@@ -195,7 +195,7 @@ public class ControllerSupportDelegate
 		{
 			if (m_disablableControllerIds == null)
 			{
-				m_disablableControllerIds = new ArrayList();
+				m_disablableControllerIds = new ArrayList<Class<? extends Controller>>();
 			}
 			m_disablableControllerIds.add(id);
 		}
@@ -214,7 +214,7 @@ public class ControllerSupportDelegate
 		{
 			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
-				((Controller) m_controllers.get(i)).plugIn(m_widget);
+				m_controllers.get(i).plugIn(m_widget);
 			}
 		}
 	}
@@ -225,7 +225,7 @@ public class ControllerSupportDelegate
 		{
 			for (int i = m_controllers.size() - 1; i >= 0; i--)
 			{
-				((Controller) m_controllers.get(i)).unplug(m_widget);
+				m_controllers.get(i).unplug(m_widget);
 			}
 		}
 	}
@@ -283,7 +283,7 @@ public class ControllerSupportDelegate
 			{
 				for (int i = 0, size = m_controllers.size(); i < size; i++)
 				{
-					Controller controller = (Controller) m_controllers.get(i);
+					Controller controller = m_controllers.get(i);
 					if ((controller.getEventBits() & eventType) != 0 && (m_enabled || ! isControllerDisablable(controller.getId())))
 					{
 						controller.onBrowserEvent(m_widget, event);

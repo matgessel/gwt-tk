@@ -35,12 +35,12 @@ public class CList extends CComponent
 		this(null, null, null);
 	}
 	
-	public CList(ListModel model, ListView view)
+	public CList(ListModel<?> model, ListView view)
 	{
 		this(model, view, null);
 	}
 	
-	public CList(ListModel model, ListView view, Pluggable updateController)
+	public CList(ListModel<?> model, ListView view, Pluggable updateController)
 	{
 		super(model, (Widget) view);
 		
@@ -56,9 +56,9 @@ public class CList extends CComponent
 		addController(listController);
 	}
 	
-	protected Object createModel()
+	protected ListModel<?> createModel()
 	{
-		return new ListModelDefault(new ListSelectionModelSingle());
+		return new ListModelDefault<Object>(new ListSelectionModelSingle());
 	}
 	
 	protected Widget createView()
@@ -66,9 +66,9 @@ public class CList extends CComponent
 		return new ListViewBasic();
 	}
 	
-	public ListModel getListModel()
+	public ListModel<?> getListModel()
 	{
-		return (ListModel) getModel();
+		return (ListModel<?>) getModel();
 	}
 	
 	public ListView getListView()
@@ -149,7 +149,7 @@ public class CList extends CComponent
 		
 		CList getList();
 		
-		ListModel getListModel();
+		ListModel<?> getListModel();
 		
 		ListView getListView();
 		
@@ -185,7 +185,7 @@ public class CList extends CComponent
 			return m_index;
 		}
 		
-		public ListModel getListModel()
+		public ListModel<?> getListModel()
 		{
 			return getList().getListModel();
 		}

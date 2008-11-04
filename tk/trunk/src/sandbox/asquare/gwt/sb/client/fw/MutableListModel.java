@@ -15,13 +15,13 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface MutableListModel extends ListModel, MutableIndexedDataSource
+public interface MutableListModel<E> extends ListModel<E>, MutableIndexedDataSource<E>
 {
-    void add(Object value);
+    void add(E value);
     
-    void insert(int index, Object value);
+    void insert(int index, E value);
     
-    Object remove(int index);
+    E remove(int index);
     
     void clear();
 }

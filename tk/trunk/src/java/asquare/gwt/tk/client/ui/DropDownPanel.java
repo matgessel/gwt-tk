@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import asquare.gwt.tk.client.ui.behavior.ControlSurfaceController;
+import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 
 import com.google.gwt.user.client.DOM;
@@ -56,7 +57,7 @@ public class DropDownPanel extends CComplexPanel
 	public static final String PROPERTY_OPEN = "DropDownPanel-open";
 	public static final String PROPERTY_INTERACTIVE = "DropDownPanel-interactive";
 	
-	private final ArrayList m_listeners = new ArrayList();
+	private final ArrayList<DropDownListener> m_listeners = new ArrayList<DropDownListener>();
 	private final Element m_contentDiv;
 	private HTML m_header = null;
 	private boolean m_interactive = true;
@@ -101,9 +102,9 @@ public class DropDownPanel extends CComplexPanel
 		}
 	}
 	
-	protected List createHeaderControllers()
+	protected List<Controller> createHeaderControllers()
 	{
-		List result = new ArrayList();
+		List<Controller> result = new ArrayList<Controller>();
 		result.add(new OpenerController(this));
 		result.add(ControlSurfaceController.getInstance());
 		return result;
@@ -251,9 +252,9 @@ public class DropDownPanel extends CComplexPanel
 		if (m_listeners.size() == 0)
 			return;
 		
-		for (Iterator iter = m_listeners.iterator(); iter.hasNext();)
+		for (Iterator<DropDownListener> iter = m_listeners.iterator(); iter.hasNext();)
 		{
-			((DropDownListener) iter.next()).dropDownOpened(this);
+			iter.next().dropDownOpened(this);
 		}
 	}
 	
@@ -262,9 +263,9 @@ public class DropDownPanel extends CComplexPanel
 		if (m_listeners.size() == 0)
 			return;
 		
-		for (Iterator iter = m_listeners.iterator(); iter.hasNext();)
+		for (Iterator<DropDownListener> iter = m_listeners.iterator(); iter.hasNext();)
 		{
-			((DropDownListener) iter.next()).dropDownClosed(this);
+			iter.next().dropDownClosed(this);
 		}
 	}
 	

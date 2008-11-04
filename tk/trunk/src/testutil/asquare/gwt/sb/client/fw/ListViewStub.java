@@ -12,7 +12,7 @@ public class ListViewStub implements ListView
 {
 	private static final String PROPERTY_MODELOBJECT = "modelObject";
 	
-	private final ArrayList mItems = new ArrayList();
+	private final ArrayList<Map<String, Object>> mItems = new ArrayList<Map<String, Object>>();
 	
 	public Object getModelElement(int index)
 	{
@@ -24,9 +24,9 @@ public class ListViewStub implements ListView
 		return getItem(index).get(property);
 	}
 	
-	private Map getItem(int index)
+	private Map<String, Object> getItem(int index)
 	{
-		return (Map) mItems.get(index);
+		return mItems.get(index);
 	}
 	
 	public void add(Object modelElement, Properties cellProperties)
@@ -36,7 +36,7 @@ public class ListViewStub implements ListView
 
 	public void insert(IndexedCellId cellId, Object modelElement, Properties cellProperties)
 	{
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		mItems.add(cellId.getIndex(), map);
 		renderCell(cellId, modelElement, cellProperties);
 	}
@@ -60,7 +60,7 @@ public class ListViewStub implements ListView
 	{
 		if (cellProperties != null)
 		{
-			Map item = getItem(((IndexedCellId) cellId).getIndex());
+			Map<String, Object> item = (Map<String, Object>) getItem(((IndexedCellId) cellId).getIndex());
 			item.put(ListCellRenderer.PROPERTY_EVEN, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_EVEN)));
 			item.put(ListCellRenderer.PROPERTY_FIRST, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_FIRST)));
 			item.put(ListCellRenderer.PROPERTY_LAST, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_LAST)));

@@ -16,6 +16,7 @@
 package asquare.gwt.sb.client.widget;
 
 import asquare.gwt.tk.client.ui.CComposite;
+import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.Pluggable;
 
 import com.google.gwt.user.client.ui.Widget;
@@ -110,7 +111,7 @@ public class CComponent extends CComposite
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.CComposite#setControllerDisablable(java.lang.Class, boolean)
 	 */
-	public void setControllerDisablable(Class id, boolean disablable)
+	public void setControllerDisablable(Class<? extends Controller> id, boolean disablable)
 	{
 		super.setControllerDisablable(id, disablable);
 	}

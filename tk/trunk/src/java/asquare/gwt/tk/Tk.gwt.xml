@@ -16,23 +16,18 @@
 <module>
 	<inherits name='com.google.gwt.user.User'/>
 	
-	<!-- patch module must be after Google module -->
+	<!-- patches must be after Google module -->
+	<inherits name='com.google.gwt.dom.Patch'/>
 	<inherits name='com.google.gwt.user.Patch'/>
-
+	
 	<inherits name='asquare.gwt.tk.DomUtil'/>
 	
 	<inherits name='asquare.gwt.tk.GlassPanel'/>
-	
 	<inherits name='asquare.gwt.tk.TabFocusController'/>
-
 	<inherits name='asquare.gwt.tk.PreventSelectionController'/>
-	
 	<inherits name='asquare.gwt.tk.CPopupPanel'/>
-	
 	<inherits name='asquare.gwt.tk.ModalDialog'/>
-	
 	<inherits name='asquare.gwt.tk.MouseMoveFilter'/>
-	
 	<inherits name='asquare.gwt.tk.PreventDragController'/>
 	
 	<source path="client"/>

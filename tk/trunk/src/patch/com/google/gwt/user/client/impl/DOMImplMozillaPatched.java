@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Event;
  */
 class DOMImplMozillaPatched extends DOMImplMozilla
 {
+	@Override
 	public void eventSetKeyCode(Event evt, char key)
 	{
 		throw new UnsupportedOperationException("eventSetKeyCode() is unsupported on Mozilla");

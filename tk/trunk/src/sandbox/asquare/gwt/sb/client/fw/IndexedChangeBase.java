@@ -7,7 +7,7 @@ public abstract class IndexedChangeBase extends ChangeBase
 {
     private IntRange m_range;
 	
-	public IndexedChangeBase(Class type, int index, int count)
+	public IndexedChangeBase(Class<? extends IndexedChangeBase> type, int index, int count)
     {
         super(type);
         m_range = new IntRange(index, count);

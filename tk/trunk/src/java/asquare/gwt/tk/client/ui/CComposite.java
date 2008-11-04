@@ -88,7 +88,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 * @return a List with 0 or more controllers, or <code>null</code>
 	 * @deprecated add controllers in subclass constructor instead 
 	 */
-	protected List createControllers()
+	protected List<Controller> createControllers()
 	{
 		return null;
 	}
@@ -97,7 +97,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#getController(java.lang.Class)
 	 */
-	public Controller getController(Class id)
+	public Controller getController(Class<? extends Controller> id)
 	{
 		return getControllerSupport().getController(id);
 	}
@@ -126,12 +126,12 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#setControllers(java.util.List)
 	 */
-	public void setControllers(List controllers)
+	public void setControllers(List<Controller> controllers)
 	{
 		getControllerSupport().setControllers(controllers);
 	}
 	
-	protected void setControllerDisablable(Class id, boolean disablable)
+	protected void setControllerDisablable(Class<? extends Controller> id, boolean disablable)
 	{
 		getControllerSupport().setControllerDisablable(id, disablable);
 	}

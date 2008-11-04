@@ -22,11 +22,12 @@ import asquare.gwt.tk.client.Tests;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
+@SuppressWarnings("deprecation")
 public class GWTUtilTC extends GWTTestCase
 {
 	private int[] m_sInt;
 	private int[] m_dInt;
-	private List m_list;
+	private List<Integer> m_list;
 	private Object[] m_dObject;
 	
 	public String getModuleName()
@@ -38,7 +39,7 @@ public class GWTUtilTC extends GWTTestCase
 	{
 		m_sInt = new int[] {1, 2, 3, 4};
 		m_dInt = new int[4];
-		m_list = new ArrayList();
+		m_list = new ArrayList<Integer>();
 		for (int i = 1; i <= 4; i++)
 		{
 			m_list.add(new Integer(i));
@@ -432,7 +433,7 @@ public class GWTUtilTC extends GWTTestCase
 		}
 		
 		// 0 length list
-		ArrayList emptyList = new ArrayList();
+		ArrayList<Object> emptyList = new ArrayList<Object>();
 		result = GwtUtil.toArray(emptyList, new Object[emptyList.size()]);
 		
 		// array.length > list.size()

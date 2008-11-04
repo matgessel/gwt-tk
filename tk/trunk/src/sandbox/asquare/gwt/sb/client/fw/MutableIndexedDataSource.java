@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface MutableIndexedDataSource extends IndexedDataSource
+public interface MutableIndexedDataSource<E> extends IndexedDataSource<E>
 {
-	void set(int index, Object value);
+	void set(int index, E value);
 }

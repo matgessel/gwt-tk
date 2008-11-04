@@ -18,6 +18,7 @@ package asquare.gwt.sb.client.fw;
 import java.util.EmptyStackException;
 import java.util.List;
 
+import asquare.gwt.sb.client.util.UndoableCommand;
 import asquare.gwt.sb.client.util.UndoableCommandStub;
 
 import com.google.gwt.junit.client.GWTTestCase;
@@ -502,7 +503,7 @@ public class EditHistoryModelTC extends GWTTestCase
 //		}
 	}
 	
-	private void assertListEquals(Object[] items, List list)
+	private void assertListEquals(Object[] items, List<UndoableCommand> list)
 	{
 		assertEquals(items.length, list.size());
 		for (int i = 0; i < items.length; i++)

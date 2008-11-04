@@ -20,7 +20,7 @@ import java.util.EventListener;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
 import asquare.gwt.sb.client.util.RangeCollection;
 
-public abstract class ListModelBase implements ListModel, SourcesModelChangeEventComplex
+public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChangeEventComplex
 {
 	private final ListModelChangeSupport m_changeSupport;
 	private final ListSelectionModel m_selectionModel;

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("unused")
 public class RowPanelTC extends GWTTestCase
 {
 	private RowPanel m_panel;

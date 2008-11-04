@@ -30,12 +30,12 @@ import asquare.gwt.sb.client.util.*;
  */
 public class ListUpdateController extends UpdateControllerBase implements ListModelListener
 {
-	private final ListModel m_model;
+	private final ListModel<?> m_model;
 	private final ListView m_view;
-	private final ArrayList m_styleProperties = new ArrayList();
-	private final ArrayList m_contentProperties = new ArrayList();
+	private final ArrayList<String> m_styleProperties = new ArrayList<String>();
+	private final ArrayList<String> m_contentProperties = new ArrayList<String>();
 	
-	public ListUpdateController(ListModel model, ListView view)
+	public ListUpdateController(ListModel<?> model, ListView view)
 	{
 		m_model = model;
 		m_view = view;
@@ -44,7 +44,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		m_styleProperties.add(ListModel.ITEM_PROPERTY_SELECTION);
 	}
 	
-	protected ListModel getModel()
+	protected ListModel<?> getModel()
 	{
 		return m_model;
 	}
@@ -245,7 +245,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		}
 	}
 	
-	protected Properties configureCellProperties(int index, ListModel model, Properties properties)
+	protected Properties configureCellProperties(int index, ListModel<?> model, Properties properties)
 	{
 		int hoverIndex = model.getHoverCell() != null ? ((IndexedCellId) model.getHoverCell()).getIndex() : -1;
 		properties.set(ListCellRenderer.PROPERTY_HOVER_INDEX, hoverIndex);

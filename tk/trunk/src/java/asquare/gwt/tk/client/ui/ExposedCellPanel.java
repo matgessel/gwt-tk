@@ -16,6 +16,7 @@
 package asquare.gwt.tk.client.ui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import asquare.gwt.tk.client.util.GwtUtil;
 import asquare.gwt.tk.client.util.TableUtil;
@@ -41,7 +42,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 * Maps the index of each cell to an ordered list of child widgets. 
 	 * Mapping may be null if the cell contains no widgets. <br/>
 	 */
-	private final ArrayList m_cellMap = new ArrayList();
+	private final List<List<Widget>> m_cellMap = new ArrayList<List<Widget>>();
 	
 	private HorizontalAlignmentConstant m_horizontalAlignment = ALIGN_LEFT;
 	private VerticalAlignmentConstant m_verticalAlignment = ALIGN_TOP;
@@ -132,12 +133,12 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		ArrayList cellWidgets = (ArrayList) m_cellMap.get(cellIndex);
+		List<Widget> cellWidgets = m_cellMap.get(cellIndex);
 		if (cellWidgets != null)
 		{
 			while (! cellWidgets.isEmpty())
 			{
-				removeWidget((Widget) cellWidgets.get(cellWidgets.size() - 1), cellIndex);
+				removeWidget(cellWidgets.get(cellWidgets.size() - 1), cellIndex);
 			}
 		}
 		DOM.setInnerHTML(getCellElement(cellIndex), "");
@@ -192,7 +193,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		ArrayList childWidgets = (ArrayList) m_cellMap.get(cellIndex);
+		List<Widget> childWidgets = m_cellMap.get(cellIndex);
 		
 		if (childWidgets == null)
 			throw new IndexOutOfBoundsException(Integer.toString(wIndex));
@@ -215,7 +216,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 		int cell = 0, size = m_cellMap.size();
 		while (cell < size)
 		{
-			ArrayList cellWidgets = (ArrayList) m_cellMap.get(cell);
+			List<Widget> cellWidgets = m_cellMap.get(cell);
 			if (cellWidgets != null && cellWidgets.contains(w))
 			{
 				result = cell;
@@ -273,7 +274,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	{
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		ArrayList cellWidgets = (ArrayList) m_cellMap.get(cellIndex);
+		List<Widget> cellWidgets = m_cellMap.get(cellIndex);
 		int wIndex = (cellWidgets != null) ? cellWidgets.size() : 0;
 		insertWidgetAt(w, cellIndex, wIndex);
 	}
@@ -322,14 +323,14 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 		
 		GwtUtil.rangeCheck(m_cellMap, cellIndex, false);
 		
-		ArrayList cellWidgets = (ArrayList) m_cellMap.get(cellIndex);
+		List<Widget> cellWidgets = m_cellMap.get(cellIndex);
 		
 		if (cellWidgets == null)
 		{
 			if (wIndex != 0)
 				throw new IndexOutOfBoundsException(Integer.toString(wIndex));
 
-			cellWidgets = new ArrayList();
+			cellWidgets = new ArrayList<Widget>();
 			m_cellMap.set(cellIndex, cellWidgets); // pre: cellIndex has been inserted
 		}
 		
@@ -371,7 +372,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 		assert cellIndex >= 0;
 		
 		removeWidget(w, cellIndex);
-		ArrayList childWidgets = (ArrayList) m_cellMap.get(cellIndex);
+		List<Widget> childWidgets = m_cellMap.get(cellIndex);
 		if (removeEmptyCell && childWidgets.size() == 0)
 		{
 			removeCell(cellIndex);
@@ -385,7 +386,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 */
 	private void removeWidget(Widget w, int cellIndex)
 	{
-		ArrayList childWidgets = (ArrayList) m_cellMap.get(cellIndex);
+		List<Widget> childWidgets = m_cellMap.get(cellIndex);
 		
 		super.remove(w);
 		boolean present = (childWidgets).remove(w);

@@ -514,17 +514,18 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		}
 	}
 	
-	private static class HandlerCollection extends ArrayList
+	private static class HandlerCollection extends ArrayList<EventHandler>
 	{
 		private static final long serialVersionUID = 1L;
 
 		// -1 means cache is invalid
 		private int m_eventBitsCache = 0;
 		
-		public void add(EventHandler handler)
+		public boolean add(EventHandler handler)
 		{
-			super.add(handler);
+			boolean result = super.add(handler);
 			m_eventBitsCache |= handler.getEventBits();
+			return result;
 		}
 		
 		public boolean remove(EventHandler handler)

@@ -20,9 +20,9 @@ import java.util.List;
 
 import asquare.gwt.tk.client.util.GwtUtil;
 
-public class ListModelDefault extends ListModelBase implements MutableListModel
+public class ListModelDefault<E> extends ListModelBase<E> implements MutableListModel<E>
 {
-	private final ArrayList m_items = new ArrayList();
+	private final ArrayList<E> m_items = new ArrayList<E>();
 	
 	public ListModelDefault(ListSelectionModel selectionModel)
 	{
@@ -34,7 +34,7 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		super(selectionModel, changeSupport);
 	}
 	
-	public Object get(int index)
+	public E get(int index)
 	{
 		return m_items.get(index);
 	}
@@ -112,12 +112,12 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		return dest;
 	}
 	
-	public void add(Object o)
+	public void add(E o)
 	{
 		insert(m_items.size(), o);
 	}
 	
-	public void addAll(Object[] items)
+	public void addAll(E[] items)
 	{
 		for (int i = 0; i < items.length; i++)
 		{
@@ -125,7 +125,7 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		}
 	}
 	
-	public void addAll(List items)
+	public void addAll(List<E> items)
 	{
 		for (int i = 0, size = items.size(); i < size; i++)
 		{
@@ -133,19 +133,19 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		}
 	}
 	
-	public void setItems(Object[] items)
+	public void setItems(E[] items)
 	{
 		clear();
 		addAll(items);
 	}
 	
-	public void setItems(List items)
+	public void setItems(List<E> items)
 	{
 		clear();
 		addAll(items);
 	}
 	
-	public void insert(int index, Object o)
+	public void insert(int index, E o)
 	{
 		m_items.add(index, o);
 		addChange(new ListModelEvent.ListChangeItemInsertion(index, 1));
@@ -156,7 +156,7 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		}
 	}
 	
-	public void set(int index, Object o)
+	public void set(int index, E o)
 	{
 		Object old = m_items.set(index, o);
 		if (! GwtUtil.equals(old, o))
@@ -174,9 +174,9 @@ public class ListModelDefault extends ListModelBase implements MutableListModel
 		addItemPropertyChange(ITEM_PROPERTY_VALUE, index, 1);
 	}
 	
-	public Object remove(int index)
+	public E remove(int index)
 	{
-		Object result = m_items.remove(index);
+		E result = m_items.remove(index);
 		addChange(new ListModelEvent.ListChangeItemRemoval(index, 1));
 		ListSelectionModel selectionModel = getSelectionModel();
 		if (selectionModel != null)

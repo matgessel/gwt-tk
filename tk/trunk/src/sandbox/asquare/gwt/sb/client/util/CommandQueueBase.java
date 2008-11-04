@@ -25,8 +25,8 @@ import com.google.gwt.user.client.Command;
  */
 public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 {
-	private final ArrayList m_listeners = new ArrayList();
-	private final ArrayList m_queue = new ArrayList();
+	private final ArrayList<CommandQueueListener> m_listeners = new ArrayList<CommandQueueListener>();
+	private final ArrayList<Command> m_queue = new ArrayList<Command>();
 	
 	public void addListener(CommandQueueListener listener)
 	{
@@ -54,12 +54,12 @@ public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 	 */
 	public Command get(int index)
 	{
-		return (Command) m_queue.get(index);
+		return m_queue.get(index);
 	}
 	
 	public Command remove(int index)
 	{
-		return (Command) m_queue.remove(index);
+		return m_queue.remove(index);
 	}
 	
 	public void clear()
@@ -90,7 +90,7 @@ public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 	protected void run()
 	{
 //		Debug.println("CommandQueue.run()");
-		executeCommand((Command) m_queue.remove(0));
+		executeCommand(m_queue.remove(0));
 		if (hasNext())
 		{
 			scheduleRunIteration();

@@ -17,20 +17,10 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.ArrayList;
 
-public class EditHistoryListenerCollection extends ArrayList
+public class EditHistoryListenerCollection extends ArrayList<EditHistoryListener>
 {
 	private static final long serialVersionUID = -8965877059437741858L;
 
-	public void addListener(EditHistoryListener listener)
-	{
-		add(listener);
-	}
-	
-	public void removeListener(EditHistoryListener listener)
-	{
-		remove(listener);
-	}
-	
 	public void fireUpdate(EditHistoryModel model)
 	{
 		if (size() == 0)

@@ -41,8 +41,8 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class StreamPanel extends ComplexPanel
 {
-	private Stack m_elementTreePath = new Stack();
-	private Stack m_widgetTreePath = new Stack();
+	private Stack<Element> m_elementTreePath = new Stack<Element>();
+	private Stack<Widget> m_widgetTreePath = new Stack<Widget>();
 	private String m_display = null;
 	
 	
@@ -99,7 +99,7 @@ public class StreamPanel extends ComplexPanel
 	
 	public Widget currentWidget()
 	{
-		return (Widget) m_widgetTreePath.peek();
+		return m_widgetTreePath.peek();
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class StreamPanel extends ComplexPanel
 		Element element = DOM.createElement(type);
 		if (m_display != null)
 			DOM.setStyleAttribute(element, "display", m_display);
-		DOM.appendChild((Element) m_elementTreePath.peek(), element);
+		DOM.appendChild(m_elementTreePath.peek(), element);
 		return element;
 	}
 	
@@ -134,7 +134,7 @@ public class StreamPanel extends ComplexPanel
 	{
 		if (m_display != null)
 			DOM.setStyleAttribute(w.getElement(), "display", m_display);
-		add(w, (Element) m_elementTreePath.peek());
+		add(w, m_elementTreePath.peek());
 		return w;
 	}
 	
@@ -148,24 +148,24 @@ public class StreamPanel extends ComplexPanel
 	
 	public void attr(String attributeName, String value)
 	{
-		DOM.setElementProperty((Element) m_elementTreePath.peek(), attributeName, value);
+		DOM.setElementProperty(m_elementTreePath.peek(), attributeName, value);
 	}
 	
 	public void text(String text)
 	{
-		Element e = (Element) m_elementTreePath.peek();
+		Element e = m_elementTreePath.peek();
 		DOM.setInnerText(e, DOM.getInnerText(e) + text);
 	}
 	
 	public void html(String html)
 	{
-		Element e = (Element) m_elementTreePath.peek();
+		Element e = m_elementTreePath.peek();
 		DOM.setInnerHTML(e, DOM.getInnerHTML(e) + html);
 	}
 	
 	public void styleName(String styleName)
 	{
-		UIObject.setStyleName((Element) m_elementTreePath.peek(), styleName, true);
+		UIObject.setStyleName(m_elementTreePath.peek(), styleName, true);
 	}
 	
 	/**

@@ -20,7 +20,7 @@ public class IndexedModelEvent extends ModelChangeEvent
 	private final int m_beginInterval;
 	private final int m_endInterval;
 	
-	public IndexedModelEvent(IndexedDataSource source, int beginInterval, int endInterval)
+	public IndexedModelEvent(IndexedDataSource<?> source, int beginInterval, int endInterval)
 	{
 		super(source);
 		m_beginInterval = beginInterval;
@@ -37,8 +37,8 @@ public class IndexedModelEvent extends ModelChangeEvent
 		return m_endInterval;
 	}
 	
-	public IndexedDataSource getIndexedModel()
+	public IndexedDataSource<?> getIndexedModel()
 	{
-		return (IndexedDataSource) super.getSource();
+		return (IndexedDataSource<?>) super.getSource();
 	}
 }

@@ -23,6 +23,7 @@ public class Properties implements AssociativeArray
 	/**
 	 * This has to be declared in "Java" to satisfy the hosted shell. 
 	 */
+	@SuppressWarnings("unused")
 	private JavaScriptObject m_array = JavaScriptObject.createObject();
 	
 //	private native JavaScriptObject createImpl() /*-{

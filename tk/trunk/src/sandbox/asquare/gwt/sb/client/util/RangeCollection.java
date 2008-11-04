@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class RangeCollection
 {
 	// an ordered list of ranges sorted by range index
-	private final ArrayList m_ranges = new ArrayList();
+	private final ArrayList<Range> m_ranges = new ArrayList<Range>();
 	
 	public int getMinValue()
 	{
@@ -43,7 +43,7 @@ public class RangeCollection
 		
 		for (int i = 0, size = m_ranges.size(); i < size; i++)
 		{
-			if (((Range) m_ranges.get(i)).contains(index, length))
+			if (m_ranges.get(i).contains(index, length))
 			{
 				return true;
 			}
@@ -53,7 +53,7 @@ public class RangeCollection
 	
 	public Range get(int index)
 	{
-		return (Range) m_ranges.get(index);
+		return m_ranges.get(index);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class RangeCollection
 		// search for range containing index
 		for (int i = 0, size = m_ranges.size(); i < size; i++)
 		{
-			Range candidate = (Range) m_ranges.get(i);
+			Range candidate = m_ranges.get(i);
 			if (candidate.getStartIndex() > startIndex + length)
 			{
 				break;
@@ -108,11 +108,11 @@ public class RangeCollection
 		if (range.getLength() == 0)
 			return;
 		
-		ArrayList toMerge = new ArrayList();
+		ArrayList<Range> toMerge = new ArrayList<Range>();
 		int rangeCount = m_ranges.size();
 		for (int i = 0; i < rangeCount; i++)
 		{
-			Range candidate = (Range) m_ranges.get(i);
+			Range candidate = m_ranges.get(i);
 			if (candidate.getStartIndex() > range.getStartIndex() + range.getLength())
 			{
 				/*
@@ -131,11 +131,11 @@ public class RangeCollection
 		if (toMerge.size() > 0)
 		{
 			// overlaps detected, merge new data and existing range(s) into the low range
-			Range primary = (Range) toMerge.get(0);
+			Range primary = toMerge.get(0);
 			primary.add(range);
 			for (int j = toMerge.size() - 1; j >= 1; j--)
 			{
-				Range temp = (Range) toMerge.remove(j);
+				Range temp = toMerge.remove(j);
 				primary.add(temp);
 				m_ranges.remove(temp);
 			}
@@ -146,7 +146,7 @@ public class RangeCollection
 			int insertIndex = 0;
 			while (insertIndex < rangeCount)
 			{
-				if (((Range) m_ranges.get(insertIndex)).getStartIndex() > range.getStartIndex())
+				if (m_ranges.get(insertIndex).getStartIndex() > range.getStartIndex())
 					break;
 				
 				insertIndex++;
@@ -232,7 +232,7 @@ public class RangeCollection
 	{
 		for (int i = m_ranges.size() - 1; i >= 0; i--)
 		{
-			Range range = (Range) m_ranges.get(i);
+			Range range = m_ranges.get(i);
 			if (range.getTerminus() <= size)
 			{
 				break;
@@ -297,7 +297,7 @@ public class RangeCollection
 	{
 		for (int i = m_ranges.size() - 1; i >=0; i--)
 		{
-			Range range = (Range) m_ranges.get(i);
+			Range range = m_ranges.get(i);
 			
 			if (range.getStartIndex() + range.getLength() - 1 < index)
 				break;
@@ -330,7 +330,7 @@ public class RangeCollection
 		
 		for (int i = m_ranges.size() - 1; i >=0; i--)
 		{
-			Range range = (Range) m_ranges.get(i);
+			Range range = m_ranges.get(i);
 			
 			if (range.getStartIndex() + range.getLength() - 1 < index)
 				break;
@@ -343,7 +343,7 @@ public class RangeCollection
 			 */
 			if (i > 0 && range.getStartIndex() == index - count)
 			{
-				Range mergeCandidate = (Range) m_ranges.get(i - 1);
+				Range mergeCandidate = m_ranges.get(i - 1);
 				if (mergeCandidate.intersectsOrNeighbors(range))
 				{
 					m_ranges.remove(i);
@@ -378,7 +378,7 @@ public class RangeCollection
 		RangeCollection result = new RangeCollection();
 		for (int reference = 0, refSize = getSize(); reference < refSize; reference++)
 		{
-			Range range = ((Range) m_ranges.get(reference)).intersect(startIndex, length);
+			Range range = m_ranges.get(reference).intersect(startIndex, length);
 			if (range != null)
 			{
 				result.add(range);
@@ -401,7 +401,7 @@ public class RangeCollection
 		{
 			for (int target = 0, targetSize = ranges.getSize(); target < targetSize; target++)
 			{
-				Range range = ((Range) m_ranges.get(reference)).intersect((Range) ranges.get(target));
+				Range range = m_ranges.get(reference).intersect((Range) ranges.get(target));
 				if (range != null)
 				{
 					result.add(range);
@@ -421,7 +421,7 @@ public class RangeCollection
 		int result = 0;
 		for (int i = 0, size = m_ranges.size(); i < size; i++)
 		{
-			result += ((Range) m_ranges.get(i)).getLength();
+			result += m_ranges.get(i).getLength();
 		}
 		return result;
 	}
@@ -436,7 +436,7 @@ public class RangeCollection
 		Range[] result = new Range[m_ranges.size()];
 		for (int i = 0; i < result.length; i++)
 		{
-			result[i] = (Range) m_ranges.get(i);
+			result[i] = m_ranges.get(i);
 		}
 		return result;
 	}
@@ -446,7 +446,7 @@ public class RangeCollection
 		RangeCollection result = new RangeCollection();
 		for (int i = 0, size = m_ranges.size(); i < size; i++)
 		{
-			result.add((Range) ((Range) m_ranges.get(i)).duplicate());
+			result.add((Range) m_ranges.get(i).duplicate());
 		}
 		return result;
 	}

@@ -15,6 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
+import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.EventController;
 import asquare.gwt.tk.client.ui.behavior.MouseEvent;
 import asquare.gwt.tk.client.util.GwtUtil;
@@ -25,12 +26,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 public abstract class HoverControllerBase extends EventController
 {
-	public HoverControllerBase(Class id)
+	public HoverControllerBase(Class<? extends Controller> id)
 	{
 		this(id, 0);
 	}
 	
-	protected HoverControllerBase(Class id, int eventBits)
+	protected HoverControllerBase(Class<? extends Controller> id, int eventBits)
 	{
 		super(id, eventBits | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT);
 	}

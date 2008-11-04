@@ -26,7 +26,7 @@ public class TypedList
 	 * Interleaved list of type/value pairs. Even indices (0,2,4...) specify
 	 * the value type for the following value.
 	 */
-	private final ArrayList m_list = new ArrayList();
+	private final ArrayList<Object> m_list = new ArrayList<Object>();
 	
 	public boolean isType(int index, Object type)
 	{
@@ -150,9 +150,9 @@ public class TypedList
 		return result;
 	}
 	
-	public List getValuesFor(Object type)
+	public List<Object> getValuesFor(Object type)
 	{
-		List result = new ArrayList();
+		List<Object> result = new ArrayList<Object>();
 		for (int i = 0, size = m_list.size(); i < size; i+=2)
 		{
 			if (m_list.get(i).equals(type))

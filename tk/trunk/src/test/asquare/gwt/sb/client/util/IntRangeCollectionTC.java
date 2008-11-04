@@ -17,6 +17,7 @@ package asquare.gwt.sb.client.util;
 
 import junit.framework.TestCase;
 
+@SuppressWarnings("unused")
 public class IntRangeCollectionTC extends TestCase
 {
 	private IntRange m_range0_9;

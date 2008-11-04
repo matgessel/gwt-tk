@@ -16,16 +16,21 @@
  -->
 <project name="GWT Tk" default="full" basedir=".">
 	
-	<condition property="dev.jar.name" value="gwt-dev-mac.jar">
+	<property file="build.properties"/>
+	
+	<condition property="gwt.platform" value="mac">
 		<os family="mac"/>
 	</condition>
-	<condition property="dev.jar.name" value="gwt-dev-windows.jar">
+	<condition property="gwt.platform" value="windows">
 		<os family="windows"/>
 	</condition>
-	<!-- assume linux if not mac or win -->
-	<property name="dev.jar.name" value="gwt-dev-linux.jar"/>
+	<property name="gwt.platform" value="linux"/><!-- assume linux if not mac or win -->
 	
-	<property file="build.properties"/>
+	<property name="dev.jar.name" value="gwt-dev-${gwt.platform}.jar"/>
+	
+	<condition property="junit.platform.args" value="-XstartOnFirstThread -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl">
+		<equals arg1="${gwt.platform}" arg2="mac"/>
+	</condition>
 	
 	<path id="gwt.classpath">
 		<pathelement location="${gwt.lib.location}/gwt-user.jar"/>
@@ -51,7 +56,7 @@
 		<property name="src.dir" value="src/${module}"/>
 		<echo level="info" message="src.dir=${src.dir}"/>
 		<mkdir dir="build/${module}/classes"/>
-		<javac source="1.4" target="1.4" destdir="build/${module}/classes" srcdir="${src.dir}">
+		<javac source="1.5" target="1.5" destdir="build/${module}/classes" srcdir="${src.dir}">
 			<classpath>
 				<pathelement path="${module.classpath}"/><!-- optional -->
 				<fileset dir="build">
@@ -107,7 +112,9 @@
 			<istrue value="${gwttk.debug}"/>
 		</condition>
 		
-		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true" jvmargs="-client">
+		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true">
+  	        <jvmarg value="-client"/>
+  	        <jvmarg value="-Xmx128M"/>
 			<sysproperty key="java.awt.headless" value="true"/>
 			<classpath>
 				<path location="${src.dir}"/>
@@ -197,10 +204,7 @@
 		<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
             <sysproperty key="gwt.args" value="-port 8889 -out test" />
   	        <jvmarg value="-client"/>
-			<!-- uncomment for Mac
-			<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"/>
-  	        <jvmarg line="-XstartOnFirstThread"/>
-			-->
+  	        <jvmarg line="${junit.platform.args}"/>
 			<classpath>
 				<pathelement location="build/test/classes"/>
 				<pathelement location="src/test"/>
@@ -283,7 +287,7 @@
 				includenosourcepackages="true"
 				linksource="${javadoc.linksource}"
 				packagenames="*"
-				source="1.4"
+				source="1.5"
 				use="true"
 				windowtitle="${javadoc.windowtitle}">
 			<classpath>
@@ -291,7 +295,7 @@
 					<include name="**/*.jar"/>
 				</fileset>
 				<path refid="gwt.classpath"/>
-				<path location="D:/tools/junit3.8.2/junit.jar"/>
+				<path location="${junit.lib}"/>
 			</classpath>
 			<bottom>${javadoc.bottom}</bottom>
 			<packageset dir="src/debug"/>
@@ -442,7 +446,7 @@
 				doctitle="Google Web Toolkit (GWT) API Documentation"
 				includenosourcepackages="true"
 				linksource="true"
-				source="1.4"
+				source="1.5"
 				use="true"
 				windowtitle="GWT API Documentation">
 			<bottom>

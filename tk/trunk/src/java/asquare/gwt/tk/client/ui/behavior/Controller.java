@@ -53,5 +53,5 @@ public interface Controller extends BrowserEventHandler, PluggableEventHandler
 	 * class of the controller. Controllers with multiple implementations will
 	 * return the class of the interface or base class.
 	 */
-	public Class getId();
+	public Class<? extends Controller> getId();
 }

@@ -315,11 +315,11 @@ public class DomUtil
 	 *            be created on the fly.
 	 * @return <b>result</b> a list containing 0 or more HTML elements
 	 */
-	public static List findElementsWithClass(Element element, String className, List result)
+	public static List<Element> findElementsWithClass(Element element, String className, List<Element> result)
 	{
 		if (result == null)
 		{
-			result = new ArrayList();
+			result = new ArrayList<Element>();
 		}
 
 		String cls = DOM.getElementProperty(element, "className");

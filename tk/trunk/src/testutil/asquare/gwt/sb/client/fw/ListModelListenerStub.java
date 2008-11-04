@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asquare.gwt.sb.client.fw.ListModelEvent.ListItemPropertyChange;
-import asquare.gwt.tk.client.util.GwtUtil;
 
 public class ListModelListenerStub extends ModelListenerComplexStub implements ListModelListener
 {
@@ -35,7 +34,7 @@ public class ListModelListenerStub extends ModelListenerComplexStub implements L
 	
 	public ListItemPropertyChange[] getItemPropertyChanges(String itemPropertyName)
 	{
-		List changes = new ArrayList();
+		List<ListItemPropertyChange> changes = new ArrayList<ListItemPropertyChange>();
 		int searchIndex = getChangeList().getIndexOfType(ListItemPropertyChange.class);
 		while (searchIndex != -1)
 		{
@@ -46,9 +45,7 @@ public class ListModelListenerStub extends ModelListenerComplexStub implements L
             }
             searchIndex = getChangeList().getIndexOfType(ListItemPropertyChange.class, searchIndex + 1);
 		}
-		ListItemPropertyChange[] result = new ListItemPropertyChange[changes.size()];
-		GwtUtil.toArray(changes, result);
-		return result;
+		return changes.toArray(new ListItemPropertyChange[changes.size()]);
 	}
 	
 	public ListItemPropertyChange getItemPropertyChange(String itemPropertyName)
