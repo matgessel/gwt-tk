@@ -15,6 +15,8 @@
  */
 package asquare.gwt.tk.client.ui;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Image;
 
@@ -27,16 +29,33 @@ public class ImagePrototype extends AbstractImagePrototype
 		m_url = url;
 	}
 	
+	@Override
 	public void applyTo(Image image)
 	{
 		image.setUrl(m_url);
 	}
 	
+	@Override
+	public void applyTo(ImagePrototypeElement imageElement)
+	{
+		DOM.setImgSrc(imageElement.<Element>cast(), m_url);
+	}
+	
+	@Override
+	public ImagePrototypeElement createElement()
+	{
+		Element result = DOM.createImg();
+		applyTo(result.<ImagePrototypeElement>cast());
+		return result.cast();
+	}
+	
+	@Override
 	public Image createImage()
 	{
 	    return new Image(m_url);
 	}
 	
+	@Override
 	public String getHTML()
 	{
 		return "<img src='" + m_url + "'>";
