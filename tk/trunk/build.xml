@@ -37,6 +37,8 @@
 		<pathelement location="${gwt.lib.location}/${dev.jar.name}"/>
 	</path>
 	
+    <taskdef name="timer" classname="com.google.gwt.ant.taskdefs.Timer" classpath="lib/ant-gwt.jar" />
+	
 	<target name="assertModuleProperty">
 		<fail unless="module" message="'module' property must be specified"/>
 	</target>
@@ -189,65 +191,69 @@
 	<target name="test-dependencies" depends="patch,emulation,core,sandbox,debug,testutil"/>
 	
 	<target name="test">
-		<antcall target="cleanModule">
-			<param name="module" value="test"/>
-		</antcall>
-		<antcall target="compileModule">
-			<param name="module" value="test"/>
-			<param name="module.classpath" value="${junit.lib}"/>
-		</antcall>
-		<!-- Windows likes to keep the jars file-locked after the tests complete, so we make a copy for testing only -->
-		<delete dir="build/test/jars"/>
-		<copy todir="build/test/jars" flatten="true">
-			<fileset dir="build" includes="**/*.jar" excludes="**/*debugstub*"/>
-		</copy>
-		<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
-            <sysproperty key="gwt.args" value="-port 8889 -out test" />
-  	        <jvmarg value="-client"/>
-  	        <jvmarg line="${junit.platform.args}"/>
-			<classpath>
-				<pathelement location="build/test/classes"/>
-				<pathelement location="src/test"/>
-				<fileset dir="build/test/jars" includes="*"/>
-				<path refid="gwt.classpath"/>
-                <pathelement location="${junit.lib}" />
-			</classpath>
-			<formatter type="plain"/>
-			<batchtest todir="build/test">
-				<fileset dir="build/test/classes">
-					<include name="**/*TC.class"/>
-				</fileset>
-			</batchtest>
-		</junit>
+		<timer>
+			<antcall target="cleanModule">
+				<param name="module" value="test"/>
+			</antcall>
+			<antcall target="compileModule">
+				<param name="module" value="test"/>
+				<param name="module.classpath" value="${junit.lib}"/>
+			</antcall>
+			<!-- Windows likes to keep the jars file-locked after the tests complete, so we make a copy for testing only -->
+			<delete dir="build/test/jars"/>
+			<copy todir="build/test/jars" flatten="true">
+				<fileset dir="build" includes="**/*.jar" excludes="**/*debugstub*"/>
+			</copy>
+			<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
+	            <sysproperty key="gwt.args" value="-port 8889 -out test" />
+	  	        <jvmarg value="-client"/>
+	  	        <jvmarg line="${junit.platform.args}"/>
+				<classpath>
+					<pathelement location="build/test/classes"/>
+					<pathelement location="src/test"/>
+					<fileset dir="build/test/jars" includes="*"/>
+					<path refid="gwt.classpath"/>
+	                <pathelement location="${junit.lib}" />
+				</classpath>
+				<formatter type="plain"/>
+				<batchtest todir="build/test">
+					<fileset dir="build/test/classes">
+						<include name="**/*TC.class"/>
+					</fileset>
+				</batchtest>
+			</junit>
+		</timer>
 	</target>
 	
 	<target name="uitest" depends="core,sandbox,debugstub,debug">
-		<antcall target="cleanModule">
-			<param name="module" value="uitest"/>
-		</antcall>
-		<antcall target="compileModule">
-			<param name="module" value="uitest"/>
-		</antcall>
-		<antcall target="gwtCompileModuleBoth">
-			<param name="module" value="uitest"/>
-			<param name="gwt.module" value="asquare.gwt.tk.uitest.alertdialog.Demo"/>
-		</antcall>
-		<antcall target="gwtCompileModuleBoth">
-			<param name="module" value="uitest"/>
-			<param name="gwt.module" value="asquare.gwt.tk.uitest.glasspanel.Demo"/>
-		</antcall>
-		<antcall target="gwtCompileModuleBoth">
-			<param name="module" value="uitest"/>
-			<param name="gwt.module" value="asquare.gwt.tk.uitest.isvisible.Demo"/>
-		</antcall>
-		<antcall target="gwtCompileModuleBoth">
-			<param name="module" value="uitest"/>
-			<param name="gwt.module" value="asquare.gwt.tk.uitest.onload.Demo"/>
-		</antcall>
-		<antcall target="gwtCompileModuleBoth">
-			<param name="module" value="uitest"/>
-			<param name="gwt.module" value="asquare.gwt.tk.uitest.popuppanel.Demo"/>
-		</antcall>
+		<timer>
+			<antcall target="cleanModule">
+				<param name="module" value="uitest"/>
+			</antcall>
+			<antcall target="compileModule">
+				<param name="module" value="uitest"/>
+			</antcall>
+			<antcall target="gwtCompileModuleBoth">
+				<param name="module" value="uitest"/>
+				<param name="gwt.module" value="asquare.gwt.tk.uitest.alertdialog.Demo"/>
+			</antcall>
+			<antcall target="gwtCompileModuleBoth">
+				<param name="module" value="uitest"/>
+				<param name="gwt.module" value="asquare.gwt.tk.uitest.glasspanel.Demo"/>
+			</antcall>
+			<antcall target="gwtCompileModuleBoth">
+				<param name="module" value="uitest"/>
+				<param name="gwt.module" value="asquare.gwt.tk.uitest.isvisible.Demo"/>
+			</antcall>
+			<antcall target="gwtCompileModuleBoth">
+				<param name="module" value="uitest"/>
+				<param name="gwt.module" value="asquare.gwt.tk.uitest.onload.Demo"/>
+			</antcall>
+			<antcall target="gwtCompileModuleBoth">
+				<param name="module" value="uitest"/>
+				<param name="gwt.module" value="asquare.gwt.tk.uitest.popuppanel.Demo"/>
+			</antcall>
+		</timer>
 	</target>
 	
 	<target name="jars" depends="patch,core,sandbox,debug,debugstub,testutil">
