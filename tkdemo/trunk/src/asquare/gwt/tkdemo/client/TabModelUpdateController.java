@@ -24,10 +24,10 @@ import com.google.gwt.user.client.HistoryListener;
 public class TabModelUpdateController implements HistoryListener
 {
 	private final AppPanelCollection m_panels;
-	private final ListModel m_tabBarModel;
+	private final ListModel<?> m_tabBarModel;
 	private final ListSelectionModelSingle m_selectionModel;
 	
-	public TabModelUpdateController(AppPanelCollection panels, ListModel tabBarModel)
+	public TabModelUpdateController(AppPanelCollection panels, ListModel<?> tabBarModel)
 	{
 		m_panels = panels;
 		m_tabBarModel = tabBarModel;

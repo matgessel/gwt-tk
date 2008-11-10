@@ -18,6 +18,7 @@ package asquare.gwt.tk.client.ui.behavior.impl;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
+import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.GlassPanelController;
 import asquare.gwt.tk.client.util.DomUtil;
 
@@ -52,7 +53,7 @@ public class GlassPanelControllerIE6 implements GlassPanelController
 		return s_impl.getEventBits();
 	}
 
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return s_impl.getId();
 	}

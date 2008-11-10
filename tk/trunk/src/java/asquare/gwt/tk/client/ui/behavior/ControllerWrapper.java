@@ -23,7 +23,7 @@ public class ControllerWrapper extends ControllerAdaptor implements Controller
 {
 	private final Controller m_controller;
 	
-	public ControllerWrapper(Class id, int eventBits, Controller controller)
+	public ControllerWrapper(Class<? extends Controller> id, int eventBits, Controller controller)
 	{
 		super(id, eventBits & controller.getEventBits());
 		m_controller = controller;

@@ -134,12 +134,12 @@ public class ModalDialog extends CPopupPanel
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.CPopupPanel#createControllers()
 	 */
-	protected List createControllers()
+	protected List<Controller> createControllers()
 	{
-		List result = new ArrayList();
-		result.add(GWT.create(PositionDialogController.class));
+		List<Controller> result = new ArrayList<Controller>();
+		result.add(GWT.<Controller>create(PositionDialogController.class));
 		result.add(new InitializeFocusController());
-		result.add(GWT.create(TabFocusController.class));
+		result.add(GWT.<Controller>create(TabFocusController.class));
 		result.add(new FocusOnCloseController());
 		return result;
 	}
@@ -150,9 +150,9 @@ public class ModalDialog extends CPopupPanel
 	 * 
 	 * @return a List with 0 or more controllers, or <code>null</code>
 	 */
-	protected List createCaptionControllers()
+	protected List<Controller> createCaptionControllers()
 	{
-		List result = new ArrayList();
+		List<Controller> result = new ArrayList<Controller>();
 		result.add(new DragController(new MouseMoveFilter(new MouseDragHandler(new AdjustObjectGesture.Move(this)))));
 		result.add(new DragStyleController(this));
 		return result;
@@ -499,7 +499,7 @@ public class ModalDialog extends CPopupPanel
 		 * the wiser. Of course, we have to call onAttach() to receive events and
 		 * onDetach() to prevent memory leaks.
 		 */
-		protected CaptionWrapper(Element captionElement, List controllers)
+		protected CaptionWrapper(Element captionElement, List<Controller> controllers)
 		{
 			super(captionElement, controllers);
 			setStyleName(STYLENAME_CAPTION);

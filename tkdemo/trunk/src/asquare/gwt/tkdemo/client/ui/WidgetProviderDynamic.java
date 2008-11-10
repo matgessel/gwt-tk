@@ -23,9 +23,9 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class WidgetProviderDynamic extends WidgetProviderLazy
 {
-	private final Class m_cls;
+	private final Class<?> m_cls;
 	
-	public WidgetProviderDynamic(Class widgetClass)
+	public WidgetProviderDynamic(Class<?> widgetClass)
 	{
 		m_cls = widgetClass;
 	}

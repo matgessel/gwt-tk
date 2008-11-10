@@ -28,6 +28,6 @@ public class CTabBar extends CList
 {
 	public CTabBar(ListWidget structure, CellRenderer renderer)
 	{
-		super(new ListModelDefault(new ListSelectionModelSingle()), new TabBarView(structure, renderer));
+		super(new ListModelDefault<Object>(new ListSelectionModelSingle()), new TabBarView(structure, renderer));
 	}
 }

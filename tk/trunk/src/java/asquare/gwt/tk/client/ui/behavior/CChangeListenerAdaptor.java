@@ -48,7 +48,7 @@ public class CChangeListenerAdaptor extends ChangeListenerCollection implements 
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CChangeListenerAdaptor.class;
 	}

@@ -48,7 +48,7 @@ public class CClickListenerAdaptor extends ClickListenerCollection implements Co
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CClickListenerAdaptor.class;
 	}

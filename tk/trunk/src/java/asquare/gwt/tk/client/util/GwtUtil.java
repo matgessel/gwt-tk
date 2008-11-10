@@ -17,8 +17,6 @@ package asquare.gwt.tk.client.util;
 
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
-
 /**
  * General utility methods for working with in GWT. 
  */
@@ -38,7 +36,7 @@ public class GwtUtil
 	 *            element in list (<code>list.size()</code>)
 	 * @throws IndexOutOfBoundsException if the index is out of range
 	 */
-	public static void rangeCheck(List list, int index, boolean extend) throws IndexOutOfBoundsException
+	public static void rangeCheck(List<?> list, int index, boolean extend) throws IndexOutOfBoundsException
 	{
 		rangeCheck(0, list.size(), index, extend);
 	}
@@ -240,7 +238,7 @@ public class GwtUtil
 	 * @throws ArrayStoreException if an element in <code>list</code> cannot
 	 *             not be copied to <code>dest</code> due to a type mismatch
 	 */
-	public static Object[] toArray(List src, Object[] dest)
+	public static Object[] toArray(List<?> src, Object[] dest)
 	{
 		// necessary in web mode
 		if (src == null || dest == null)
@@ -303,7 +301,7 @@ public class GwtUtil
         if (o == null)
         	return "null";
         
-		return getClassSimpleName(GWT.getTypeName(o));
+		return getClassSimpleName(o.getClass().getName());
 	}
 	
 	/**

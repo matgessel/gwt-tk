@@ -109,7 +109,7 @@ public class Demo implements EntryPoint
     {
         private final AppPanelCollection m_panels;
         private final CTabBar m_tabbar;
-        private final ListModelDefault m_tabBarmodel;
+        private final ListModelDefault<String> m_tabBarmodel;
         private final ListSelectionModelSingle m_selectionModel;
         private final int m_initialIndex;
         

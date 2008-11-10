@@ -47,7 +47,7 @@ public class CKeyboardListenerAdaptor extends KeyboardListenerCollection impleme
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CKeyboardListenerAdaptor.class;
 	}

@@ -49,7 +49,7 @@ public class CFocusListenerAdaptor extends FocusListenerCollection implements Co
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CFocusListenerAdaptor.class;
 	}

@@ -193,9 +193,9 @@ public class DialogPanel extends Composite
 			{
 				final ModalDialog dialog = new ModalDialog()
 				{
-					protected List createCaptionControllers()
+					protected List<Controller> createCaptionControllers()
 					{
-						List result = new ArrayList();
+						List<Controller> result = new ArrayList<Controller>();
 						result.add(ControlSurfaceController.getInstance());
 						return result;
 					}

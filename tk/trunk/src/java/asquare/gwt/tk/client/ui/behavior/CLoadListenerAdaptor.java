@@ -47,7 +47,7 @@ public class CLoadListenerAdaptor extends LoadListenerCollection implements Cont
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CLoadListenerAdaptor.class;
 	}

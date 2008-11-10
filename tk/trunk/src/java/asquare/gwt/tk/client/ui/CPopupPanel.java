@@ -61,7 +61,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * 
 	 * @return a List with 0 or more controllers, or <code>null</code>
 	 */
-	protected List createControllers()
+	protected List<Controller> createControllers()
 	{
 		return null;
 	}
@@ -79,7 +79,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#getController(java.lang.Class)
 	 */
-	public Controller getController(Class id)
+	public Controller getController(Class<? extends Controller> id)
 	{
 		return m_controllerSupport.getController(id);
 	}
@@ -97,7 +97,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#setControllers(java.util.List)
 	 */
-	public void setControllers(List controllers)
+	public void setControllers(List<Controller> controllers)
 	{
 		m_controllerSupport.setControllers(controllers);
 	}

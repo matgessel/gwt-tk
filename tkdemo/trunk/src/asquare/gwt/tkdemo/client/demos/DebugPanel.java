@@ -167,7 +167,7 @@ public class DebugPanel extends Composite
 	private Widget createCheckBoxes()
 	{
 		// can't use HashMap because it does not preserve order
-		final ArrayList eventToMask = new ArrayList();
+		final ArrayList<EventToMask> eventToMask = new ArrayList<EventToMask>();
 		eventToMask.add(new EventToMask("onfocus", Event.ONFOCUS));
 		eventToMask.add(new EventToMask("onblur", Event.ONBLUR));
 		eventToMask.add(new EventToMask("onchange", Event.ONCHANGE));
@@ -193,7 +193,7 @@ public class DebugPanel extends Composite
                 EventToMask mapping = null;
                 for (int i = 0, size = eventToMask.size(); i < size; i++)
                 {
-                    EventToMask candidate = (EventToMask) eventToMask.get(i);
+                    EventToMask candidate = eventToMask.get(i);
                     if (candidate.m_eventString.equals(eventText))
                     {
                         mapping = candidate;
@@ -220,7 +220,7 @@ public class DebugPanel extends Composite
 			{
 				panel.addCell();
 			}
-			EventToMask mapping = (EventToMask) eventToMask.get(i);
+			EventToMask mapping = eventToMask.get(i);
 			addCheckBox(panel, mapping.m_eventString, mapping.m_eventMask, checkBoxController);
 		}
 		

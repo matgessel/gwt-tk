@@ -29,8 +29,8 @@ import com.google.gwt.user.client.ui.HasFocus;
  */
 public class FocusModel
 {
-	private final ArrayList m_listeners = new ArrayList();
-	private final ArrayList m_widgets = new ArrayList();
+	private final ArrayList<FocusModelListener> m_listeners = new ArrayList<FocusModelListener>();
+	private final ArrayList<HasFocus> m_widgets = new ArrayList<HasFocus>();
 	
 	private int m_focusIndex = -1;
 	private int m_blurIndex = -1;
@@ -101,7 +101,7 @@ public class FocusModel
 		if (widgets.length == 0)
 			return;
 		
-		ArrayList added = new ArrayList();
+		ArrayList<HasFocus> added = new ArrayList<HasFocus>();
 		for (int i = 0; i < widgets.length; i++)
 		{
 			if (insertImpl(widgets[i], m_widgets.size()))

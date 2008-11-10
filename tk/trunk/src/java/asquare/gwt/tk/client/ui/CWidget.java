@@ -53,7 +53,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 * @param controllers a list of 0 or more controllers, or <code>null</code>
 	 * @throws IllegalArgumentException if <code>element</code> is null
 	 */
-	public CWidget(Element element, List controllers)
+	public CWidget(Element element, List<Controller> controllers)
 	{
 		if (element == null)
 			throw new IllegalArgumentException();
@@ -73,7 +73,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 * 
 	 * @return a List with 0 or more controllers, or <code>null</code>
 	 */
-	protected List createControllers()
+	protected List<Controller> createControllers()
 	{
 		return null;
 	}
@@ -82,7 +82,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#getController(java.lang.Class)
 	 */
-	public Controller getController(Class id)
+	public Controller getController(Class<? extends Controller> id)
 	{
 		return m_controllerSupport.getController(id);
 	}
@@ -109,7 +109,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.ControllerSupport#setControllers(java.util.List)
 	 */
-	public void setControllers(List controllers)
+	public void setControllers(List<Controller> controllers)
 	{
 		m_controllerSupport.setControllers(controllers);
 	}

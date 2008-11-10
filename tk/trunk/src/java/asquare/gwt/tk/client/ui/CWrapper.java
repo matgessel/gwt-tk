@@ -48,7 +48,7 @@ public class CWrapper extends CComposite implements ControllerSupport
 	 * @param controllers a list of 0 or more controllers, or <code>null</code>
 	 * @throws IllegalArgumentException if <code>widget</code> is null
 	 */
-	public CWrapper(Widget widget, List controllers)
+	public CWrapper(Widget widget, List<Controller> controllers)
 	{
 		this(widget, controllers, true);
 	}
@@ -65,7 +65,7 @@ public class CWrapper extends CComposite implements ControllerSupport
 	 *            pass the wrapped widget
 	 * @throws IllegalArgumentException if <code>widget</code> is null
 	 */
-	public CWrapper(Widget widget, List controllers, boolean eventsTargetWrapper)
+	public CWrapper(Widget widget, List<Controller> controllers, boolean eventsTargetWrapper)
 	{
 		super(eventsTargetWrapper);
 		super.initWidget(widget);

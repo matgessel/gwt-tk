@@ -24,7 +24,7 @@ import com.google.gwt.user.client.Command;
  * Supports (char, Command) pairs. Similar to the Swing
  * {@link javax.swing.ActionMap ActionMap}.
  */
-public class KeyMap extends HashMap
+public class KeyMap extends HashMap<Character, Command>
 {
 	private static final long serialVersionUID = -4705847631304175265L;
 

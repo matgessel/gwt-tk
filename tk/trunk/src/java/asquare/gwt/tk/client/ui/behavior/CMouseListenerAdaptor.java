@@ -47,7 +47,7 @@ public class CMouseListenerAdaptor extends MouseListenerCollection implements Co
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CMouseListenerAdaptor.class;
 	}

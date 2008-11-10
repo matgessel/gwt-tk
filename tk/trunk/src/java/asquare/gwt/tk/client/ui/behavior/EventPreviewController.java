@@ -32,22 +32,22 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class EventPreviewController extends EventController implements EventPreview
 {
-	public EventPreviewController(Class id)
+	public EventPreviewController(Class<? extends Controller> id)
 	{
 		this(id, 0, null);
 	}
 	
-	public EventPreviewController(Class id, EventHandler handler)
+	public EventPreviewController(Class<? extends Controller> id, EventHandler handler)
 	{
 		this(id, 0, handler);
 	}
 	
-	public EventPreviewController(Class id, int eventBits)
+	public EventPreviewController(Class<? extends Controller> id, int eventBits)
 	{
 		this(id, eventBits, null);
 	}
 	
-	public EventPreviewController(Class id, int eventBits, EventHandler handler)
+	public EventPreviewController(Class<? extends Controller> id, int eventBits, EventHandler handler)
 	{
 		super(id, eventBits, handler);
 	}

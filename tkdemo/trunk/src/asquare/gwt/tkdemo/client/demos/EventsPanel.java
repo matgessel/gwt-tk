@@ -35,9 +35,9 @@ public class EventsPanel extends Composite
 		panel.add(createEx2());
 	}
 	
-	private static Collection createSomeWidgets()
+	private static Collection<Widget> createSomeWidgets()
 	{
-        ArrayList result = new ArrayList();
+        ArrayList<Widget> result = new ArrayList<Widget>();
 		result.add(new HTML("<b>Double-click a widget to select it</b>"));
 		result.add(new Button("Button"));
 		result.add(new CheckBox("CheckBox"));
@@ -73,9 +73,9 @@ public class EventsPanel extends Composite
 		example.setStyleName("example division");
 		outer.add(example);
 		
-		for (Iterator iter = createSomeWidgets().iterator(); iter.hasNext();)
+		for (Iterator<Widget> iter = createSomeWidgets().iterator(); iter.hasNext();)
 		{
-			example.add(new Ex1_EventWrapper((Widget) iter.next()));
+			example.add(new Ex1_EventWrapper(iter.next()));
 		}
 		
 		return outer;
@@ -147,12 +147,12 @@ public class EventsPanel extends Composite
 		 * Create a list of controllers to process events on each widget. 
 		 * These controllers are stateless, so they may be shared between all widgets. 
 		 */
-        ArrayList controllers = new ArrayList();
+        ArrayList<Controller> controllers = new ArrayList<Controller>();
 		controllers.add(ControlSurfaceController.getInstance());
 		controllers.add(new Ex2_Controller());
-		for (Iterator iter = createSomeWidgets().iterator(); iter.hasNext();)
+		for (Iterator<Widget> iter = createSomeWidgets().iterator(); iter.hasNext();)
 		{
-			example.add(new CWrapper((Widget) iter.next(), controllers));
+			example.add(new CWrapper(iter.next(), controllers));
 		}
 		
 		return outer;

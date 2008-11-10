@@ -48,7 +48,7 @@ public class CMouseWheelListenerAdaptor extends MouseWheelListenerCollection imp
 		}
 	}
 	
-	public Class getId()
+	public Class<? extends Controller> getId()
 	{
 		return CMouseWheelListenerAdaptor.class;
 	}

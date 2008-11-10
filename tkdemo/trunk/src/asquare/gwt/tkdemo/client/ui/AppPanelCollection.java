@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.*;
  */
 public class AppPanelCollection
 {
-	private final ArrayList m_entries = new ArrayList();
+	private final ArrayList<Entry> m_entries = new ArrayList<Entry>();
 	
 	public void add(String primaryToken, String uiString, WidgetProvider tabBody)
 	{
@@ -47,24 +47,24 @@ public class AppPanelCollection
 	
 	public Widget getWidget(int index)
 	{
-		return ((Entry) m_entries.get(index)).m_widgetProvider.getWidget();
+		return m_entries.get(index).m_widgetProvider.getWidget();
 	}
 	
 	public String getUIString(int index)
 	{
-		return ((Entry) m_entries.get(index)).m_description;
+		return m_entries.get(index).m_description;
 	}
 	
 	public String getToken(int index)
 	{
-		return ((Entry) m_entries.get(index)).m_token;
+		return m_entries.get(index).m_token;
 	}
 	
 	public int getIndexForToken(String token)
 	{
 		for (int index = 0; index < m_entries.size(); index++)
 		{
-			if (((Entry) m_entries.get(index)).hasToken(token))
+			if (m_entries.get(index).hasToken(token))
 			{
 				return index;
 			}
@@ -82,7 +82,7 @@ public class AppPanelCollection
 		public final String m_token;
 		public final String m_description;
 		public final WidgetProvider m_widgetProvider;
-		private final List m_additionalTokens;
+		private final List<String> m_additionalTokens;
 		
 		public Entry(String token, String description, WidgetProvider tabBody, String[] additionalTokens)
 		{

@@ -26,7 +26,7 @@ public class TabBodyUpdateController implements ListModelListener
 	
 	private int m_previouslySelectedIndex = -1;
 	
-	public TabBodyUpdateController(ListModel model, ExposedCellPanel tabPanel, AppPanelCollection panels)
+	public TabBodyUpdateController(ListModel<?> model, ExposedCellPanel tabPanel, AppPanelCollection panels)
 	{
 		m_selectionModel = (ListSelectionModelSingle) model.getSelectionModel();
 		m_tabPanel = tabPanel;

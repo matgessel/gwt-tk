@@ -42,9 +42,9 @@ public class ClickWidget extends CWidget implements HasText, HasHTML, SourcesCli
 		super(element);
 	}
 	
-	protected List createControllers()
+	protected List<Controller> createControllers()
 	{
-        List result = new ArrayList();
+        List<Controller> result = new ArrayList<Controller>();
 		result.add(ControlSurfaceController.getInstance());
 		return result;
 	}

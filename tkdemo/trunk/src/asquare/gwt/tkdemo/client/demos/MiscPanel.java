@@ -98,6 +98,7 @@ public class MiscPanel extends Composite
 	}
 	
 	// work in progress...
+	@SuppressWarnings("unused")
 	private Widget createBasicPanelPanel()
 	{
 		BasicPanel panel = new BasicPanel();

@@ -33,6 +33,7 @@ public class ActionButton extends Button implements ActionPropertyListener
 	
 	public ActionButton(Action action)
 	{
+		sinkEvents(Event.ONCLICK);
 		setAction(action);
 	}
 	

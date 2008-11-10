@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PreventBubbleController extends ControllerAdaptor
 {
-	private static HashMap s_pool = new HashMap(); 
+	private static HashMap<String, PreventBubbleController> s_pool = new HashMap<String, PreventBubbleController>(); 
 	
 	private int m_eventBits;
 	

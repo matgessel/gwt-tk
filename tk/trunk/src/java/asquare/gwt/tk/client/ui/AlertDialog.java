@@ -178,9 +178,9 @@ public class AlertDialog extends ModalDialog
 		return dialog;
 	}
 	
-	protected List createControllers()
+	protected List<Controller> createControllers()
 	{
-		List result = super.createControllers();
+		List<Controller> result = super.createControllers();
 		result.add(new HotKeyController());
 		result.add(new ArrowKeyFocusController());
 		return result;

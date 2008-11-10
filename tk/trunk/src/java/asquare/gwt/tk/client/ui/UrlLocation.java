@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.*;
  */
 public class UrlLocation extends TextBox implements FocusListener, KeyboardListener
 {
-	private ArrayList m_listeners = new ArrayList();
+	private ArrayList<URLListener> m_listeners = new ArrayList<URLListener>();
 	
 	public UrlLocation()
 	{
@@ -77,9 +77,9 @@ public class UrlLocation extends TextBox implements FocusListener, KeyboardListe
 		if (keyCode == KeyboardListener.KEY_ENTER)
 		{
 			setFocus(false);
-			for (Iterator iter = m_listeners.iterator(); iter.hasNext();)
+			for (Iterator<URLListener> iter = m_listeners.iterator(); iter.hasNext();)
 			{
-				((URLListener) iter.next()).urlEntered(this);
+				iter.next().urlEntered(this);
 			}
 		}
 	}
