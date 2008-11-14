@@ -26,6 +26,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Utility methods for working with DOM. 
@@ -515,4 +516,24 @@ public class DomUtil
 		
 		s_impl.clean(element);
 	}
+	
+	/**
+	 * Get the {@link EventListener} which will handle events for the specified
+	 * element. The EventListener is almost always the {@link Widget} which owns
+	 * the element.
+	 * 
+	 * @param e an elememt, ususally {@link Event#getTarget()}
+	 * @return a listener, or <code>null</code>
+	 */
+	public static native EventListener getEventListener(Element e) /*-{
+		var listener;
+		while(e)
+		{
+			if (listener = e.__listener)
+			{
+				return listener;
+			}
+			e = e.parentNode;
+		}
+	}-*/;
 }

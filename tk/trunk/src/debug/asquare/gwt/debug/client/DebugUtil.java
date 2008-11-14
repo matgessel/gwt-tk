@@ -15,11 +15,11 @@
  */
 package asquare.gwt.debug.client;
 
+import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListenerCollection;
-import com.google.gwt.user.client.ui.UIObject;
 
 /**
  * Contains debugging utility methods. 
@@ -207,20 +207,9 @@ public class DebugUtil
 	 * @return the value of the tagName property, or null if
 	 *         <code>element</code> is null
 	 */
-	public static native String getTagName(Element element) /*-{
-		return element ? element.tagName : null;
-	}-*/;
-	
-	/**
-	 * Get the HTML tag name of the specified UIObject's element.
-	 * 
-	 * @param uio a UIObject
-	 * @return the value of the tagName property, or <code>null</code> if
-	 *         <code>uio</code> is null.
-	 */
-	public static String getTagName(UIObject uio)
+	public static String getTagName(Element element)
 	{
-		return getTagName((uio != null) ? uio.getElement() : null);
+		return (element != null) ? element.getTagName() : null;
 	}
 	
 	/**
@@ -236,8 +225,8 @@ public class DebugUtil
 			return String.valueOf(element);
 		}
 		String tagName = getTagName(element);
-		String id = DOM.getElementProperty(element, "id");
-		String classNames = DOM.getElementProperty(element, "className");
+		String id = element.getId();
+		String classNames = element.getClassName();
 		String description = null;
 		
 		if ("div".equalsIgnoreCase(tagName) || "span".equalsIgnoreCase(tagName))
@@ -253,9 +242,9 @@ public class DebugUtil
 		}
 		else if (tagName.equalsIgnoreCase("button"))
 		{
-			description = DOM.getElementProperty(element, "value");
+			description = ButtonElement.as(element).getValue();
 		}
 		
-		return (description == null) ? tagName : tagName + "[" + description + "]";
+		return (description == null) ? tagName : tagName + '[' + description + ']';
 	}
 }

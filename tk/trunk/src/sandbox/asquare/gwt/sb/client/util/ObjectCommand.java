@@ -15,7 +15,7 @@
  */
 package asquare.gwt.sb.client.util;
 
-public interface ObjectCommand
+public interface ObjectCommand<T>
 {
-	void execute(Object object);
+	void execute(T object);
 }
