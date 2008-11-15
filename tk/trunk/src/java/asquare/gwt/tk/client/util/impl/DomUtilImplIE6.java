@@ -15,22 +15,19 @@
  */
 package asquare.gwt.tk.client.util.impl;
 
-import asquare.gwt.tk.client.util.DomUtil;
-
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.dom.client.*;
 
 public class DomUtilImplIE6 extends DomUtilImpl
 {
-	public void clean(Element element)
+	public void clean(com.google.gwt.dom.client.Element element)
 	{
-		String elementName = DomUtil.getElementName(element);
+		String elementName = element.getNodeName();
 		if ("TR".equals(elementName) || "TABLE".equalsIgnoreCase(elementName) || "TBODY".equalsIgnoreCase(elementName))
 		{
-			Element firstChild;
-			while((firstChild = DOM.getFirstChild(element)) != null)
+			Node firstChild;
+			while((firstChild = element.getFirstChild()) != null)
 			{
-				DOM.removeChild(element, firstChild);
+				element.removeChild(firstChild);
 			}
 		}
 		else

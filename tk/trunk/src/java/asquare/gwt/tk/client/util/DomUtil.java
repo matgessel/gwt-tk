@@ -109,9 +109,10 @@ public class DomUtil
 	 * @param element
 	 * @return the node name upper case, e.g. "TD"
 	 */
-	public static native String getElementName(Element element) /*-{
-		return element.nodeName;
-	}-*/;
+	public static String getElementName(Element element)
+	{
+	    return element.getNodeName();
+	}
 	
 	/**
 	 * Gets the id attribute of the specified UIObject's element.
@@ -509,7 +510,7 @@ public class DomUtil
 	 * @param element a DOM element
 	 * @throws IllegalArgumentException if <code>parent</code> is null
 	 */
-	public static void clean(Element element)
+	public static void clean(com.google.gwt.dom.client.Element element)
 	{
 		if (element == null)
 			throw new IllegalArgumentException();
@@ -525,7 +526,7 @@ public class DomUtil
 	 * @param e an elememt, ususally {@link Event#getTarget()}
 	 * @return a listener, or <code>null</code>
 	 */
-	public static native EventListener getEventListener(Element e) /*-{
+	public static native EventListener getEventListener(com.google.gwt.dom.client.Element e) /*-{
 		var listener;
 		while(e)
 		{

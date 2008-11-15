@@ -83,8 +83,8 @@ public class DomUtilImpl
 		return navigator.userAgent.toLowerCase().indexOf("win") != -1;
 	}-*/;
 	
-	public void clean(Element element)
+	public void clean(com.google.gwt.dom.client.Element element)
 	{
-		DOM.setInnerHTML(element, "");
+		element.setInnerHTML("");
 	}
 }

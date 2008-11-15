@@ -15,11 +15,10 @@
  */
 package asquare.gwt.debug.client;
 
-import com.google.gwt.dom.client.ButtonElement;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.KeyboardListenerCollection;
+import com.google.gwt.dom.client.*;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.ui.*;
 
 /**
  * Contains debugging utility methods. 
@@ -183,7 +182,7 @@ public class DebugUtil
 	{
 		return 
 		"char=" + (char) DOM.eventGetKeyCode(event) + 
-		",keyCode=" + (int) DOM.eventGetKeyCode(event) + 
+		",keyCode=" + DOM.eventGetKeyCode(event) + 
 		",modifiers=" + KeyboardListenerCollection.getKeyboardModifiers(event) + 
 		",target=" + getTagName(DOM.eventGetTarget(event));
 	}
@@ -224,7 +223,7 @@ public class DebugUtil
 		{
 			return String.valueOf(element);
 		}
-		String tagName = getTagName(element);
+		String tagName = element.getTagName();
 		String id = element.getId();
 		String classNames = element.getClassName();
 		String description = null;
