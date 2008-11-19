@@ -153,7 +153,8 @@ public class GWTCacheFilter implements Filter
 				HttpServletResponse hresponse = (HttpServletResponse) response;
 				
 				// the w3c spec requires a maximum age of 1 year
-				hresponse.setHeader("Cache-Control", "max-age=31536000");
+				// Firefox 3+ needs 'public' to cache this resource when received via SSL
+				hresponse.setHeader("Cache-Control", "public max-age=31536000");
 				
 				// necessary to overwrite "Pragma: no-cache" header
 				hresponse.setHeader("Pragma", "temp");
