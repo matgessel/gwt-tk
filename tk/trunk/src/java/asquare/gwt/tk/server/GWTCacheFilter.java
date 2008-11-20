@@ -82,6 +82,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see <a
  *      href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.32">Pragma
  *      directive</a>
+ * @see Pattern
  */
 public class GWTCacheFilter implements Filter
 {
@@ -146,7 +147,7 @@ public class GWTCacheFilter implements Filter
 				HttpServletResponse hResponse = (HttpServletResponse) response;
 				hResponse.setHeader("Cache-Control", "no-cache no-store must-revalidate");
 				hResponse.setHeader("Pragma", "no-cache"); // HTTP/1.0
-				hResponse.setDateHeader("Expires", 0l);
+				hResponse.setDateHeader("Expires", 86400000); // January 2, 1970
 			}
 			else if (forceCachePattern.matcher(hRequest.getRequestURL()).matches())
 			{
