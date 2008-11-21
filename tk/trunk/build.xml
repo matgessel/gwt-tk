@@ -263,13 +263,22 @@
 		<copy todir="build/out/components" flatten="true">
 			<fileset dir="build" includes="**/*.jar" excludes="**/test/**"/>
 		</copy>
+		<copy todir="build/out">
+			<fileset dir="build/out/components" includes="*-testutil-*.jar"/>
+		</copy>
 		<delete file="build/out/gwttk-dev-${project.version}.jar"/>
 		<jar destfile="build/out/gwttk-dev-${project.version}.jar" duplicate="preserve">
-			<zipgroupfileset dir="build/out/components" includes="**/*.jar" excludes="*-debugstub-*.jar"/>
+			<zipgroupfileset dir="build/out/components" includes="**/*.jar">
+				<exclude name="*-debugstub-*.jar"/>
+				<exclude name="*-testutil-*.jar"/>
+			</zipgroupfileset>
 		</jar>
 		<delete file="build/out/gwttk-${project.version}.jar"/>
 		<jar destfile="build/out/gwttk-${project.version}.jar" duplicate="preserve">
-			<zipgroupfileset dir="build/out/components" includes="**/*.jar" excludes="*-debug-*.jar"/>
+			<zipgroupfileset dir="build/out/components" includes="**/*.jar">
+				<exclude name="*-debug-*.jar"/>
+				<exclude name="*-testutil-*.jar"/>
+			</zipgroupfileset>
 		</jar>
 	</target>
 	
