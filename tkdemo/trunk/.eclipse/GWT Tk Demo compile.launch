@@ -20,6 +20,7 @@
 <mapEntry key="project.dir" value="${workspace_loc:/GWT Tk Demo}"/>
 </mapAttribute>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_TARGETS" value="compileDemo,"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LAUNCH_CONFIGURATION_BUILD_SCOPE" value="${none}"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/GWT Tk/build.xml}"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
 </launchConfiguration>

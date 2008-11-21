@@ -116,7 +116,7 @@ code {
   padding: 7px 4px 0 9px;
   white-space: nowrap;
 }
-.tk-SideTab.Disabled .Content {
+.tk-SideTab.disabled .Content {
   color: gray;
 }
 .tk-SideTab .bg {
