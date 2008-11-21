@@ -19,6 +19,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("deprecation")
 public abstract class EventDelegateAdaptor extends EventInterestAdaptor implements BrowserEventHandler, EventDelegate
 {
 	/**
