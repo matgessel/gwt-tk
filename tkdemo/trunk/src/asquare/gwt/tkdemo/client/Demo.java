@@ -119,7 +119,7 @@ public class Demo implements EntryPoint
         {
             m_panels = panels;
             m_tabbar = tabbar;
-            m_tabBarmodel = (ListModelDefault) tabbar.getListModel();
+            m_tabBarmodel = (ListModelDefault<String>) tabbar.<String>getListModel();
             m_selectionModel = (ListSelectionModelSingle) m_tabBarmodel.getSelectionModel();
             m_initialIndex = initialIndex;
         }
