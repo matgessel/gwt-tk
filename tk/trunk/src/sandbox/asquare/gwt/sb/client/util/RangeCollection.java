@@ -401,7 +401,7 @@ public class RangeCollection
 		{
 			for (int target = 0, targetSize = ranges.getSize(); target < targetSize; target++)
 			{
-				Range range = m_ranges.get(reference).intersect((Range) ranges.get(target));
+				Range range = m_ranges.get(reference).intersect(ranges.get(target));
 				if (range != null)
 				{
 					result.add(range);
@@ -446,7 +446,7 @@ public class RangeCollection
 		RangeCollection result = new RangeCollection();
 		for (int i = 0, size = m_ranges.size(); i < size; i++)
 		{
-			result.add((Range) m_ranges.get(i).duplicate());
+			result.add(m_ranges.get(i).duplicate());
 		}
 		return result;
 	}

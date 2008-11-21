@@ -60,7 +60,7 @@ public class ListViewStub implements ListView
 	{
 		if (cellProperties != null)
 		{
-			Map<String, Object> item = (Map<String, Object>) getItem(((IndexedCellId) cellId).getIndex());
+			Map<String, Object> item = getItem(((IndexedCellId) cellId).getIndex());
 			item.put(ListCellRenderer.PROPERTY_EVEN, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_EVEN)));
 			item.put(ListCellRenderer.PROPERTY_FIRST, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_FIRST)));
 			item.put(ListCellRenderer.PROPERTY_LAST, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_LAST)));
@@ -81,6 +81,21 @@ public class ListViewStub implements ListView
 	{
 		prepareElement(cellId, modelElement, cellProperties);
 		renderContent(cellId, modelElement, cellProperties);
+	}
+	
+	/**
+	 * @deprecated
+	 */
+	public boolean isEnabled()
+	{
+		return false;
+	}
+	
+	/**
+	 * @deprecated
+	 */
+	public void setEnabled(boolean enabled)
+	{
 	}
 	
 	/**

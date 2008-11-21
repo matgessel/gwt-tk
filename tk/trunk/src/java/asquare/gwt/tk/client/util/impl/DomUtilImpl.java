@@ -15,9 +15,6 @@
  */
 package asquare.gwt.tk.client.util.impl;
 
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-
 public class DomUtilImpl
 {
 	private static final boolean QUIRKS_MODE = isQuirksMode0();

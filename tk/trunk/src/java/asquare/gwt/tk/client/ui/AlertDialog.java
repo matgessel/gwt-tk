@@ -396,7 +396,7 @@ public class AlertDialog extends ModalDialog
 	 */
 	public Widget getButton(int index)
 	{
-		return (Button) m_buttonPanel.getWidgetAt(index, 0);
+		return m_buttonPanel.getWidgetAt(index, 0);
 	}
 	
 	/**

@@ -165,7 +165,7 @@ public class ControllerSupportDelegate
 			m_controllers = new ArrayList<Controller>();
 			for (int i = 0, size = controllers.size(); i < size; i++)
 			{
-				m_controllers.add((Controller) controllers.get(i));
+				m_controllers.add(controllers.get(i));
 			}
 			if (m_widget.isAttached())
 			{

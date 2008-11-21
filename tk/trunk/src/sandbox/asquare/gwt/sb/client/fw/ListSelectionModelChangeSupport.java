@@ -136,7 +136,7 @@ public class ListSelectionModelChangeSupport extends ModelChangeSupportComplex
 				{
 					for (int i = 0, size = m_listeners.size(); i < size; i++)
 					{
-						((ListSelectionModelListener) m_listeners.get(i)).listSelectionModelChanged(m_event);
+						m_listeners.get(i).listSelectionModelChanged(m_event);
 					}
 				}
 				finally

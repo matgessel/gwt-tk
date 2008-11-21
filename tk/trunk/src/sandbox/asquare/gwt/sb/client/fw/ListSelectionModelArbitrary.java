@@ -222,9 +222,9 @@ public class ListSelectionModelArbitrary implements ListSelectionModel
 		if (index < 0)
 			throw new IndexOutOfBoundsException(String.valueOf(index));
 		
-		RangeCollection deselectedChanges = (RangeCollection) m_selectedRanges.duplicate();
+		RangeCollection deselectedChanges = m_selectedRanges.duplicate();
 		m_selectedRanges.shift(index, count);
-		RangeCollection selectedChanges = (RangeCollection) m_selectedRanges.duplicate();
+		RangeCollection selectedChanges = m_selectedRanges.duplicate();
 		selectedChanges.removeAll(deselectedChanges);
 		deselectedChanges.removeAll(m_selectedRanges);
 		m_changeSupport.selectionAdded(selectedChanges);

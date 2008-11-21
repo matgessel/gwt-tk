@@ -200,7 +200,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 		
 		GwtUtil.rangeCheck(childWidgets, wIndex, false);
 		
-		return (Widget) childWidgets.get(wIndex);
+		return childWidgets.get(wIndex);
 	}
 	
 	/**

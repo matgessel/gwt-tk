@@ -60,7 +60,7 @@ public class KeyMap extends HashMap<Character, Command>
 	 */
 	public Command get(char keyCode)
 	{
-		return (Command) get(new Character(keyCode));
+		return get(new Character(keyCode));
 	}
 	
 	/**
@@ -72,6 +72,6 @@ public class KeyMap extends HashMap<Character, Command>
 	 */
 	public Command remove(char keyCode)
 	{
-		return (Command) remove(new Character(keyCode));
+		return remove(new Character(keyCode));
 	}
 }

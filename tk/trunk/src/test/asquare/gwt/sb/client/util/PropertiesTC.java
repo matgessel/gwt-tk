@@ -48,6 +48,7 @@ public class PropertiesTC extends GWTTestCase
 		m_s = "String value";
 	}
 	
+	@SuppressWarnings("cast")
 	public void testGetSet_Object()
 	{
 		setupImpl();

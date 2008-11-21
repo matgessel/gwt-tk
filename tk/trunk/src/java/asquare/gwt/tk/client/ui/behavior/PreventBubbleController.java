@@ -42,7 +42,7 @@ public class PreventBubbleController extends ControllerAdaptor
 	public static final PreventBubbleController getInstance(int eventBits)
 	{
 		String key = String.valueOf(eventBits);
-		PreventBubbleController result = (PreventBubbleController) s_pool.get(key);
+		PreventBubbleController result = s_pool.get(key);
 		if (result == null)
 		{
 			result = new PreventBubbleController(eventBits);

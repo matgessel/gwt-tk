@@ -128,7 +128,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		{
 			for (int i = 0, size = m_handlers.size(); i < size; i++)
 			{
-				((EventHandler) m_handlers.get(i)).plugIn(m_pluggedInWidget);
+				(m_handlers.get(i)).plugIn(m_pluggedInWidget);
 			}
 		}
 	}
@@ -142,7 +142,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		{
 			for (int i = 0, size = m_handlers.size(); i < size; i++)
 			{
-				((EventHandler) m_handlers.get(i)).unplug(m_pluggedInWidget);
+				(m_handlers.get(i)).unplug(m_pluggedInWidget);
 			}
 		}
 		m_pluggedInWidget = null;
@@ -319,7 +319,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_DOWN) != 0)
 			{
 				handler.processMouseDown(e);
@@ -336,7 +336,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_MOVE) != 0)
 			{
 				handler.processMouseMove(e);
@@ -353,7 +353,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_UP) != 0)
 			{
 				handler.processMouseUp(e);
@@ -370,7 +370,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_CLICK) != 0)
 			{
 				handler.processMouseClick(e);
@@ -387,7 +387,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_DOUBLECLICK) != 0)
 			{
 				handler.processMouseDoubleClick(e);
@@ -404,7 +404,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_OVER) != 0)
 			{
 				handler.processMouseOver(e);
@@ -421,7 +421,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & MouseEvent.MOUSE_OUT) != 0)
 			{
 				handler.processMouseOut(e);
@@ -438,7 +438,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & KeyEvent.KEY_DOWN) != 0)
 			{
 				handler.processKeyDown(e);
@@ -455,7 +455,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & KeyEvent.KEY_PRESSED) != 0)
 			{
 				handler.processKeyPress(e);
@@ -472,7 +472,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & KeyEvent.KEY_UP) != 0)
 			{
 				handler.processKeyUp(e);
@@ -489,7 +489,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & FocusEvent.FOCUS_GAINED) != 0)
 			{
 				handler.processFocusGained(e);
@@ -506,7 +506,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		
 		for (int i = 0, size = m_handlers.size(); i < size; i++)
 		{	
-			EventHandler handler = (EventHandler) m_handlers.get(i);
+			EventHandler handler = m_handlers.get(i);
 			if ((handler.getEventBits() & FocusEvent.FOCUS_LOST) != 0)
 			{
 				handler.processFocusLost(e);
@@ -541,7 +541,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 				int m_eventBitsCache = 0;
 				for (int i = 0, size = size(); i < size; i++)
 				{
-					m_eventBitsCache |= ((EventHandler) get(i)).getEventBits();
+					m_eventBitsCache |= get(i).getEventBits();
 				}
 			}
 			return m_eventBitsCache;

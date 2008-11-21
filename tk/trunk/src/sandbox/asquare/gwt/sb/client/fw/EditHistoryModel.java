@@ -81,12 +81,12 @@ public class EditHistoryModel
 	
 	public UndoableCommand peekUndo()
 	{
-		return (UndoableCommand) m_undo.peek();
+		return m_undo.peek();
 	}
 	
 	public UndoableCommand peekRedo()
 	{
-		return (UndoableCommand) m_redo.peek();
+		return m_redo.peek();
 	}
 	
 	public void push(UndoableCommand command)
@@ -102,7 +102,7 @@ public class EditHistoryModel
 	
 	public UndoableCommand undo()
 	{
-		UndoableCommand result = (UndoableCommand) m_undo.pop();
+		UndoableCommand result = m_undo.pop();
 		m_redo.push(result);
 		m_changed = true;
 		return result;
@@ -110,7 +110,7 @@ public class EditHistoryModel
 	
 	public UndoableCommand redo()
 	{
-		UndoableCommand result = (UndoableCommand) m_redo.pop();
+		UndoableCommand result = m_redo.pop();
 		m_undo.push(result);
 		m_changed = true;
 		return result;
@@ -173,11 +173,11 @@ public class EditHistoryModel
 		
 		if (index < 0)
 		{
-			return (UndoableCommand) m_undo.get(index + m_undo.size());
+			return m_undo.get(index + m_undo.size());
 		}
 		else
 		{
-			return (UndoableCommand) m_redo.get(index - 1);
+			return m_redo.get(index - 1);
 		}
 	}
 	

@@ -61,7 +61,7 @@ public class FocusModel
 		HasFocus[] removed = new HasFocus[m_widgets.size()];
 		for (int i = removed.length - 1; i >= 0; i--)
 		{
-			removed[i] = (HasFocus) m_widgets.get(i);
+			removed[i] = m_widgets.get(i);
 		}
 		m_widgets.clear();
 		m_focusIndex = -1;
@@ -242,7 +242,7 @@ public class FocusModel
 	{
 		GwtUtil.rangeCheck(0, m_widgets.size(), index, false);
 		
-		return (HasFocus) m_widgets.get(index);
+		return m_widgets.get(index);
 	}
 	
 	/**
@@ -261,7 +261,7 @@ public class FocusModel
 	
 	private void remove(int index)
 	{
-		HasFocus widget = (HasFocus) m_widgets.remove(index);
+		HasFocus widget = m_widgets.remove(index);
 		if (m_focusIndex > index)
 		{
 			m_focusIndex--;
@@ -496,7 +496,7 @@ public class FocusModel
 			return initialIndex;
 		
 		// return if widget is not disabled
-		if (shouldFocus((HasFocus) m_widgets.get(current)))
+		if (shouldFocus(m_widgets.get(current)))
 			return current;
 		
 		return getNextIndex(initialIndex, current, size, forward);
