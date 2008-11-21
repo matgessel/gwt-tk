@@ -15,8 +15,8 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.tk.testutil.TkTestUtil;
 import junit.framework.TestCase;
+import asquare.gwt.tk.testutil.TkTestUtil;
 
 public class ListModelDefaultTC extends TestCase
 {
@@ -40,6 +40,13 @@ public class ListModelDefaultTC extends TestCase
 		m_b2 = new Integer(2);
 		m_c1 = new Integer(1);
 		m_array = new Object[] {m_a1, m_b2, m_c1};
+	}
+	
+	private void setupPopulate()
+	{
+		setupImpl();
+		m_model.addAll(m_array);
+		m_model.resetChanges();
 	}
 	
 	public void testSet()
@@ -101,6 +108,13 @@ public class ListModelDefaultTC extends TestCase
 		assertEquals(1, m_model.getSelectionModel().getSelectionSize());
 		assertEquals(1, m_model.getSelectionModel().getSelectedIndices()[0]);
 		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+		
+		// update disabled items
+		setupPopulate();
+		m_model.setIndexEnabled(0, false);
+		m_model.insert(0, new Object());
+		assertTrue(m_model.isIndexEnabled(0));
+		assertFalse(m_model.isIndexEnabled(1));
 	}
 	
 	public void testClear()
@@ -116,6 +130,15 @@ public class ListModelDefaultTC extends TestCase
 		m_model.update();
 		assertEquals(0, m_model.getSelectionModel().getSelectionSize());
 		assertEquals(1, m_l1.getItemPropertyChangeCount(ListModel.ITEM_PROPERTY_SELECTION));
+		
+		// update disabled items
+		setupPopulate();
+		m_model.setIndexEnabled(0, false);
+		m_model.setIndexEnabled(2, false);
+		m_model.clear();
+		m_model.addAll(m_array);
+		assertTrue(m_model.isIndexEnabled(0));
+		assertTrue(m_model.isIndexEnabled(2));
 	}
 	
 	public void testRemove()
@@ -141,6 +164,15 @@ public class ListModelDefaultTC extends TestCase
 		model.add(m_a1);
 		model.remove(0);
 		assertFalse(model.isIndexSelected(0));
+		
+		// update disabled items
+		setupPopulate();
+		m_model.setIndexEnabled(0, false);
+		m_model.setIndexEnabled(2, false);
+		m_model.remove(0);
+		assertTrue(m_model.isIndexEnabled(0));
+		assertFalse(m_model.isIndexEnabled(1));
+		assertTrue(m_model.isIndexEnabled(2));
 	}
 	
 	public void testSelection()
@@ -181,6 +213,56 @@ public class ListModelDefaultTC extends TestCase
 			fail();
 		}
 		catch (Exception e)
+		{
+			// EXPECTED
+		}
+	}
+	
+	public void testDisableIndex()
+	{
+		// basic test
+		setupPopulate();
+		m_model.addListener(m_l1);
+		m_model.setIndexEnabled(0, false);
+		m_model.update();
+		
+		// no change
+		setupPopulate();
+		m_model.setIndexEnabled(0, false);
+		m_model.resetChanges();
+		m_model.addListener(m_l1);
+		m_model.setIndexEnabled(0, false);
+		m_model.setIndexEnabled(1, true);
+		m_model.update();
+		assertFalse(m_l1.isChanged());
+		
+		// spurious updates if entire model is disabled
+		setupPopulate();
+		m_model.setEnabled(false);
+		m_model.resetChanges();
+		m_model.addListener(m_l1);
+		m_model.setIndexEnabled(2, false);
+		m_model.update();
+		assertFalse(m_l1.isChanged());
+		
+		// negative index
+		try
+		{
+			m_model.setIndexEnabled(-1, false);
+			fail();
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			// EXPECTED
+		}
+		
+		// index > size
+		try
+		{
+			m_model.setIndexEnabled(m_model.getSize(), false);
+			fail();
+		}
+		catch (IndexOutOfBoundsException e)
 		{
 			// EXPECTED
 		}

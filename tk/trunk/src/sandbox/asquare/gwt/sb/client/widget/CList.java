@@ -19,6 +19,7 @@ import java.util.EventListener;
 import java.util.EventObject;
 
 import asquare.gwt.sb.client.fw.*;
+import asquare.gwt.sb.client.fw.ModelChangeEventComplex.PropertyChangeBoolean;
 import asquare.gwt.tk.client.ui.behavior.ControlSurfaceController;
 import asquare.gwt.tk.client.ui.behavior.MouseEvent;
 import asquare.gwt.tk.client.ui.behavior.Pluggable;
@@ -54,21 +55,41 @@ public class CList extends CComponent
 		ListController listController = new ListController(this);
 		setControllerDisablable(listController.getId(), true);
 		addController(listController);
+		model.addListener(new ListModelListener()
+		{
+			public void modelChanged(ListModelEvent event)
+			{
+				PropertyChangeBoolean enabledChange = event.getPropertyChangeBoolean(ListModel.PROPERTY_ENABLED);
+				if (enabledChange != null)
+				{
+					CList.super.setEnabled(enabledChange.getNewValue());
+				}
+			}
+		});
 	}
 	
+	@Override
 	protected ListModel<?> createModel()
 	{
 		return new ListModelDefault<Object>(new ListSelectionModelSingle());
 	}
 	
+	@Override
 	protected Widget createView()
 	{
 		return new ListViewBasic();
 	}
 	
-	public ListModel<?> getListModel()
+	@Override
+	public ListModel<?> getModel()
 	{
-		return (ListModel<?>) getModel();
+		return (ListModel<?>) super.getModel();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> ListModel<T> getListModel()
+	{
+		return (ListModel<T>) getModel();
 	}
 	
 	public ListView getListView()
@@ -114,18 +135,9 @@ public class CList extends CComponent
 	
 	public void setEnabled(boolean enabled)
 	{
-		if (isEnabled() != enabled)
-		{
-			if (enabled)
-			{
-				removeStyleDependentName(StyleNames.DISABLED);
-			}
-			else
-			{
-				addStyleDependentName(StyleNames.DISABLED);
-			}
-			super.setEnabled(enabled);
-		}
+		// NO SUPER
+		getListModel().setEnabled(enabled);
+		getListModel().update();
 	}
 	
 	public static interface ListClickHandler extends EventListener

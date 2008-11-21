@@ -17,15 +17,22 @@ package asquare.gwt.sb.client.fw;
 
 public interface ListModel<E> extends IndexedDataSource<E>, ModelHoverSupport, SourcesModelChangeEventComplex
 {
+	String PROPERTY_ENABLED = "enabled";
+	
 	String ITEM_PROPERTY_VALUE = "listItemValue";
 	String ITEM_PROPERTY_HOVER = "listItemHover";
 	String ITEM_PROPERTY_SELECTION = "listItemSelection";
+	String ITEM_PROPERTY_ENABLED = "listItemEnabled";
 	
 	void addListener(ListModelListener listener);
 
 	void removeListener(ListModelListener listener);
 	
 	ListSelectionModel getSelectionModel();
+	
+	boolean isEnabled();
+	
+	void setEnabled(boolean enabled);
 	
 	boolean isIndexSelected(int index);
 	

@@ -23,6 +23,7 @@ import asquare.gwt.sb.client.util.Properties;
  * <h3>CSS Style Rules</h3>
  * <ul class='css'>
  * <li>.tk-ListView { }</li>
+ * <li>.tk-ListView-disabled { }</li>
  * <li>.tk-ListItem { an item in the list }</li>
  * </ul>
  */
@@ -30,12 +31,17 @@ public interface ListView extends CompositeCellView
 {
 	public static final String STYLENAME_LIST = "tk-ListView";
 	public static final String STYLENAME_LIST_ITEM = "tk-ListItem";
+	public static final String STYLESUFFIX_LIST_DISABLED = StyleNames.DISABLED;
 	
 	CellRenderer getRenderer();
 	
 	void setRenderer(CellRenderer renderer);
 	
 //	int getIndexOf(Element eventTarget);
+	
+	boolean isEnabled();
+	
+	void setEnabled(boolean enabled);
 	
 	void add(Object modelElement, Properties cellProperties);
 	

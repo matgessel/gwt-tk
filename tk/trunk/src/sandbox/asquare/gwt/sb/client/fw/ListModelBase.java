@@ -25,6 +25,7 @@ public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChan
 	private final ListModelChangeSupport m_changeSupport;
 	private final ListSelectionModel m_selectionModel;
 	
+	private boolean m_enabled = true;
 	private IndexedCellId m_hoverCell = null;
 	
 	public ListModelBase(ListSelectionModel selectionModel)
@@ -104,7 +105,25 @@ public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChan
 	
 	public boolean isIndexEnabled(int index)
 	{
-		return true;
+		return m_enabled;
+	}
+	
+	public boolean isEnabled()
+	{
+		return m_enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		if (m_changeSupport.propertyChanged(PROPERTY_ENABLED, m_enabled, enabled))
+		{
+			m_enabled = enabled;
+			int size = getSize();
+			if (size > 0)
+			{
+				m_changeSupport.addItemPropertyChange(ITEM_PROPERTY_ENABLED, 0, size);
+			}
+		}
 	}
 	
 	public CellId getHoverCell()

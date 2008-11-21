@@ -21,6 +21,8 @@ import asquare.gwt.sb.client.fw.ListModelEvent.ListChangeItemInsertion;
 import asquare.gwt.sb.client.fw.ListModelEvent.ListChangeItemRemoval;
 import asquare.gwt.sb.client.fw.ListModelEvent.ListItemPropertyChange;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
+import asquare.gwt.sb.client.fw.ModelChangeEventComplex.PropertyChangeBase;
+import asquare.gwt.sb.client.fw.ModelChangeEventComplex.PropertyChangeBoolean;
 import asquare.gwt.sb.client.util.*;
 
 /**
@@ -42,6 +44,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		m_contentProperties.add(ListModel.ITEM_PROPERTY_VALUE);
 		m_styleProperties.add(ListModel.ITEM_PROPERTY_HOVER);
 		m_styleProperties.add(ListModel.ITEM_PROPERTY_SELECTION);
+		m_styleProperties.add(ListModel.ITEM_PROPERTY_ENABLED);
 	}
 	
 	protected ListModel<?> getModel()
@@ -196,9 +199,21 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 	
 	protected void processChange(ChangeBase change, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
 	{
-		if (change instanceof IndexedChangeBase)
+		if (change instanceof PropertyChangeBase)
+		{
+			processPropertyChange((PropertyChangeBase) change, tempProperties, renderStyleItems, renderContentItems);
+		}
+		else if (change instanceof IndexedChangeBase)
 		{
 			processListChange((IndexedChangeBase) change, tempProperties, renderStyleItems, renderContentItems);
+		}
+	}
+	
+	protected void processPropertyChange(PropertyChangeBase change, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	{
+		if (ListModel.PROPERTY_ENABLED.equals(change.getName()))
+		{
+			m_view.setEnabled(((PropertyChangeBoolean) change).getNewValue());
 		}
 	}
 	

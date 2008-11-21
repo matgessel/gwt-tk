@@ -50,7 +50,7 @@ public class StyleNames
     /**
      * {@value}
      */
-    public static final String DISABLED = "Disabled";
+    public static final String DISABLED = "disabled";
     
     /**
      * {@value}

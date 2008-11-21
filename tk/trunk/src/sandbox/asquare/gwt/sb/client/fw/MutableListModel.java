@@ -17,7 +17,9 @@ package asquare.gwt.sb.client.fw;
 
 public interface MutableListModel<E> extends ListModel<E>, MutableIndexedDataSource<E>
 {
-    void add(E value);
+    void setIndexEnabled(int index, boolean enabled);
+	
+	void add(E value);
     
     void insert(int index, E value);
     

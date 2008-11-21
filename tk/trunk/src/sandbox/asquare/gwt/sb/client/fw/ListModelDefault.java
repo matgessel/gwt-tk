@@ -18,11 +18,13 @@ package asquare.gwt.sb.client.fw;
 import java.util.ArrayList;
 import java.util.List;
 
+import asquare.gwt.sb.client.util.IntRangeCollection;
 import asquare.gwt.tk.client.util.GwtUtil;
 
 public class ListModelDefault<E> extends ListModelBase<E> implements MutableListModel<E>
 {
 	private final ArrayList<E> m_items = new ArrayList<E>();
+	private final IntRangeCollection m_disabledItems = new IntRangeCollection();
 	
 	public ListModelDefault(ListSelectionModel selectionModel)
 	{
@@ -110,6 +112,25 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 			nextCandidate++;
 		}
 		return dest;
+	}
+	
+	@Override
+	public boolean isIndexEnabled(int index)
+	{
+		GwtUtil.rangeCheck(m_items, index, false);
+		
+		return super.isIndexEnabled(index) && ! m_disabledItems.contains(index, 1);
+	}
+	
+	public void setIndexEnabled(int index, boolean enabled)
+	{
+		GwtUtil.rangeCheck(m_items, index, false);
+		
+		if (isIndexEnabled(index) != enabled)
+		{
+			addItemPropertyChange(ITEM_PROPERTY_ENABLED, index, 1);
+			m_disabledItems.add(index, 1);
+		}
 	}
 	
 	public void add(E o)

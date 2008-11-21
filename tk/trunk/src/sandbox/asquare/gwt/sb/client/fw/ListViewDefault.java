@@ -31,9 +31,33 @@ public class ListViewDefault extends CompositeCellViewBase implements ListView
 		setStyleName(ListView.STYLENAME_LIST);
 	}
 	
+	@Override
 	protected CellRenderer createRenderer()
 	{
         return new ListCellRendererDefault();
+	}
+	
+	@Override
+	public boolean isEnabled()
+	{
+		return super.isEnabled();
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		if (isEnabled() != enabled)
+		{
+			super.setEnabled(enabled);
+			if (enabled)
+			{
+				addStyleDependentName(ListView.STYLESUFFIX_LIST_DISABLED);
+			}
+			else
+			{
+				removeStyleDependentName(ListView.STYLESUFFIX_LIST_DISABLED);
+			}
+		}
 	}
 	
 	public CellId getCellId(Element eventTarget)
