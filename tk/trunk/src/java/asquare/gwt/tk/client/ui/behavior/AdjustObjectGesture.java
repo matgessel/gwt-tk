@@ -344,7 +344,7 @@ public abstract class AdjustObjectGesture implements DragGesture
 	        {
 	            return m_uio.getOffsetHeight();
 	        }
-	    };
+	    }
 	}
 	
 	public static interface PositionListener
