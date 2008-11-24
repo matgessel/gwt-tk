@@ -39,17 +39,17 @@ public class TabCollection
 	
 	public Widget getWidget(int i)
 	{
-		return (Widget) m_bodies.get(i);
+		return m_bodies.get(i);
 	}
 
 	public String getDescription(int i)
 	{
-		return (String) m_descriptions.get(i);
+		return m_descriptions.get(i);
 	}
 	
 	public String getToken(int i)
 	{
-		return (String) m_tokens.get(i);
+		return m_tokens.get(i);
 	}
 	
 	public int getIndexForToken(String token)

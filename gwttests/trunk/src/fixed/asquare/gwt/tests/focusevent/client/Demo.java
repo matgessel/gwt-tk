@@ -76,7 +76,7 @@ public class Demo implements EntryPoint
 		
 		public void onFocus(Widget sender)
 		{
-			UIObject border = (UIObject) m_borders.get(sender);
+			UIObject border = m_borders.get(sender);
 			border.removeStyleName("fail");
 			border.addStyleName("pass");
 		}

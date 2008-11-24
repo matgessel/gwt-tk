@@ -110,7 +110,8 @@ public class ClassCastTestCase extends GWTTestCase
 		Apple apple = (Apple) getFoodItem();
 	}
 	
-	public void testBaseToInterfaceToConcrete_crazyInline()
+	@SuppressWarnings("cast")
+    public void testBaseToInterfaceToConcrete_crazyInline()
 	{
 		Apple apple = (Apple) (CanEatRaw) (Food) new Apple();
 	}
