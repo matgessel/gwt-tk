@@ -41,6 +41,15 @@ public class CList extends CComponent
 		this(model, view, null);
 	}
 	
+	/**
+	 * @param model a model, or <code>null</code>. {@link #createModel()} will
+	 *            be invoked if <code>model</code> is <code>null</code>.
+	 * @param view a view, or <code>null</code>. {@link #createView()} will be
+	 *            invoked if <code>view</code> is <code>null</code>.
+	 * @param updateController an Update Controller, or <code>null</code>. A
+	 *            default impl will be created if <code>updateController</code>
+	 *            is <code>null</code>.
+	 */
 	public CList(ListModel<?> model, ListView view, Pluggable updateController)
 	{
 		super(model, (Widget) view);
@@ -55,7 +64,7 @@ public class CList extends CComponent
 		ListController listController = new ListController(this);
 		setControllerDisablable(listController.getId(), true);
 		addController(listController);
-		model.addListener(new ListModelListener()
+		getModel().addListener(new ListModelListener()
 		{
 			public void modelChanged(ListModelEvent event)
 			{
