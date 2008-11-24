@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class RefreshViewsListenerCollection extends ArrayList<RefreshViewsListener>
 {
-	private static final long serialVersionUID = -1840555495831347763L;
+	private static final long serialVersionUID = 0L;
 
 	public void fireUpdate()
 	{

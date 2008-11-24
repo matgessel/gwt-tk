@@ -37,22 +37,22 @@ public abstract class InputEventImpl extends EventBaseImpl implements InputEvent
 	
 	public boolean isAltDown()
 	{
-		return DOM.eventGetAltKey(getDomEvent());
+		return getDomEvent().getAltKey();
 	}
 	
 	public boolean isControlDown()
 	{
-		return DOM.eventGetCtrlKey(getDomEvent());
+		return getDomEvent().getCtrlKey();
 	}
 	
 	public boolean isMetaDown()
 	{
-		return DOM.eventGetMetaKey(getDomEvent());
+		return getDomEvent().getMetaKey();
 	}
 	
 	public boolean isShiftDown()
 	{
-		return DOM.eventGetShiftKey(getDomEvent());
+		return getDomEvent().getShiftKey();
 	}
 	
 	public boolean isPreventDefault()
