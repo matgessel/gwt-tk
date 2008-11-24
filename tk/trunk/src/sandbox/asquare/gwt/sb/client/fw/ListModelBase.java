@@ -36,8 +36,8 @@ public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChan
 	protected ListModelBase(ListSelectionModel selectionModel, ListModelChangeSupport changeSupport)
 	{
 		m_changeSupport = changeSupport != null ? changeSupport : new ListModelChangeSupport(this);
-		m_selectionModel = selectionModel;
-		if (m_selectionModel != null)
+		m_selectionModel = (selectionModel != null) ? selectionModel : ListSelectionModelNone.getInstance();
+		if (! (m_selectionModel instanceof ListSelectionModelNone))
 		{
 			m_selectionModel.addListener(new ListSelectionModelListener()
 			{
@@ -100,7 +100,7 @@ public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChan
 	
 	public boolean isIndexSelected(int index)
 	{
-		return m_selectionModel != null && m_selectionModel.isIndexSelected(index);
+		return index < getSize() && isIndexEnabled(index) && m_selectionModel.isIndexSelected(index);
 	}
 	
 	public boolean isIndexEnabled(int index)

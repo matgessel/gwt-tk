@@ -30,11 +30,23 @@ public interface ListModel<E> extends IndexedDataSource<E>, ModelHoverSupport, S
 	
 	ListSelectionModel getSelectionModel();
 	
+	boolean isIndexSelected(int index);
+	
+	/**
+	 * Get the number of selected items. 
+	 */
+	int getSelectionSize();
+	
+	/**
+	 * Get the selected and enabled indices. 
+	 * 
+	 * @return an array of <code>0</code> or more items
+	 */
+	int[] getSelectedIndices();
+	
 	boolean isEnabled();
 	
 	void setEnabled(boolean enabled);
-	
-	boolean isIndexSelected(int index);
 	
 	boolean isIndexEnabled(int index);
 }

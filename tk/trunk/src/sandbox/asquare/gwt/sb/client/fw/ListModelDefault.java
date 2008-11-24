@@ -18,13 +18,11 @@ package asquare.gwt.sb.client.fw;
 import java.util.ArrayList;
 import java.util.List;
 
-import asquare.gwt.sb.client.util.IntRangeCollection;
 import asquare.gwt.tk.client.util.GwtUtil;
 
 public class ListModelDefault<E> extends ListModelBase<E> implements MutableListModel<E>
 {
-	private final ArrayList<E> m_items = new ArrayList<E>();
-	private final IntRangeCollection m_disabledItems = new IntRangeCollection();
+	private final ArrayList<Element<E>> m_items = new ArrayList<Element<E>>();
 	
 	public ListModelDefault(ListSelectionModel selectionModel)
 	{
@@ -38,12 +36,51 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	
 	public E get(int index)
 	{
-		return m_items.get(index);
+		return m_items.get(index).m_value;
 	}
 	
-	public int getIndexOf(Object o)
+	public int getIndexOf(E o)
 	{
-		return m_items.indexOf(o);
+		for (int i = 0, size = m_items.size(); i < size; i++)
+		{
+			E candidate = m_items.get(i).m_value;
+			if (o != null && o.equals(candidate) || candidate == null)
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public int getSelectionSize()
+	{
+		int result = 0;
+		int[] selectedIndices = getSelectionModel().getSelectedIndices();
+		for (int i = 0, size = getSize(); i < selectedIndices.length; i++)
+		{
+			if (selectedIndices[i] < size && isIndexEnabled(selectedIndices[i]))
+			{
+				result++;
+			}
+		}
+		return result;
+	}
+	
+	public int[] getSelectedIndices()
+	{
+		int[] selectedIndices = getSelectionModel().getSelectedIndices();
+		int[] enabled = new int[selectedIndices.length];
+		int total = 0;
+		for (int i = 0, size = getSize(); i < selectedIndices.length; i++)
+		{
+			if (selectedIndices[i] < size && isIndexEnabled(selectedIndices[i]))
+			{
+				enabled[total++] = selectedIndices[i];
+			}
+		}
+		int[] result = new int[total];
+		System.arraycopy(enabled, 0, result, 0, total);
+		return result;
 	}
 	
 	/**
@@ -51,28 +88,38 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	 */
 	public Object[] getSelectedItems()
 	{
-		return getSelectedItems(new Object[getSelectionModel().getSelectionSize()]);
+		return getSelectedItems(null);
 	}
 	
 	/**
-	 * @throws IllegalStateException if the selection model has indices which are out of the bounds of this model
-	 * @throws IllegalArgumentException if <code>dest</code> is <code>null</code>
+	 * @param dest an array large enough to hold the selection, or <code>null</code> to have an array of type Object[] created
 	 * @throws IllegalArgumentException if <code>dest</code> is too small to hold the selected items
 	 */
 	public Object[] getSelectedItems(Object[] dest)
 	{
-		if (getSelectionModel().getMaxSelectedIndex() >= m_items.size())
+		int[] selectedIndices = getSelectedIndices();
+		
+		if (selectedIndices.length > 0 && selectedIndices[selectedIndices.length - 1] >= m_items.size())
 			throw new IllegalStateException();
 		
-		int[] indices = getSelectionModel().getSelectedIndices();
+		if (dest == null)
+		{
+			dest = new Object[selectedIndices.length];
+		}
 		
-		if (dest == null || dest.length < indices.length)
+		if (dest.length < selectedIndices.length)
 			throw new IllegalArgumentException();
 		
-		for (int i = 0; i < dest.length; i++)
+		for (int i = 0; i < selectedIndices.length; i++)
 		{
-			dest[i] = m_items.get(indices[i]);
+			dest[i] = m_items.get(selectedIndices[i]).m_value;
 		}
+		
+		if (dest.length > selectedIndices.length)
+		{
+			dest[selectedIndices.length] = null;
+		}
+		
 		return dest;
 	}
 	
@@ -81,25 +128,31 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	 */
 	public Object[] getUnselectedItems()
 	{
-		return getUnselectedItems(new Object[m_items.size() - getSelectionModel().getSelectionSize()]);
+		return getUnselectedItems(null);
 	}
 	
 	/**
-	 * @throws IllegalStateException if the selection model has indices which are out of the bounds of this model
-	 * @throws IllegalArgumentException if <code>dest</code> is <code>null</code>
+	 * @param dest an array large enough to hold the selection, or <code>null</code> to have an array of type Object[] created
 	 * @throws IllegalArgumentException if <code>dest</code> is too small to hold the selected items
 	 */
 	public Object[] getUnselectedItems(Object[] dest)
 	{
-		if (getSelectionModel().getMaxSelectedIndex() >= m_items.size())
+		int[] selectedIndices = getSelectedIndices();
+		int count = m_items.size() - selectedIndices.length;
+		
+		if (selectedIndices.length > 0 && selectedIndices[selectedIndices.length - 1] >= m_items.size())
 			throw new IllegalStateException();
 		
-		if ( dest == null || dest.length < m_items.size() - getSelectionModel().getSelectionSize())
+		if (dest == null)
+		{
+			dest = new Object[count];
+		}
+		
+		if (dest.length < count)
 			throw new IllegalArgumentException();
-			
+		
 		int nextCandidate = 0, nextSelected = 0, nextResult = 0;
-		int[] selectedIndices = getSelectionModel().getSelectedIndices();
-		while (nextResult < dest.length)
+		while (nextResult < count)
 		{
 			if (nextSelected < selectedIndices.length && nextCandidate == selectedIndices[nextSelected])
 			{
@@ -107,29 +160,35 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 			}
 			else
 			{
-				dest[nextResult++] = m_items.get(nextCandidate);
+				dest[nextResult++] = m_items.get(nextCandidate).m_value;
 			}
 			nextCandidate++;
 		}
+		
+		if (dest.length > count)
+		{
+			dest[count] = null;
+		}
+		
 		return dest;
 	}
 	
 	@Override
 	public boolean isIndexEnabled(int index)
 	{
-		GwtUtil.rangeCheck(m_items, index, false);
-		
-		return super.isIndexEnabled(index) && ! m_disabledItems.contains(index, 1);
+		return isEnabled() && m_items.get(index).m_enabled;
 	}
 	
 	public void setIndexEnabled(int index, boolean enabled)
 	{
-		GwtUtil.rangeCheck(m_items, index, false);
-		
-		if (isIndexEnabled(index) != enabled)
+		Element<E> element = m_items.get(index);
+		if (element.m_enabled != enabled)
 		{
-			addItemPropertyChange(ITEM_PROPERTY_ENABLED, index, 1);
-			m_disabledItems.add(index, 1);
+			element.m_enabled = enabled;
+			if (isEnabled())
+			{
+				addItemPropertyChange(ITEM_PROPERTY_ENABLED, index, 1);
+			}
 		}
 	}
 	
@@ -168,20 +227,17 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	
 	public void insert(int index, E o)
 	{
-		m_items.add(index, o);
+		m_items.add(index, new Element<E>(o));
 		addChange(new ListModelEvent.ListChangeItemInsertion(index, 1));
-		ListSelectionModel selectionModel = getSelectionModel();
-		if (selectionModel != null)
-		{
-			selectionModel.adjustForItemsInserted(index, 1);
-		}
+		getSelectionModel().adjustForItemsInserted(index, 1);
 	}
 	
 	public void set(int index, E o)
 	{
-		Object old = m_items.set(index, o);
-		if (! GwtUtil.equals(old, o))
+		Element<E> element = m_items.get(index);
+		if (! GwtUtil.equals(element.m_value, o))
 		{
+			element.m_value = o;
 			setChanged(index);
 		}
 	}
@@ -197,13 +253,9 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	
 	public E remove(int index)
 	{
-		E result = m_items.remove(index);
+		E result = m_items.remove(index).m_value;
 		addChange(new ListModelEvent.ListChangeItemRemoval(index, 1));
-		ListSelectionModel selectionModel = getSelectionModel();
-		if (selectionModel != null)
-		{
-			selectionModel.adjustForItemsRemoved(index, 1);
-		}
+		getSelectionModel().adjustForItemsRemoved(index, 1);
 		return result;
 	}
 	
@@ -216,16 +268,28 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 		{
 			addChange(new ListModelEvent.ListChangeItemRemoval(0, m_items.size()));
 			m_items.clear();
-			ListSelectionModel selectionModel = getSelectionModel();
-			if (selectionModel != null)
-			{
-				selectionModel.clearSelection();
-			}
+			getSelectionModel().clearSelection();
 		}
 	}
 	
 	public int getSize()
 	{
 		return m_items.size();
+	}
+	
+	private static class Element<E>
+	{
+		E m_value;
+		boolean m_enabled = true;
+		
+		public Element(E value)
+		{
+			m_value = value;
+		}
+		
+		public String toString()
+		{
+			return String.valueOf(m_value);
+		}
 	}
 }
