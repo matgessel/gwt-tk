@@ -15,8 +15,10 @@
  */
 package asquare.gwt.sb.client.widget;
 
-import asquare.gwt.sb.client.fw.*;
+import asquare.gwt.sb.client.fw.ExplicitUpdateModel;
+import asquare.gwt.sb.client.fw.ListSelectionModel;
 import asquare.gwt.tk.client.ui.behavior.*;
+import asquare.gwt.tk.client.util.Platform;
 
 public abstract class ListSelectionControllerBase extends EventController
 {
@@ -63,7 +65,7 @@ public abstract class ListSelectionControllerBase extends EventController
 	            {
 	                m_strategy = new AddStrategy();
 	            }
-	            else if (e.isControlDown())
+	            else if (Platform.isToggleKeyDown(e.getDomEvent()))
 	            {
 	                m_strategy = new ToggleStrategy();
 	            }
