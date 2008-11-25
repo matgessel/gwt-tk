@@ -18,8 +18,6 @@ package asquare.gwt.sb.client.fw;
 import java.util.ArrayList;
 import java.util.EventListener;
 
-import asquare.gwt.tk.client.util.GwtUtil;
-
 public abstract class ChangeSupportBase
 {
 	private final Object m_source;
@@ -66,8 +64,6 @@ public abstract class ChangeSupportBase
 	
 	protected EventListener[] getListeners()
 	{
-		EventListener[] result = new EventListener[m_listeners.size()];
-		GwtUtil.toArray(m_listeners, result);
-		return result;
+		return m_listeners.toArray(new EventListener[m_listeners.size()]);
 	}
 }

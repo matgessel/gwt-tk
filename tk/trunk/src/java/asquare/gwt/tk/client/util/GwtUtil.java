@@ -237,6 +237,7 @@ public class GwtUtil
 	 *             enough to contain all of the list elements.
 	 * @throws ArrayStoreException if an element in <code>list</code> cannot
 	 *             not be copied to <code>dest</code> due to a type mismatch
+	 * @deprecated use {@link List#toArray(Object[])}
 	 */
 	public static Object[] toArray(List<?> src, Object[] dest)
 	{

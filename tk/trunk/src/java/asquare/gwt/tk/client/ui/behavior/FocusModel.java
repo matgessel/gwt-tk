@@ -111,9 +111,7 @@ public class FocusModel
 		}
 		if (added.size() > 0)
 		{
-			HasFocus[] result = new HasFocus[added.size()];
-			GwtUtil.toArray(added, result);
-			fireAdded(result);
+			fireAdded(added.toArray(new HasFocus[added.size()]));
 		}
 	}
 	
