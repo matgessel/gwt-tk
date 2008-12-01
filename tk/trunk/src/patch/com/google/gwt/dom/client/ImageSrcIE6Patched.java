@@ -35,7 +35,7 @@ class ImageSrcIE6Patched
 		{
 			ImageSrcIE6.setImgSrc(img, src);
 		}
-		catch (RuntimeException e)
+		catch (Throwable e)
 		{
 			System.err.println("Warning: ImageSrcIE6Patched.setImgSrc(), ignoring exception: " + e.getMessage());
 		}
