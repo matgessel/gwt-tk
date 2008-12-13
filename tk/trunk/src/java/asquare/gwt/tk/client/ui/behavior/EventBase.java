@@ -42,8 +42,8 @@ public interface EventBase
 	boolean isPreviewPhase();
 	
 	/**
-	 * @return <code>true</code> if the occured in the specified UIObject or
-	 *         its child elements
+	 * @return <code>true</code> if the event occured in the specified UIObject
+	 *         or its child elements
 	 */
 	boolean didEventOccurIn(UIObject uio);
 

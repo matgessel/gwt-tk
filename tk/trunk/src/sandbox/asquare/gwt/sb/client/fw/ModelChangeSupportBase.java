@@ -102,7 +102,9 @@ public abstract class ModelChangeSupportBase extends ChangeSupportBase
 		{
 			if (hasListeners())
 			{
-				notifyListeners(getListeners());
+				// variable helps stepping debugger
+				EventListener[] listeners = getListeners();
+				notifyListeners(listeners);
 			}
 			resetChanges();
 		}
