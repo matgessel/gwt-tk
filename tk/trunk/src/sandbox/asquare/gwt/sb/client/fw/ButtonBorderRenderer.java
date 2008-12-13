@@ -58,7 +58,7 @@ public class ButtonBorderRenderer extends CellRendererDefault
 		super.renderCell(viewElement, modelElement, properties);
 	}
 	
-	protected String getCellString(String valueString, Properties properties)
+	protected String getCellString(String valueString, Object modelObject, Properties properties)
 	{
 //		DOM.setStyleAttribute(viewElement, "width", "100%");
 //		DOM.setStyleAttribute(viewElement, "height", "100%");

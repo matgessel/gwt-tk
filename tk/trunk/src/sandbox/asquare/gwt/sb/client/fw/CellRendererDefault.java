@@ -213,23 +213,27 @@ public class CellRendererDefault implements CellRendererString
 	public void renderContent(Element viewElement, Object modelElement, Properties properties)
 	{
 		final String valueString = getValueString(modelElement, properties);
-		final String cellString = getCellString(valueString, properties);
+		final String cellString = getCellString(valueString, modelElement, properties);
 		DOM.setInnerHTML(viewElement, cellString);
 	}
 	
 	/**
-	 * Template method for creating complicated cells.  
+	 * Template method for decorating text returned by the formatter.
+	 * Implementors can use this method to create complex cells.
+	 * <p>
+	 * This implementation simply returns the input string.
 	 * 
-	 * @param valueString
+	 * @param valueString the string provided by the formatter
 	 * @return an HTML snippet describing the entire content of the cell
 	 */
-	protected String getCellString(String valueString, Properties properties)
+	protected String getCellString(String valueString, Object modelElement, Properties properties)
 	{
 		return valueString;
 	}
 	
 	/**
-	 * Wraps the formatter methods. 
+	 * Calls the formatter.  
+	 * 
 	 * @return an HTML snippet representing <code>modelElement</code>
 	 */
 	protected String getValueString(Object modelElement, Properties properties)

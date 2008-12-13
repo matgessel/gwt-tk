@@ -46,7 +46,7 @@ public class SideTabRenderer3 extends ListCellRendererDefault
 		super(listCellStyleName);
 	}
 	
-	protected String getCellString(String valueString, Properties properties)
+	protected String getCellString(String valueString, Object modelObject, Properties properties)
 	{
 		final String newHtml = 
 			"<div style='position:relative'>" + // enables Content div to be absolutely positioned
