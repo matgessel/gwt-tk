@@ -265,7 +265,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		int hoverIndex = model.getHoverCell() != null ? ((IndexedCellId) model.getHoverCell()).getIndex() : -1;
 		properties.set(ListCellRenderer.PROPERTY_HOVER_INDEX, hoverIndex);
 		properties.set(ListCellRenderer.PROPERTY_HOVER, hoverIndex == index);
-		properties.set(ListCellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index));
+		properties.set(ListCellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index, false));
 		properties.set(ListCellRenderer.PROPERTY_DISABLED, ! model.isIndexEnabled(index));
 		properties.set(ListCellRenderer.PROPERTY_FIRST, index == 0);
 		properties.set(ListCellRenderer.PROPERTY_LAST, index == model.getSize() - 1);

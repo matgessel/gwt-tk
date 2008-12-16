@@ -30,19 +30,30 @@ public interface ListModel<E> extends IndexedDataSource<E>, ModelHoverSupport, S
 	
 	ListSelectionModel getSelectionModel();
 	
-	boolean isIndexSelected(int index);
+    /**
+     * Determines if an index is selected. 
+     *  
+     * @param includeDisabledIndices <code>true</code> to count selected
+     *            indices which are disabled
+     */
+	boolean isIndexSelected(int index, boolean includeDisabledIndices);
 	
 	/**
-	 * Get the number of selected items. 
+	 * Get the number of selected items.
+	 *  
+     * @param includeDisabledItems <code>true</code> to include selected
+     *            items which are disabled
 	 */
-	int getSelectionSize();
-	
-	/**
-	 * Get the selected and enabled indices. 
-	 * 
-	 * @return an array of <code>0</code> or more items
-	 */
-	int[] getSelectedIndices();
+	int getSelectionSize(boolean includeDisabledItems);
+
+    /**
+     * Get the selected indices.
+     * 
+     * @param includeDisabledIndices <code>true</code> to include selected
+     *            indices which are disabled
+     * @return an array of <code>0</code> or more items
+     */
+	int[] getSelectedIndices(boolean includeDisabledIndices);
 	
 	boolean isEnabled();
 	

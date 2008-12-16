@@ -125,7 +125,7 @@ public class ListModelDefaultTC extends TestCase
 		m_model.add(m_b2);
 		m_model.getSelectionModel().setSelectionRange(0, 0);
 		m_model.update();
-		assertTrue(m_model.isIndexSelected(0));
+		assertTrue(m_model.isIndexSelected(0, false));
 		m_model.addListener(m_l1);
 		m_model.insert(0, m_a1);
 		m_model.update();
@@ -148,7 +148,7 @@ public class ListModelDefaultTC extends TestCase
 		m_model.add(m_a1);
 		m_model.getSelectionModel().setSelectionRange(0, 0);
 		m_model.update();
-		assertTrue(m_model.isIndexSelected(0));
+		assertTrue(m_model.isIndexSelected(0, false));
 		m_model.addListener(m_l1);
 		m_model.clear();
 		m_model.update();
@@ -172,7 +172,7 @@ public class ListModelDefaultTC extends TestCase
 		m_model.addAll(m_array);
 		m_model.getSelectionModel().setSelectionRange(2, 2);
 		m_model.update();
-		assertTrue(m_model.isIndexSelected(2));
+		assertTrue(m_model.isIndexSelected(2, false));
 		m_model.remove(0);
 		m_model.update();
 		assertEquals(1, m_model.getSelectionModel().getSelectionSize());
@@ -187,7 +187,7 @@ public class ListModelDefaultTC extends TestCase
 		ListModelDefault<Object> model = new ListModelDefault<Object>(null);
 		model.add(m_a1);
 		model.remove(0);
-		assertFalse(model.isIndexSelected(0));
+		assertFalse(model.isIndexSelected(0, false));
 		
 		// update disabled items
 		setupPopulate();
@@ -218,38 +218,61 @@ public class ListModelDefaultTC extends TestCase
 	{
 		// index > size
 		setupImpl();
-		assertFalse(m_model.isIndexSelected(5));
+		assertFalse(m_model.isIndexSelected(5, false));
+		
+        // some disabled
+        setupPopulate(new ListSelectionModelArbitrary());
+        m_model.getSelectionModel().addSelectionRange(0, m_model.getSize() - 1);
+        m_model.setIndexEnabled(0, false);
+        m_model.setIndexEnabled(1, false);
+        assertFalse(m_model.isIndexSelected(0, false));
+        assertFalse(m_model.isIndexSelected(1, false));
+        assertTrue(m_model.isIndexSelected(0, true));
+        assertTrue(m_model.isIndexSelected(1, true));
 	}
 	
 	public void testGetSelectedIndices()
 	{
 		// 0 size
-		assertEquals(0, new ListModelDefault<Object>(null).getSelectedIndices().length);
+		assertEquals(0, new ListModelDefault<Object>(null).getSelectedIndices(false).length);
 		
 		// 0 selected
 		setupImpl();
-		assertEquals(0, m_model.getSelectedIndices().length);
+		assertEquals(0, m_model.getSelectedIndices(false).length);
 		
 		// all disabled
-		setupPopulate();
+		setupPopulate(new ListSelectionModelArbitrary());
 		m_model.getSelectionModel().addSelectionRange(0, m_model.getSize() - 1);
 		for (int i = 0, size = m_model.getSize(); i < size; i++)
 		{
 			m_model.setIndexEnabled(i, false);
 		}
-		assertEquals(0, m_model.getSelectedIndices().length);
+        assertEquals(0, m_model.getSelectedIndices(false).length);
+        assertEquals(m_model.getSize(), m_model.getSelectedIndices(true).length);
 		
 		// some disabled
-		setupPopulate();
+        setupPopulate(new ListSelectionModelArbitrary());
 		m_model.getSelectionModel().addSelectionRange(0, m_model.getSize() - 1);
 		m_model.setIndexEnabled(0, false);
 		m_model.setIndexEnabled(1, false);
-		TkTestUtil.assertEqualValues(new int[] {2}, m_model.getSelectedIndices());
+        TkTestUtil.assertEqualValues(new int[] {2}, m_model.getSelectedIndices(false));
+        TkTestUtil.assertEqualValues(new int[] {0, 1, 2}, m_model.getSelectedIndices(true));
 		
 		// selected item out of range
 		setupPopulate(new ListSelectionModelArbitrary());
 		m_model.getSelectionModel().setSelectionRange(2, 3);
-		TkTestUtil.assertEqualValues(new int[] {2}, m_model.getSelectedIndices());
+		TkTestUtil.assertEqualValues(new int[] {2}, m_model.getSelectedIndices(false));
+	}
+	
+	public void testGetSelectionSize()
+	{
+        // some disabled
+        setupPopulate(new ListSelectionModelArbitrary());
+        m_model.getSelectionModel().addSelectionRange(0, m_model.getSize() - 1);
+        m_model.setIndexEnabled(0, false);
+        m_model.setIndexEnabled(1, false);
+        assertEquals(1, m_model.getSelectionSize(false));
+        assertEquals(3, m_model.getSelectionSize(true));
 	}
 	
 	public void testGetSelectedItems()
@@ -257,27 +280,35 @@ public class ListModelDefaultTC extends TestCase
 		// dest array same size
 		setupPopulate(new ListSelectionModelArbitrary());
 		m_selectionModel.setSelectionRange(0, 2);
-		TkTestUtil.assertSameElements(m_array, m_model.getSelectedItems(new Object[m_model.getSelectedIndices().length]));
+		TkTestUtil.assertSameElements(m_array, m_model.getSelectedItems(new Object[m_model.getSelectedIndices(false).length], false));
 		
 		// dest array larger (null terminator)
 		Object[] dest = new Object[m_model.getSize() + 10];
 		Object x = "x";
 		java.util.Arrays.fill(dest, x);
-		Object[] selectedItems = m_model.getSelectedItems(dest);
+		Object[] selectedItems = m_model.getSelectedItems(dest, false);
 		assertSame(dest, selectedItems);
 		TkTestUtil.arrayIdentityCompare(m_array, 0, selectedItems, 0, m_array.length);
-		assertNull(selectedItems[m_model.getSelectedIndices().length]);
+		assertNull(selectedItems[m_model.getSelectedIndices(false).length]);
 		
 		// dest array smaller
 		try
 		{
-			m_model.getSelectedItems(new Object[1]);
+			m_model.getSelectedItems(new Object[1], false);
 			fail();
 		}
 		catch (Exception e)
 		{
 			// EXPECTED
 		}
+
+        // some disabled
+        setupPopulate(new ListSelectionModelArbitrary());
+        m_model.getSelectionModel().addSelectionRange(0, m_model.getSize() - 1);
+        m_model.setIndexEnabled(0, false);
+        m_model.setIndexEnabled(1, false);
+        TkTestUtil.assertSameElements(new Object[] {m_c1}, m_model.getSelectedItems(new Object[m_model.getSelectedIndices(false).length], false));
+        TkTestUtil.assertSameElements(m_array, m_model.getSelectedItems(new Object[m_model.getSelectedIndices(true).length], true));
 	}
 	
 	public void testGetUnselectedItems()
@@ -289,39 +320,40 @@ public class ListModelDefaultTC extends TestCase
 		model.setItems(new String[] {"0", "1", "2", "3", "4"});
 		selectionModel.addSelectionRange(1, 1);
 		selectionModel.addSelectionRange(3, 3);
-		TkTestUtil.assertEqualValues(new String[] {"0", "2", "4"}, model.getUnselectedItems());
+		TkTestUtil.assertEqualValues(new String[] {"0", "2", "4"}, model.getUnselectedItems(false));
 		selectionModel.setSelectionRange(0, 0);
 		selectionModel.addSelectionRange(2, 2);
 		selectionModel.addSelectionRange(4, 4);
-		TkTestUtil.assertEqualValues(new String[] {"1", "3"}, model.getUnselectedItems());
+		TkTestUtil.assertEqualValues(new String[] {"1", "3"}, model.getUnselectedItems(false));
 		
 		// disabled items
 		model.getSelectionModel().clearSelection();
 		selectionModel.addSelectionRange(0, 4);
 		model.setIndexEnabled(1, false);
 		model.setIndexEnabled(3, false);
-		TkTestUtil.assertSameElements(new String[] {"1", "3"}, model.getUnselectedItems());
+        assertEquals(2, model.getUnselectedItems(false).length);
+        assertEquals(0, model.getUnselectedItems(true).length);
 		
 		// selection out of bounds
 		setupPopulate();
 		m_model.getSelectionModel().setSelectionRange(model.getSize(), model.getSize());
-		TkTestUtil.assertSameElements(m_array, m_model.getUnselectedItems());
+		TkTestUtil.assertSameElements(m_array, m_model.getUnselectedItems(false));
 		
 		// dest array larger (null terminator)
 		setupPopulate();
 		Object[] dest = new Object[m_model.getSize() + 10];
 		Object x = "x";
 		java.util.Arrays.fill(dest, x);
-		Object[] unselectedItems = m_model.getUnselectedItems(dest);
+		Object[] unselectedItems = m_model.getUnselectedItems(dest, false);
 		assertSame(dest, unselectedItems);
 		TkTestUtil.arrayIdentityCompare(m_array, 0, unselectedItems, 0, m_array.length);
-		assertNull(unselectedItems[m_model.getSize() - m_model.getSelectedIndices().length]);
+		assertNull(unselectedItems[m_model.getSize() - m_model.getSelectedIndices(false).length]);
 		
 		// dest array smaller
 		setupPopulate();
 		try
 		{
-			m_model.getUnselectedItems(new Object[1]);
+			m_model.getUnselectedItems(new Object[1], false);
 			fail();
 		}
 		catch (Exception e)

@@ -98,9 +98,9 @@ public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChan
 		return m_selectionModel;
 	}
 	
-	public boolean isIndexSelected(int index)
+	public boolean isIndexSelected(int index, boolean includeDisabledIndices)
 	{
-		return index < getSize() && isIndexEnabled(index) && m_selectionModel.isIndexSelected(index);
+		return index < getSize() && m_selectionModel.isIndexSelected(index) && (includeDisabledIndices || isIndexEnabled(index));
 	}
 	
 	public boolean isIndexEnabled(int index)

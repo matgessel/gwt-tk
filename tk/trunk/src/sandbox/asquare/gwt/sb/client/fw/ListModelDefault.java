@@ -52,13 +52,13 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 		return -1;
 	}
 	
-	public int getSelectionSize()
+	public int getSelectionSize(boolean includeDisabledItems)
 	{
 		int result = 0;
 		int[] selectedIndices = getSelectionModel().getSelectedIndices();
 		for (int i = 0, size = getSize(); i < selectedIndices.length; i++)
 		{
-			if (selectedIndices[i] < size && isIndexEnabled(selectedIndices[i]))
+			if (selectedIndices[i] < size && (includeDisabledItems || isIndexEnabled(selectedIndices[i])))
 			{
 				result++;
 			}
@@ -66,14 +66,14 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 		return result;
 	}
 	
-	public int[] getSelectedIndices()
+	public int[] getSelectedIndices(boolean includeDisabledIndices)
 	{
 		int[] selectedIndices = getSelectionModel().getSelectedIndices();
 		int[] enabled = new int[selectedIndices.length];
 		int total = 0;
 		for (int i = 0, size = getSize(); i < selectedIndices.length; i++)
 		{
-			if (selectedIndices[i] < size && isIndexEnabled(selectedIndices[i]))
+			if (selectedIndices[i] < size && (includeDisabledIndices || isIndexEnabled(selectedIndices[i])))
 			{
 				enabled[total++] = selectedIndices[i];
 			}
@@ -86,18 +86,18 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	/**
 	 * @throws IllegalStateException if the selection model has indices which are out of the bounds of this model
 	 */
-	public Object[] getSelectedItems()
+	public Object[] getSelectedItems(boolean includeDisabledItems)
 	{
-		return getSelectedItems(null);
+		return getSelectedItems(null, includeDisabledItems);
 	}
 	
 	/**
 	 * @param dest an array large enough to hold the selection, or <code>null</code> to have an array of type Object[] created
 	 * @throws IllegalArgumentException if <code>dest</code> is too small to hold the selected items
 	 */
-	public Object[] getSelectedItems(Object[] dest)
+	public Object[] getSelectedItems(Object[] dest, boolean includeDisabledItems)
 	{
-		int[] selectedIndices = getSelectedIndices();
+		int[] selectedIndices = getSelectedIndices(includeDisabledItems);
 		
 		if (selectedIndices.length > 0 && selectedIndices[selectedIndices.length - 1] >= m_items.size())
 			throw new IllegalStateException();
@@ -126,18 +126,18 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 	/**
 	 * @throws IllegalStateException if the selection model has indices which are out of the bounds of this model
 	 */
-	public Object[] getUnselectedItems()
+	public Object[] getUnselectedItems(boolean excludeDisabledItems)
 	{
-		return getUnselectedItems(null);
+		return getUnselectedItems(null, excludeDisabledItems);
 	}
 	
 	/**
 	 * @param dest an array large enough to hold the selection, or <code>null</code> to have an array of type Object[] created
 	 * @throws IllegalArgumentException if <code>dest</code> is too small to hold the selected items
 	 */
-	public Object[] getUnselectedItems(Object[] dest)
+	public Object[] getUnselectedItems(Object[] dest, boolean excludeDisabledItems)
 	{
-		int[] selectedIndices = getSelectedIndices();
+		int[] selectedIndices = getSelectedIndices(excludeDisabledItems);
 		int count = m_items.size() - selectedIndices.length;
 		
 		if (selectedIndices.length > 0 && selectedIndices[selectedIndices.length - 1] >= m_items.size())
