@@ -49,8 +49,14 @@ public class EventPreviewControllerTemporary extends EventControllerBase impleme
 	
 	public void stop()
 	{
-		DOM.removeEventPreview(this);
 		unplug(getPluggedInWidget());
+	}
+	
+	@Override
+	public void unplug(Widget widget)
+	{
+        DOM.removeEventPreview(this);
+        super.unplug(widget);
 	}
 	
 	/**
