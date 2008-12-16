@@ -74,7 +74,7 @@ public class GlassPanelDemo extends BasicPanel
 				super(label);
 				addClickListener(listener);
 			}
-		};
+		}
 		
 		example.add(new ShowExample("Dark", new CreateExample("glasspanel-ex-dark")));
 		example.add(new ShowExample("Light", new CreateExample("glasspanel-ex-light")));
