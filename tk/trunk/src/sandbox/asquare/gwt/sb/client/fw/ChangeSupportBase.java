@@ -17,12 +17,13 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.ArrayList;
 import java.util.EventListener;
+import java.util.List;
 
 public abstract class ChangeSupportBase
 {
 	private final Object m_source;
 	
-	private ArrayList<EventListener> m_listeners = null;
+	private List<EventListener> m_listeners = null;
 	
 	public ChangeSupportBase(Object source)
 	{

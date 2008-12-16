@@ -60,44 +60,44 @@ public class ListUpdateControllerTC extends GWTTestCase
 		setupImpl();
 		m_model.getSelectionModel().setSelectionRange(1, 1);
 		m_model.update();
-		assertEquals(Boolean.TRUE, m_view.getProperty(1, ListCellRenderer.PROPERTY_SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(1, ListCellProperties.SELECTED));
 		m_model.remove(1);
 		m_model.update();
 		assertEquals(m_2, m_view.getModelElement(1));
-		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.FALSE, m_view.getProperty(1, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.FALSE, m_view.getProperty(2, ListCellRenderer.PROPERTY_SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellProperties.SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(1, ListCellProperties.SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(2, ListCellProperties.SELECTED));
 		
 		// remove surrounded selected item
 		setupImpl();
 		m_model.getSelectionModel().setSelectionRange(1, 3);
 		m_model.update();
-		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.TRUE, m_view.getProperty(1, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.TRUE, m_view.getProperty(2, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.TRUE, m_view.getProperty(3, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.FALSE, m_view.getProperty(4, ListCellRenderer.PROPERTY_SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellProperties.SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(1, ListCellProperties.SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(2, ListCellProperties.SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(3, ListCellProperties.SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(4, ListCellProperties.SELECTED));
 		m_model.remove(2);
 		m_model.update();
 		assertEquals(m_1, m_view.getModelElement(1));
 		assertEquals(m_3, m_view.getModelElement(2));
-		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.TRUE, m_view.getProperty(1, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.TRUE, m_view.getProperty(2, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.FALSE, m_view.getProperty(3, ListCellRenderer.PROPERTY_SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellProperties.SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(1, ListCellProperties.SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(2, ListCellProperties.SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(3, ListCellProperties.SELECTED));
 		
 		// remove item w/ last item selected
 		setupImpl();
 		m_model.getSelectionModel().setSelectionRange(4, 4);
 		m_model.update();
-		assertEquals(Boolean.TRUE, m_view.getProperty(4, ListCellRenderer.PROPERTY_SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(4, ListCellProperties.SELECTED));
 		m_model.remove(3);
 		m_model.update();
 		assertEquals(m_4, m_view.getModelElement(3));
 		assertEquals(4, m_view.getSize());
-		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.FALSE, m_view.getProperty(1, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.FALSE, m_view.getProperty(2, ListCellRenderer.PROPERTY_SELECTED));
-		assertEquals(Boolean.TRUE, m_view.getProperty(3, ListCellRenderer.PROPERTY_SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(0, ListCellProperties.SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(1, ListCellProperties.SELECTED));
+		assertEquals(Boolean.FALSE, m_view.getProperty(2, ListCellProperties.SELECTED));
+		assertEquals(Boolean.TRUE, m_view.getProperty(3, ListCellProperties.SELECTED));
 	}
 }

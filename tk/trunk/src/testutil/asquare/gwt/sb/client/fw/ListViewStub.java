@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import asquare.gwt.sb.client.util.Properties;
-
 import com.google.gwt.user.client.Element;
 
 public class ListViewStub implements ListView
@@ -29,12 +27,12 @@ public class ListViewStub implements ListView
 		return mItems.get(index);
 	}
 	
-	public void add(Object modelElement, Properties cellProperties)
+	public void add(Object modelElement, CellProperties cellProperties)
 	{
 		insert(new IndexedCellIdImpl(getSize()), modelElement, cellProperties);
 	}
 
-	public void insert(IndexedCellId cellId, Object modelElement, Properties cellProperties)
+	public void insert(IndexedCellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		Map<String, Object> map = new HashMap<String, Object>();
 		mItems.add(cellId.getIndex(), map);
@@ -56,31 +54,39 @@ public class ListViewStub implements ListView
 		return mItems.size();
 	}
 
-	public void prepareElement(CellId cellId, Object modelElement, Properties cellProperties)
+	public void prepareElement(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		if (cellProperties != null)
 		{
 			Map<String, Object> item = getItem(((IndexedCellId) cellId).getIndex());
-			item.put(ListCellRenderer.PROPERTY_EVEN, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_EVEN)));
-			item.put(ListCellRenderer.PROPERTY_FIRST, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_FIRST)));
-			item.put(ListCellRenderer.PROPERTY_LAST, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_LAST)));
-			item.put(ListCellRenderer.PROPERTY_ODD, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_ODD)));
-			item.put(ListCellRenderer.PROPERTY_ACTIVE, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_ACTIVE)));
-			item.put(ListCellRenderer.PROPERTY_DISABLED, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_DISABLED)));
-			item.put(ListCellRenderer.PROPERTY_HOVER, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_HOVER)));
-			item.put(ListCellRenderer.PROPERTY_SELECTED, Boolean.valueOf(cellProperties.getBoolean(ListCellRenderer.PROPERTY_SELECTED)));
+			String[] booleanProperties = {
+				ListCellProperties.EVEN, 
+				ListCellProperties.FIRST, 
+				ListCellProperties.LAST, 
+				ListCellProperties.ODD, 
+				ListCellProperties.ACTIVE, 
+				ListCellProperties.DISABLED, 
+				ListCellProperties.HOVER, 
+				ListCellProperties.SELECTED
+			};
+			
+			for (String property : booleanProperties)
+			{
+				item.put(property, Boolean.valueOf(cellProperties.getBoolean(property)));
+			}
 		}
 	}
 
-	public void renderContent(CellId cellId, Object modelElement, Properties cellProperties)
+	public void renderContent(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		getItem(((IndexedCellId) cellId).getIndex()).put(PROPERTY_MODELOBJECT, modelElement);
 	}
 
-	public void renderCell(CellId cellId, Object modelElement, Properties cellProperties)
+	public void renderCell(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
-		prepareElement(cellId, modelElement, cellProperties);
-		renderContent(cellId, modelElement, cellProperties);
+		ListCellProperties properties0 = (ListCellProperties) cellProperties;
+		prepareElement(cellId, modelElement, properties0);
+		renderContent(cellId, modelElement, properties0);
 	}
 	
 	/**

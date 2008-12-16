@@ -16,7 +16,6 @@
 package asquare.gwt.sb.client.widget;
 
 import asquare.gwt.sb.client.fw.*;
-import asquare.gwt.sb.client.util.Properties;
 import asquare.gwt.tk.client.util.GwtUtil;
 
 import com.google.gwt.user.client.DOM;
@@ -54,31 +53,36 @@ public class TabBarView extends ListViewDefault
 		DOM.setInnerText(last, " "); // force cell to show in IE/Opera quirks mode
 	}
 	
+	@Override
 	public Element getCellRootElement(CellId cellId)
 	{
 		IndexedCellId cellId0 = (IndexedCellId) cellId;
 		return super.getCellRootElement(new IndexedCellIdImpl(cellId0.getIndex() + 1));
 	}
 	
+	@Override
 	public Element getCellRootElement(Element element)
 	{
 		int index = getIndexOf(element);
 		return (index >= 0) ? getCellRootElement(new IndexedCellIdImpl(index)) : null;
 	}
 	
+	@Override
 	public int getIndexOf(Element eventTarget)
 	{
 		int result = super.getIndexOf(eventTarget) - 1;
 		return (result >= 0 && result < getSize()) ? result : -1;
 	}
 	
-	public void insert(IndexedCellId cellId, Object item, Properties cellProperties)
+	@Override
+	public void insert(IndexedCellId cellId, Object item, CellProperties cellProperties)
 	{
 		cellId.setIndex(cellId.getIndex() + 1);
 		GwtUtil.rangeCheck(1, getSize(), cellId.getIndex(), true);
 		super.insert(cellId, item, cellProperties);
 	}
 	
+	@Override
 	public void clear()
 	{
 		// remove all children except spacers
@@ -90,6 +94,7 @@ public class TabBarView extends ListViewDefault
 		}
 	}
 	
+	@Override
 	public void remove(IndexedCellId cellId)
 	{
 		cellId.setIndex(cellId.getIndex() + 1);
@@ -97,12 +102,14 @@ public class TabBarView extends ListViewDefault
 		super.remove(cellId);
 	}
 	
+	@Override
 	public int getSize()
 	{
 		return super.getSize() - 2;
 	}
 	
-	public void renderCell(CellId cellId, Object item, Properties cellProperties)
+	@Override
+	public void renderCell(CellId cellId, Object item, CellProperties cellProperties)
 	{
 		int index = ((IndexedCellId) cellId).getIndex();
 		GwtUtil.rangeCheck(1, getSize(), index + 1, false);

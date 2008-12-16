@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 import com.google.gwt.user.client.Element;
 
 /**
@@ -35,5 +33,5 @@ public interface CompositeCellView
 	
 	Element getCellRootElement(CellId cellId);
 
-	void renderCell(CellId cellId, Object modelElement, Properties cellProperties);
+	void renderCell(CellId cellId, Object modelElement, CellProperties cellProperties);
 }

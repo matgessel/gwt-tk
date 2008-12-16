@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
@@ -51,14 +49,16 @@ public class ButtonBorderRenderer extends CellRendererDefault
 		super(listCellStyleName);
 	}
 	
-	public void renderCell(Element viewElement, Object modelElement, Properties properties)
+	@Override
+	public void renderCell(Element viewElement, Object modelElement, CellProperties properties)
 	{
 		// enables Content div to be absolutely positioned
 		DOM.setStyleAttribute(viewElement, "position", "relative");
 		super.renderCell(viewElement, modelElement, properties);
 	}
 	
-	protected String getCellString(String valueString, Object modelObject, Properties properties)
+	@Override
+	protected String getCellString(String valueString, Object modelObject, CellProperties properties)
 	{
 //		DOM.setStyleAttribute(viewElement, "width", "100%");
 //		DOM.setStyleAttribute(viewElement, "height", "100%");

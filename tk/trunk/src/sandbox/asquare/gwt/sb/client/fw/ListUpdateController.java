@@ -23,7 +23,9 @@ import asquare.gwt.sb.client.fw.ListModelEvent.ListItemPropertyChange;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.ChangeBase;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.PropertyChangeBase;
 import asquare.gwt.sb.client.fw.ModelChangeEventComplex.PropertyChangeBoolean;
-import asquare.gwt.sb.client.util.*;
+import asquare.gwt.sb.client.util.IntRange;
+import asquare.gwt.sb.client.util.IntRangeCollection;
+import asquare.gwt.sb.client.util.Range;
 
 /**
  * Note: does not set even/odd properties because row removal is done by
@@ -32,10 +34,14 @@ import asquare.gwt.sb.client.util.*;
  */
 public class ListUpdateController extends UpdateControllerBase implements ListModelListener
 {
+	private static final ListCellPropertiesImpl s_defaultPropertiesImpl = new ListCellPropertiesImpl();
+	
 	private final ListModel<?> m_model;
 	private final ListView m_view;
 	private final ArrayList<String> m_styleProperties = new ArrayList<String>();
 	private final ArrayList<String> m_contentProperties = new ArrayList<String>();
+	
+	private ListCellPropertiesImpl m_propertiesImpl = s_defaultPropertiesImpl;
 	
 	public ListUpdateController(ListModel<?> model, ListView view)
 	{
@@ -60,6 +66,16 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 	protected Object getModelObject(int index)
 	{
 		return m_model.get(index);
+	}
+	
+	public ListCellPropertiesImpl getPropertiesImpl()
+	{
+		return m_propertiesImpl;
+	}
+	
+	public void setPropertiesImpl(ListCellPropertiesImpl propertiesImpl)
+	{
+		m_propertiesImpl = propertiesImpl;
 	}
 	
 	/**
@@ -108,12 +124,11 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		int size = m_model.getSize();
 		if (size > 0)
 		{
-			Properties tempProperties = new Properties();
 			IndexedCellId cellId = new IndexedCellIdImpl();
 			for (int index = 0; index < size; index++)
 			{
 				cellId.setIndex(index);
-				m_view.insert(cellId, getModelObject(index), configureCellProperties(index, m_model, tempProperties));
+				m_view.insert(cellId, getModelObject(index), m_propertiesImpl.configure(index, m_model));
 			}
 		}
 	}
@@ -125,13 +140,12 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 	
 	public void modelChanged(ListModelEvent event)
 	{
-		Properties tempProperties = new Properties();
 		IntRangeCollection renderStyleItems = new IntRangeCollection();
 		IntRangeCollection renderContentItems = new IntRangeCollection();
 		
 		for (int i = 0, size = event.getChangeCount(); i < size; i++)
 		{
-			processChange(event.getChangeAt(i), tempProperties, renderStyleItems, renderContentItems);
+			processChange(event.getChangeAt(i), m_propertiesImpl, renderStyleItems, renderContentItems);
 		}
 		
 		IntRangeCollection insertedItems = new IntRangeCollection();
@@ -184,7 +198,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 			Range range = renderStyleItems.get(i);
 			for (int index = range.getStartIndex(), terminus = index + range.getLength(); index < terminus; index++)
 			{
-				m_view.prepareElement(tempCellId.setIndex(index), getModelObject(index), configureCellProperties(index, m_model, tempProperties));
+				m_view.prepareElement(tempCellId.setIndex(index), getModelObject(index), m_propertiesImpl.configure(index, m_model));
 			}
 		}
 		for (int i = 0, size = renderContentItems.getSize(); i < size; i++)
@@ -192,12 +206,12 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 			Range range = renderContentItems.get(i);
 			for (int index = range.getStartIndex(), terminus = index + range.getLength(); index < terminus; index++)
 			{
-				m_view.renderContent(tempCellId.setIndex(index), getModelObject(index), configureCellProperties(index, m_model, tempProperties));
+				m_view.renderContent(tempCellId.setIndex(index), getModelObject(index), m_propertiesImpl.configure(index, m_model));
 			}
 		}
 	}
 	
-	protected void processChange(ChangeBase change, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	protected void processChange(ChangeBase change, ListCellPropertiesImpl tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
 	{
 		if (change instanceof PropertyChangeBase)
 		{
@@ -209,7 +223,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		}
 	}
 	
-	protected void processPropertyChange(PropertyChangeBase change, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	protected void processPropertyChange(PropertyChangeBase change, ListCellPropertiesImpl tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
 	{
 		if (ListModel.PROPERTY_ENABLED.equals(change.getName()))
 		{
@@ -217,7 +231,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		}
 	}
 	
-	protected void processListChange(IndexedChangeBase listChange, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	protected void processListChange(IndexedChangeBase listChange, ListCellPropertiesImpl tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
 	{
 		if (listChange instanceof ListChangeItemInsertion)
 		{
@@ -226,8 +240,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 			for (int index = itemInsertion.getIndex(), terminus = index + itemInsertion.getCount(); index < terminus; index++)
 			{
 				cellId.setIndex(index);
-				configureCellProperties(index, m_model, tempProperties);
-				m_view.insert(cellId, getModelObject(index), tempProperties);
+				m_view.insert(cellId, getModelObject(index), tempProperties.configure(index, m_model));
 			}
 		}
 		else if (listChange instanceof ListChangeItemRemoval)
@@ -246,7 +259,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		}
 	}
 	
-	protected void processItemPropertyChange(ListItemPropertyChange itemPropertyChange, Properties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
+	protected void processItemPropertyChange(ListItemPropertyChange itemPropertyChange, ListCellProperties tempProperties, IntRangeCollection renderStyleItems, IntRangeCollection renderContentItems)
 	{
 		int index = itemPropertyChange.getIndex();
 		int count = itemPropertyChange.getCount();
@@ -258,19 +271,6 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		{
 			renderContentItems.add(index, count);
 		}
-	}
-	
-	protected Properties configureCellProperties(int index, ListModel<?> model, Properties properties)
-	{
-		int hoverIndex = model.getHoverCell() != null ? ((IndexedCellId) model.getHoverCell()).getIndex() : -1;
-		properties.set(ListCellRenderer.PROPERTY_HOVER_INDEX, hoverIndex);
-		properties.set(ListCellRenderer.PROPERTY_HOVER, hoverIndex == index);
-		properties.set(ListCellRenderer.PROPERTY_SELECTED, model.isIndexSelected(index, false));
-		properties.set(ListCellRenderer.PROPERTY_DISABLED, ! model.isIndexEnabled(index));
-		properties.set(ListCellRenderer.PROPERTY_FIRST, index == 0);
-		properties.set(ListCellRenderer.PROPERTY_LAST, index == model.getSize() - 1);
-		properties.set(ListCellRenderer.PROPERTY_INDEX, index);
-		return properties;
 	}
 	
 //	public void modelChanged(ListModelEvent event)

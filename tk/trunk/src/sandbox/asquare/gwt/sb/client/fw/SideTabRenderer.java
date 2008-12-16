@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 
@@ -47,9 +45,10 @@ public class SideTabRenderer extends ListCellRendererDefault
 		super(listCellStyleName);
 	}
 	
-	public void renderCell(Element viewElement, Object modelElement, Properties properties)
+	@Override
+	public void renderCell(Element viewElement, Object modelElement, CellProperties properties)
 	{
-		DOM.setElementProperty(viewElement, "className", buildStyleName(modelElement, properties));
+		DOM.setElementProperty(viewElement, "className", buildStyleName(new StringBuilder(), modelElement, properties).toString());
 		final String newHtml = 
 			"<div class='Content'>" + String.valueOf(modelElement) + "</div>"; 
 		DOM.setInnerHTML(viewElement, newHtml);

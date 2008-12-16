@@ -15,9 +15,7 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
-public class ListCellRendererDefault extends CellRendererDefault implements ListCellRenderer
+public class ListCellRendererDefault extends CellRendererDefault
 {
 	public ListCellRendererDefault()
 	{
@@ -32,18 +30,9 @@ public class ListCellRendererDefault extends CellRendererDefault implements List
 	public ListCellRendererDefault(String elementBaseStyleName, StringFormatter formatter)
 	{
 		super(elementBaseStyleName != null ? elementBaseStyleName : ListView.STYLENAME_LIST_ITEM, formatter);
-	}
-	
-	protected String buildStyleName(Object modelElement, Properties properties)
-	{
-		String result = super.buildStyleName(modelElement, properties);
-		if (properties != null)
-		{
-			result = appendDependantStyle(result, StyleNames.FIRST, properties.getBoolean(PROPERTY_FIRST));
-			result = appendDependantStyle(result, StyleNames.LAST, properties.getBoolean(PROPERTY_LAST));
-			result = appendDependantStyle(result, StyleNames.ODD, properties.getBoolean(PROPERTY_ODD));
-			result = appendDependantStyle(result, StyleNames.EVEN, properties.getBoolean(PROPERTY_EVEN));
-		}
-		return result;
+		addDependentStyleNameRule(ListCellProperties.FIRST, true, StyleNames.FIRST);
+		addDependentStyleNameRule(ListCellProperties.LAST, true, StyleNames.LAST);
+		addDependentStyleNameRule(ListCellProperties.ODD, true, StyleNames.ODD);
+		addDependentStyleNameRule(ListCellProperties.EVEN, true, StyleNames.EVEN);
 	}
 }

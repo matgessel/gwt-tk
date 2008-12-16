@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 import com.google.gwt.user.client.Element;
 
 /**
@@ -33,30 +31,25 @@ import com.google.gwt.user.client.Element;
  */
 public interface CellRenderer
 {
-	public static final String PROPERTY_SELECTED = "selected";
-	public static final String PROPERTY_HOVER = "hover";
-	public static final String PROPERTY_ACTIVE = "active";
-	public static final String PROPERTY_DISABLED = "disabled";
-	
 	/**
 	 * This styles cell element and creates the <em>contents</em> of a cell.
 	 * 
 	 * @param viewElement the view cell element
 	 * @param modelElement an Object representing a value to display
-	 * @param properties a dictionary of properties which the formatter uses to
-	 *            style the view, or <code>null</code>
+	 * @param cellProperties a collection of properties which the formatter uses
+	 *            to style the view, or <code>null</code>
 	 */
-	void renderCell(Element viewElement, Object modelElement, Properties properties);
+	void renderCell(Element viewElement, Object modelElement, CellProperties cellProperties);
 	
 	/**
 	 * Styles the cell element. 
 	 * 
 	 * @param viewElement the view cell element
 	 * @param modelElement an Object representing a value to display
-	 * @param properties a dictionary of properties which the formatter uses to
-	 *            style the view, or <code>null</code>
+	 * @param cellProperties a collection of properties which the formatter uses
+	 *            to style the view, or <code>null</code>
 	 */
-	void prepareElement(Element viewElement, Object modelElement, Properties properties);
+	void prepareElement(Element viewElement, Object modelElement, CellProperties cellProperties);
 	
 	/**
 	 * Creates the cell contents. This is typically implemented by setting the
@@ -64,8 +57,8 @@ public interface CellRenderer
 	 * 
 	 * @param viewElement the view cell element
 	 * @param modelElement an Object representing a value to display
-	 * @param properties a dictionary of properties which the formatter uses to
-	 *            style the view, or <code>null</code>
+	 * @param cellProperties a collection of properties which the formatter uses
+	 *            to style the view, or <code>null</code>
 	 */
-	void renderContent(Element viewElement, Object modelElement, Properties properties);
+	void renderContent(Element viewElement, Object modelElement, CellProperties cellProperties);
 }

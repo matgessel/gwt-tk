@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 import com.google.gwt.user.client.Element;
 
 public class ListViewDefault extends CompositeCellViewBase implements ListView
@@ -76,12 +74,12 @@ public class ListViewDefault extends CompositeCellViewBase implements ListView
 		return m_structure.getCellElement(((IndexedCellId) cellId).getIndex());
 	}
 	
-	public void add(Object item, Properties cellProperties)
+	public void add(Object item, CellProperties cellProperties)
 	{
 		insert(new IndexedCellIdImpl(getSize()), item, cellProperties);
 	}
 	
-	public void insert(IndexedCellId cellId, Object item, Properties cellProperties)
+	public void insert(IndexedCellId cellId, Object item, CellProperties cellProperties)
 	{
 		getRenderer(cellId, item, cellProperties).renderCell(insertCellStructure(cellId.getIndex()), item, cellProperties);
 	}

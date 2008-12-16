@@ -15,7 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
 import asquare.gwt.tk.client.ui.CComposite;
 
 public abstract class CompositeCellViewBase extends CComposite implements CompositeCellView
@@ -51,22 +50,22 @@ public abstract class CompositeCellViewBase extends CComposite implements Compos
 	 * Template method which allows the view to override the default renderer
 	 * for a particular cell.
 	 */
-	protected CellRenderer getRenderer(CellId cellId, Object modelElement, Properties cellProperties)
+	protected CellRenderer getRenderer(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		return m_renderer;
 	}
 	
-	public void renderCell(CellId cellId, Object modelElement, Properties cellProperties)
+	public void renderCell(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		getRenderer(cellId, modelElement, cellProperties).renderCell(getCellRootElement(cellId), modelElement, cellProperties);
 	}
 	
-	public void prepareElement(CellId cellId, Object modelElement, Properties cellProperties)
+	public void prepareElement(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		getRenderer(cellId, modelElement, cellProperties).prepareElement(getCellRootElement(cellId), modelElement, cellProperties);
 	}
 	
-	public void renderContent(CellId cellId, Object modelElement, Properties cellProperties)
+	public void renderContent(CellId cellId, Object modelElement, CellProperties cellProperties)
 	{
 		getRenderer(cellId, modelElement, cellProperties).renderContent(getCellRootElement(cellId), modelElement, cellProperties);
 	}

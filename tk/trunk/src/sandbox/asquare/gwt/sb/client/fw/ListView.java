@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 /**
  * A list widget which displays arbitrary items. 
  * 
@@ -43,9 +41,9 @@ public interface ListView extends CompositeCellView
 	
 	void setEnabled(boolean enabled);
 	
-	void add(Object modelElement, Properties cellProperties);
+	void add(Object modelElement, CellProperties cellProperties);
 	
-	void insert(IndexedCellId cellId, Object modelElement, Properties cellProperties);
+	void insert(IndexedCellId cellId, Object modelElement, CellProperties cellProperties);
 	
 	void remove(IndexedCellId cellId);
 	
@@ -53,7 +51,9 @@ public interface ListView extends CompositeCellView
 	
 	int getSize();
 	
-	void prepareElement(CellId cellId, Object modelElement, Properties cellProperties);
+	// TODO trim(int size);
 	
-	void renderContent(CellId cellId, Object modelElement, Properties cellProperties);
+	void prepareElement(CellId cellId, Object modelElement, CellProperties cellProperties);
+	
+	void renderContent(CellId cellId, Object modelElement, CellProperties cellProperties);
 }

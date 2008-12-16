@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2008 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,12 +15,28 @@
  */
 package asquare.gwt.sb.client.fw;
 
-public interface ListCellRenderer extends CellRendererString
+/**
+ * {@link ListCellProperties} is a parameter object which is used to configure the
+ * {@link ListCellRenderer}.
+ */
+public interface ListCellProperties extends CellProperties
 {
-	public static final String PROPERTY_FIRST = "first";
-	public static final String PROPERTY_LAST = "last";
-	public static final String PROPERTY_INDEX = "index";
-	public static final String PROPERTY_ODD = "odd";
-	public static final String PROPERTY_EVEN = "even";
-	public static final String PROPERTY_HOVER_INDEX = "hoverIndex";
+	String FIRST = "first";
+	String LAST = "last";
+	String INDEX = "index";
+	String ODD = "odd";
+	String EVEN = "even";
+	String HOVER_INDEX = "hoverIndex";
+	
+	boolean isFirst();
+	
+	boolean isLast();
+	
+	int getIndex();
+	
+	boolean isOdd();
+	
+	boolean isEven();
+	
+	int getHoverIndex();
 }

@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.fw;
 
-import asquare.gwt.sb.client.util.Properties;
-
 /**
  * A formatter for side tabs.
  * <p>
@@ -46,18 +44,18 @@ public class SideTabRenderer3 extends ListCellRendererDefault
 		super(listCellStyleName);
 	}
 	
-	protected String getCellString(String valueString, Object modelObject, Properties properties)
+	@Override
+	protected String getCellString(String valueString, Object modelElement, CellProperties properties)
 	{
-		final String newHtml = 
-			"<div style='position:relative'>" + // enables Content div to be absolutely positioned
-				"<div class='bg'>" +
-					"<div class='top'>" +
-						"<div class='Content'><span style='visibility:hidden;'>" + valueString + "</span></div>" +
-					"</div>" +
-					"<div class='bottom' style='font-size:0;'></div>" +
+		return 
+		"<div style='position:relative'>" + // enables Content div to be absolutely positioned
+			"<div class='bg'>" +
+				"<div class='top'>" +
+					"<div class='Content'><span style='visibility:hidden;'>" + valueString + "</span></div>" +
 				"</div>" +
-				"<div class='Content' style='position:absolute;'>" + valueString + "</div>" +
-			"</div>";
-		return newHtml;
+				"<div class='bottom' style='font-size:0;'></div>" +
+			"</div>" +
+			"<div class='Content' style='position:absolute;'>" + valueString + "</div>" +
+		"</div>";
 	}
 }
