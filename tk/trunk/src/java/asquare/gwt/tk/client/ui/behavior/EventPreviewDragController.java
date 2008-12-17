@@ -72,8 +72,14 @@ public class EventPreviewDragController extends EventController
 		
 		protected void processEvent(EventBase event)
 		{
-			EventPreviewDragController.this.processEvent(event);
-			super.processEvent(event);
+			try
+			{
+				EventPreviewDragController.this.processEvent(event);
+			}
+			finally
+			{
+				super.processEvent(event);
+			}
 		}
 	}
 }
