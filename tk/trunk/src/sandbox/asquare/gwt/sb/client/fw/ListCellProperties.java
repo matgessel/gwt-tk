@@ -17,7 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 /**
  * {@link ListCellProperties} is a parameter object which is used to configure the
- * {@link ListCellRenderer}.
+ * {@link CellRenderer}.
  */
 public interface ListCellProperties extends CellProperties
 {
