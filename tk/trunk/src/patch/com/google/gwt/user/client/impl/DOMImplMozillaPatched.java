@@ -19,8 +19,6 @@ import com.google.gwt.user.client.Event;
 
 /**
  * Modifications to GWT's Mozilla implementation go here.
- * <strong>NOTICE</strong>:
- * portions of this file are copied from Google's DOMImplMozillaPatched: 
  */
 class DOMImplMozillaPatched extends DOMImplMozilla
 {
