@@ -223,7 +223,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		}
 		else
 		{
-			throw new IllegalArgumentException("TODO: handle all event types");
+			throw new IllegalArgumentException("TODO: handle event type=" + DOM.eventGetType(event));
 		}
 		return result;
 	}
