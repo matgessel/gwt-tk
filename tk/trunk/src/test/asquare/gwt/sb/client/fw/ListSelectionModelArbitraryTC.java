@@ -271,6 +271,16 @@ public class ListSelectionModelArbitraryTC extends TestCase
 		m_model.setSelectionRange(6, 4);
 		assertEquals(6, m_model.getAnchorIndex());
 		assertEquals(4, m_model.getLeadIndex());
+		
+		// previous discontiguous selection
+		setupImpl();
+		m_model.setSelectionRange(1, 1);
+		m_model.addSelectionRange(3, 3);
+		m_model.setSelectionRange(1, 1);
+		TkTestUtil.assertEqualValues(new int[]{1}, m_model.getSelectedIndices());
+		m_model.addSelectionRange(3, 3);
+		m_model.setSelectionRange(3, 3);
+		TkTestUtil.assertEqualValues(new int[]{3}, m_model.getSelectedIndices());
 	}
 	
 //	public void testSetIndexSelected()

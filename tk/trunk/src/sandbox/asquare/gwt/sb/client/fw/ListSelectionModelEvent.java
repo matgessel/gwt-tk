@@ -51,7 +51,7 @@ public class ListSelectionModelEvent extends ModelChangeEvent
 	 */
 	private void sweep(Range range, RangeCollection ranges)
 	{
-		for (int i = 0, size = ranges.getSize(); i < size; i++)
+		for(int i = ranges.getSize() - 1; i >= 0; i--)
 		{
 			Range candidate = ranges.get(i);
 			Range intersection = range.intersect(candidate);
