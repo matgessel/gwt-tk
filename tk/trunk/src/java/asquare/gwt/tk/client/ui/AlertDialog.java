@@ -406,50 +406,74 @@ public class AlertDialog extends ModalDialog
 	{
 		return m_buttonPanel.getWidgetCount();
 	}
-	
-	/**
-	 * Adds a button to button panel.
-	 * 
-	 * @param text the text to display in the button
-	 * @param hotKey the keycode of a key which will execute the widget's
-	 *            associated command when pressed
-	 * @param command a command to execute if the button is clicked, or
-	 *            <code>null</code>
-	 * @param type a constant representing special button behavior
-	 */
+
+    /**
+     * Adds a button to button panel. When the button is clicked, the dialog
+     * will be closed and the specified command will be executed.
+     * 
+     * @param text the text to display in the button
+     * @param hotKey the keycode of a key which will execute the widget's
+     *            associated command when pressed
+     * @param command a command to execute if the button is clicked, or
+     *            <code>null</code>
+     * @param type a constant representing special button behavior
+     */
 	public void addButton(String text, char hotKey, Command command, int type)
 	{
 		addButton(new Button(text), hotKey, command, type);
 	}
-	
-	/**
-	 * Adds a widget to button panel. The widget will be added to the focus
-	 * cycle if it implements {@link HasFocus} and does not have a tabIndex < 0.
-	 * The widget must implement {@link SourcesClickEvents}. When a button is
-	 * clicked, the dialog will be closed and the specified command will be
-	 * executed.
-	 * 
-	 * @param widget the widget to add
-	 * @param hotKey the keycode of a key which will execute the widget's
-	 *            associated command when pressed
-	 * @param command a command to execute if the button is clicked, or
-	 *            <code>null</code>
-	 * @param type a constant representing special button behavior
-	 * @throws ClassCastException if <code>widget</code> does not implement
-	 *             {@link SourcesClickEvents}
-	 */
-	public void addButton(Widget widget, char hotKey, final Command command, int type)
+    
+    /**
+     * Adds a widget to button panel. The widget will be added to the focus
+     * cycle if it implements {@link HasFocus} and does not have a tabIndex < 0.
+     * The widget must implement {@link SourcesClickEvents}. When the widget is
+     * clicked, the dialog will be closed and the specified command will be
+     * executed.
+     * 
+     * @param widget the widget to add
+     * @param hotKey the keycode of a key which will execute the widget's
+     *            associated command when pressed
+     * @param command a command to execute if the widget is clicked, or
+     *            <code>null</code>
+     * @param type a constant representing special button behavior
+     * @throws ClassCastException if <code>widget</code> does not implement
+     *             {@link SourcesClickEvents}
+     */
+    public void addButton(Widget widget, char hotKey, final Command command, int type)
+    {
+        addButton(widget, hotKey, type, true, command);
+    }
+
+    /**
+     * Adds a widget to button panel. The widget will be added to the focus
+     * cycle if it implements {@link HasFocus} and does not have a tabIndex < 0.
+     * The widget must implement {@link SourcesClickEvents}. When the widget is
+     * clicked, the specified command will be executed.
+     * 
+     * @param widget the widget to add
+     * @param hotKey the keycode of a key which will execute the widget's
+     *            associated command when pressed
+     * @param type a constant representing special button behavior
+     * @param closeDialog <code>true</code> to close the dialog when the
+     *            button is clicked
+     * @param command a command to execute if the widget is clicked, or
+     *            <code>null</code>
+     * @throws ClassCastException if <code>widget</code> does not implement
+     *             {@link SourcesClickEvents}
+     */
+    public void addButton(Widget widget, char hotKey, int type, final boolean closeDialog, final Command command)
 	{
 		SourcesClickEvents clickable = (SourcesClickEvents) widget;
 		boolean focusable = widget instanceof HasFocus;
+        final HideAndExecuteCommand command0 = new HideAndExecuteCommand(AlertDialog.this, closeDialog, command);
 		
-		clickable.addClickListener(new ClickListener()
-		{
-			public void onClick(Widget sender)
-			{
-				new HideAndExecuteCommand(AlertDialog.this, command).execute();
-			}
-		});
+	    clickable.addClickListener(new ClickListener()
+        {
+            public void onClick(Widget sender)
+            {
+                command0.execute();
+            }
+        });
 		m_buttonPanel.add(widget);
 		if (focusable)
 		{
@@ -466,11 +490,11 @@ public class AlertDialog extends ModalDialog
 		}
 		if ((type & BUTTON_CANCEL) != 0)
 		{
-			m_keyMap.put((char) KeyEvent.KEYCODE_ESCAPE, command);
+			m_keyMap.put((char) KeyEvent.KEYCODE_ESCAPE, command0);
 		}
 		if (hotKey > 0)
 		{
-			m_keyMap.put(Character.toUpperCase(hotKey), command);
+			m_keyMap.put(Character.toUpperCase(hotKey), command0);
 		}
 	}
 	
@@ -521,17 +545,27 @@ public class AlertDialog extends ModalDialog
 	public static class HideAndExecuteCommand implements Command
 	{
 		private final ModalDialog m_dialog;
-		private final Command m_command;
-		
-		public HideAndExecuteCommand(ModalDialog dialog, Command command)
+		private final boolean m_hide;
+        private final Command m_command;
+        
+        public HideAndExecuteCommand(ModalDialog dialog, Command command)
+        {
+            this(dialog, true, command);
+        }
+        
+        public HideAndExecuteCommand(ModalDialog dialog, boolean hide, Command command)
 		{
 			m_dialog = dialog;
+			m_hide = hide;
 			m_command = command;
 		}
 		
 		public void execute()
 		{
-			m_dialog.hide();
+			if (m_hide)
+			{
+			    m_dialog.hide();
+			}
 			if (m_command != null)
 			{
 				DeferredCommand.addCommand(m_command);
@@ -556,8 +590,7 @@ public class AlertDialog extends ModalDialog
 			char keyCode = (char) KeyEventImpl.getKeyCode(event);
 			if (dialog.getKeyMap().containsKey(keyCode))
 			{
-				Command command = dialog.getKeyMap().get(keyCode);
-				new HideAndExecuteCommand(dialog, command).execute();
+				dialog.getKeyMap().get(keyCode).execute();
 				return false;
 			}
 			return true;
