@@ -22,35 +22,28 @@ package asquare.gwt.sb.client.fw;
  */
 public interface StringFormatter
 {
-	/**
-	 * Get the String value to be displayed in a view cell. Strings may contain
-	 * html decorations.
-	 * 
-	 * <pre>
-	 * String getString(Object modelElement)
-	 * {
-	 *   String result = String.valueOf(modelElement);
-	 *   boolean valid = validate(modelElement);
-	 *   if (! valid)
-	 *   {
-	 *     return "&lt;span style='color:red;'&gt;" + result + "&lt;/span&gt;"
-	 *   }
-	 *   return result;
-	 * }
-	 * </pre>
-	 * @param modelElement the model element being displayed
-	 * @return the String representation of <code>modelElement</code>
-	 */
+	 /*
+	  * TODO: add getAttributedString() or getRenderingHints() to enable, for
+	  * example, negative values to be rendered in red?
+	  */
+	 
+	 /**
+	  * Get the String value to be displayed in a view cell. Strings typically
+	  * <em>cannot</em> contain html markup.
+	  * 
+	  * @param modelElement the model element being displayed
+	  * @return the String representation of <code>modelElement</code>
+	  */
 	String getString(Object modelElement);
-	
-	/**
-	 * Get the String value to be displayed in the cell editor. E.g. a financial
-	 * application may add a currency symbol for viewing, but the cell editor
-	 * uses numeric values only.
-	 * 
-	 * @param modelElement
-	 * @return a String, or <code>null</code> to use the
-	 *         {@link #getString(Object)} value
-	 */
+
+    /**
+     * Get the String value to be displayed in the cell editor. E.g. a financial
+     * application may add a currency symbol for viewing, but the cell editor
+     * uses numeric values only.
+     * 
+     * @param modelElement
+     * @return a String, or <code>null</code> to use the
+     *         {@link #getString(Object)} value
+     */
 	String getEditingString(Object modelElement);
 }

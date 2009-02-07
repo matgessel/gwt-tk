@@ -30,6 +30,15 @@ public class DomUtilTC extends GWTTestCase
 	{
 		return Tests.getModuleName();
 	}
+    
+    public void testEscapeMarkup()
+    {
+        String html = "<span style=\"color:red;\">-19.38</span>";
+//        String escapedHtml = "&lt;span style=\"color:red;\"&gt;-19.38&lt;/span&gt;";
+        String escapedHtml = "&lt;span style=\"color:red;\">-19.38&lt;/span>";
+        
+        assertEquals(escapedHtml, DomUtil.escapeMarkup(html));
+    }
 
 	public void testAppendText()
 	{

@@ -14,17 +14,19 @@
  the License.
  -->
 <module>
-	<inherits name='com.google.gwt.user.User'/>
-	
-	<inherits name='asquare.gwt.debug.BrowserInfo'/>
-	
-	<replace-with class="asquare.gwt.debug.client.impl.DebugImplOpera">
-		<when-type-is class="asquare.gwt.debug.client.impl.DebugImpl"/>
-		<when-property-is name="user.agent" value="opera"/>
-	</replace-with>
-	
-	<replace-with class="asquare.gwt.debug.client.impl.DebugImplSafari">
-		<when-type-is class="asquare.gwt.debug.client.impl.DebugImpl"/>
-		<when-property-is name="user.agent" value="safari"/>
-	</replace-with>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.user.Debug'/>
+    <inherits name='asquare.gwt.debug.BrowserInfo'/>
+    
+    <replace-with class="asquare.gwt.debug.client.impl.DebugImplOpera">
+        <when-type-is class="asquare.gwt.debug.client.impl.DebugImpl"/>
+        <when-property-is name="user.agent" value="opera"/>
+    </replace-with>
+    
+    <replace-with class="asquare.gwt.debug.client.impl.DebugImplSafari">
+        <when-type-is class="asquare.gwt.debug.client.impl.DebugImpl"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+
+    <set-property name="gwt.enableDebugId" value="true"/> 
 </module>

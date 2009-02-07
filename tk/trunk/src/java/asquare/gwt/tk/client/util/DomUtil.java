@@ -35,8 +35,28 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class DomUtil
 {
-	private static DomUtilImpl s_impl = (DomUtilImpl) GWT.create(DomUtilImpl.class);
+	private static final DomUtilImpl s_impl = (DomUtilImpl) GWT.create(DomUtilImpl.class);
+	private static final Element s_tempRenderElement = DOM.createSpan();
+
+	/**
+	 * Escapes HTML markup in the specified string.
+	 */
+	public static String escapeMarkup(String text)
+	{
+		s_tempRenderElement.setInnerText(text);
+		return s_tempRenderElement.getInnerHTML();
+	}
 	
+//	public static native String escapeMarkup(String valueString) /*-{
+//    	var elem = @asquare.gwt.sb.client.fw.CellRendererDefault::s_tempRenderElement;
+//    	if (elem.firstChild)
+//    	{
+//    	    elem.removeChild(elem.firstChild);
+//    	}
+//    	elem.appendChild($doc.createTextNode(valueString));
+//    	return elem.innerHTML;
+//    }-*/;
+
 	/**
 	 * Appends text to a #text node which is a child of the element. Drills down
 	 * recursivly via '.firstChild' until a #text node is found. 
@@ -111,7 +131,7 @@ public class DomUtil
 	 */
 	public static String getElementName(Element element)
 	{
-	    return element.getNodeName();
+		return element.getNodeName();
 	}
 	
 	/**

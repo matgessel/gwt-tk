@@ -17,7 +17,7 @@ package asquare.gwt.sb.client.fw;
 
 import java.util.ArrayList;
 
-import asquare.gwt.tk.client.util.GwtUtil;
+import asquare.gwt.tk.client.util.*;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -36,6 +36,7 @@ public class CellRendererDefault implements CellRendererString
 	private RuleCollection m_styleRules = null;
 	private String m_elementStyleName;
 	private StringFormatter m_formatter;
+	private boolean m_escapeMarkup = true;
 	
 	public CellRendererDefault()
 	{
@@ -87,6 +88,26 @@ public class CellRendererDefault implements CellRendererString
 		
 		m_formatter = formatter;
 	}
+	
+	public boolean isEscapeMarkup()
+    {
+        return m_escapeMarkup;
+    }
+
+    /**
+     * Instructs the renderer to escape HTML markup in values to be rendered.
+     * Default is <code>true</code>. Specifying <code>false</code> will enable
+     * HTML script injection if the data being rendererd is not from a trusted
+     * source.
+     * 
+     * @param escape <code>false</code> to allow HTML markup to be rendered in
+     *            cells
+     * @see #escapeMarkup(String)
+     */
+	public void setEscapeMarkup(boolean escape)
+    {
+        m_escapeMarkup = escape;
+    }
 	
 	/**
 	 * Configures the renderer to add the specified dependent style name if
@@ -267,22 +288,10 @@ public class CellRendererDefault implements CellRendererString
 	public void renderContent(Element viewElement, Object modelElement, CellProperties properties)
 	{
 		final String valueString = getValueString(modelElement, properties);
-		final String cellString = getCellString(valueString, modelElement, properties);
+		final String safeValueString = (m_escapeMarkup) ? escapeMarkup(valueString) : valueString;
+		final String nonEmptyValueString = ("".equals(safeValueString)) ? "&nbsp;" : safeValueString;
+		final String cellString = getCellString(nonEmptyValueString, modelElement, properties);
 		DOM.setInnerHTML(viewElement, cellString);
-	}
-	
-	/**
-	 * Template method for decorating text returned by the formatter.
-	 * Implementors can use this method to create complex cells.
-	 * <p>
-	 * This implementation simply returns the input string.
-	 * 
-	 * @param valueString the string provided by the formatter
-	 * @return an HTML snippet describing the entire content of the cell
-	 */
-	protected String getCellString(String valueString, Object modelElement, CellProperties properties)
-	{
-		return valueString;
 	}
 	
 	/**
@@ -292,10 +301,34 @@ public class CellRendererDefault implements CellRendererString
 	 */
 	protected String getValueString(Object modelElement, CellProperties properties)
 	{
-		String result = m_formatter.getString(modelElement);
-		return (result != null && result.length() > 0) ? result : "&nbsp;";
+        return m_formatter.getString(modelElement);
+	}
+
+    /**
+     * Escapes HTML markup in the string returned by
+     * {@link #getValueString(Object, CellProperties)}.
+     * 
+     * @see #setEscapeMarkup(boolean)
+     */
+	protected String escapeMarkup(String valueString)
+	{
+        return DomUtil.escapeMarkup(valueString);
 	}
 	
+    /**
+     * Template method for decorating text returned by the formatter.
+     * Implementors can use this method to create complex cells.
+     * <p>
+     * This implementation simply returns the input string.
+     * 
+     * @param valueString the string provided by the formatter
+     * @return an HTML snippet describing the entire content of the cell
+     */
+    protected String getCellString(String valueString, Object modelElement, CellProperties properties)
+    {
+        return valueString;
+    }
+    
 	private static class RuleCollection
 	{
 		private final ArrayList<String> m_rendererProperties = new ArrayList<String>();

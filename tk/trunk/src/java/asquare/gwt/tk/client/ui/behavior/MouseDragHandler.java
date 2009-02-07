@@ -64,8 +64,14 @@ public class MouseDragHandler extends EventController
 		if (m_dragGesture != null)
 		{
 			m_mouseDown = e;
-			m_dragGesture.start(e);
-			m_previousEvent = e;
+			try
+			{
+                m_dragGesture.start(e);
+			}
+			finally
+			{
+	            m_previousEvent = e;
+			}
 		}
 	}
 	
@@ -73,8 +79,14 @@ public class MouseDragHandler extends EventController
 	{
 		if (m_mouseDown != null)
 		{
-			m_dragGesture.step(new DragEventImpl((MouseEventImpl) e, (MouseEventImpl) m_mouseDown, (MouseEventImpl) m_previousEvent));
-			m_previousEvent = e;
+			try
+            {
+	            m_dragGesture.step(new DragEventImpl((MouseEventImpl) e, (MouseEventImpl) m_mouseDown, (MouseEventImpl) m_previousEvent));
+            }
+            finally
+            {
+                m_previousEvent = e;
+            }
 		}
 	}
 	
@@ -85,8 +97,14 @@ public class MouseDragHandler extends EventController
 		{
             // clear MD first to prevent reentrancy
             m_mouseDown = null;
-            m_dragGesture.finish();
-			m_previousEvent = null;
+            try
+            {
+                m_dragGesture.finish();
+            }
+            finally
+            {
+                m_previousEvent = null;
+            }
 		}
 	}
 }
