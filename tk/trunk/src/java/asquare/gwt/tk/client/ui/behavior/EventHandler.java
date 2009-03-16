@@ -43,4 +43,5 @@ public interface EventHandler extends PluggableEventHandler
 	void processMouseOut(MouseEvent e);
 	void processMouseOver(MouseEvent e);
 	void processMouseUp(MouseEvent e);
+	void processMouseWheel(MouseWheelEvent e);
 }

@@ -58,7 +58,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 	
 	/**
 	 * @param eventBits additional events to sink, or to use the event bits
-	 *            <code>0</code> from the handlers
+	 *			<code>0</code> from the handlers
 	 * @param handler an EventHandler or <code>null</code>
 	 */
 	public EventControllerBase(int eventBits, EventHandler handler)
@@ -197,6 +197,10 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 	{
 	}
 	
+	public void onMouseWheel(MouseWheelEvent e)
+	{
+	}
+	
 	public void onFocusGained(FocusEvent e)
 	{
 	}
@@ -212,6 +216,10 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		if (MouseEventImpl.isMouseEvent(eventType))
 		{
 			result = new MouseEventImpl(widget, event, eventType, previewPhase);
+		}
+		else if (MouseWheelEventImpl.isMouseWheelEvent(eventType))
+		{
+			result = new MouseWheelEventImpl(widget, event, eventType, previewPhase);
 		}
 		else if (KeyEventImpl.isKeyEvent(eventType))
 		{
@@ -233,6 +241,10 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		if (event instanceof MouseEvent)
 		{
 			processMouseEvent((MouseEvent) event);
+		}
+		else if (event instanceof MouseWheelEvent)
+		{
+			processMouseWheel((MouseWheelEvent) event);
 		}
 		else if (event instanceof KeyEvent)
 		{
@@ -275,6 +287,23 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 			case MouseEvent.MOUSE_DOUBLECLICK:
 				processMouseDoubleClick(mouseEvent);
 				break;
+		}
+	}
+	
+	public void processMouseWheel(MouseWheelEvent e)
+	{
+		onMouseWheel(e);
+		
+		if (! hasHandlers())
+			return;
+		
+		for (int i = 0, size = m_handlers.size(); i < size; i++)
+		{   
+			EventHandler handler = m_handlers.get(i);
+			if ((handler.getEventBits() & MouseWheelEvent.MOUSE_WHEEL) != 0)
+			{
+				handler.processMouseWheel(e);
+			}
 		}
 	}
 	

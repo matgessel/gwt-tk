@@ -104,4 +104,9 @@ public class EventHandlerWrapper implements EventHandler
 	{
 		m_delegate.processMouseUp(e);
 	}
+	
+	public void processMouseWheel(MouseWheelEvent e)
+	{
+	    m_delegate.processMouseWheel(e);
+	}
 }
