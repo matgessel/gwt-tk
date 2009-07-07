@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>GWT Focus event tests</title>
+	<LINK rel="stylesheet" type="text/css"/ href="style.css">
+	<STYLE type="text/css">
+		.pass {
+			border: solid 2px green;
+		}
+		.fail {
+			border: solid 2px red;
+		}
+		td {
+		  vertical-align: top;
+		}
+	</STYLE>
+	<SCRIPT type="text/javascript">
+		pass = function(id)
+		{
+			element = document.getElementById(id);
+			element["className"] = "pass";
+		}
+	</SCRIPT>
+</head>
+
+<body>
+<script language="javascript" src="asquare.gwt.tests.focusevent.Demo.nocache.js"></script>
+<DIV id="bugReport">
+	<h2>GWT Focus event tests</h2>
+	<P class="module"><code>asquare.gwt.tests.focusevent.Demo</code></P>
+	
+	<H4>Description</H4>
+	<P>Tests FocusWidget derivatives to see if event 
+		listeners are notified of onfocus event. </P>
+	
+	<H4>GWT Version</H4>
+	<P>Windows 1.1</P>
+	
+	<H4>Platforms Tested</H4>
+	<p>Hosted browser (XP), IE6 (XP), FFox 1.5 (XP), Opera 9 (XP), Safari (OS 10.4), Camino (OS 10.4)</p>
+	
+	<H4>Platforms Affected</H4>
+	<p>Varies, see test results</p>
+
+	<H4>Reproduction</H4>
+	<pre>
+Click on or tab through the widgets below. 
+
+Expected: widget's onfocus event handler is called and its border turns green
+
+Actual: results vary by platform and widget
+	</pre>
+	<p><a href="onfocusResults_1.1.html">Test Results</a></p>
+</DIV>
+
+<TABLE><TR><TD>
+	<P>Pure HTML onfocus Event Handler </P>
+	<div id="buttondiv" class="fail"><INPUT type="button" value="button" onfocus="pass('buttondiv');"/></div>
+	<div id="checkboxdiv" class="fail"><LABEL for="checkbox">checkbox</LABEL><INPUT id="checkbox" type="checkbox"onfocus="pass('checkboxdiv');"/></div>
+	<div id="radiodiv" class="fail"><LABEL for="radio">radio</LABEL><INPUT id="radio" type="radio" name="radiogroup" onfocus="pass('radiodiv');"/></div>
+	<div id="textdiv" class="fail"><INPUT type="text" value="text" onfocus="pass('textdiv');"/></div>
+	<div id="passworddiv" class="fail"><INPUT type="password" value="password" onfocus="pass('passworddiv');"></div>
+	<div id="textareadiv" class="fail"><TEXTAREA onfocus="pass('textareadiv');">textarea</TEXTAREA></div>
+	<div id="selectdiv" class="fail"><SELECT onfocus="pass('selectdiv');">
+		<OPTION>Select</OPTION>
+		<OPTION>2</OPTION>
+		<OPTION>3</OPTION>
+	</SELECT></div>
+</TD>
+<TD id="gwt">
+</TD></TR></TABLE>
+</body>
+</html>

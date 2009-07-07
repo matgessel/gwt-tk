@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>GWT History Bug Demo</title>
+	<meta name='gwt:module' content='asquare.gwt.tests.history.Demo'>
+	<LINK rel="stylesheet" type="text/css"/ href="style.css">
+</head>
+
+<body>
+<script language="javascript" src="gwt.js"></script>
+<iframe id="__gwt_historyFrame" style="width:0;height:0;border:0"></iframe>
+<DIV id="bugReport">
+	<h2>GWT History Bug Demo</h2>
+	<P class="module"><code>asquare.gwt.tests.history.client.Demo</code></P>
+	
+	<H4>Description</H4>
+	<P>History breaks if doc has element with same id as history token</P>
+	
+	<H4>GWT Version</H4>
+	<P>Windows 1.3.3</P>
+	
+	<H4>Platforms Tested</H4>
+	<p>Hosted Browser (XP), IE6 (XP), FFox 1.5 (XP), Opera (XP), Safari (OS 10.4.7)</p>
+	
+	<H4>Platforms Affected</H4>
+	<P>Hosted Browser (XP), IE6 (XP)</P>
+
+	<H4>Reproduction</H4>
+	<pre>
+	1. click Stimulants, Fruit, Vegetabes, Grains
+	2. click the browser back button 3 times
+	Expected: tabs are shown this order: Vegetables, Fruit, Stimulants
+	Actual: tabs are changed this order: Vegetables, Fruit, Fruit
+	
+	Note that the history token changes in the location bar but the tab does not change after fruit.
+	The document has element with an id=&quot;fruit&quot;. If this is changed the bug will no longer reproduce. 
+	Note: This test must be performed on a webserver (i.e. GWT shell). History does not work with IE6 off the filesystem.</pre>
+</DIV>
+</body>
+</html>

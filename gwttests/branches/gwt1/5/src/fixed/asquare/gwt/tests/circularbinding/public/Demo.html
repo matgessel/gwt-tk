@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>Circular binding demo</title>
+	<LINK rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<script language="javascript" src="asquare.gwt.tests.circularbinding.Demo.nocache.js"></script>
+<DIV id="bugReport">
+	<h2>Circular binding demo</h2>
+	<P class="module"><code>asquare.gwt.tests.circularbinding.Demo</code></P>
+	
+	<H4>Description</H4>
+	<p>GWT compiler produces infinite loop as a result of super 
+		method call in implementation class. </p>
+	
+	<H4>GWT Version</H4>
+	<P>1.2.11, 1.1.10</P>
+	
+	<H4>Platforms Tested</H4>
+	<p>IE6 (XP), FF1.5 (XP)</p>
+	
+	<H4>Platforms Affected</H4>
+	<P>IE6 (XP), FF1.5 (XP)</P>
+
+	<H4>Reproduction</H4>
+	<pre>
+	Click on the element labeled "Click me"
+	
+	Expected: text is written to the TextArea
+	
+	Actual Result: stack overflow error
+	</pre>
+</DIV>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>Button Blur Bug Demo</title>
+	<meta name='gwt:module' content='asquare.gwt.tests.buttonblur.Demo'>
+	<LINK rel="stylesheet" type="text/css"/ href="style.css">
+</head>
+
+<body>
+<script language="javascript" src="gwt.js"></script>
+<DIV id="bugReport">
+	<h2>Button Blur Bug Demo</h2>
+	<P class="module"><code>asquare.gwt.tests.buttonblur.Demo</code></P>
+	
+	<H4>Description</H4>
+	<P>onblur event handler is called in Opera whenever a button is clicked</P>
+	
+	<H4>GWT Version</H4>
+	<P>1.3.3</P>
+	
+	<H4>Platforms Tested</H4>
+	<p>Hosted Browser (XP), IE6 (XP), FFox 1.5 (XP), Opera 9.01 (XP), Safari 2.0.4 (OS 10.4.7), Camino 1.0.2 (OS 10.4.7)</p>
+	
+	<H4>Platforms Affected</H4>
+	<P>Opera 9.01 (XP)</P>
+	
+	<H4>Reproduction</H4>
+	<pre>click on the buttons below and observe the output in the debug console
+	
+	Expected: onfocus is reported when button is first clicked, onblur is reported when button is blurred
+	
+	Actual Result: onblur is reported whenever button is clicked (and again when button is blurred)
+	</pre>
+</DIV>
+<P><button onfocus="Debug.println('nativeButton.onfocus')" onblur="Debug.println('nativeButton.onblur')">nativeButton</button></P>
+
+</body>
+</html>

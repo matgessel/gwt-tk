@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+	<title>Programmatic focus bug demo</title>
+	<LINK rel="stylesheet" type="text/css"/ href="style.css">
+</head>
+
+<body>
+<script language="javascript" src="asquare.gwt.tests.focus.Demo.nocache.js"></script>
+<DIV id="bugReport">
+	<h2>Programmatic focus bug demo</h2>
+	<P class="module"><code>asquare.gwt.tests.focus.Demo</code></P>
+	
+	<H4>Description</H4>
+	<P>Programmatically focusing CheckBox fails</P>
+	
+	<H4>GWT Version</H4>
+	<P>Windows 1.1</P>
+	
+	<H4>Platforms Tested</H4>
+	<p>IE6 (XP), FFox 1.5 (XP)</p>
+	
+	<H4>Platforms Affected</H4>
+	<P>All</P>
+
+	<H4>Reproduction</H4>
+	<pre>
+Click the "focus" button next to the checkbox. 
+Expected: "focus" button loses focus, checkbox gains focus
+Actual: nothing happens</pre>
+	
+	<H4>Detail</H4>
+	<p>The GWT CheckBox component is comopsite of a SPAN, INPUT and LABEL elements. 
+		HasFocus.setFocus() is attempting to focus the span. </p>	
+	<p>CheckBox is focusable by normal tabbing. </p>	
+	<p>This bug interferes with implementation of programmatic focus cycles. </p>	
+	<p>Also affects RadioButton. </p>	
+</DIV>
+</body>
+</html>

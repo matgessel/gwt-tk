@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/fixed"/>
+	<classpathentry kind="src" path="src/working"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="lib" path="lib/gwttk-debug-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GWT Latest"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
