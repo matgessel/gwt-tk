@@ -15,16 +15,14 @@
  */
 package asquare.gwt.tests.circularbinding.client;
 
-import com.google.gwt.user.client.Event;
-
 public class DOM2Impl
 {
-	public int eventGetClientX(Event event)
+	public int eventGetClientX()
 	{
 		return 10;
 	}
 
-	public native int eventGetClientY(Event evt) /*-{
+	public native int eventGetClientY() /*-{
 		return 10;
 	}-*/;
 }

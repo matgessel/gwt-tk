@@ -20,6 +20,8 @@ import asquare.gwt.tk.client.ui.RowPanel;
 import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 
@@ -29,9 +31,9 @@ public class Demo implements EntryPoint
 	{
 		RowPanel outer = new RowPanel();
 		
-		Button showGP = new Button("Show GlassPanel", new ClickListener()
+		Button showGP = new Button("Show GlassPanel", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				GlassPanel gp = new GlassPanel();
 				gp.addController(new HideGlassPanelController());

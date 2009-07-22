@@ -21,6 +21,8 @@ import asquare.gwt.debug.client.*;
 import asquare.gwt.tk.client.ui.*;
 import asquare.gwt.tk.client.util.*;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.FlexTable.*;
@@ -93,49 +95,49 @@ public class DebugPanel extends Composite
 		
 		// debug output
 		table.setHTML(0, 0, "Debug&nbsp;output ");
-		table.setWidget(0, 1, new Button("enable", new ClickListener()
+		table.setWidget(0, 1, new Button("enable", new ClickHandler()
 				{
-					public void onClick(Widget sender)
+					public void onClick(ClickEvent event)
 					{
 						Debug.enable();
 					}
 				}));
-		table.setWidget(0, 2, new Button("disable", new ClickListener()
+		table.setWidget(0, 2, new Button("disable", new ClickHandler()
 				{
-					public void onClick(Widget sender)
+					public void onClick(ClickEvent event)
 					{
 						Debug.disable();
 					}
 				}));
 		
 		table.setHTML(1, 0, "Debug&nbsp;console ");
-		table.setWidget(1, 1, new Button("enable", new ClickListener()
+		table.setWidget(1, 1, new Button("enable", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				DebugConsole.getInstance().enable();
 			}
 		}));
-		table.setWidget(1, 2, new Button("disable", new ClickListener()
+		table.setWidget(1, 2, new Button("disable", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				DebugConsole.getInstance().disable();
 			}
 		}));
 		
 		table.setHTML(2, 0, "Event&nbsp;tracing ");
-		table.setWidget(2, 1, new Button("enable", new ClickListener()
+		table.setWidget(2, 1, new Button("enable", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				eventListener.enable(true);
 				Debug.println("You can trace any event. Some events are ignored by default");
 			}
 		}));
-		table.setWidget(2, 2, new Button("disable", new ClickListener()
+		table.setWidget(2, 2, new Button("disable", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				eventListener.enable(false);
 			}
@@ -184,11 +186,11 @@ public class DebugPanel extends Composite
 		eventToMask.add(new EventToMask("ondblclick", Event.ONDBLCLICK));
 		eventToMask.add(new EventToMask("onerror", Event.ONERROR));
 		
-		ClickListener checkBoxController = new ClickListener()
+		ClickHandler checkBoxController = new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
-				CheckBox cb = (CheckBox) sender;
+				CheckBox cb = (CheckBox) event.getSource();
 				String eventText = cb.getText();
                 EventToMask mapping = null;
                 for (int i = 0, size = eventToMask.size(); i < size; i++)
@@ -201,7 +203,7 @@ public class DebugPanel extends Composite
                     }
                 }
 				int traceEventMask = m_eventListener.getEventMask();
-				if (cb.isChecked())
+				if (cb.getValue())
 				{
 					traceEventMask |= mapping.m_eventMask;
 				}
@@ -227,13 +229,13 @@ public class DebugPanel extends Composite
 		return panel;
 	}
 	
-	private void addCheckBox(ColumnPanel parent, String label, int mask, ClickListener listener)
+	private void addCheckBox(ColumnPanel parent, String label, int mask, ClickHandler listener)
 	{
 		CheckBox cb = new CheckBox(label);
 		DomUtil.setStyleAttribute(cb, "display", "block");
 		DomUtil.setStyleAttribute(cb, "whiteSpace", "nowrap");
-		cb.setChecked((m_eventListener.getEventMask() & mask) != 0);
-		cb.addClickListener(listener);
+		cb.setValue((m_eventListener.getEventMask() & mask) != 0);
+		cb.addClickHandler(listener);
 		parent.addWidget(cb, false);
 	}
 	

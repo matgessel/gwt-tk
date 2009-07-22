@@ -15,7 +15,7 @@
  */
 package com.google.gwt.dom.client;
 
-public class DOMImplIE6Patched extends DOMImplIE6
+class DOMImplIE6Patched extends DOMImplIE6
 {
 	@Override
 	public String imgGetSrc(Element img)

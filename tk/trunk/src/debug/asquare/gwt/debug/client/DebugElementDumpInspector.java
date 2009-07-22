@@ -47,6 +47,7 @@ public class DebugElementDumpInspector extends DebugEventListener
 		Debug.init();
 	}
 	
+	@Override
 	protected void doEvent(Event event)
 	{
 		Element target = DOM.eventGetTarget(event);

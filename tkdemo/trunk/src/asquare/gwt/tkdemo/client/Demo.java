@@ -60,7 +60,7 @@ public class Demo implements EntryPoint
 		CTabBar tabbar = new CTabBar(new ListWidgetVTable(), new SideTabRenderer3());
         tabbar.removeController(tabbar.getController(CompositeCellViewHoverController.class));
 		tabbar.setStyleName("DemoTabBar");
-		History.addHistoryListener(new TabModelUpdateController(panels, tabbar.getListModel()));
+		History.addValueChangeHandler(new TabModelUpdateController(panels, tabbar.getListModel()));
 		tabPanel.add(tabbar);
 		tabPanel.setCellStyleName("DemoTabPanel-tabBar");
 		

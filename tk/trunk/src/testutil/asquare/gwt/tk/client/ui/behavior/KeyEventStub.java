@@ -18,13 +18,11 @@ package asquare.gwt.tk.client.ui.behavior;
 public class KeyEventStub extends InputEventStub implements KeyEvent
 {
 	private final int m_keyCode;
-    private final boolean m_autoRepeat;
     
-    public KeyEventStub(int type, int keyCode, boolean autoRepeat, boolean previewPhase)
+    public KeyEventStub(int type, int keyCode, boolean previewPhase)
 	{
         super(type, previewPhase);
         m_keyCode = keyCode;
-        m_autoRepeat = autoRepeat;
 	}
 
     public int getKeyCode()
@@ -35,10 +33,5 @@ public class KeyEventStub extends InputEventStub implements KeyEvent
     public char getKeyPressChar()
     {
         return (char) m_keyCode;
-    }
-
-    public boolean isAutoRepeat()
-    {
-        return m_autoRepeat;
     }
 }

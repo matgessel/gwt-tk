@@ -19,13 +19,13 @@ import com.google.gwt.user.client.Event;
 
 public class DOM2ImplIE6Patched extends DOM2Impl
 {
-	public int eventGetClientX(Event event)
+	public int eventGetClientX()
 	{
-		return super.eventGetClientX(event) - 5;
+		return super.eventGetClientX() - 5;
 	}
 
 	public int eventGetClientY(Event event)
 	{
-		return super.eventGetClientY(event) - 5;
+		return super.eventGetClientY() - 5;
 	}
 }

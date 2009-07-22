@@ -15,9 +15,10 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -26,8 +27,15 @@ import com.google.gwt.user.client.ui.Widget;
  * {@link MouseEvent}s. It is often cleaner to use an independent controller
  * for preview events since events may be treated differently.
  */
-public class EventPreviewControllerTemporary extends EventControllerBase implements EventPreview
+public class EventPreviewControllerTemporary extends EventControllerBase implements NativePreviewHandler
 {
+	private HandlerRegistration m_registration;
+	
+	public EventPreviewControllerTemporary()
+	{
+		this(0, null);
+	}
+	
 	public EventPreviewControllerTemporary(int eventBits)
 	{
 		this(eventBits, null);
@@ -44,7 +52,7 @@ public class EventPreviewControllerTemporary extends EventControllerBase impleme
 			throw new NullPointerException();
 		
 		plugIn(widget);
-		DOM.addEventPreview(this);
+		m_registration = Event.addNativePreviewHandler(this);
 	}
 	
 	public void stop()
@@ -55,8 +63,9 @@ public class EventPreviewControllerTemporary extends EventControllerBase impleme
 	@Override
 	public void unplug(Widget widget)
 	{
-        DOM.removeEventPreview(this);
-        super.unplug(widget);
+        m_registration.removeHandler();
+        m_registration = null;
+		super.unplug(widget);
 	}
 	
 	/**
@@ -65,14 +74,16 @@ public class EventPreviewControllerTemporary extends EventControllerBase impleme
 	 * @throws IllegalStateException if the controller has EventPreview but its
 	 *             widget is no longer attached
 	 */
-    public boolean onEventPreview(Event event)
+    public void onPreviewNativeEvent(Event.NativePreviewEvent event)
 	{
-		if ((DOM.eventGetType(event) & getEventBits()) != 0)
+    	if ((event.getTypeInt() & getEventBits()) != 0)
 		{
-			EventBase event0 = convertEvent(getPluggedInWidget(), event, true);
+			EventBase event0 = convertEvent(getPluggedInWidget(), Event.as(event.getNativeEvent()), true);
 			processEvent(event0);
-			return ! event0.isKillPreviewEvent();
+			if (event0.isKillPreviewEvent())
+			{
+				event.cancel();
+			}
 		}
-		return true;
 	}
 }

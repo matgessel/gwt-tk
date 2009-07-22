@@ -19,6 +19,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 
+@Deprecated
 public class CKeyboardListenerAdaptor extends KeyboardListenerCollection implements Controller
 {
 	private static final long serialVersionUID = 1L;

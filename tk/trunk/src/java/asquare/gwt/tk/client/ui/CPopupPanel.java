@@ -15,17 +15,19 @@
  */
 package asquare.gwt.tk.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import asquare.gwt.tk.client.ui.behavior.Controller;
-import asquare.gwt.tk.client.ui.behavior.ControllerSupport;
-import asquare.gwt.tk.client.ui.behavior.ControllerSupportDelegate;
+import asquare.gwt.tk.client.ui.behavior.*;
 import asquare.gwt.tk.client.ui.behavior.AdjustObjectGesture.Positionable;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,8 +36,9 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class CPopupPanel extends PopupPanel implements ControllerSupport, Positionable
 {
+	private static final PopupPanelController s_controller = (PopupPanelController) GWT.create(PopupPanelController.class);
+	
 	private final ControllerSupportDelegate m_controllerSupport = new ControllerSupportDelegate(this);
-	private final EventPreviewDelegate m_eventPreview = (EventPreviewDelegate) GWT.create(EventPreviewDelegate.class);
 	
 	/**
 	 * Creates a popup panel with auto hide disabled. 
@@ -63,7 +66,9 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 */
 	protected List<Controller> createControllers()
 	{
-		return null;
+		List<Controller> result = new ArrayList<Controller>();
+		result.add(s_controller);
+		return result;
 	}
 	
 	/*
@@ -148,15 +153,6 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	
 	/*
 	 * (non-Javadoc)
-	 * @see com.google.gwt.user.client.ui.PopupPanel#onEventPreview(com.google.gwt.user.client.Event)
-	 */
-	public boolean onEventPreview(Event event)
-	{
-		return m_eventPreview.onEventPreview(event, super.onEventPreview(event));
-	}
-	
-	/*
-	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
 	public void onBrowserEvent(Event event)
@@ -187,38 +183,58 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	/**
 	 * This class basically exists to deal with the Firefox/scroll bug. 
 	 */
-	protected static class EventPreviewDelegate
+	public static class PopupPanelController extends ControllerAdaptor
 	{
-		/**
-		 * @param event
-		 * @param superResult the result of <code>PopupPanel{@link #onEventPreview(Event, boolean)}</code>
-		 * @return <code>false</code> to cancel the event
-		 */
-		public boolean onEventPreview(Event event, boolean superResult)
+		public PopupPanelController()
 		{
-			return superResult;
+			super(PopupPanelController.class);
+		}
+		
+		public void plugIn(Widget widget)
+		{
+			// NOOP
+		}
+		
+		public void unplug(Widget widget)
+		{
+			// NOOP
 		}
 	}
 	
-	protected static class EventPreviewDelegateFF extends EventPreviewDelegate
+	public static class PopupPanelControllerFF extends PopupPanelController implements NativePreviewHandler
 	{
-		public boolean onEventPreview(Event event, boolean superResult)
+		private HandlerRegistration m_registration;
+		
+		@Override
+		public void plugIn(Widget widget)
 		{
-			if (! DomUtil.isMac() && (DOM.eventGetType(event) & Event.MOUSEEVENTS) != 0)
+			m_registration = Event.addNativePreviewHandler(this);
+		}
+		
+		@Override
+		public void unplug(Widget widget)
+		{
+			m_registration.removeHandler();
+		}
+		
+		public void onPreviewNativeEvent(NativePreviewEvent event)
+		{
+			if ((event.getTypeInt() & Event.MOUSEEVENTS) != 0)
+			if (! DomUtil.isMac())
 			{
 				/*
 				 * The client area is bounded by the scroll bars. If a mouse
 				 * event is outside the client area it must be targeted to a
 				 * scroll bar. Override default behavior to allow these events.
 				 */
-				int clientX = DOM.eventGetClientX(event);
-				int clientY = DOM.eventGetClientY(event);
+				int clientX = event.getNativeEvent().getClientX();
+				int clientY = event.getNativeEvent().getClientY();
 				if (clientX > DomUtil.getViewportWidth() || clientY > DomUtil.getViewportHeight())
 				{
-					return true;
+					// overrides PopupPanel's call to NativePreviewEvent.cancel()
+					event.consume();
 				}
 			}
-			return super.onEventPreview(event, superResult);
 		}
 	}
 }

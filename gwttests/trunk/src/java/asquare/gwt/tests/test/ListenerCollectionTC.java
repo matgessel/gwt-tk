@@ -15,10 +15,11 @@
  */
 package asquare.gwt.tests.test;
 
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.ui.PopupListener;
-import com.google.gwt.user.client.ui.PopupListenerCollection;
-import com.google.gwt.user.client.ui.PopupPanel;
 
 public class ListenerCollectionTC extends GWTTestCase
 {
@@ -29,28 +30,48 @@ public class ListenerCollectionTC extends GWTTestCase
 	
 	public void testConcurrentModification()
 	{
-		PopupListenerCollection popupListenerCollection = new PopupListenerCollection();
-		popupListenerCollection.add(new PopupListenerStub());
-		popupListenerCollection.add(new PopupListenerStub());
-		popupListenerCollection.add(new PopupListener()
+		final HandlerManager listeners = new HandlerManager(this);
+		listeners.addHandler(EventStub.TYPE, new EventHandlerStub());
+		listeners.addHandler(EventStub.TYPE, new EventHandlerStub());
+		final HandlerRegistration[] registration = new HandlerRegistration[1];
+		registration[0] = listeners.addHandler(EventStub.TYPE, new EventHandlerStub()
 		{
-			public void onPopupClosed(PopupPanel sender, boolean autoClosed)
+			@Override
+			public void handle()
 			{
-				// do some cleanup
-				
-				sender.removePopupListener(this);
-
-				// schedule a focus event
+//				listeners.removeHandler(EventStub.TYPE, this); // deprecated method
+				registration[0].removeHandler();
 			}
 		});
-		popupListenerCollection.add(new PopupListenerStub());
-		popupListenerCollection.add(new PopupListenerStub());
+		listeners.addHandler(EventStub.TYPE, new EventHandlerStub());
+		listeners.addHandler(EventStub.TYPE, new EventHandlerStub());
+		
+		listeners.fireEvent(new EventStub());
+		// side-effect: listener removal
+		listeners.fireEvent(new EventStub());
 	}
 	
-	private static class PopupListenerStub implements PopupListener
+	private static class EventHandlerStub implements EventHandler
 	{
-		public void onPopupClosed(PopupPanel sender, boolean autoClosed)
+		public void handle()
 		{
+		}
+	}
+	
+	private static class EventStub extends GwtEvent<EventHandlerStub>
+	{
+		private static final Type<EventHandlerStub> TYPE = new Type<EventHandlerStub>();
+		
+		@Override
+		protected void dispatch(EventHandlerStub handler)
+		{
+			handler.handle();
+		}
+
+		@Override
+		public Type<EventHandlerStub> getAssociatedType()
+		{
+			return null;
 		}
 	}
 }

@@ -15,6 +15,8 @@
  */
 package asquare.gwt.debug.client;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -107,7 +109,7 @@ public class DebugConsole extends DialogBox
 		controlsRight.add(clearButton);
 		
 		final Button hideButton = new Button("Hide");
-		DOM.setStyleAttribute(hideButton.getElement(), "text-align", "right");
+		DOM.setStyleAttribute(hideButton.getElement(), "textAlign", "right");
 		controlsRight.add(hideButton);
 		
 		setWidget(outer);
@@ -116,10 +118,11 @@ public class DebugConsole extends DialogBox
 		
 		m_enabler.install();
 		
-		ClickListener controller = new ClickListener()
+		ClickHandler handler = new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
+				Widget sender = (Widget) event.getSource();
 				if (sender == clearButton)
 				{
 					clearMessages();
@@ -149,10 +152,10 @@ public class DebugConsole extends DialogBox
 				}
 			}
 		};
-		toggleDebugButton.addClickListener(controller);
-		m_disableButton.addClickListener(controller);
-		clearButton.addClickListener(controller);
-		hideButton.addClickListener(controller);
+		toggleDebugButton.addClickHandler(handler);
+		m_disableButton.addClickHandler(handler);
+		clearButton.addClickHandler(handler);
+		hideButton.addClickHandler(handler);
 		
 		sinkEvents(Event.ONMOUSEDOWN);
 		preventSelectionInIE(getElement());
@@ -361,17 +364,20 @@ public class DebugConsole extends DialogBox
 			super(defaultEnableKey, 0, "Debug Console enabler");
 		}
 		
+		@Override
 		protected void doDisabled()
 		{
 			DebugConsole.this.disable();
 		}
 		
+		@Override
 		protected void doEnabled()
 		{
 			DebugConsole.this.enable();
 			DebugConsole.this.show();
 		}
 		
+		@Override
 		protected void doEvent(Event event)
 		{
 			// NOOP

@@ -415,16 +415,19 @@ public class Debug
 			super(Debug.DEFAULT_ENABLE_KEY, 0, "Debug enabler");
 		}
 		
+		@Override
 		protected void doDisabled()
 		{
 			Debug.disable();
 		}
 		
+		@Override
 		protected void doEnabled()
 		{
 			Debug.enable();
 		}
 		
+		@Override
 		protected void doEvent(Event event)
 		{
 			// NOOP

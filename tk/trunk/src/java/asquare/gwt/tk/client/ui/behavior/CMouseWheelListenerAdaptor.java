@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.MouseWheelListener;
 import com.google.gwt.user.client.ui.MouseWheelListenerCollection;
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public class CMouseWheelListenerAdaptor extends MouseWheelListenerCollection implements Controller
 {
 	private static final long serialVersionUID = 1L;

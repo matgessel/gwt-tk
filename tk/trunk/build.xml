@@ -89,7 +89,7 @@
 	
 	<target name="gwtCompileModuleBoth">
 		<antcall target="gwtCompileModuleDebug">
-			<param name="gwt.out" value=""/>
+			<param name="gwt.war" value=""/>
 		</antcall>
 		<antcall target="gwtCompileModule"/>
 	</target>
@@ -98,7 +98,7 @@
 		<description>Compiles to human readable script with debug statements</description>
 		<antcall target="gwtCompileModule">
 			<param name="gwt.style" value="PRETTY"/>
-			<param name="gwt.out" value="build/${module}/www-debug"/>
+			<param name="gwt.war" value="build/${module}/war-debug"/>
 			<param name="gwttk.debug" value="true"/>
 		</antcall>
 	</target>
@@ -107,14 +107,14 @@
 		<description>Compiles obfuscated code without debug statments</description>
 		<property name="src.dir" value="src/${module}"/>
 		<property name="gwt.logLevel" value="INFO"/>
-		<property name="gwt.out" value="build/${module}/www"/>
+		<property name="gwt.war" value="build/${module}/war"/>
 		<property name="gwt.style" value="OBF"/>
 		<property name="gwt.module" value="${gwt.module.package}.${gwt.module.name}"/>
 		<condition property="debug.jar.location" value="build/debug" else="build/debugstub">
 			<istrue value="${gwttk.debug}"/>
 		</condition>
 		
-		<java classname="com.google.gwt.dev.GWTCompiler" failonerror="true" fork="true">
+		<java classname="com.google.gwt.dev.Compiler" failonerror="true" fork="true">
   	        <jvmarg value="-client"/>
   	        <jvmarg value="-Xmx128M"/>
 			<sysproperty key="java.awt.headless" value="true"/>
@@ -133,8 +133,8 @@
 			</classpath>
 			<arg value="-logLevel"/>
 			<arg value="${gwt.logLevel}"/>
-			<arg value="-out"/>
-			<arg value="${gwt.out}"/>
+			<arg value="-war"/>
+			<arg value="${gwt.war}"/>
 			<arg value="-style"/>
 			<arg value="${gwt.style}"/>
 			<arg value="${gwt.module}"/>
@@ -335,10 +335,10 @@
 		<delete>
 			<fileset dir="${deliverableDir}" includes="**/*"/>
 		</delete>
-		<java classname="com.google.gwt.dev.GWTCompiler" classpathref="project.full.classpath" fork="true">
+		<java classname="com.google.gwt.dev.Compiler" classpathref="project.full.classpath" fork="true">
 			<arg value="-logLevel"/>
 			<arg value="${gwt.logLevel}"/>
-			<arg value="-out"/>
+			<arg value="-war"/>
 			<arg value="${deliverableDir}"/>
 			<arg value="-style"/>
 			<arg value="OBF"/>
@@ -369,7 +369,7 @@
 
 	<target name="gwtToolUsage">
 		<description>Prints usage messages for GWT tools</description>
-		<java classname="com.google.gwt.dev.GWTCompiler" classpathref="gwt.classpath" fork="true">
+		<java classname="com.google.gwt.dev.Compiler" classpathref="gwt.classpath" fork="true">
 			<arg value="-help"/>
 		</java>
 		<echo message="*************************"/>

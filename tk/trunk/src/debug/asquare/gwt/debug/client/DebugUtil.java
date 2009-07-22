@@ -15,10 +15,11 @@
  */
 package asquare.gwt.debug.client;
 
+import java.util.ArrayList;
+
 import com.google.gwt.dom.client.*;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.*;
 
 /**
  * Contains debugging utility methods. 
@@ -45,6 +46,10 @@ public class DebugUtil
 		if ((eventMask & Event.ONCLICK) != 0)
 		{
 			result.append("click ");
+		}
+		if ((eventMask & Event.ONCONTEXTMENU) != 0)
+		{
+			result.append("contextmenu ");
 		}
 		if ((eventMask & Event.ONDBLCLICK) != 0)
 		{
@@ -183,7 +188,7 @@ public class DebugUtil
 		return 
 		"char=" + (char) DOM.eventGetKeyCode(event) + 
 		",keyCode=" + DOM.eventGetKeyCode(event) + 
-		",modifiers=" + KeyboardListenerCollection.getKeyboardModifiers(event) + 
+		",modifiers=" + createModifiersString(event) + 
 		",target=" + getTagName(DOM.eventGetTarget(event));
 	}
 	
@@ -195,8 +200,44 @@ public class DebugUtil
 		",screenX=" + DOM.eventGetScreenX(event) + 
 		",screenY=" + DOM.eventGetScreenY(event) + 
 		",buttons=" + DOM.eventGetButton(event) + 
-		",modifiers=" + KeyboardListenerCollection.getKeyboardModifiers(event) + 
+		",modifiers=" + createModifiersString(event) + 
 		",target=" + getTagName(DOM.eventGetTarget(event));
+	}
+	
+	private static String createModifiersString(Event event)
+	{
+		ArrayList<String> modifiers = new ArrayList<String>();
+		if (event.getShiftKey())
+		{
+			modifiers.add("shift");
+		}
+		if (event.getCtrlKey())
+		{
+			modifiers.add("ctrl");
+		}
+		if (event.getAltKey())
+		{
+			modifiers.add("alt");
+		}
+		if (event.getMetaKey())
+		{
+			modifiers.add("meta");
+		}
+		
+		if (modifiers.size() == 0)
+			return "()";
+		
+		StringBuilder result = new StringBuilder("(");
+		for (int i = 0, size = modifiers.size(); i < size; i++)
+		{
+			if (i > 0)
+			{
+				result.append('|');
+			}
+			result.append(modifiers.get(i));
+		}
+		result.append(')');
+		return result.toString();
 	}
 	
 	/**

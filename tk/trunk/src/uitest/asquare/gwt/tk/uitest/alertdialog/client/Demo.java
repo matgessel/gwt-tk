@@ -23,6 +23,8 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -34,6 +36,7 @@ public class Demo implements EntryPoint
 		
 		new DebugEventListener('x', Event.ONMOUSEDOWN, null)
 		{
+			@Override
 			protected void doEvent(Event event)
 			{
 				Element target = DOM.eventGetTarget(event);
@@ -64,6 +67,7 @@ public class Demo implements EntryPoint
 		}.install();
 		new DebugEventListener('z', Event.ONMOUSEDOWN, "Offset hierarchy inspector")
 		{
+			@Override
 			protected void doEvent(Event event)
 			{
 				Element target = DOM.eventGetTarget(event);
@@ -84,9 +88,9 @@ public class Demo implements EntryPoint
 		
 		final Button button = new Button();
 		button.setText("Default Info dialog");
-		button.addClickListener(new ClickListener()
+		button.addClickHandler(new ClickHandler()
 		{
-			public void onClick(final Widget aSender)
+			public void onClick(ClickEvent event)
 			{
 				final AlertDialog alert =
 				AlertDialog.createInfo(new Command()

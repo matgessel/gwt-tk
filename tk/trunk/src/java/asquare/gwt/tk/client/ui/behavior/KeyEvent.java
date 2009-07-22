@@ -15,8 +15,8 @@
  */
 package asquare.gwt.tk.client.ui.behavior;
 
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.KeyboardListener;
 
 public interface KeyEvent extends InputEvent
 {
@@ -25,22 +25,22 @@ public interface KeyEvent extends InputEvent
 	int KEY_UP = Event.ONKEYUP;
 	int KEY_EVENTS = Event.ONKEYDOWN | Event.ONKEYPRESS | Event.ONKEYUP;
 	
-	int KEYCODE_ALT = KeyboardListener.KEY_ALT;
-	int KEYCODE_BACKSPACE = KeyboardListener.KEY_BACKSPACE;
-	int KEYCODE_CTRL = KeyboardListener.KEY_CTRL;
-	int KEYCODE_DELETE = KeyboardListener.KEY_DELETE;
-	int KEYCODE_DOWN = KeyboardListener.KEY_DOWN;
-	int KEYCODE_END = KeyboardListener.KEY_END;
-	int KEYCODE_ENTER = KeyboardListener.KEY_ENTER;
-	int KEYCODE_ESCAPE = KeyboardListener.KEY_ESCAPE;
-	int KEYCODE_HOME = KeyboardListener.KEY_HOME;
-	int KEYCODE_LEFT = KeyboardListener.KEY_LEFT;
-	int KEYCODE_PAGEDOWN = KeyboardListener.KEY_PAGEDOWN;
-	int KEYCODE_PAGEUP = KeyboardListener.KEY_PAGEUP;
-	int KEYCODE_RIGHT = KeyboardListener.KEY_RIGHT;
-	int KEYCODE_SHIFT = KeyboardListener.KEY_SHIFT;
-	int KEYCODE_TAB = KeyboardListener.KEY_TAB;
-	int KEYCODE_UP = KeyboardListener.KEY_UP;
+	int KEYCODE_ALT = KeyCodes.KEY_ALT;
+	int KEYCODE_BACKSPACE = KeyCodes.KEY_BACKSPACE;
+	int KEYCODE_CTRL = KeyCodes.KEY_CTRL;
+	int KEYCODE_DELETE = KeyCodes.KEY_DELETE;
+	int KEYCODE_DOWN = KeyCodes.KEY_DOWN;
+	int KEYCODE_END = KeyCodes.KEY_END;
+	int KEYCODE_ENTER = KeyCodes.KEY_ENTER;
+	int KEYCODE_ESCAPE = KeyCodes.KEY_ESCAPE;
+	int KEYCODE_HOME = KeyCodes.KEY_HOME;
+	int KEYCODE_LEFT = KeyCodes.KEY_LEFT;
+	int KEYCODE_PAGEDOWN = KeyCodes.KEY_PAGEDOWN;
+	int KEYCODE_PAGEUP = KeyCodes.KEY_PAGEUP;
+	int KEYCODE_RIGHT = KeyCodes.KEY_RIGHT;
+	int KEYCODE_SHIFT = KeyCodes.KEY_SHIFT;
+	int KEYCODE_TAB = KeyCodes.KEY_TAB;
+	int KEYCODE_UP = KeyCodes.KEY_UP;
 	
 	/**
 	 * Gets a code representing a specific keyboard key which was pressed or
@@ -60,9 +60,4 @@ public interface KeyEvent extends InputEvent
 	 * @throws IllegalStateException if event is other than onkeypress
 	 */
 	char getKeyPressChar();
-	
-	/**
-	 * TODO: throw exception when reading on unsupported key events?
-	 */
-	boolean isAutoRepeat();
 }

@@ -17,6 +17,10 @@ package asquare.gwt.tk.client.ui;
 
 import asquare.gwt.tk.client.util.DomUtil;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
@@ -29,10 +33,8 @@ import com.google.gwt.user.client.ui.*;
  * <li>.tk-SimpleHyperLink { }</li>
  * </ul>
  */
-public class SimpleHyperLink extends Widget implements HasText, HasHTML, SourcesClickEvents
+public class SimpleHyperLink extends Widget implements HasText, HasHTML, HasClickHandlers
 {
-	private ClickListenerCollection m_listeners;
-	
 	public SimpleHyperLink()
 	{
 		this(null, null);
@@ -47,9 +49,9 @@ public class SimpleHyperLink extends Widget implements HasText, HasHTML, Sources
 	 * Constructs a new SimpleHyperLink
 	 * 
 	 * @param text a String or null
-	 * @param clickListener a ClickListener or null
+	 * @param clickHandler a ClickHandler or <code>null</code>
 	 */
-	public SimpleHyperLink(String text, ClickListener clickListener)
+	public SimpleHyperLink(String text, ClickHandler clickHandler)
 	{
 		setElement(DOM.createAnchor());
 		
@@ -65,9 +67,9 @@ public class SimpleHyperLink extends Widget implements HasText, HasHTML, Sources
 			setText(text);
 		}
 		
-		if (clickListener != null)
+		if (clickHandler != null)
 		{
-			addClickListener(clickListener);
+			addClickHandler(clickHandler);
 		}
 	}
 	
@@ -75,13 +77,9 @@ public class SimpleHyperLink extends Widget implements HasText, HasHTML, Sources
 	{
 		if (DOM.eventGetType(event) == Event.ONCLICK)
 		{
-			if (m_listeners != null)
-			{
-				m_listeners.fireClick(this);
-			}
-			// keep '#' out of the location bar
 			DOM.eventPreventDefault(event);
 		}
+		super.onBrowserEvent(event);
 	}
 	
 	// HasText methods
@@ -106,21 +104,8 @@ public class SimpleHyperLink extends Widget implements HasText, HasHTML, Sources
 		DOM.setInnerHTML(getElement(), html);
 	}
 	
-	// SourcesClickEvents methods
-	public void addClickListener(ClickListener listener)
+	public HandlerRegistration addClickHandler(ClickHandler handler)
 	{
-		if (m_listeners == null)
-		{
-			m_listeners = new ClickListenerCollection();
-		}
-		m_listeners.add(listener);
-	}
-
-	public void removeClickListener(ClickListener listener)
-	{
-		if (m_listeners != null)
-		{
-			m_listeners.remove(listener);
-		}
+		return addDomHandler(handler, ClickEvent.getType());
 	}
 }

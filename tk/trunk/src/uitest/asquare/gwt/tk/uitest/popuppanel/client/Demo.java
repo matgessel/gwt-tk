@@ -21,6 +21,8 @@ import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 
 public class Demo implements EntryPoint
@@ -40,9 +42,9 @@ public class Demo implements EntryPoint
 		RowPanel outer = new RowPanel();
 		outer.add(new HTML("<h3>Default transparency test</h3>"));
 		final Button button = new Button("Show popup");
-		button.addClickListener(new ClickListener()
+		button.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				PopupPanel popup = new PopupPanel(true);
 				popup.setPopupPosition(button.getAbsoluteLeft(), button.getAbsoluteTop() + button.getOffsetHeight());
@@ -64,9 +66,8 @@ public class Demo implements EntryPoint
 		
 		outer.add(new HTML("<h3>Popup transparency</h3><p>Hover over a widget</p>"));
 		
-		ListBox list = new ListBox();
+		ListBox list = new ListBox(true);
 		list.setVisibleItemCount(4);
-		list.setMultipleSelect(true);
 		list.addItem("ListBox");
 		list.addItem("1");
 		list.addItem("2");

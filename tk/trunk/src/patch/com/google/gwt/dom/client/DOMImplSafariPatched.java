@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ * Copyright 2009 Mat Gessel <mat.gessel@gmail.com>
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -13,9 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.google.gwt.user.client.impl;
-
-import com.google.gwt.user.client.Event;
+package com.google.gwt.dom.client;
 
 /**
  * Modifications to GWT's Safari implementation go here. 
@@ -26,9 +24,9 @@ class DOMImplSafariPatched extends DOMImplSafari
 	private static final boolean VERSION2 = isSafari2();
 	
 	@Override
-	public native int eventGetButton(Event evt) /*-{
+	public native int eventGetButton(NativeEvent evt) /*-{
 		var button = evt.button;
-		if (@com.google.gwt.user.client.impl.DOMImplSafariPatched::VERSION2)
+		if (@com.google.gwt.dom.client.DOMImplSafariPatched::VERSION2)
 		{
 			return button || -1;
 		}

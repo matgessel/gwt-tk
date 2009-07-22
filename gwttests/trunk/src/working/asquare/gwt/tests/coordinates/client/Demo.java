@@ -19,12 +19,13 @@ import asquare.gwt.debug.client.*;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
 
 public class Demo implements EntryPoint
 {
@@ -32,23 +33,16 @@ public class Demo implements EntryPoint
 	{
 		DialogBox dialog = new DialogBox()
 		{
-			public void onMouseUp(Widget sender, int x, int y)
 			{
-				super.onMouseUp(sender, x, y);
+				addDomHandler(new MouseDownHandler()
+				{
+					public void onMouseDown(MouseDownEvent event)
+					{
+						Debug.println("DialogBox.onMouseDown(" + event.getX() + "," + event.getY() + ")");
+					}
+				}, MouseDownEvent.getType());
 			}
-		
-			public void onMouseMove(Widget sender, int x, int y)
-			{
-				super.onMouseMove(sender, x, y);
-			}
-		
-			public void onMouseDown(Widget sender, int x, int y)
-			{
-				Debug.println("DialogBox.onMouseDown(" + x + "," + y + ")");
-				super.onMouseDown(sender, x, y);
-			}
-		
-		}; 
+		};
 		dialog.setText("Dialog Caption");
 		Image image = new Image("one.gif");
 		DOM.setStyleAttribute(image.getElement(), "height", "100px");

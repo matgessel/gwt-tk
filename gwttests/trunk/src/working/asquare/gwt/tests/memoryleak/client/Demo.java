@@ -16,6 +16,8 @@
 package asquare.gwt.tests.memoryleak.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.*;
 
@@ -26,9 +28,9 @@ public class Demo implements EntryPoint
 	
 	public void onModuleLoad()
 	{
-		m_button.addClickListener(new ClickListener()
+		m_button.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				if (m_popupPanel == null)
 				{

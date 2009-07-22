@@ -29,9 +29,9 @@ public class CircularBindingTC extends GWTTestCase
 	public void testCallNativeSuper()
 	{
 		// this works
-		assertEquals(5, DOM2.eventGetClientX(null));
+		assertEquals(5, DOM2.eventGetClientX());
 		
 		// this results in an infinite loop
-		assertEquals(5, DOM2.eventGetClientY(null));
+		assertEquals(5, DOM2.eventGetClientY());
 	}
 }

@@ -15,14 +15,15 @@
  */
 package asquare.gwt.tests.history.client;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 
-public class TabController implements HistoryListener, TabListener
+public class TabController implements ValueChangeHandler<String>, SelectionHandler<Integer>
 {
 	private final TabCollection m_tabs;
 	private final TabPanel m_tabPanel;
@@ -49,9 +50,10 @@ public class TabController implements HistoryListener, TabListener
 		}
 	}
 	
-	// HistoryListener methods
-	public void onHistoryChanged(String historyToken)
+	// History
+	public void onValueChange(ValueChangeEvent<String> event)
 	{
+		String historyToken = event.getValue();
 		int tabIndex = m_tabs.getIndexForToken(historyToken);
 		if (tabIndex < 0)
 		{
@@ -60,14 +62,10 @@ public class TabController implements HistoryListener, TabListener
 		selectTab(tabIndex);
 	}
 	
-	// TabListener methods
-	public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex)
+	// Tab
+	public void onSelection(SelectionEvent<Integer> event)
 	{
-		return true;
-	}
-
-	public void onTabSelected(SourcesTabEvents sender, int tabIndex)
-	{
+		int tabIndex = event.getSelectedItem();
 		if (tabIndex != m_selectedTab)
 		{
 			History.newItem(m_tabs.getToken(tabIndex));

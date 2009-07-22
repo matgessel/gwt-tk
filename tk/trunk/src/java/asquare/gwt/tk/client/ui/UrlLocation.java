@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import asquare.gwt.tk.client.ui.commands.SelectAllCommand;
 
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.*;
 
@@ -28,14 +29,14 @@ import com.google.gwt.user.client.ui.*;
  * 
  * <p><em>This widget is a work in progress and therefore is subject to change. </em></p>
  */
-public class UrlLocation extends TextBox implements FocusListener, KeyboardListener
+public class UrlLocation extends TextBox implements FocusHandler, KeyDownHandler
 {
 	private ArrayList<URLListener> m_listeners = new ArrayList<URLListener>();
 	
 	public UrlLocation()
 	{
-		addFocusListener(this);
-		addKeyboardListener(this);
+		addFocusHandler(this);
+		addKeyDownHandler(this);
 	}
 	
 	public void addListener(URLListener listener)
@@ -63,18 +64,14 @@ public class UrlLocation extends TextBox implements FocusListener, KeyboardListe
 		setText(url);
 	}
 
-	// FocusListener methods
-	public void onFocus(Widget sender)
+	public void onFocus(FocusEvent event)
 	{
 		DeferredCommand.addCommand(new SelectAllCommand(this));
 	}
 
-	public void onLostFocus(Widget sender) {}
-
-	// KeyboardListener methods
-	public void onKeyPress(Widget sender, char keyCode, int modifiers)
+	public void onKeyDown(KeyDownEvent event)
 	{
-		if (keyCode == KeyboardListener.KEY_ENTER)
+		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER)
 		{
 			setFocus(false);
 			for (Iterator<URLListener> iter = m_listeners.iterator(); iter.hasNext();)
@@ -83,8 +80,4 @@ public class UrlLocation extends TextBox implements FocusListener, KeyboardListe
 			}
 		}
 	}
-	
-	public void onKeyDown(Widget sender, char keyCode, int modifiers) {}
-
-	public void onKeyUp(Widget sender, char keyCode, int modifiers) {}
 }

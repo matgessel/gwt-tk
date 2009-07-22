@@ -24,7 +24,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.impl.FocusImpl;
 
@@ -116,7 +116,7 @@ public class ModalDialog extends CPopupPanel
 	private CaptionWrapper m_caption = null;
 	private int m_minContentWidth = 200;
 	private int m_minContentHeight = 75;
-	private HasFocus m_focusOnCloseWidget;
+	private Focusable m_focusOnCloseWidget;
 	
 	public ModalDialog()
 	{
@@ -171,7 +171,7 @@ public class ModalDialog extends CPopupPanel
 	 */
 	public void setFocusModel(FocusModel focusModel)
 	{
-		// TODO: apply IoC? I.e. let interested object register for change notifications
+		// TODO: apply IoC? I.e. make m_focusModel a listenable property
 		m_focusModel = focusModel;
 		TabFocusController tabFocusController = (TabFocusController) getController(TabFocusController.class);
 		if (tabFocusController != null)
@@ -278,9 +278,9 @@ public class ModalDialog extends CPopupPanel
 		// pre: content row is created and is last row
 		m_panel.addWidget(w, false);
 		
-		if (w instanceof HasFocus)
+		if (w instanceof Focusable)
 		{
-			m_focusModel.add((HasFocus) w);
+			m_focusModel.add((Focusable) w);
 		}
 	}
 	
@@ -306,9 +306,9 @@ public class ModalDialog extends CPopupPanel
 		if (m_caption != null && w == m_panel.getWidgetAt(0, 0))
 			throw new IllegalArgumentException();
 		
-		if (w instanceof HasFocus)
+		if (w instanceof Focusable)
 		{
-			m_focusModel.remove((HasFocus) w);
+			m_focusModel.remove((Focusable) w);
 		}
 		
 		// pre: content row is created and is last row
@@ -407,7 +407,7 @@ public class ModalDialog extends CPopupPanel
 	 * 
 	 * @return a widget or <code>null</code>
 	 */
-	public HasFocus getFocusOnCloseWidget()
+	public Focusable getFocusOnCloseWidget()
 	{
 		return m_focusOnCloseWidget;
 	}
@@ -427,7 +427,7 @@ public class ModalDialog extends CPopupPanel
 	 * 
 	 * @param focusOnCloseWidget a widget to focus after this dialog is closed
 	 */
-	public void show(HasFocus focusOnCloseWidget)
+	public void show(Focusable focusOnCloseWidget)
 	{
 		m_focusOnCloseWidget = focusOnCloseWidget;
 		m_glassPanel.show();
@@ -533,7 +533,7 @@ public class ModalDialog extends CPopupPanel
 		public void plugIn(Widget widget)
 		{
 			final ModalDialog dialog = (ModalDialog) widget;
-			HasFocus focusWidget = dialog.getFocusModel().getCurrentWidget();
+			Focusable focusWidget = dialog.getFocusModel().getCurrentWidget();
 			Command focusCommand;
 			if (focusWidget != null)
 			{
@@ -565,7 +565,7 @@ public class ModalDialog extends CPopupPanel
 		
 		public void unplug(Widget widget)
 		{
-			HasFocus focusOnCloseWidget = ((ModalDialog) widget).getFocusOnCloseWidget();
+			Focusable focusOnCloseWidget = ((ModalDialog) widget).getFocusOnCloseWidget();
 			if (focusOnCloseWidget != null)
 			{
 				DeferredCommand.addCommand(new FocusCommand(focusOnCloseWidget));

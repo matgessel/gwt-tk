@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.FocusListener;
 import com.google.gwt.user.client.ui.FocusListenerCollection;
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public class CFocusListenerAdaptor extends FocusListenerCollection implements Controller
 {
 	private static final long serialVersionUID = 1L;

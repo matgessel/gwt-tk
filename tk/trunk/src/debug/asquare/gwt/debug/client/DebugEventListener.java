@@ -15,8 +15,11 @@
  */
 package asquare.gwt.debug.client;
 
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 
 /**
  * A UI event monitor. Event descriptions are output via
@@ -52,6 +55,8 @@ public class DebugEventListener
 	 * The default enabler key, which is <code>'e'</code>
 	 */
 	public static final char DEFAULT_ENABLE_KEY = 'e';
+	
+	private final Handler m_handler = new Handler();
 	
 	private final String m_name;
 	
@@ -111,16 +116,21 @@ public class DebugEventListener
 	/**
 	 * Installs this listener so that it listens to dispatched events. It will
 	 * not process events or produce output until it is enabled by pressing the
-	 * enable key twice or via {@link #enable(boolean)}. 
+	 * enable key twice or via {@link #enable(boolean)}.
+	 * 
+	 *  @throws IllegalStateException if already installed
 	 */
 	public void install()
 	{
-		EventPreviewDispatcher.addListener(this);
+		m_handler.init();
 	}
 	
+	/**
+	 *  @throws IllegalStateException if not installed
+	 */
 	public void uninstall()
 	{
-		EventPreviewDispatcher.removeListener(this);
+		m_handler.dispose();
 	}
 	
 	/**
@@ -211,20 +221,20 @@ public class DebugEventListener
 	}
 	
 	/**
-	 * Called by {@link EventPreviewDispatcher} when an event is previewed.
-	 * 
-	 * @param event
+	 * Called by when an event is previewed.
 	 */
-	public void eventDispatched(Event event)
+	public void eventDispatched(NativeEvent event)
 	{
+		Event event0 = Event.as(event);
+		
 		/* 
 		 * onKeyDown works with invisible characters (e.g. caps lock)
 		 * onKeyPress works with visible characters (i.e. [a-zA-Z0-9~!@#$%^&*()_+])
 		 */
-		int eventType = DOM.eventGetType(event);
+		int eventType = Event.getTypeInt(event0.getType());
 		if (eventType == Event.ONKEYDOWN)
 		{
-			char keyCode = (char) DOM.eventGetKeyCode(event);
+			char keyCode = (char) event0.getKeyCode();
 			if (isSameKey(keyCode, m_lastKeyDown) && isSameKey(keyCode, m_enableKey))
 			{
 				m_lastKeyDown = 0;
@@ -238,7 +248,7 @@ public class DebugEventListener
 		
 		if (m_enabled && (m_eventMask & eventType) != 0)
 		{
-			doEvent(event);
+			doEvent(event0);
 		}
 	}
 	
@@ -287,5 +297,31 @@ public class DebugEventListener
 	protected void doEvent(Event event)
 	{
 		Debug.println(DebugUtil.prettyPrintEvent(event));
+	}
+	
+	private class Handler implements NativePreviewHandler
+	{
+		private HandlerRegistration m_handlerRegistration;
+		
+		public void init()
+		{
+			if (m_handlerRegistration != null)
+				throw new IllegalStateException();
+			
+			m_handlerRegistration = Event.addNativePreviewHandler(this);
+		}
+		
+		public void dispose()
+		{
+			if (m_handlerRegistration != null)
+				throw new IllegalStateException();
+			
+			m_handlerRegistration.removeHandler();
+		}
+		
+		public void onPreviewNativeEvent(NativePreviewEvent event)
+		{
+			eventDispatched(event.getNativeEvent());
+		}
 	}
 }

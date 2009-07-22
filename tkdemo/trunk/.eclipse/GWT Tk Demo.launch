@@ -18,8 +18,8 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/GWT_RUNTIME"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.GWTShell"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-style PRETTY -out www asquare.gwt.tkdemo.Demo/Demo.html"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.HostedMode"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-style PRETTY -war war -startupUrl asquare.gwt.tkdemo.Demo/Demo.html asquare.gwt.tkdemo.Demo"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="GWT Tk Demo"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-enableassertions -Xmx128M"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:GWT Tk Demo/build}"/>

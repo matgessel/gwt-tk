@@ -18,6 +18,8 @@ package asquare.gwt.tkdemo.client.demos;
 import asquare.gwt.tk.client.ui.*;
 import asquare.gwt.tk.client.ui.behavior.*;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -42,7 +44,7 @@ public class GlassPanelDemo extends BasicPanel
 		example.addStyleName("example");
 		outer.add(example);
 		
-		class CreateExample implements ClickListener
+		class CreateExample implements ClickHandler
 		{
 			private final String m_cssId;
 			private final String m_bodyStyleName;
@@ -58,7 +60,7 @@ public class GlassPanelDemo extends BasicPanel
 				m_bodyStyleName = bodyStyleName;
 			}
 			
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final GlassPanel gp = new GlassPanel(m_bodyStyleName);
                 gp.addStyleName(m_cssId);
@@ -69,19 +71,19 @@ public class GlassPanelDemo extends BasicPanel
 		
 		class ShowExample extends SimpleHyperLink
 		{
-			public ShowExample(String label, ClickListener listener)
+			public ShowExample(String label, ClickHandler handler)
 			{
 				super(label);
-				addClickListener(listener);
+				addClickHandler(handler);
 			}
 		}
 		
 		example.add(new ShowExample("Dark", new CreateExample("glasspanel-ex-dark")));
 		example.add(new ShowExample("Light", new CreateExample("glasspanel-ex-light")));
 		example.add(new ShowExample("Opaque", new CreateExample("glasspanel-ex-opaque")));
-		example.add(new ShowExample("Transparent PNG background image", new ClickListener()
+		example.add(new ShowExample("Transparent PNG background image", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final GlassPanel gp = new GlassPanel();
 				gp.addStyleName("glasspanel-ex-transparentPNG");
@@ -95,9 +97,9 @@ public class GlassPanelDemo extends BasicPanel
 		}));
 		example.add(new ShowExample("Tiled background image", new CreateExample("glasspanel-ex-tiledBG")));
 		example.add(new ShowExample("Centered background image", new CreateExample("glasspanel-ex-centeredBG")));
-		example.add(new ShowExample("Foreground text", new ClickListener()
+		example.add(new ShowExample("Foreground text", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final GlassPanel gp = new GlassPanel();
 				gp.addStyleName("glasspanel-ex-text");

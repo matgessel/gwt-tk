@@ -21,7 +21,7 @@ import asquare.gwt.tk.client.ui.behavior.TabFocusController;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -51,9 +51,9 @@ public class FocusCyclePanel extends BasicPanel
 	public void add(Widget w)
 	{
 		super.add(w);
-		if (w instanceof HasFocus)
+		if (w instanceof Focusable)
 		{
-			m_focusModel.add((HasFocus) w);
+			m_focusModel.add((Focusable) w);
 		}
 	}
 	
@@ -62,9 +62,9 @@ public class FocusCyclePanel extends BasicPanel
 		if (! super.remove(w))
 			return false;
 		
-		if (w instanceof HasFocus)
+		if (w instanceof Focusable)
 		{
-			m_focusModel.remove((HasFocus) w);
+			m_focusModel.remove((Focusable) w);
 		}
 		return true;
 	}

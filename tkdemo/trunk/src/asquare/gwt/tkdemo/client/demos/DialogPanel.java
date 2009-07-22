@@ -22,6 +22,11 @@ import asquare.gwt.tk.client.ui.behavior.*;
 import asquare.gwt.tk.client.ui.resource.*;
 import asquare.gwt.tk.client.util.*;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.HTMLTable.*;
@@ -81,7 +86,7 @@ public class DialogPanel extends Composite
 		
 		panel.add(new HTML("<h4>ModalDialog examples</h4>"));
 		
-		class CloseListener implements ClickListener
+		class CloseListener implements ClickHandler
 		{
 			private final ModalDialog m_dialog;
 			
@@ -90,7 +95,7 @@ public class DialogPanel extends Composite
 				m_dialog = dialog;
 			}
 			
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				m_dialog.hide();
 			}
@@ -101,20 +106,20 @@ public class DialogPanel extends Composite
 			public CloseButton(ModalDialog dialog)
 			{
 				super("Close");
-				addClickListener(new CloseListener(dialog));
+				addClickHandler(new CloseListener(dialog));
 			}
 			
 			public CloseButton(ModalDialog dialog, String text)
 			{
 				super(text);
-				addClickListener(new CloseListener(dialog));
+				addClickHandler(new CloseListener(dialog));
 			}
 		}
 		
 		final Button plainDialog = new Button("Plain");
-		plainDialog.addClickListener(new ClickListener()
+		plainDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog();
 				dialog.setCaption("Caption area", false);
@@ -126,9 +131,9 @@ public class DialogPanel extends Composite
 		panel.add(plainDialog);
 		
 		final Button verboseDialog = new Button("Verbose");
-		verboseDialog.addClickListener(new ClickListener()
+		verboseDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog();
 				dialog.setCaption("Verbose dialog", false);
@@ -147,9 +152,9 @@ public class DialogPanel extends Composite
 		panel.add(verboseDialog);
 		
         final Button captionLessDialog = new Button("No caption");
-        captionLessDialog.addClickListener(new ClickListener()
+        captionLessDialog.addClickHandler(new ClickHandler()
         {
-            public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
             {
                 final ModalDialog dialog = new ModalDialog();
                 dialog.add(new Label("Captionless dialog"));
@@ -160,9 +165,9 @@ public class DialogPanel extends Composite
         panel.add(captionLessDialog);
         
         final Button loadingDialog = new Button("Loading...");
-        loadingDialog.addClickListener(new ClickListener()
+        loadingDialog.addClickHandler(new ClickHandler()
         {
-            public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
             {
                 final ModalDialog dialog = new ModalDialog();
                 final Label label = new Label("0% loaded");
@@ -187,9 +192,9 @@ public class DialogPanel extends Composite
         panel.add(loadingDialog);
         
 		final Button undraggableDialog = new Button("Drag disabled");
-		undraggableDialog.addClickListener(new ClickListener()
+		undraggableDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog()
 				{
@@ -209,9 +214,9 @@ public class DialogPanel extends Composite
 		panel.add(undraggableDialog);
 		
 		final Button styledDragDialog = new Button("Drag style");
-		styledDragDialog.addClickListener(new ClickListener()
+		styledDragDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog();
 				String oldPrimaryName = dialog.getStylePrimaryName();
@@ -226,9 +231,9 @@ public class DialogPanel extends Composite
 		panel.add(styledDragDialog);
 		
 		final Button focusManagementDialog = new Button("Focus management");
-		focusManagementDialog.addClickListener(new ClickListener()
+		focusManagementDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog();
 				dialog.setCaption("Register", false);
@@ -283,9 +288,9 @@ public class DialogPanel extends Composite
 		panel.add(focusManagementDialog);
 		
 		final Button explicitlyPositionedDialog = new Button("Explicitly positioned");
-		explicitlyPositionedDialog.addClickListener(new ClickListener()
+		explicitlyPositionedDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog();
 				dialog.removeController(dialog.getController(ModalDialog.PositionDialogController.class));
@@ -303,9 +308,9 @@ public class DialogPanel extends Composite
 		panel.add(explicitlyPositionedDialog);
 		
 		final Button multipleDialogs = new Button("Multiple dialogs");
-		multipleDialogs.addClickListener(new ClickListener()
+		multipleDialogs.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				ModalDialog dialog = new ModalDialog();
 				dialog.setCaption("First dialog", false);
@@ -337,25 +342,25 @@ public class DialogPanel extends Composite
 				final Frame frame = new Frame();
 				frame.setSize("400px", "200px");
 				outer.add(frame);
-				urlBox.addChangeListener(new ChangeListener()
+				urlBox.addChangeHandler(new ChangeHandler()
 				{
-					public void onChange(Widget sender)
+					public void onChange(ChangeEvent event)
 					{
 						frame.setUrl(urlBox.getURL());
 					}
 				});
-				goButton.addClickListener(new ClickListener()
+				goButton.addClickHandler(new ClickHandler()
 				{
-					public void onClick(Widget sender)
+					public void onClick(ClickEvent event)
 					{
 						frame.setUrl(urlBox.getURL());
 					}
 				});
-				addressList.addChangeListener(new ChangeListener()
+				addressList.addChangeHandler(new ChangeHandler()
 				{
-					public void onChange(Widget sender)
+					public void onChange(ChangeEvent event)
 					{
-						ListBox list = (ListBox) sender;
+						ListBox list = (ListBox) event.getSource();
 						if (list.getSelectedIndex() > 0)
 						{
 							urlBox.setText(list.getItemText(list.getSelectedIndex()));
@@ -364,9 +369,9 @@ public class DialogPanel extends Composite
 					}
 				});
 				final Button secondDialog = new Button("Show second dialog");
-				secondDialog.addClickListener(new ClickListener()
+				secondDialog.addClickHandler(new ClickHandler()
 				{
-					public void onClick(Widget sender)
+					public void onClick(ClickEvent event)
 					{
 						final ModalDialog dialog = new ModalDialog();
 						dialog.setCaption("Second dialog", false);
@@ -387,9 +392,9 @@ public class DialogPanel extends Composite
 		panel.add(multipleDialogs);
 		
 		final Button styledDialog = new Button("Styled");
-		styledDialog.addClickListener(new ClickListener()
+		styledDialog.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				final ModalDialog dialog = new ModalDialog();
 				dialog.addStyleName("dialog-styled");
@@ -399,7 +404,7 @@ public class DialogPanel extends Composite
 				caption.add(captionText);
 				caption.setCellWidth(captionText, "100%");
 				Image close = new Image("close.gif");
-				close.addClickListener(new CloseListener(dialog));
+				close.addClickHandler(new CloseListener(dialog));
 				caption.add(close);
 				dialog.setCaption(caption);
 				dialog.add(new Label("I've been a bad, bad browser."));
@@ -421,9 +426,9 @@ public class DialogPanel extends Composite
 		panel.add(new HTML("<h4>AlertDialog examples</h4>"));
 		
 		final Button showInfo = new Button("Info");
-		showInfo.addClickListener(new ClickListener()
+		showInfo.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog.createInfo(null, "Caption text", "Message text").show(showInfo);
 			}
@@ -431,9 +436,9 @@ public class DialogPanel extends Composite
 		panel.add(showInfo);
 		
 		final Button showWarning = new Button("Warning");
-		showWarning.addClickListener(new ClickListener()
+		showWarning.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog.createWarning(null, "Caption text", "Message text").show(showWarning);
 			}
@@ -441,9 +446,9 @@ public class DialogPanel extends Composite
 		panel.add(showWarning);
 		
 		final Button showError = new Button("Error");
-		showError.addClickListener(new ClickListener()
+		showError.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog.createError(null, "Caption text", "Message text").show(showError);
 			}
@@ -451,9 +456,9 @@ public class DialogPanel extends Composite
 		panel.add(showError);
 		
 		final Button showModified = new Button("Modified");
-		showModified.addClickListener(new ClickListener()
+		showModified.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog dialog = AlertDialog.createWarning(null, "Modified alert", "This dialog was created by a factory method. It was modified to remove the Cancel button");
 				dialog.removeButton(dialog.getButton(1));
@@ -464,9 +469,9 @@ public class DialogPanel extends Composite
 		panel.add(showModified);
 		
 		final Button showImagesAsButtons = new Button("Images as buttons");
-		showImagesAsButtons.addClickListener(new ClickListener()
+		showImagesAsButtons.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog dialog = new AlertDialog();
 				dialog.addStyleName("alert-imageButtons");
@@ -475,7 +480,7 @@ public class DialogPanel extends Composite
 				dialog.setIcon(TkImageFactory.getInstance().createAlertDialogImages().AlertIcon16().createImage());
 				Icon check = new Icon("CheckIcon32.png", 32, 32);
 				check.setTitle("OK");
-				dialog.addButton(check, (char) KeyboardListener.KEY_ENTER, null, AlertDialog.BUTTON_DEFAULT);
+				dialog.addButton(check, (char) KeyCodes.KEY_ENTER, null, AlertDialog.BUTTON_DEFAULT);
 				Icon x = new Icon("XIcon32.png", 32, 32);
 				x.setTitle("Cancel");
 				dialog.addButton(x, 'x', null, AlertDialog.BUTTON_CANCEL);
@@ -485,9 +490,9 @@ public class DialogPanel extends Composite
 		panel.add(showImagesAsButtons);
 		
 		final Button showImagesInButtons = new Button("Images in buttons");
-		showImagesInButtons.addClickListener(new ClickListener()
+		showImagesInButtons.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog dialog = new AlertDialog();
 				dialog.setCaptionText("Caption text", false);
@@ -503,9 +508,9 @@ public class DialogPanel extends Composite
 		panel.add(showImagesInButtons);
 		
 		final Button showStyled = new Button("Styled");
-		showStyled.addClickListener(new ClickListener()
+		showStyled.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				AlertDialog dialog = new AlertDialog();
 				dialog.addStyleName("alert-styled");

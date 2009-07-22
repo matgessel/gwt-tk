@@ -18,6 +18,10 @@ package asquare.gwt.tests.buttonblur.client;
 import asquare.gwt.debug.client.Debug;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.user.client.ui.*;
 
 public class Demo implements EntryPoint
@@ -33,15 +37,18 @@ public class Demo implements EntryPoint
 	private Widget createDemoPanel()
 	{
 		Button result = new Button("gwtButton");
-		result.addFocusListener(new FocusListener()
+		result.addFocusHandler(new FocusHandler()
 		{
-			public void onLostFocus(Widget sender)
-			{
-				Debug.println("gwtButton.onLostFocus()");
-			}
-			public void onFocus(Widget sender)
+			public void onFocus(FocusEvent event)
 			{
 				Debug.println("gwtButton.onFocus()");
+			}
+		});
+		result.addBlurHandler(new BlurHandler()
+		{
+			public void onBlur(BlurEvent event)
+			{
+				Debug.println("gwtButton.onLostFocus()");
 			}
 		});
 		return result;

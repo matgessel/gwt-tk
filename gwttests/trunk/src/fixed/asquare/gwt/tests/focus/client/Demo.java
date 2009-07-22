@@ -16,6 +16,8 @@
 package asquare.gwt.tests.focus.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 
 public class Demo implements EntryPoint
@@ -42,8 +44,7 @@ public class Demo implements EntryPoint
 		listBox1.addItem("item2");
 		listBox1.addItem("item3");
 		outer.add(listBox1);
-		ListBox listBox2 = new ListBox();
-		listBox2.setMultipleSelect(true);
+		ListBox listBox2 = new ListBox(true);
 		listBox2.setVisibleItemCount(3);
 		listBox2.addItem("ListBox2");
 		listBox2.addItem("item2");
@@ -64,11 +65,11 @@ public class Demo implements EntryPoint
 		
 		public void add(final Widget w)
 		{
-			setWidget(m_currentRow, 0, new Button("focus ->", new ClickListener()
+			setWidget(m_currentRow, 0, new Button("focus ->", new ClickHandler()
 			{
-				public void onClick(Widget sender)
+				public void onClick(ClickEvent e)
 				{
-					((HasFocus) w).setFocus(true);
+					((Focusable) w).setFocus(true);
 				}
 			}));
 			setWidget(m_currentRow, 1, w);

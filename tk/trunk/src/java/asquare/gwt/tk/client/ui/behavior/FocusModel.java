@@ -17,32 +17,45 @@ package asquare.gwt.tk.client.ui.behavior;
 
 import java.util.ArrayList;
 
-import asquare.gwt.tk.client.util.GwtUtil;
-
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.FocusWidget;
-import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.Focusable;
+
+import asquare.gwt.tk.client.ui.behavior.event.FocusModelEvent;
+import asquare.gwt.tk.client.ui.behavior.event.FocusModelHandler;
+import asquare.gwt.tk.client.util.GwtUtil;
 
 /**
  * Tracks the widgets in a focus cycle and which widget <em>should</em> be
  * focused. Note that multiple focus cycles may exist on a page; this model's
  * focused widget may not necessarily have focus.
+ * <p>
+ * Only widgets implementing {@link HasFocusHandlers} and
+ * {@link HasBlurHandlers} are added.
  */
 public class FocusModel
 {
-	private final ArrayList<FocusModelListener> m_listeners = new ArrayList<FocusModelListener>();
-	private final ArrayList<HasFocus> m_widgets = new ArrayList<HasFocus>();
+	private final HandlerManager m_handlerManager = new HandlerManager(this);
+	private final ArrayList<Focusable> m_widgets = new ArrayList<Focusable>();
 	
 	private int m_focusIndex = -1;
 	private int m_blurIndex = -1;
 	
-	public void addListener(FocusModelListener listener)
+	public void addHandler(FocusModelHandler handler)
 	{
-		m_listeners.add(listener);
+		m_handlerManager.addHandler(FocusModelEvent.WidgetsAdded.getType(), handler);
+		m_handlerManager.addHandler(FocusModelEvent.WidgetsRemoved.getType(), handler);
+		m_handlerManager.addHandler(FocusModelEvent.FocusChanged.getType(), handler);
 	}
 	
-	public void removeListener(FocusModelListener listener)
+	@SuppressWarnings("deprecation")
+	public void removeHandler(FocusModelHandler handler)
 	{
-		m_listeners.remove(listener);
+		m_handlerManager.removeHandler(FocusModelEvent.WidgetsAdded.getType(), handler);
+		m_handlerManager.removeHandler(FocusModelEvent.WidgetsRemoved.getType(), handler);
+		m_handlerManager.removeHandler(FocusModelEvent.FocusChanged.getType(), handler);
 	}
 	
 	/**
@@ -58,15 +71,11 @@ public class FocusModel
 	 */
 	public void clear()
 	{
-		HasFocus[] removed = new HasFocus[m_widgets.size()];
-		for (int i = removed.length - 1; i >= 0; i--)
-		{
-			removed[i] = m_widgets.get(i);
-		}
+		Focusable[] removed = m_widgets.toArray(new Focusable[m_widgets.size()]);
 		m_widgets.clear();
 		m_focusIndex = -1;
 		m_blurIndex = -1;
-		fireRemoved(removed);
+		m_handlerManager.fireEvent(new FocusModelEvent.WidgetsRemoved(this, removed));
 	}
 	
 	/**
@@ -74,9 +83,9 @@ public class FocusModel
 	 * 
 	 * @param widget
 	 * @return <code>true</code> if <code>widget</code> is contained in the model
-	 * @see #shouldAdd(HasFocus)
+	 * @see #shouldAdd(Focusable)
 	 */
-	public boolean contains(HasFocus widget)
+	public boolean contains(Focusable widget)
 	{
 		if (widget == null)
 			throw new IllegalArgumentException();
@@ -91,9 +100,9 @@ public class FocusModel
 	 * @throws IllegalArgumentException if <code>widgets</code> is <code>null</code>
 	 * @throws IllegalArgumentException if an element is <code>null</code>
 	 * @throws IllegalArgumentException if an element is already present in the model
-	 * @see #shouldAdd(HasFocus)
+	 * @see #shouldAdd(Focusable)
 	 */
-	public void add(HasFocus[] widgets)
+	public void add(Focusable[] widgets)
 	{
 		if (widgets == null)
 			throw new IllegalArgumentException();
@@ -101,7 +110,7 @@ public class FocusModel
 		if (widgets.length == 0)
 			return;
 		
-		ArrayList<HasFocus> added = new ArrayList<HasFocus>();
+		ArrayList<Focusable> added = new ArrayList<Focusable>();
 		for (int i = 0; i < widgets.length; i++)
 		{
 			if (insertImpl(widgets[i], m_widgets.size()))
@@ -111,7 +120,7 @@ public class FocusModel
 		}
 		if (added.size() > 0)
 		{
-			fireAdded(added.toArray(new HasFocus[added.size()]));
+			m_handlerManager.fireEvent(new FocusModelEvent.WidgetsAdded(this, added.toArray(new Focusable[added.size()])));
 		}
 	}
 	
@@ -121,9 +130,9 @@ public class FocusModel
 	 * @param widget a widget
 	 * @throws IllegalArgumentException if <code>widget</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>widget</code> is already present in the model
-	 * @see #shouldAdd(HasFocus)
+	 * @see #shouldAdd(Focusable)
 	 */
-	public void add(HasFocus widget)
+	public void add(Focusable widget)
 	{
 		insert(widget, m_widgets.size());
 	}
@@ -137,20 +146,20 @@ public class FocusModel
 	 * @throws IllegalArgumentException if <code>widget</code> is <code>null</code>
 	 * @throws IllegalArgumentException if <code>widget</code> is already present in the model
 	 * @throws IndexOutOfBoundsException if <code>index < 0 || index > {@link #getSize()}</code>
-	 * @see #shouldAdd(HasFocus)
+	 * @see #shouldAdd(Focusable)
 	 */
-	public void insert(HasFocus widget, int index)
+	public void insert(Focusable widget, int index)
 	{
 		if (insertImpl(widget, index))
 		{
-			fireAdded(new HasFocus[] {widget});
+			m_handlerManager.fireEvent(new FocusModelEvent.WidgetsAdded(this, new Focusable[] {widget}));
 		}
 	}
 	
 	/**
 	 * @return true if <code>widget</code> is added to the model
 	 */
-	private boolean insertImpl(HasFocus widget, int index)
+	private boolean insertImpl(Focusable widget, int index)
 	{
 		if (widget == null)
 			throw new IllegalArgumentException("widget cannot be null");
@@ -179,14 +188,20 @@ public class FocusModel
 	}
 	
 	/**
-	 * Determines whether the specified Widget can be added to the model. 
+	 * Determines whether the specified Widget can be added to the model.
 	 * 
 	 * @param widget a widget which is candidate to be added to the model
-	 * @return <code>true</code> if <code>widget.getTabIndex() >= 0</code>
+	 * @return <code>true</code> if <code>widget</code> implements
+	 *         {@link HasFocusHandlers}, {@link HasBlurHandlers} and
+	 *         <code>widget.getTabIndex() >= 0</code>
 	 */
-	protected boolean shouldAdd(HasFocus widget)
+	protected boolean shouldAdd(Focusable widget)
 	{
-		return widget.getTabIndex() >= 0;
+		if (widget instanceof HasFocusHandlers && widget instanceof HasBlurHandlers)
+		{
+			return widget.getTabIndex() >= 0;
+		}
+		return false;
 	}
 	
 	/**
@@ -220,7 +235,7 @@ public class FocusModel
 	 * @throws IllegalArgumentException if <code>widget</code> is
 	 *             <code>null</code>
 	 */
-	public int getIndexOf(HasFocus widget)
+	public int getIndexOf(Focusable widget)
 	{
 		if (widget == null)
 			throw new IllegalArgumentException();
@@ -236,7 +251,7 @@ public class FocusModel
 	 * @return the widget
 	 * @throws IndexOutOfBoundsException if <code>index</code> is out of range
 	 */
-	public HasFocus getWidgetAt(int index)
+	public Focusable getWidgetAt(int index)
 	{
 		GwtUtil.rangeCheck(0, m_widgets.size(), index, false);
 		
@@ -248,7 +263,7 @@ public class FocusModel
 	 * 
 	 * @param widget
 	 */
-	public void remove(HasFocus widget)
+	public void remove(Focusable widget)
 	{
 		int index = m_widgets.indexOf(widget);
 		if (index >= 0)
@@ -259,7 +274,7 @@ public class FocusModel
 	
 	private void remove(int index)
 	{
-		HasFocus widget = m_widgets.remove(index);
+		Focusable widget = m_widgets.remove(index);
 		if (m_focusIndex > index)
 		{
 			m_focusIndex--;
@@ -276,7 +291,7 @@ public class FocusModel
 		{
 			m_blurIndex = -1;
 		}
-		fireRemoved(new HasFocus[] {widget});
+		m_handlerManager.fireEvent(new FocusModelEvent.WidgetsRemoved(this, new Focusable[] {widget}));
 	}
 	
 	/**
@@ -284,14 +299,14 @@ public class FocusModel
 	 * 
 	 * @return a widget, or <code>null</code> if no widget is focused
 	 */
-	public HasFocus getCurrentWidget()
+	public Focusable getCurrentWidget()
 	{
-		return (m_focusIndex != -1) ? (HasFocus) m_widgets.get(m_focusIndex) : null;
+		return (m_focusIndex != -1) ? (Focusable) m_widgets.get(m_focusIndex) : null;
 	}
 	
-	public HasFocus getBlurWidget()
+	public Focusable getBlurWidget()
 	{
-		return (m_blurIndex != -1) ? (HasFocus) m_widgets.get(m_blurIndex) : null;
+		return (m_blurIndex != -1) ? (Focusable) m_widgets.get(m_blurIndex) : null;
 	}
 	
 	/**
@@ -301,7 +316,7 @@ public class FocusModel
 	 * @throws IllegalArgumentException if <code>widget</code> is not
 	 *             present in the model and not <code>null</code>
 	 */
-	public void setFocusWidget(HasFocus widget)
+	public void setFocusWidget(Focusable widget)
 	{
 		int index;
 		if (widget == null)
@@ -331,7 +346,7 @@ public class FocusModel
 		{
 			m_blurIndex = m_focusIndex;
 			m_focusIndex = index;
-			fireFocusChanged(getBlurWidget(), getCurrentWidget());
+			m_handlerManager.fireEvent(new FocusModelEvent.FocusChanged(this, getBlurWidget(), getCurrentWidget()));
 		}
 	}
 	
@@ -378,10 +393,10 @@ public class FocusModel
 	 * <code>null</code> no if focusable widget is available
 	 * @throws IllegalStateException if the model is empty
 	 */
-	public HasFocus getNextWidget(boolean forward)
+	public Focusable getNextWidget(boolean forward)
 	{
 		int nextIndex = getNextIndex(forward);
-		return (nextIndex != -1) ? (HasFocus) getWidgetAt(nextIndex) : null;
+		return (nextIndex != -1) ? getWidgetAt(nextIndex) : null;
 	}
 	
 	/**
@@ -390,7 +405,7 @@ public class FocusModel
 	 * @return the next widget
 	 * @throws IllegalStateException if the model is empty
 	 */
-	public HasFocus getNextWidget()
+	public Focusable getNextWidget()
 	{
 		return getNextWidget(true);
 	}
@@ -401,7 +416,7 @@ public class FocusModel
 	 * @return the previous widget
 	 * @throws IllegalStateException if the model is empty
 	 */
-	public HasFocus getPreviousWidget()
+	public Focusable getPreviousWidget()
 	{
 		return getNextWidget(false);
 	}
@@ -507,39 +522,12 @@ public class FocusModel
 	 * @return <code>true</code> unless <code>widget</code> is a disabled
 	 *         {@link FocusWidget}
 	 */
-	protected boolean shouldFocus(HasFocus widget)
+	protected boolean shouldFocus(Focusable widget)
 	{
 		if (widget instanceof FocusWidget)
 		{
 			return ((FocusWidget) widget).isEnabled();
 		}
 		return true;
-	}
-	
-	private void fireAdded(HasFocus[] added)
-	{
-		Object[] listeners = m_listeners.toArray();
-		for (int i = 0; i < listeners.length; i++)
-		{
-			((FocusModelListener) listeners[i]).widgetsAdded(this, added);
-		}
-	}
-	
-	private void fireRemoved(HasFocus[] removed)
-	{
-		Object[] listeners = m_listeners.toArray();
-		for (int i = 0; i < listeners.length; i++)
-		{
-			((FocusModelListener) listeners[i]).widgetsRemoved(this, removed);
-		}
-	}
-	
-	private void fireFocusChanged(HasFocus previous, HasFocus current)
-	{
-		Object[] listeners = m_listeners.toArray();
-		for (int i = 0; i < listeners.length; i++)
-		{
-			((FocusModelListener) listeners[i]).focusChanged(this, previous, current);
-		}
 	}
 }

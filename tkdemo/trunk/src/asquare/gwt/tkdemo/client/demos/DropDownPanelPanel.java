@@ -18,6 +18,8 @@ package asquare.gwt.tkdemo.client.demos;
 import asquare.gwt.tk.client.ui.*;
 import asquare.gwt.tk.client.util.DomUtil;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.*;
 
 public class DropDownPanelPanel extends Composite
@@ -96,16 +98,16 @@ public class DropDownPanelPanel extends Composite
 		outer.add(dropDown4);
 		outer.setCellWidth(dropDown4, "1px");
 		
-		open.addClickListener(new ClickListener()
+		open.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				dropDown4.setOpen(true);
 			}
 		});
-		close.addClickListener(new ClickListener()
+		close.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				dropDown4.setOpen(false);
 			}

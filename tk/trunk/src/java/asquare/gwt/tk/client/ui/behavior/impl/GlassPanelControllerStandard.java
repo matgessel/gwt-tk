@@ -19,12 +19,16 @@ import asquare.gwt.tk.client.ui.behavior.ControllerAdaptor;
 import asquare.gwt.tk.client.ui.behavior.GlassPanelController;
 import asquare.gwt.tk.client.util.DomUtil;
 
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GlassPanelControllerStandard extends ControllerAdaptor implements GlassPanelController, WindowResizeListener
+public class GlassPanelControllerStandard extends ControllerAdaptor implements GlassPanelController, ResizeHandler
 {
+	private HandlerRegistration m_windowResizeRegistration;
+	
 	/*
 	 * These track the last known scrollbar state. They are helpful in
 	 * determining if the panel size needs to be updated when the window is
@@ -47,12 +51,12 @@ public class GlassPanelControllerStandard extends ControllerAdaptor implements G
 		widget.setHeight(calculateHeight());
 		m_xScroll = canScrollX();
 		m_yScroll = canScrollY();
-		Window.addWindowResizeListener(this);
+		m_windowResizeRegistration = Window.addResizeHandler(this);
 	}
 	
 	public void unplug(Widget widget)
 	{
-		Window.removeWindowResizeListener(this);
+		m_windowResizeRegistration.removeHandler();
 		m_xScroll = m_yScroll = false;
 		m_widget = null;
 	}
@@ -117,8 +121,7 @@ public class GlassPanelControllerStandard extends ControllerAdaptor implements G
 		}
 	}
 	
-	// WindowResizeListener methods
-	public void onWindowResized(int width, int height)
+	public void onResize(ResizeEvent event)
 	{
 		updateWidth();
 		updateHeight();

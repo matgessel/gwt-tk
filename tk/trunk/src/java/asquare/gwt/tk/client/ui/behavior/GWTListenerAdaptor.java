@@ -18,6 +18,7 @@ package asquare.gwt.tk.client.ui.behavior;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
 
+@Deprecated
 public class GWTListenerAdaptor extends ControllerSupportDelegate implements ChangeListener, ClickListener, FocusListener, KeyboardListener, LoadListener, MouseListener, MouseWheelListener, ScrollListener
 {
 	public GWTListenerAdaptor(Widget w)

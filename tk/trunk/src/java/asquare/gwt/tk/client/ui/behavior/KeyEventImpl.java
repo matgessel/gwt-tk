@@ -97,12 +97,4 @@ public class KeyEventImpl extends InputEventImpl implements KeyEvent
 		
 		return (char) DOM.eventGetKeyCode(getDomEvent());
 	}
-	
-	/**
-	 * TODO: throw exception when reading on unsupported key events?
-	 */
-	public boolean isAutoRepeat()
-	{
-		return DOM.eventGetRepeat(getDomEvent());
-	}
 }

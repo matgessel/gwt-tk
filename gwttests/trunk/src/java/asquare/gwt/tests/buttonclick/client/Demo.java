@@ -16,6 +16,8 @@
 package asquare.gwt.tests.buttonclick.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
@@ -25,16 +27,16 @@ public class Demo implements EntryPoint
 	{
 		Button m_button1 = new Button("Click me");
 		final Button m_button2 = new Button("Target button");
-		m_button1.addClickListener(new ClickListener()
+		m_button1.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				m_button2.click();
 			}
 		});
-		m_button2.addClickListener(new ClickListener()
+		m_button2.addClickHandler(new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				Window.alert("target button click() called");
 			}

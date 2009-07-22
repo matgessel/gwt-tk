@@ -15,13 +15,15 @@
  */
 package asquare.gwt.sb.client.util;
 
-import com.google.gwt.user.client.ui.KeyboardListener;
+import asquare.gwt.tk.client.ui.behavior.event.KeyboardModifiers;
 
-/**
- * @see KeyboardListener for modifiers
- */
 public interface ActionMap
 {
+	int MODIFIER_ALT = KeyboardModifiers.MODIFIER_ALT;
+	int MODIFIER_CTRL = KeyboardModifiers.MODIFIER_CTRL;
+	int MODIFIER_META = KeyboardModifiers.MODIFIER_META;
+	int MODIFIER_SHIFT = KeyboardModifiers.MODIFIER_SHIFT;
+	
 	Action get(char keyCode);
 	
 	Action get(char keyCode, int modifiers);

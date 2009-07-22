@@ -15,6 +15,7 @@
  */
 package asquare.gwt.tests.test;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.junit.client.GWTTestCase;
 
@@ -32,7 +33,7 @@ public class JSNITC extends GWTTestCase
 	}
 	
 	private static native String getStaticValue(SubClass o) /*-{
-		return o.@asquare.gwt.tests.test.JSNITC.SubClass::getStaticValue()();
+		return @asquare.gwt.tests.test.JSNITC.SubClass::getStaticValue()();
 	}-*/;
 	
 	private static native String getInstanceValue(SubClass o) /*-{
@@ -43,11 +44,13 @@ public class JSNITC extends GWTTestCase
 	{
 		public static String getStaticValue()
 		{
+			// use replace() to prevent intering of literal
 			return "staxic".replace('x', 't');
 		}
 		
 		public String getInstanceValue()
 		{
+			// use replace() to prevent intering of literal
 			return "insxance".replace('x', 't');
 		}
 	}
@@ -79,14 +82,22 @@ public class JSNITC extends GWTTestCase
 		final String VAL1 = "val1";
 		AssociativeArray map = new AssociativeArray();
 		
-		map.set(KEY1, VAL1);
-		assertSame(VAL1, map.get(KEY1));
-		assertSame(VAL1, map.getString(KEY1));
+		/*
+		 * Expected to fail in Hosted Mode
+		 * http://groups.google.com/group/Google-Web-Toolkit-Contributors/browse_thread/thread/a78f6de111717e3d
+		 */
+		if (GWT.isScript())
+		{
+			map.set(KEY1, VAL1);
+			assertSame(VAL1, map.getString(KEY1));
+			assertSame(VAL1, map.get(KEY1));
+		}
 	}
 	
 	private static class AssociativeArray
 	{
-		JavaScriptObject m_impl;
+		@SuppressWarnings("unused")
+		private JavaScriptObject m_impl;
 		
 		public AssociativeArray()
 		{

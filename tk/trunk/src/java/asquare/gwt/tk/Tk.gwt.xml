@@ -18,7 +18,6 @@
 	
 	<!-- patches must be after Google module -->
 	<inherits name='com.google.gwt.dom.Patch'/>
-	<inherits name='com.google.gwt.user.Patch'/>
 	
 	<inherits name='asquare.gwt.tk.DomUtil'/>
 	

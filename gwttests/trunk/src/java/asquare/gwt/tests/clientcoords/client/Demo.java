@@ -16,9 +16,9 @@
 package asquare.gwt.tests.clientcoords.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventPreview;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
@@ -30,15 +30,15 @@ public class Demo implements EntryPoint
 		RootPanel.get("outer").add(new Label("Event client position"));
 		final TextArea output = new TextArea();
 		RootPanel.get("outer").add(output);
-		DOM.addEventPreview(new EventPreview()
+		Event.addNativePreviewHandler(new Event.NativePreviewHandler()
 		{
-			public boolean onEventPreview(Event event)
+			public void onPreviewNativeEvent(NativePreviewEvent event)
 			{
-				if (DOM.eventGetType(event) == Event.ONMOUSEDOWN)
+				if (event.getTypeInt() == Event.ONMOUSEDOWN)
 				{
-					output.setText("clientX=" + DOM.eventGetClientX(event) + ", clientY=" + DOM.eventGetClientY(event));
+					NativeEvent nativeEvent = event.getNativeEvent();
+					output.setText("clientX=" + nativeEvent.getClientX() + ", clientY=" + nativeEvent.getClientY());
 				}
-				return true;
 			}
 		});
 	}

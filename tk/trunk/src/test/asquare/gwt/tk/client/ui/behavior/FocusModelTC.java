@@ -16,17 +16,18 @@
 package asquare.gwt.tk.client.ui.behavior;
 
 import asquare.gwt.tk.client.Tests;
+import asquare.gwt.tk.client.ui.behavior.event.FocusModelHandler;
 import asquare.gwt.tk.testutil.TkTestUtil;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.Focusable;
 
 public class FocusModelTC extends GWTTestCase
 {
 	private FocusModel m_model;
 	private Button m_a, m_b, m_c, m_d, m_e;
-	private FocusModelListenerStub m_l1;
+	private FocusModelHandlerStub m_l1;
 	
 	public String getModuleName()
 	{
@@ -36,8 +37,8 @@ public class FocusModelTC extends GWTTestCase
 	protected void setUpImpl()
 	{
 		m_model = new FocusModel();
-		m_l1 = new FocusModelListenerStub();
-		m_model.addListener(m_l1);
+		m_l1 = new FocusModelHandlerStub();
+		m_model.addHandler(m_l1);
 		m_a = new Button("a");
 		m_b = new Button("b");
 		m_c = new Button("c");
@@ -47,24 +48,24 @@ public class FocusModelTC extends GWTTestCase
 	
 	public void testAddRemoveListener()
 	{
-		FocusModelListenerStub l2 = new FocusModelListenerStub();
+		FocusModelHandlerStub l2 = new FocusModelHandlerStub();
 		
 		setUpImpl();
 		m_model.add(m_a);
 		assertTrue(m_l1.isChanged());
 		m_l1.init();
-		m_model.removeListener(m_l1);
+		m_model.removeHandler(m_l1);
 		m_model.add(m_b);
 		assertFalse(m_l1.isChanged());
 		
 		// multiple listeners
 		setUpImpl();
-		m_model.addListener(l2);
+		m_model.addHandler(l2);
 		m_model.add(m_a);
 		assertTrue(m_l1.isChanged());
 		assertTrue(l2.isChanged());
-		m_model.removeListener(m_l1);
-		m_model.removeListener(l2);
+		m_model.removeHandler(m_l1);
+		m_model.removeHandler(l2);
 		m_l1.init();
 		l2.init();
 		m_model.remove(m_a);
@@ -73,16 +74,16 @@ public class FocusModelTC extends GWTTestCase
 		
 		// remove listener during notification
 		setUpImpl();
-		m_model.addListener(new FocusModelListener()
+		m_model.addHandler(new FocusModelHandler()
 		{
-			public void widgetsAdded(FocusModel model, HasFocus[] added)
+			public void widgetsAdded(FocusModel model, Focusable[] added)
 			{
-				m_model.removeListener(this);
+				m_model.removeHandler(this);
 			}
-			public void widgetsRemoved(FocusModel model, HasFocus[] removed) {}
-			public void focusChanged(FocusModel model, HasFocus previous, HasFocus current) {}
+			public void widgetsRemoved(FocusModel model, Focusable[] removed) {}
+			public void focusChanged(FocusModel model, Focusable previous, Focusable current) {}
 		});
-		m_model.addListener(l2);
+		m_model.addHandler(l2);
 		m_model.add(m_a);
 		assertTrue(m_l1.isChanged());
 		assertTrue(l2.isChanged());
@@ -257,7 +258,7 @@ public class FocusModelTC extends GWTTestCase
 		setUpImpl();
 		try
 		{
-			m_model.add((HasFocus) null);
+			m_model.add((Focusable) null);
 			fail();
 		}
 		catch (IllegalArgumentException e)
@@ -283,8 +284,8 @@ public class FocusModelTC extends GWTTestCase
 	{
 		// basic test
 		setUpImpl();
-		HasFocus[] a1 = {m_a, m_b, m_c};
-		HasFocus[] a2 = {m_d, m_e};
+		Focusable[] a1 = {m_a, m_b, m_c};
+		Focusable[] a2 = {m_d, m_e};
 		m_model.add(a1);
 		assertEquals(3, m_model.getSize());
 		m_model.add(a2);
@@ -297,8 +298,8 @@ public class FocusModelTC extends GWTTestCase
 		
 		// listener notified
 		setUpImpl();
-		a1 = new HasFocus[] {m_a, m_b, m_c};
-		a2 = new HasFocus[] {m_d, m_e};
+		a1 = new Focusable[] {m_a, m_b, m_c};
+		a2 = new Focusable[] {m_d, m_e};
 		m_model.add(a1);
 		m_l1.init();
 		m_model.add(a2);
@@ -308,8 +309,8 @@ public class FocusModelTC extends GWTTestCase
 		// tabIndex < 0
 		setUpImpl();
 		m_b.setTabIndex(-1);
-		a1 = new HasFocus[] {m_a, m_b, m_c};
-		a2 = new HasFocus[] {m_b};
+		a1 = new Focusable[] {m_a, m_b, m_c};
+		a2 = new Focusable[] {m_b};
 		m_model.add(a1);
 		assertEquals(2, m_l1.getAdded().length);
 		m_l1.init();
@@ -320,7 +321,7 @@ public class FocusModelTC extends GWTTestCase
 		setUpImpl();
 		try
 		{
-			m_model.add((HasFocus[]) null);
+			m_model.add((Focusable[]) null);
 			fail();
 		}
 		catch (IllegalArgumentException e)
@@ -330,7 +331,7 @@ public class FocusModelTC extends GWTTestCase
 		
 		// null widget
 		setUpImpl();
-		a1 = new HasFocus[] {m_a, null, m_b};
+		a1 = new Focusable[] {m_a, null, m_b};
 		try
 		{
 			m_model.add(a1);
@@ -343,8 +344,8 @@ public class FocusModelTC extends GWTTestCase
 		
 		// widget already present
 		setUpImpl();
-		a1 = new HasFocus[] {m_a, m_b, m_a};
-		a2 = new HasFocus[] {m_c, m_a, m_d};
+		a1 = new Focusable[] {m_a, m_b, m_a};
+		a2 = new Focusable[] {m_c, m_a, m_d};
 		m_model.add(m_a);
 		try
 		{
@@ -369,7 +370,7 @@ public class FocusModelTC extends GWTTestCase
 	public void testClear()
 	{
 		setUpImpl();
-		HasFocus[] a = {m_a, m_b, m_c};
+		Focusable[] a = {m_a, m_b, m_c};
 		
 		// basic test
 		m_model.clear();
@@ -477,7 +478,7 @@ public class FocusModelTC extends GWTTestCase
 		
 		// first, middle, last
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c, m_d, m_e});
+		m_model.add(new Focusable[] {m_a, m_b, m_c, m_d, m_e});
 		assertEquals(5, m_model.getSize());
 		m_model.remove(m_a);
 		m_model.remove(m_c);
@@ -491,7 +492,7 @@ public class FocusModelTC extends GWTTestCase
 		
 		// listeners notified
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c, m_d, m_e});
+		m_model.add(new Focusable[] {m_a, m_b, m_c, m_d, m_e});
 		m_l1.init();
 		m_model.remove(m_a);
 		assertSame(m_a, m_l1.getRemoved()[0]);
@@ -501,14 +502,14 @@ public class FocusModelTC extends GWTTestCase
 		
 		// remove focused widget
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c, m_d, m_e});
+		m_model.add(new Focusable[] {m_a, m_b, m_c, m_d, m_e});
 		m_model.setFocusWidget(m_d);
 		m_model.remove(m_d);
 		assertNull(m_model.getCurrentWidget());
 		
 		// remove blur widget
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c, m_d, m_e});
+		m_model.add(new Focusable[] {m_a, m_b, m_c, m_d, m_e});
 		m_model.setFocusWidget(m_c);
 		m_model.setFocusWidget(m_d);
 		m_model.remove(m_c);
@@ -517,7 +518,7 @@ public class FocusModelTC extends GWTTestCase
 		
 		// shift down (current, blur index)
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c, m_d, m_e});
+		m_model.add(new Focusable[] {m_a, m_b, m_c, m_d, m_e});
 		m_model.setFocusWidget(m_c);
 		m_model.setFocusWidget(m_d);
 		m_model.remove(m_b);
@@ -562,7 +563,7 @@ public class FocusModelTC extends GWTTestCase
 	{
 		// basic test
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c});
+		m_model.add(new Focusable[] {m_a, m_b, m_c});
 		m_l1.init();
 		
 		m_model.setFocusWidget(m_a);
@@ -585,7 +586,7 @@ public class FocusModelTC extends GWTTestCase
 		
 		// set null
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c});
+		m_model.add(new Focusable[] {m_a, m_b, m_c});
 		m_model.setFocusWidget(m_a);
 		m_l1.init();
 		m_model.setFocusWidget(null);
@@ -620,7 +621,7 @@ public class FocusModelTC extends GWTTestCase
 		
 		// unchanged
 		setUpImpl();
-		m_model.add(new HasFocus[] {m_a, m_b, m_c});
+		m_model.add(new Focusable[] {m_a, m_b, m_c});
 		m_model.setFocusWidget(m_b);
 		m_l1.init();
 		m_model.setFocusWidget(m_b);
@@ -631,7 +632,7 @@ public class FocusModelTC extends GWTTestCase
 	{
 		// basic test
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		assertSame(m_a, m_model.getNextWidget());
 		m_model.setFocusWidget(m_a);
 		assertSame(m_b, m_model.getNextWidget());
@@ -648,35 +649,35 @@ public class FocusModelTC extends GWTTestCase
 		
 		// start from blur widget if no focus
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_model.setFocusWidget(m_b);
 		m_model.setFocusWidget(null);
 		assertEquals(m_c, m_model.getNextWidget());
 		
 		// first widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_a.setEnabled(false);
 		m_model.setFocusWidget(m_c);
 		assertSame(m_b, m_model.getNextWidget());
 		
 		// middle widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_b.setEnabled(false);
 		m_model.setFocusWidget(m_a);
 		assertSame(m_c, m_model.getNextWidget());
 		
 		// last widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_c.setEnabled(false);
 		m_model.setFocusWidget(m_b);
 		assertSame(m_a, m_model.getNextWidget());
 		
 		// no focus, first widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b});
+		m_model.add(new Focusable[]{m_a, m_b});
 		m_a.setEnabled(false);
 		assertSame(m_b, m_model.getNextWidget());
 		
@@ -697,7 +698,7 @@ public class FocusModelTC extends GWTTestCase
 		setUpImpl();
 		m_b.setEnabled(false);
 		m_c.setEnabled(false);
-		m_model.add(new HasFocus[]{m_a, m_b, m_c, m_d});
+		m_model.add(new Focusable[]{m_a, m_b, m_c, m_d});
 		m_model.setFocusWidget(m_a);
 		assertSame(m_d, m_model.getNextWidget());
 		
@@ -705,7 +706,7 @@ public class FocusModelTC extends GWTTestCase
 		setUpImpl();
 		m_a.setEnabled(false);
 		m_d.setEnabled(false);
-		m_model.add(new HasFocus[]{m_a, m_b, m_c, m_d});
+		m_model.add(new Focusable[]{m_a, m_b, m_c, m_d});
 		m_model.setFocusWidget(m_c);
 		assertSame(m_b, m_model.getNextWidget());
 		
@@ -726,7 +727,7 @@ public class FocusModelTC extends GWTTestCase
 	{
 		// basic test
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		assertSame(m_c, m_model.getPreviousWidget());
 		m_model.setFocusWidget(m_c);
 		assertSame(m_b, m_model.getPreviousWidget());
@@ -743,35 +744,35 @@ public class FocusModelTC extends GWTTestCase
 		
 		// start from blur widget if no focus
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_model.setFocusWidget(m_b);
 		m_model.setFocusWidget(null);
 		assertEquals(m_a, m_model.getPreviousWidget());
 		
 		// first widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_a.setEnabled(false);
 		m_model.setFocusWidget(m_b);
 		assertSame(m_c, m_model.getPreviousWidget());
 		
 		// middle widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_b.setEnabled(false);
 		m_model.setFocusWidget(m_c);
 		assertSame(m_a, m_model.getPreviousWidget());
 		
 		// last widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b, m_c});
+		m_model.add(new Focusable[]{m_a, m_b, m_c});
 		m_c.setEnabled(false);
 		m_model.setFocusWidget(m_a);
 		assertSame(m_b, m_model.getPreviousWidget());
 		
 		// no focus, last widget disabled
 		setUpImpl();
-		m_model.add(new HasFocus[]{m_a, m_b});
+		m_model.add(new Focusable[]{m_a, m_b});
 		m_b.setEnabled(false);
 		assertSame(m_a, m_model.getPreviousWidget());
 		
@@ -792,7 +793,7 @@ public class FocusModelTC extends GWTTestCase
 		setUpImpl();
 		m_b.setEnabled(false);
 		m_c.setEnabled(false);
-		m_model.add(new HasFocus[]{m_a, m_b, m_c, m_d});
+		m_model.add(new Focusable[]{m_a, m_b, m_c, m_d});
 		m_model.setFocusWidget(m_d);
 		assertSame(m_a, m_model.getPreviousWidget());
 		
@@ -800,7 +801,7 @@ public class FocusModelTC extends GWTTestCase
 		setUpImpl();
 		m_a.setEnabled(false);
 		m_d.setEnabled(false);
-		m_model.add(new HasFocus[]{m_a, m_b, m_c, m_d});
+		m_model.add(new Focusable[]{m_a, m_b, m_c, m_d});
 		m_model.setFocusWidget(m_b);
 		assertSame(m_c, m_model.getPreviousWidget());
 		

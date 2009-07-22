@@ -22,6 +22,9 @@ import asquare.gwt.tk.client.ui.resource.TkImageFactory;
 import asquare.gwt.tk.client.util.DomUtil;
 import asquare.gwt.tk.client.util.KeyMap;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -463,13 +466,13 @@ public class AlertDialog extends ModalDialog
      */
     public void addButton(Widget widget, char hotKey, int type, final boolean closeDialog, final Command command)
 	{
-		SourcesClickEvents clickable = (SourcesClickEvents) widget;
-		boolean focusable = widget instanceof HasFocus;
+		HasClickHandlers clickable = (HasClickHandlers) widget;
+		boolean focusable = widget instanceof Focusable;
         final HideAndExecuteCommand command0 = new HideAndExecuteCommand(AlertDialog.this, closeDialog, command);
 		
-	    clickable.addClickListener(new ClickListener()
+	    clickable.addClickHandler(new ClickHandler()
         {
-            public void onClick(Widget sender)
+            public void onClick(ClickEvent event)
             {
                 command0.execute();
             }
@@ -477,15 +480,15 @@ public class AlertDialog extends ModalDialog
 		m_buttonPanel.add(widget);
 		if (focusable)
 		{
-			getFocusModel().add((HasFocus) widget);
+			getFocusModel().add((Focusable) widget);
 		}
 		if ((type & BUTTON_DEFAULT) != 0)
 		{
 			widget.addStyleName("tk-AlertDialog-defaultButton");
 			m_defaultButton = widget;
-			if (focusable && getFocusModel().contains((HasFocus) widget))
+			if (focusable && getFocusModel().contains((Focusable) widget))
 			{
-				getFocusModel().setFocusWidget((HasFocus) widget);
+				getFocusModel().setFocusWidget((Focusable) widget);
 			}
 		}
 		if ((type & BUTTON_CANCEL) != 0)
@@ -513,9 +516,9 @@ public class AlertDialog extends ModalDialog
 			m_defaultButton = null;
 			m_defaultButton.removeStyleName("tk-AlertDialog-defaultButton");
 		}
-		if (button instanceof HasFocus)
+		if (button instanceof Focusable)
 		{
-			getFocusModel().remove(((HasFocus) button));
+			getFocusModel().remove(((Focusable) button));
 		}
 	}
 	
@@ -532,7 +535,8 @@ public class AlertDialog extends ModalDialog
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.ModalDialog#show(com.google.gwt.user.client.ui.HasFocus)
 	 */
-	public void show(HasFocus focusOnCloseWidget)
+	@Override
+	public void show(Focusable focusOnCloseWidget)
 	{
 		super.setCaption(buildCaption());
 		buildContent();
@@ -617,13 +621,13 @@ public class AlertDialog extends ModalDialog
 				if (keyCode == KeyEvent.KEYCODE_RIGHT || keyCode == KeyEvent.KEYCODE_DOWN)
 				{
 					// increment focus
-					focusModel.getNextWidget().setFocus(true);
+					focusModel.focusNextWidget();
 					result = false;
 				}
 				else if (keyCode == KeyEvent.KEYCODE_LEFT || keyCode == KeyEvent.KEYCODE_UP)
 				{
 					// decrement focus
-					focusModel.getPreviousWidget().setFocus(true);
+					focusModel.focusPreviousWidget();
 					result = false;
 				}
 			}

@@ -33,8 +33,8 @@ public class CellRendererDefaultTC extends GWTTestCase
 	{
         Element viewElement = DOM.createSpan();
 	    String html = "<span style=\"color:red;\">-19.38</span>";
-//        String escapedHtml = "&lt;span style=\"color:red;\"&gt;-19.38&lt;/span&gt;";
-        String escapedHtml = "&lt;span style=\"color:red;\">-19.38&lt;/span>";
+        String escapedHtml = "&lt;span style=\"color:red;\"&gt;-19.38&lt;/span&gt;";
+//        String escapedHtml = "&lt;span style=\"color:red;\">-19.38&lt;/span>";
         
 	    // escaped
         CellRendererDefault defaultRenderer = new CellRendererDefault();

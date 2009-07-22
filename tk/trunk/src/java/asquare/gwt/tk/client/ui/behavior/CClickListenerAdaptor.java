@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.ClickListenerCollection;
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public class CClickListenerAdaptor extends ClickListenerCollection implements Controller
 {
 	private static final long serialVersionUID = 1L;

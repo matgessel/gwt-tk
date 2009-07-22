@@ -16,6 +16,8 @@
 package asquare.gwt.tests.popupflash.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.*;
 
@@ -25,11 +27,11 @@ public class Demo implements EntryPoint
 	{
 		RootPanel body = RootPanel.get();
 		DOM.setStyleAttribute(body.getElement(), "background", "blue");
-		final Button showPopupButton = new Button("Show popup");
-		showPopupButton.addClickListener(new ClickListener()
+		body.add(new Button("Show popup", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
+				Button showPopupButton = (Button) event.getSource();
 				PopupPanel popup = new PopupPanel(true);
 				popup.add(new HTML("Click outside the popup to dismiss it"));
 				DOM.setStyleAttribute(popup.getElement(), "border", "solid white 5px");
@@ -40,7 +42,6 @@ public class Demo implements EntryPoint
 				popup.setPopupPosition(x, y);
 				popup.show();
 			}
-		});
-		body.add(showPopupButton);
+		}));
 	}
 }

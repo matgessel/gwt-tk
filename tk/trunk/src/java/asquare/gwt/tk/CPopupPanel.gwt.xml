@@ -16,8 +16,8 @@
 <module>
 	<inherits name="com.google.gwt.user.User"/>
 	
-	<replace-with class="asquare.gwt.tk.client.ui.CPopupPanel.EventPreviewDelegateFF">
-		<when-type-is class="asquare.gwt.tk.client.ui.CPopupPanel.EventPreviewDelegate"/>
+	<replace-with class="asquare.gwt.tk.client.ui.CPopupPanel.PopupPanelControllerFF">
+		<when-type-is class="asquare.gwt.tk.client.ui.CPopupPanel.PopupPanelController"/>
 		<any>
 			<when-property-is name="user.agent" value="gecko"/>
 			<when-property-is name="user.agent" value="gecko1_8"/>

@@ -16,19 +16,18 @@
 package asquare.gwt.tests.circularbinding.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Event;
 
 public class DOM2
 {
 	private static final DOM2Impl impl = (DOM2Impl) GWT.create(DOM2Impl.class);
 
-	public static int eventGetClientX(Event event)
+	public static int eventGetClientX()
 	{
-		return impl.eventGetClientX(event);
+		return impl.eventGetClientX();
 	}
 
-	public static int eventGetClientY(Event event)
+	public static int eventGetClientY()
 	{
-		return impl.eventGetClientY(event);
+		return impl.eventGetClientY();
 	}
 }

@@ -20,6 +20,8 @@ import asquare.gwt.tk.client.ui.ExternalHyperLink;
 import asquare.gwt.tk.client.ui.SimpleHyperLink;
 import asquare.gwt.tk.client.util.DomUtil;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
@@ -59,9 +61,9 @@ public class MiscPanel extends Composite
 		BasicPanel example = new BasicPanel();
 		example.addStyleName("example");
 		
-		example.add(new SimpleHyperLink("SpongeBob says...", new ClickListener()
+		example.add(new SimpleHyperLink("SpongeBob says...", new ClickHandler()
 		{
-			public void onClick(Widget sender)
+			public void onClick(ClickEvent event)
 			{
 				Window.alert("I'm a goofy goober!");
 			}

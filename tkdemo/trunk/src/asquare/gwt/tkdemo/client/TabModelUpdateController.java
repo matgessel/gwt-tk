@@ -19,9 +19,10 @@ import asquare.gwt.sb.client.fw.ListModel;
 import asquare.gwt.sb.client.fw.ListSelectionModelSingle;
 import asquare.gwt.tkdemo.client.ui.AppPanelCollection;
 
-import com.google.gwt.user.client.HistoryListener;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-public class TabModelUpdateController implements HistoryListener
+public class TabModelUpdateController implements ValueChangeHandler<String>
 {
 	private final AppPanelCollection m_panels;
 	private final ListModel<?> m_tabBarModel;
@@ -34,8 +35,9 @@ public class TabModelUpdateController implements HistoryListener
 		m_selectionModel = (ListSelectionModelSingle) tabBarModel.getSelectionModel();
 	}
 	
-	public void onHistoryChanged(String historyToken)
+	public void onValueChange(ValueChangeEvent<String> event)
 	{
+		String historyToken = event.getValue();
 		int index = m_panels.getIndexForToken(historyToken);
 		if (index != -1)
 		{

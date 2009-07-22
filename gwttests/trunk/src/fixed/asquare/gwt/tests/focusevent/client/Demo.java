@@ -18,6 +18,9 @@ package asquare.gwt.tests.focusevent.client;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.user.client.ui.*;
 
 public class Demo implements EntryPoint
@@ -59,7 +62,7 @@ public class Demo implements EntryPoint
 		return outer;
 	}
 	
-	private static class TestPanel extends VerticalPanel implements FocusListener
+	private static class TestPanel extends VerticalPanel implements FocusHandler
 	{
 		private final HashMap<Widget, UIObject> m_borders = new HashMap<Widget, UIObject>();
 		
@@ -71,18 +74,14 @@ public class Demo implements EntryPoint
 			border.add(w);
 			add(border);
 			m_borders.put(w, border);
-			((HasFocus) w).addFocusListener(this);
+			((HasFocusHandlers) w).addFocusHandler(this);
 		}
 		
-		public void onFocus(Widget sender)
+		public void onFocus(FocusEvent event)
 		{
-			UIObject border = m_borders.get(sender);
+			UIObject border = m_borders.get(event.getSource());
 			border.removeStyleName("fail");
 			border.addStyleName("pass");
-		}
-
-		public void onLostFocus(Widget sender)
-		{
 		}
 	}
 }

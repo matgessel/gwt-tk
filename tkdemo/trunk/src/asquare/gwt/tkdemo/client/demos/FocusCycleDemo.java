@@ -15,15 +15,41 @@
  */
 package asquare.gwt.tkdemo.client.demos;
 
-import asquare.gwt.sb.client.fw.*;
+import asquare.gwt.sb.client.fw.StyleNames;
 import asquare.gwt.tk.client.ui.BasicPanel;
 import asquare.gwt.tk.client.ui.CWrapper;
-import asquare.gwt.tk.client.ui.behavior.*;
+import asquare.gwt.tk.client.ui.behavior.FocusModel;
+import asquare.gwt.tk.client.ui.behavior.TabFocusController;
+import asquare.gwt.tk.client.ui.behavior.event.FocusModelHandler;
 import asquare.gwt.tk.client.util.DomUtil;
 import asquare.gwt.tkdemo.client.ui.FocusCyclePanel;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.HasBlurHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class FocusCycleDemo extends BasicPanel
 {
@@ -121,7 +147,7 @@ public class FocusCycleDemo extends BasicPanel
 		
 		cycle2.add(new Label("Cycle 2"));
 		Label label = new Label("A custom focus cycle across containers");
-		DomUtil.setStyleAttribute(label, "font-size", "smaller");
+		DomUtil.setStyleAttribute(label, "fontSize", "smaller");
 		cycle2.add(label);
 		HorizontalPanel containers = new HorizontalPanel();
 		
@@ -152,42 +178,43 @@ public class FocusCycleDemo extends BasicPanel
         return cycle2;
 	}
     
-    private static class FocusStyleDecorator extends SimplePanel implements HasFocus
+    private static class FocusStyleDecorator extends SimplePanel implements Focusable, HasFocusHandlers, HasBlurHandlers
     {
-        private final DelegatingFocusListenerCollection m_focusListenerCollection;
-        private final DelegatingKeyboardListenerCollection m_keyboardListenerCollection;
+        private final HandlerManager m_handlerManager = new HandlerManager(this);
+    	
+    	private Focusable m_wrapped;
         
-        private HasFocus m_wrapped;
-        
-        public FocusStyleDecorator(HasFocus toWrap)
+        public FocusStyleDecorator(Widget toWrap)
         {
-            m_wrapped = toWrap;
-            m_focusListenerCollection = new DelegatingFocusListenerCollection(this, m_wrapped);
-            m_keyboardListenerCollection = new DelegatingKeyboardListenerCollection(this, m_wrapped);
-            setWidget((Widget) toWrap);
+            m_wrapped = (Focusable) toWrap;
+            setWidget(toWrap);
             setStyleName("FocusStyleDecorator");
+            class Handler implements FocusHandler, BlurHandler
+            {
+				public void onFocus(FocusEvent event)
+				{
+					m_handlerManager.fireEvent(event);
+				}
+				public void onBlur(BlurEvent event)
+				{
+					m_handlerManager.fireEvent(event);
+				}
+            }
+            Handler handler = new Handler();
+            ((HasFocusHandlers) m_wrapped).addFocusHandler(handler);
+            ((HasBlurHandlers) m_wrapped).addBlurHandler(handler);
         }
 
-        public void addFocusListener(FocusListener listener)
+        public HandlerRegistration addFocusHandler(FocusHandler handler)
         {
-            m_focusListenerCollection.add(listener);
+        	return m_handlerManager.addHandler(FocusEvent.getType(), handler);
         }
-
-        public void removeFocusListener(FocusListener listener)
+        
+        public HandlerRegistration addBlurHandler(BlurHandler handler)
         {
-            m_focusListenerCollection.remove(listener);
+        	return m_handlerManager.addHandler(BlurEvent.getType(), handler);
         }
-
-        public void addKeyboardListener(KeyboardListener listener)
-        {
-            m_keyboardListenerCollection.add(listener);
-        }
-
-        public void removeKeyboardListener(KeyboardListener listener)
-        {
-            m_keyboardListenerCollection.remove(listener);
-        }
-
+        
         public int getTabIndex()
         {
             return m_wrapped.getTabIndex();
@@ -214,18 +241,18 @@ public class FocusCycleDemo extends BasicPanel
         }
     }
     
-    private static class WidgetFocusStyleController implements FocusModelListener
+    private static class WidgetFocusStyleController implements FocusModelHandler
     {
         private UIObject m_current = null;
         private UIObject m_previous = null;
         
         public WidgetFocusStyleController(FocusModel focusModel)
         {
-            focusModel.addListener(this);
+            focusModel.addHandler(this);
             focusChanged(focusModel, focusModel.getBlurWidget(), focusModel.getCurrentWidget());
         }
         
-        public void focusChanged(FocusModel model, HasFocus previous, HasFocus current)
+        public void focusChanged(FocusModel model, Focusable previous, Focusable current)
         {
             if (m_current != null)
             {
@@ -253,11 +280,11 @@ public class FocusCycleDemo extends BasicPanel
             }
         }
         
-        public void widgetsAdded(FocusModel model, HasFocus[] added)
+        public void widgetsAdded(FocusModel model, Focusable[] added)
         {
         }
         
-        public void widgetsRemoved(FocusModel model, HasFocus[] removed)
+        public void widgetsRemoved(FocusModel model, Focusable[] removed)
         {
             for (int i = 0; i < removed.length; i++)
             {

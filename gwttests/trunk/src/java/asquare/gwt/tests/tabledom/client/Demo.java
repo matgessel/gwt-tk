@@ -16,6 +16,8 @@
 package asquare.gwt.tests.tabledom.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.*;
@@ -32,9 +34,9 @@ public class Demo implements EntryPoint
 		final Button button = new Button();
 		DOM.setStyleAttribute(button.getElement(), "display", "block");
 		button.setText("Execute");
-		button.addClickListener(new ClickListener()
+		button.addClickHandler(new ClickHandler()
 		{
-			public void onClick(final Widget aSender)
+			public void onClick(ClickEvent event)
 			{
 				Element tbody = DOM.createTBody();
 				setInnerHtml(tbody, "", "setInnerHtml(tbody, \"\")");

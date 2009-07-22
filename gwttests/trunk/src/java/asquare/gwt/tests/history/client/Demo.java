@@ -42,8 +42,8 @@ public class Demo implements EntryPoint
 			initialTabToken = tabSet.getToken(0);
 		}
 		TabController controller = new TabController(tabSet, tabPanel, initialTabToken);
-		tabPanel.addTabListener(controller);
-		History.addHistoryListener(controller);
+		tabPanel.addSelectionHandler(controller);
+		History.addValueChangeHandler(controller);
 		
 		RootPanel.get().add(tabPanel);
 	}

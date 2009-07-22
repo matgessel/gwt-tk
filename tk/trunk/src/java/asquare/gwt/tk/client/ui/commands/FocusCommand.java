@@ -16,7 +16,7 @@
 package asquare.gwt.tk.client.ui.commands;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.HasFocus;
+import com.google.gwt.user.client.ui.Focusable;
 
 /**
  * Focuses or blurs a widget. 
@@ -25,15 +25,15 @@ import com.google.gwt.user.client.ui.HasFocus;
  */
 public class FocusCommand implements Command
 {
-	private final HasFocus m_widget;
+	private final Focusable m_widget;
 	private final boolean m_focus;
 	
 	/**
 	 * Constructs a command which will focus the specified widget. 
 	 * 
-	 * @param widget a widget which implements {@link HasFocus}
+	 * @param widget a widget which implements {@link Focusable}
 	 */
-	public FocusCommand(HasFocus widget)
+	public FocusCommand(Focusable widget)
 	{
 		m_widget = widget;
 		m_focus = true;
@@ -42,10 +42,10 @@ public class FocusCommand implements Command
 	/**
 	 * Constructs a command which will focus or blur the specified widget. 
 	 * 
-	 * @param widget a widget which implements {@link HasFocus}
+	 * @param widget a widget which implements {@link Focusable}
 	 * @param focus <code>true</code> to focus <code>widget</code>, <code>false</code> to blur
 	 */
-	public FocusCommand(HasFocus widget, boolean focus)
+	public FocusCommand(Focusable widget, boolean focus)
 	{
 		m_widget = widget;
 		m_focus = focus;

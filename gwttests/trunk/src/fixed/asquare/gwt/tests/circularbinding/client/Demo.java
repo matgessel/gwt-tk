@@ -16,9 +16,14 @@
 package asquare.gwt.tests.circularbinding.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Demo implements EntryPoint
 {
@@ -34,20 +39,18 @@ public class Demo implements EntryPoint
 		final TextArea output = new TextArea();
 		outer.add(output);
 		
-		Label label = new Label("Click me")
+		Label label = new Label("Click me");
+		label.addMouseDownHandler(new MouseDownHandler()
 		{
-			public void onBrowserEvent(Event event)
+			public void onMouseDown(MouseDownEvent event)
 			{
-				if (DOM.eventGetType(event) == Event.ONMOUSEDOWN)
-				{
-					// this works
-					output.setText("x=" + DOM2.eventGetClientX(event));
-					
-					// this results in an infinite loop
-					output.setText(output.getText() + "\r\ny=" + DOM2.eventGetClientY(event));				
-				}
+				// this works
+				output.setText("x=" + DOM2.eventGetClientX());
+				
+				// this results in an infinite loop
+				output.setText(output.getText() + "\r\ny=" + DOM2.eventGetClientY());				
 			}
-		};
+		});
 		DOM.setStyleAttribute(label.getElement(), "border", "solid black 1px");
 		outer.insert(label, 0);
 		

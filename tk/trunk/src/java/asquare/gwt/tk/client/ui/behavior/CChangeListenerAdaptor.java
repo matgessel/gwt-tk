@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.Widget;
 
+@Deprecated
 public class CChangeListenerAdaptor extends ChangeListenerCollection implements Controller
 {
 	private static final long serialVersionUID = 1L;

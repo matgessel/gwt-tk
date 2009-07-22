@@ -50,7 +50,7 @@ public class ThrowExceptionInJS extends GWTTestCase
 				return @asquare.gwt.tests.test.ThrowExceptionInJS::throwIllegalArgumentException(Ljava/lang/String;)(message);
 			};
 			JSNI.initialized = true;
-		};
+		}
 	}-*/;
 	
 	private native void createThrowJavaException() /*-{
