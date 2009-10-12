@@ -58,7 +58,7 @@
 		<property name="src.dir" value="src/${module}"/>
 		<echo level="info" message="src.dir=${src.dir}"/>
 		<mkdir dir="build/${module}/classes"/>
-		<javac source="1.5" target="1.5" destdir="build/${module}/classes" srcdir="${src.dir}">
+		<javac source="1.5" target="1.5" debug="on" destdir="build/${module}/classes" srcdir="${src.dir}">
 			<classpath>
 				<pathelement path="${module.classpath}"/><!-- optional -->
 				<fileset dir="build">
