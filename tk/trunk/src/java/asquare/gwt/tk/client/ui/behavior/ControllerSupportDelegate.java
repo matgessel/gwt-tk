@@ -36,7 +36,9 @@ public class ControllerSupportDelegate
 	
 	private List<Controller> m_controllers = null;
 	private List<Class<? extends Controller>> m_disablableControllerIds = null;
-	private int m_legacyEventBits = 0;
+	private int m_bitsForOnBrowserEvent = 0; // only valid after attached
+	private int m_bitsForControllers = 0; // only valid after attached
+	private boolean m_isOrWasAttached = false;
 	private boolean m_enabled = true;
 	
 	/**
@@ -47,46 +49,64 @@ public class ControllerSupportDelegate
 	public ControllerSupportDelegate(Widget widget)
 	{
 		m_widget = widget;
-		m_legacyEventBits = DOM.getEventsSunk(widget.getElement());
 	}
 	
-	/**
-	 * Gets the event bits which were sunk on the widget itself. Used to
-	 * determine which events should be passed to a widget's 
-	 * {@link EventListener#onBrowserEvent(Event) onBrowserEvent()} method. This
-	 * can happen when subclassing or wrapping a widget.
-	 * 
-	 * @return a bitmask of the event types
-	 * @see Event
-	 */
-	public int getLegacyEventBits()
+    /**
+     * Gets the event bits which were sunk on the widget itself. This can happen
+     * when subclassing or wrapping a widget. Used to determine which events
+     * should be passed to a widget's
+     * {@link EventListener#onBrowserEvent(Event) onBrowserEvent()} method.
+     * <p>
+     * Only valid after the widget has been attached. This is because a wrapped
+     * widget may sink events internally, and we cannot get the event bits until
+     * it has been attached.
+     * 
+     * @return a bitmask of the event types
+     * @throws IllegalStateException if called before widget has been attached
+     * @see Event
+     */
+	public int getBitsForOnBrowserEvent()
 	{
-		return m_legacyEventBits;
+		if (! isOrWasAttached())
+		    throw new IllegalStateException();
+		
+		return m_bitsForOnBrowserEvent;
 	}
 	
-	private void sinkAllBits()
+	private final boolean isOrWasAttached()
 	{
-		int controllerEventBits = 0;
+	    return m_isOrWasAttached;
+	}
+
+	private int calculateControllerBits()
+	{
+		int result = 0;
 		if (m_controllers != null)
 		{
 			for (int i = 0, size = m_controllers.size(); i < size; i++)
 			{
-				controllerEventBits |= m_controllers.get(i).getEventBits();
+				result |= m_controllers.get(i).getEventBits();
 			}
 		}
-		DOM.sinkEvents(m_widget.getElement(), m_legacyEventBits | controllerEventBits);
+		return result;
 	}
 	
 	public void sinkEvents(int eventBits)
 	{
-		m_legacyEventBits |= eventBits;
-		DOM.sinkEvents(m_widget.getElement(), DOM.getEventsSunk(m_widget.getElement()) | m_legacyEventBits);
+		m_bitsForOnBrowserEvent |= eventBits;
+		if (isOrWasAttached())
+		{
+			m_widget.sinkEvents(m_bitsForOnBrowserEvent);
+		}
 	}
 	
 	public void unsinkEvents(int eventBits)
 	{
-		m_legacyEventBits &= ~eventBits;
-		sinkAllBits();
+		m_bitsForOnBrowserEvent &= ~eventBits;
+		if (isOrWasAttached())
+		{
+			DOM.sinkEvents(m_widget.getElement(), m_bitsForOnBrowserEvent | m_bitsForControllers);
+		}
 	}
 	
 	public Controller getController(Class<? extends Controller> id)
@@ -117,8 +137,12 @@ public class ControllerSupportDelegate
 			m_controllers = new ArrayList<Controller>();
 		}
 		m_controllers.add(controller);
-		DOM.sinkEvents(m_widget.getElement(), 
-				DOM.getEventsSunk(m_widget.getElement()) | controller.getEventBits()); // adding bits is easy
+		if(isOrWasAttached())
+		{
+			int eventBits = controller.getEventBits();
+			m_bitsForControllers |= eventBits;
+			DOM.sinkEvents(m_widget.getElement(), m_bitsForOnBrowserEvent | m_bitsForControllers);
+		}
 		if (m_widget.isAttached())
 		{
 			controller.plugIn(m_widget);
@@ -149,7 +173,11 @@ public class ControllerSupportDelegate
 		{
 			controller.unplug(m_widget);
 		}
-		sinkAllBits();
+		if (isOrWasAttached())
+		{
+			m_bitsForControllers = calculateControllerBits();
+			DOM.sinkEvents(m_widget.getElement(), m_bitsForOnBrowserEvent | m_bitsForControllers);
+		}
 		return m_widget;
 	}
 	
@@ -165,14 +193,19 @@ public class ControllerSupportDelegate
 			m_controllers = new ArrayList<Controller>();
 			for (int i = 0, size = controllers.size(); i < size; i++)
 			{
-				m_controllers.add(controllers.get(i));
-			}
-			if (m_widget.isAttached())
-			{
-				plugInControllers();
+				Controller controller = controllers.get(i);
+				m_controllers.add(controller);
 			}
 		}
-		sinkAllBits();
+		if (isOrWasAttached())
+		{
+			m_bitsForControllers = calculateControllerBits();
+			DOM.sinkEvents(m_widget.getElement(), m_bitsForOnBrowserEvent | m_bitsForControllers);
+		}
+		if (m_widget.isAttached())
+		{
+			plugInControllers();
+		}
 	}
 	
 	public boolean isControllerDisablable(Class<? extends Controller> id)
@@ -240,9 +273,24 @@ public class ControllerSupportDelegate
 		m_enabled = enabled;
 	}
 	
+	/**
+	 * Widget.onAttach() must be called before this. 
+	 */
 	public void onAttach()
 	{
-		plugInControllers();
+	    assert m_widget.isAttached();
+	    if (! isOrWasAttached())
+	    {
+			m_isOrWasAttached = true;
+	    	/**
+			 * The widget may have sunk events internally, so read from the DOM to
+			 * ensure we get all bits. This is why widget must first be attached. 
+			 */
+			m_bitsForOnBrowserEvent |= DOM.getEventsSunk(m_widget.getElement());
+			m_bitsForControllers = calculateControllerBits();
+			DOM.sinkEvents(m_widget.getElement(), m_bitsForOnBrowserEvent | m_bitsForControllers);
+	    }
+	    plugInControllers();
 	}
 	
 	public void onDetach()

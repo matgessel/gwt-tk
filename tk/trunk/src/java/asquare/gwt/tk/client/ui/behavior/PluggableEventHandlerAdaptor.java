@@ -19,6 +19,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PluggableEventHandlerAdaptor extends EventInterestAdaptor implements PluggableEventHandler
 {
+	private boolean m_pluggedIn = false;
+	
 	public PluggableEventHandlerAdaptor()
 	{
 	}
@@ -28,11 +30,18 @@ public class PluggableEventHandlerAdaptor extends EventInterestAdaptor implement
 		super(eventBits);
 	}
 	
+	public boolean isPluggedIn()
+	{
+		return m_pluggedIn;
+	}
+	
 	public void plugIn(Widget widget)
 	{
+		m_pluggedIn = true;
 	}
 	
 	public void unplug(Widget widget)
 	{
+		m_pluggedIn = false;
 	}
 }

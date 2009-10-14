@@ -134,8 +134,8 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 		if (isAttached())
 			return;
 		
-		m_controllerSupport.onAttach();
 		super.onAttach();
+        m_controllerSupport.onAttach();
 	}
 	
 	/*
@@ -147,8 +147,14 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 		if(! isAttached())
 			return;
 		
-		super.onDetach();
-		m_controllerSupport.onDetach();
+        try
+        {
+            m_controllerSupport.onDetach();
+        }
+        finally
+        {
+            super.onDetach();
+        }
 	}
 	
 	/*

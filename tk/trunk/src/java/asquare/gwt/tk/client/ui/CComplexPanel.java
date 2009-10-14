@@ -141,8 +141,8 @@ public class CComplexPanel extends ComplexPanel implements ControllerSupport
 		if (isAttached())
 			return;
 		
-		m_controllerSupport.onAttach();
 		super.onAttach();
+        m_controllerSupport.onAttach();
 	}
 	
 	/*
@@ -156,11 +156,11 @@ public class CComplexPanel extends ComplexPanel implements ControllerSupport
 		
 		try
 		{
-			super.onDetach();
+            m_controllerSupport.onDetach();
 		}
 		finally
 		{
-			m_controllerSupport.onDetach();
+            super.onDetach();
 		}
 	}
 	

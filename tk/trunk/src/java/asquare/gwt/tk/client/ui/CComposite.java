@@ -173,8 +173,8 @@ public class CComposite extends EventWrapper implements ControllerSupport
 		if (isAttached())
 			return;
 		
-		getControllerSupport().onAttach();
 		super.onAttach();
+        getControllerSupport().onAttach();
 	}
 	
 	/*
@@ -188,11 +188,11 @@ public class CComposite extends EventWrapper implements ControllerSupport
 		
 		try
 		{
-			super.onDetach();
+            getControllerSupport().onDetach();
 		}
 		finally
 		{
-			getControllerSupport().onDetach();
+            super.onDetach();
 		}
 	}
 	
@@ -206,7 +206,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 		 * CComposite intercepts the widget's events. Here we ensure the wrapped
 		 * widget gets any events it has sunk.
 		 */
-		if ((getControllerSupport().getLegacyEventBits() & DOM.eventGetType(event)) != 0)
+		if ((getControllerSupport().getBitsForOnBrowserEvent() & DOM.eventGetType(event)) != 0)
 		{
 			super.onBrowserEvent(event);
 		}

@@ -140,8 +140,8 @@ public class CWidget extends Widget implements ControllerSupport
 	{
 		if (isAttached())
 			return;
-		m_controllerSupport.onAttach();
 		super.onAttach();
+        m_controllerSupport.onAttach();
 	}
 	
 	/*
@@ -155,11 +155,11 @@ public class CWidget extends Widget implements ControllerSupport
 		
 		try
 		{
-			super.onDetach();
+            m_controllerSupport.onDetach();
 		}
 		finally
 		{
-			m_controllerSupport.onDetach();
+            super.onDetach();
 		}
 	}
 	
