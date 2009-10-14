@@ -109,6 +109,7 @@
 		<property name="gwt.logLevel" value="INFO"/>
 		<property name="gwt.war" value="build/${module}/war"/>
 		<property name="gwt.style" value="OBF"/>
+		<property name="gwt.localWorkers" value="2"/>
 		<property name="gwt.module" value="${gwt.module.package}.${gwt.module.name}"/>
 		<condition property="debug.jar.location" value="build/debug" else="build/debugstub">
 			<istrue value="${gwttk.debug}"/>
@@ -137,6 +138,8 @@
 			<arg value="${gwt.war}"/>
 			<arg value="-style"/>
 			<arg value="${gwt.style}"/>
+			<arg value="-localWorkers"/>
+			<arg value="${gwt.localWorkers}"/>
 			<arg value="${gwt.module}"/>
 		</java>
 	</target>
