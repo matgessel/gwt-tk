@@ -27,9 +27,9 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class TabFocusControllerStandard extends EventController implements TabFocusController, FocusHandler, BlurHandler, FocusModelHandler
+public class TabFocusControllerStandard extends EventController implements TabFocusController, FocusHandler, BlurHandler, FocusModelHandler, FocusListener
 {
-	private final Map<Object, HandlerRegistration> m_registrations = new HashMap<Object, HandlerRegistration>();
+	private final Map<Focusable, RegistrationEntry> m_registrations = new HashMap<Focusable, RegistrationEntry>();
 	
 	private FocusModel m_focusModel = null;
 	private Focusable m_currentlyFocused = null;
@@ -77,10 +77,22 @@ public class TabFocusControllerStandard extends EventController implements TabFo
 			m_focusModel.addHandler(this);
 			for (int i = 0, size = m_focusModel.getSize(); i < size; i++)
 			{
-				Object widget = m_focusModel.getWidgetAt(i);
-				HandlerRegistration registration = ((HasFocusHandlers) widget).addFocusHandler(this);
-				m_registrations.put(widget, registration);
+				wireFocusListener(m_focusModel.getWidgetAt(i));
 			}
+		}
+	}
+	
+	private void wireFocusListener(Focusable widget)
+	{
+		if (widget instanceof HasFocusHandlers && widget instanceof HasBlurHandlers)
+		{
+			HandlerRegistration focusRegistration = ((HasFocusHandlers) widget).addFocusHandler(this);
+			HandlerRegistration blurRegistration = ((HasBlurHandlers) widget).addBlurHandler(this);
+			m_registrations.put(widget, new RegistrationEntry(focusRegistration, blurRegistration));
+		}
+		else
+		{
+			((SourcesFocusEvents) widget).addFocusListener(this);
 		}
 	}
 	
@@ -88,15 +100,26 @@ public class TabFocusControllerStandard extends EventController implements TabFo
 	{
 		if (m_focusModel != null)
 		{
-			Set<Object> widgets = m_registrations.keySet();
-			for (Iterator<Object> iterator = widgets.iterator(); iterator.hasNext();)
+			for (int i = 0, size = m_focusModel.getSize(); i < size; i++)
 			{
-				Object widget = iterator.next();
-				HandlerRegistration registration = m_registrations.get(widget);
-				registration.removeHandler();
-				iterator.remove();
+				unwireFocusListener(m_focusModel.getWidgetAt(i));
 			}
 			m_focusModel.removeHandler(this);
+		}
+	}
+	
+	private void unwireFocusListener(Focusable widget)
+	{
+		RegistrationEntry entry = m_registrations.get(widget);
+		if (entry != null)
+		{
+			entry.m_focusHandlerRegistration.removeHandler();
+			entry.m_blurHandlerRegistration.removeHandler();
+			m_registrations.remove(widget);
+		}
+		else
+		{
+			((SourcesFocusEvents) widget).removeFocusListener(this);
 		}
 	}
 	
@@ -114,48 +137,67 @@ public class TabFocusControllerStandard extends EventController implements TabFo
 		}
 	}
 	
-	public void onFocus(FocusEvent event)
+	public void onFocusImpl(Object source)
 	{
-//		Debug.println(" TabFocusControllerStandard.onFocus(" + GWT.getTypeName(sender) + ")");
-		Focusable sender = (Focusable) event.getSource();
+//		Debug.println(" TabFocusControllerStandard.onFocusImpl(" + GWT.getTypeName(source) + ")");
+		Focusable focusable = (Focusable) source;
 		if (m_blurEvalCommand != null)
 		{
 			m_blurEvalCommand.cancel();
 		}
-		if (m_currentlyFocused != sender)
+		if (m_currentlyFocused != source)
 		{
-			m_currentlyFocused = sender;
-			m_focusModel.setFocusWidget(sender);
+			m_currentlyFocused = focusable;
+			m_focusModel.setFocusWidget(focusable);
 		}
+	}
+	
+	public void onBlurImpl(Object source)
+	{
+//		Debug.println(" TabFocusControllerStandard.onBlurImpl(" + GWT.getTypeName(source) + ")");
+		if (m_blurEvalCommand != null)
+		{
+			m_blurEvalCommand.cancel();
+		}
+		m_blurEvalCommand = new BlurEvalCommand(source);
+		DeferredCommand.addCommand(m_blurEvalCommand);
+	}
+	
+	public void onFocus(FocusEvent event)
+	{
+		onFocusImpl(event.getSource());
 	}
 	
 	public void onBlur(BlurEvent event)
 	{
-//		Debug.println(" TabFocusControllerStandard.onLostFocus(" + GWT.getTypeName(sender) + ")");
-		if (m_blurEvalCommand != null)
-		{
-			m_blurEvalCommand.cancel();
-		}
-		m_blurEvalCommand = new BlurEvalCommand(event.getSource());
-		DeferredCommand.addCommand(m_blurEvalCommand);
+		onBlurImpl(event.getSource());
+	}
+	
+	// FocusListenerMethods
+	public void onFocus(Widget sender)
+	{
+		onFocusImpl(sender);
+	}
+	
+	public void onLostFocus(Widget sender)
+	{
+		onFocusImpl(sender);
 	}
 	
 	// FocusModelHandler methods
 	public void widgetsAdded(FocusModel model, Focusable[] added)
 	{
-		for (Object widget : added)
+		for (Focusable widget : added)
 		{
-			HandlerRegistration registration = ((HasFocusHandlers) widget).addFocusHandler(this);
-			m_registrations.put(widget, registration);
+			wireFocusListener(widget);
 		}
 	}
 	
 	public void widgetsRemoved(FocusModel model, Focusable[] removed)
 	{
-		for (Object widget : removed)
+		for (Focusable widget : removed)
 		{
-			HandlerRegistration registration = m_registrations.remove(widget);
-			registration.removeHandler();
+			unwireFocusListener(widget);
 		}
 	}
 	
@@ -203,6 +245,18 @@ public class TabFocusControllerStandard extends EventController implements TabFo
 				m_focusModel.setFocusIndex(-1);
 			}
 			m_blurEvalCommand = null;
+		}
+	}
+	
+	private class RegistrationEntry
+	{
+		private final HandlerRegistration m_focusHandlerRegistration;
+		private final HandlerRegistration m_blurHandlerRegistration;
+		
+		public RegistrationEntry(HandlerRegistration focusHandlerRegistration, HandlerRegistration blurHandlerRegistration)
+		{
+			m_focusHandlerRegistration = focusHandlerRegistration;
+			m_blurHandlerRegistration = blurHandlerRegistration;
 		}
 	}
 }

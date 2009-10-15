@@ -17,8 +17,6 @@ package asquare.gwt.tk.client.ui.behavior;
 
 import java.util.ArrayList;
 
-import com.google.gwt.event.dom.client.HasBlurHandlers;
-import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
@@ -31,9 +29,6 @@ import asquare.gwt.tk.client.util.GwtUtil;
  * Tracks the widgets in a focus cycle and which widget <em>should</em> be
  * focused. Note that multiple focus cycles may exist on a page; this model's
  * focused widget may not necessarily have focus.
- * <p>
- * Only widgets implementing {@link HasFocusHandlers} and
- * {@link HasBlurHandlers} are added.
  */
 public class FocusModel
 {
@@ -191,17 +186,11 @@ public class FocusModel
 	 * Determines whether the specified Widget can be added to the model.
 	 * 
 	 * @param widget a widget which is candidate to be added to the model
-	 * @return <code>true</code> if <code>widget</code> implements
-	 *         {@link HasFocusHandlers}, {@link HasBlurHandlers} and
-	 *         <code>widget.getTabIndex() >= 0</code>
+	 * @return <code>true</code> if <code>widget.getTabIndex() >= 0</code>
 	 */
 	protected boolean shouldAdd(Focusable widget)
 	{
-		if (widget instanceof HasFocusHandlers && widget instanceof HasBlurHandlers)
-		{
-			return widget.getTabIndex() >= 0;
-		}
-		return false;
+		return widget.getTabIndex() >= 0;
 	}
 	
 	/**
