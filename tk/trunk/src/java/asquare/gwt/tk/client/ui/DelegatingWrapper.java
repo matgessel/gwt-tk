@@ -17,7 +17,6 @@ package asquare.gwt.tk.client.ui;
 
 import asquare.gwt.tk.client.ui.behavior.BrowserEventHandler;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -49,10 +48,14 @@ public class DelegatingWrapper extends Composite
 	@Override
 	public void onBrowserEvent(Event event)
 	{
-		super.onBrowserEvent(event);
-		if ((m_delegate.getEventBits() & DOM.eventGetType(event)) != 0)
+		if ((m_delegate.getEventBits() & event.getTypeInt()) != 0)
 		{
 			m_delegate.onBrowserEvent(getWidget(), event);
 		}
+        /*
+		 * TODO: the wrapped widget may error if it gets an event it has not
+		 * sunk. See ControllerSupportDelegate.
+		 */
+		super.onBrowserEvent(event);
 	}
 }

@@ -170,7 +170,13 @@ public class CComplexPanel extends ComplexPanel implements ControllerSupport
 	 */
 	public void onBrowserEvent(Event event)
 	{
-		super.onBrowserEvent(event);
+		/*
+		 * Ensure the wrapped widget gets any events it has sunk.
+		 */
+        if ((m_controllerSupport.getBitsForOnBrowserEvent() & event.getTypeInt()) != 0)
+        {
+            super.onBrowserEvent(event);
+        }
 		m_controllerSupport.onBrowserEvent(event);
 	}
 }

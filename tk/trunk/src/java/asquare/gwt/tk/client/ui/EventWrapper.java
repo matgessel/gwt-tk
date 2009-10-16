@@ -68,6 +68,6 @@ public abstract class EventWrapper extends Composite
 	@Override
 	public void onBrowserEvent(Event event)
 	{
-		getWidget().onBrowserEvent(event);
+		super.onBrowserEvent(event);
 	}
 }

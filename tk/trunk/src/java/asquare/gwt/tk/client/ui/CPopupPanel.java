@@ -24,7 +24,6 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
@@ -163,6 +162,13 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 */
 	public void onBrowserEvent(Event event)
 	{
+		/*
+		 * Ensure the wrapped widget gets any events it has sunk.
+		 */
+        if ((m_controllerSupport.getBitsForOnBrowserEvent() & event.getTypeInt()) != 0)
+        {
+            super.onBrowserEvent(event);
+        }
 		m_controllerSupport.onBrowserEvent(event);
 	}
 	
@@ -173,7 +179,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	
 	public void setLeft(int left)
 	{
-		DOM.setStyleAttribute(getElement(), "left", left + "px");
+		getElement().getStyle().setPropertyPx("left", left);
 	}
 	
 	public int getTop()
@@ -183,7 +189,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	
 	public void setTop(int top)
 	{
-		DOM.setStyleAttribute(getElement(), "top", top + "px");
+		getElement().getStyle().setPropertyPx("top", top);
 	}
 	
 	/**

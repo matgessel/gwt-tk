@@ -21,7 +21,6 @@ import asquare.gwt.tk.client.ui.behavior.Controller;
 import asquare.gwt.tk.client.ui.behavior.ControllerSupport;
 import asquare.gwt.tk.client.ui.behavior.ControllerSupportDelegate;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -210,10 +209,9 @@ public class CComposite extends Composite implements ControllerSupport
 	public void onBrowserEvent(Event event)
 	{
 		/*
-		 * CComposite intercepts the widget's events. Here we ensure the wrapped
-		 * widget gets any events it has sunk.
+		 * Here we ensure the wrapped widget gets any events it has sunk.
 		 */
-		if ((getControllerSupport().getBitsForOnBrowserEvent() & DOM.eventGetType(event)) != 0)
+		if ((getControllerSupport().getBitsForOnBrowserEvent() & event.getTypeInt()) != 0)
 		{
 			super.onBrowserEvent(event);
 		}
