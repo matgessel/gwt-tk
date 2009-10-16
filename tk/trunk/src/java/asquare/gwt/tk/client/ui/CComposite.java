@@ -23,6 +23,7 @@ import asquare.gwt.tk.client.ui.behavior.ControllerSupportDelegate;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -37,7 +38,7 @@ import com.google.gwt.user.client.ui.Widget;
  * controllers</li>
  * </ul>
  */
-public class CComposite extends EventWrapper implements ControllerSupport
+public class CComposite extends Composite implements ControllerSupport
 {
 	private final boolean m_eventsTargetWrapper;
 	
@@ -70,6 +71,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.EventWrapper#initWidget(com.google.gwt.user.client.ui.Widget)
 	 */
+	@Override
 	protected void initWidget(Widget widget)
 	{
 		if (widget == null)
@@ -140,6 +142,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#sinkEvents(int)
 	 */
+	@Override
 	public void sinkEvents(int eventBits)
 	{
 		getControllerSupport().sinkEvents(eventBits);
@@ -149,6 +152,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#unsinkEvents(int)
 	 */
+	@Override
 	public void unsinkEvents(int eventBits)
 	{
 		getControllerSupport().unsinkEvents(eventBits);
@@ -168,6 +172,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
 	 */
+	@Override
 	protected void onAttach()
 	{
 		if (isAttached())
@@ -181,6 +186,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onDetach()
 	 */
+	@Override
 	protected void onDetach()
 	{
 		if(! isAttached())
@@ -200,6 +206,7 @@ public class CComposite extends EventWrapper implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.EventListener#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		/*

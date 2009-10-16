@@ -22,7 +22,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * A widget wrapper which can process the
- * wrapped widget's events. 
+ * wrapped widget's events.
+ * 
+ * @deprecated use {@link Composite} instead
  */
 public abstract class EventWrapper extends Composite
 {
@@ -49,6 +51,7 @@ public abstract class EventWrapper extends Composite
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
 	 */
+	@Override
 	protected void onAttach()
 	{
 		super.onAttach();
@@ -62,6 +65,7 @@ public abstract class EventWrapper extends Composite
 	 * implementation if you want the wrapped widget to process events also.
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		getWidget().onBrowserEvent(event);

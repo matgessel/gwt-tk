@@ -19,6 +19,7 @@ import asquare.gwt.tk.client.ui.behavior.BrowserEventHandler;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -27,7 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
  * wrapped widget will allowed to process events before they are passed to the
  * delegate.
  */
-public class DelegatingWrapper extends EventWrapper
+public class DelegatingWrapper extends Composite
 {
 	private final BrowserEventHandler m_delegate;
 		
@@ -36,7 +37,8 @@ public class DelegatingWrapper extends EventWrapper
 	 */
 	public DelegatingWrapper(Widget widget, BrowserEventHandler delegate)
 	{
-		super(widget, delegate.getEventBits());
+		initWidget(widget);
+		sinkEvents(delegate.getEventBits());
 		m_delegate = delegate;
 	}
 	
@@ -44,6 +46,7 @@ public class DelegatingWrapper extends EventWrapper
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.EventListener#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		super.onBrowserEvent(event);
