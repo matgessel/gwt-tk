@@ -18,7 +18,10 @@
 	
 	<replace-with class="asquare.gwt.tk.client.util.impl.DomUtilImplIE6">
 		<when-type-is class="asquare.gwt.tk.client.util.impl.DomUtilImpl"/>
-		<when-property-is name="user.agent" value="ie6"/>
+		<any>
+          <when-property-is name="user.agent" value="ie6"/>
+          <when-property-is name="user.agent" value="ie8"/>
+		</any>
 	</replace-with>
 
 	<replace-with class="asquare.gwt.tk.client.util.impl.DomUtilImplOpera">

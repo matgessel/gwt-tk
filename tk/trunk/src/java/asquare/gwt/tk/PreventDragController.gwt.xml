@@ -22,6 +22,9 @@
 
 	<replace-with class="asquare.gwt.tk.client.ui.behavior.impl.PreventDragControllerIE6">
 		<when-type-is class="asquare.gwt.tk.client.ui.behavior.PreventDragController"/>
-		<when-property-is name="user.agent" value="ie6"/>
+        <any>
+            <when-property-is name="user.agent" value="ie6"/>
+            <when-property-is name="user.agent" value="ie8"/>
+        </any>
 	</replace-with>
 </module>

@@ -15,11 +15,12 @@
  */
 package asquare.gwt.tk.client.util.impl;
 
-import com.google.gwt.dom.client.*;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 
 public class DomUtilImplIE6 extends DomUtilImpl
 {
-	public void clean(com.google.gwt.dom.client.Element element)
+	public void clean(Element element)
 	{
 		String elementName = element.getNodeName();
 		if ("TR".equals(elementName) || "TABLE".equalsIgnoreCase(elementName) || "TBODY".equalsIgnoreCase(elementName))

@@ -16,10 +16,15 @@
 <module>
 	<inherits name="com.google.gwt.user.UserAgent"/>
 	
-	<replace-with class="asquare.gwt.debug.client.impl.BrowserInfoIE6">
-		<when-type-is class="asquare.gwt.debug.client.BrowserInfo"/>
-		<when-property-is name="user.agent" value="ie6"/>
-	</replace-with>
+    <replace-with class="asquare.gwt.debug.client.impl.BrowserInfoIE6">
+        <when-type-is class="asquare.gwt.debug.client.BrowserInfo"/>
+        <when-property-is name="user.agent" value="ie6"/>
+    </replace-with>
+
+    <replace-with class="asquare.gwt.debug.client.impl.BrowserInfoIE8">
+        <when-type-is class="asquare.gwt.debug.client.BrowserInfo"/>
+        <when-property-is name="user.agent" value="ie8"/>
+    </replace-with>
 
 	<replace-with class="asquare.gwt.debug.client.impl.BrowserInfoOpera">
 		<when-type-is class="asquare.gwt.debug.client.BrowserInfo"/>
