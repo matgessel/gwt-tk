@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Command;
  */
 public class CommandQueue extends CommandQueueBase
 {
+	@Override
 	public void add(Command command)
 	{
 		if (addImpl(command))
@@ -30,6 +31,7 @@ public class CommandQueue extends CommandQueueBase
 		}
 	}
 	
+	@Override
 	protected void scheduleRunIteration()
 	{
 		run();

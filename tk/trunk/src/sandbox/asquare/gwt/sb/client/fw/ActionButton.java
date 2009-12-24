@@ -74,6 +74,7 @@ public class ActionButton extends Button implements ActionPropertyListener
 		setEnabled(enabled);
 	}
 	
+    @Override
 	public void onBrowserEvent(Event event)
 	{
 		super.onBrowserEvent(event);

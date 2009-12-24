@@ -58,12 +58,14 @@ public class TabFocusControllerStandard extends EventController implements TabFo
 		}
 	}
 	
+	@Override
 	public void plugIn(Widget widget)
 	{
 		wireFocusListeners();
 		super.plugIn(widget);
 	}
 	
+	@Override
 	public void unplug(Widget widget)
 	{
 		super.unplug(widget);
@@ -123,6 +125,7 @@ public class TabFocusControllerStandard extends EventController implements TabFo
 		}
 	}
 	
+	@Override
 	public void onBrowserEvent(Widget widget, Event event)
 	{
 		if (KeyEventImpl.getKeyCode(event) == KeyEvent.KEYCODE_TAB)

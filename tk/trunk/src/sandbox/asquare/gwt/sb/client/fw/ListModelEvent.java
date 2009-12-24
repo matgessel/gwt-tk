@@ -71,6 +71,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 			super(ListChangeItemInsertion.class, index, count);
 		}
 		
+	    @Override
 		public boolean addChange(ChangeBase change)
 		{
 			return change instanceof ListChangeItemInsertion && addIndexedChange((IndexedChangeBase) change);
@@ -84,6 +85,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 			super(ListChangeItemRemoval.class, index, count);
 		}
 		
+	    @Override
 		public boolean addChange(ChangeBase change)
 		{
 			return change instanceof ListChangeItemRemoval && addIndexedChange((IndexedChangeBase) change);
@@ -109,6 +111,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 			return m_name;
 		}
 		
+	    @Override
 		public boolean addChange(ChangeBase change)
 		{
 			if (change instanceof ListItemPropertyChange)
@@ -122,6 +125,7 @@ public class ListModelEvent extends ModelChangeEventComplex
 			return false;
 		}
 		
+	    @Override
 		public String toString()
 		{
 			return m_name + '[' + getIndex() + '-' + getEndIndex() + ']';

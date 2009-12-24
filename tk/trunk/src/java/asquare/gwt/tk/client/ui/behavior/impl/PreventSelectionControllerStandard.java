@@ -27,6 +27,7 @@ public class PreventSelectionControllerStandard extends PreventSelectionControll
 		super(Event.ONMOUSEDOWN);
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
 		e.preventDefault();

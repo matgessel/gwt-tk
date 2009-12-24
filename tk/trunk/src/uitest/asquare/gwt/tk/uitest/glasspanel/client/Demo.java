@@ -64,6 +64,7 @@ public class Demo implements EntryPoint
 			super(HideGlassPanelController.class, Event.ONCLICK);
 		}
 		
+	    @Override
 		public void onBrowserEvent(Widget widget, Event event)
 		{
 			((GlassPanel) widget).hide();

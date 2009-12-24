@@ -20,6 +20,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 
 public class PropertiesTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.sb.SbTC";
@@ -40,6 +41,7 @@ public class PropertiesTC extends GWTTestCase
 		m_properties = new Properties();
 		m_o = new Object()
 		{
+		    @Override
 			public String toString()
 			{
 				return "Object value";

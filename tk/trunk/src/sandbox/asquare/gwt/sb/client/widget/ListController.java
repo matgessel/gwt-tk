@@ -73,6 +73,7 @@ public class ListController extends EventController
 		removeHandler(handler);
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
 		IndexedCellId cellId = (IndexedCellId) m_list.getListView().getCellId(e.getTarget());
@@ -82,6 +83,7 @@ public class ListController extends EventController
 		}
 	}
 	
+	@Override
 	public void onMouseDoubleClick(MouseEvent e)
 	{
 		IndexedCellId cellId = (IndexedCellId) m_list.getListView().getCellId(e.getTarget());

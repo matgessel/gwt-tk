@@ -57,6 +57,7 @@ public class EventPreviewController extends EventController implements EventPrev
 		return true;
 	}
 
+	@Override
 	public void onBrowserEvent(Widget widget, Event event)
 	{
 		if (shouldProcessNormalEvents())

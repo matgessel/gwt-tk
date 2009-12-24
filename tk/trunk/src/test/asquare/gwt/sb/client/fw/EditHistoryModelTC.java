@@ -31,6 +31,7 @@ public class EditHistoryModelTC extends GWTTestCase
 	private UndoableCommandStub m_c;
 	private UndoableCommandStub m_d;
 	
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.sb.SbTC";

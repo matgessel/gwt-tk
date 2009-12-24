@@ -24,6 +24,7 @@ public class CommandQueueTC extends GWTTestCase
 	private CommandQueue m_queue;
 	private UndoableCommandStub m_undo1;
 	
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.sb.SbTC";

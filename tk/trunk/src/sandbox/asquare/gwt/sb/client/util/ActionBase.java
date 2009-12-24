@@ -70,6 +70,7 @@ public abstract class ActionBase extends UICommandBase implements Action
 		}
 	}
 	
+	@Override
 	public void setUiString(String uiString)
 	{
 		if (! GwtUtil.equals(getUIString(), uiString))
@@ -90,6 +91,7 @@ public abstract class ActionBase extends UICommandBase implements Action
 			super(ActionBase.this);
 		}
 		
+		@Override
 		protected void notifyListener(Object source, EventListener listener)
 		{
 			((ActionPropertyListener) listener).actionPropertiesChanged((ActionBase) source);

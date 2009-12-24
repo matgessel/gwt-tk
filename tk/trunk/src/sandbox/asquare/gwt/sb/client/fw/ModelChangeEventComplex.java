@@ -204,6 +204,7 @@ public class ModelChangeEventComplex extends ModelChangeEvent
     	return (PropertyChangeObject) getPropertyChange(name);
     }
     
+    @Override
     public String toString()
     {
         return "ModelChangeEventComplex" + m_changes;
@@ -243,16 +244,19 @@ public class ModelChangeEventComplex extends ModelChangeEvent
             return m_type;
         }
         
+	    @Override
         public String toString()
         {
             return GwtUtil.getClassSimpleName(this);
         }
         
+	    @Override
         public int hashCode()
         {
         	return m_type.hashCode();
         }
         
+	    @Override
         public boolean equals(Object obj)
         {
         	return obj instanceof ChangeBase && equals((ChangeBase) obj);
@@ -304,6 +308,7 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 		 */
     	public abstract boolean isChanged();
     	
+	    @Override
     	public boolean addChange(ChangeBase change)
     	{
     		if (equals((Object) change))
@@ -316,11 +321,13 @@ public class ModelChangeEventComplex extends ModelChangeEvent
     	
     	protected abstract void copyNewValueFrom(PropertyChangeBase change);
     	
+	    @Override
     	public int hashCode()
     	{
     		return super.hashCode() * 31 + m_name.hashCode();
     	}
     	
+	    @Override
     	public boolean equals(Object obj)
     	{
         	return obj instanceof PropertyChangeBase && equals((PropertyChangeBase) obj);
@@ -331,6 +338,7 @@ public class ModelChangeEventComplex extends ModelChangeEvent
         	return super.equals(change) && m_name.equals(change.m_name);
     	}
     	
+	    @Override
     	public String toString()
     	{
     		return super.toString() + '[' + m_name + ']';
@@ -360,11 +368,13 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 			return m_newValue;
 		}
     	
+	    @Override
     	protected void copyNewValueFrom(PropertyChangeBase change)
     	{
     		m_newValue = ((PropertyChangeBoolean) change).m_newValue;
     	}
     	
+	    @Override
     	public boolean isChanged()
     	{
     		return m_oldValue != m_newValue;
@@ -394,11 +404,13 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 			return m_newValue;
 		}
     	
+	    @Override
     	protected void copyNewValueFrom(PropertyChangeBase change)
     	{
     		m_newValue = ((PropertyChangeInt) change).m_newValue;
     	}
     	
+	    @Override
     	public boolean isChanged()
     	{
     		return m_oldValue != m_newValue;
@@ -428,11 +440,13 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 			return m_newValue;
 		}
     	
+	    @Override
     	protected void copyNewValueFrom(PropertyChangeBase change)
     	{
     		m_newValue = ((PropertyChangeFloat) change).m_newValue;
     	}
     	
+	    @Override
     	public boolean isChanged()
     	{
     		return m_oldValue != m_newValue;
@@ -462,11 +476,13 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 			return m_newValue;
 		}
     	
+	    @Override
     	protected void copyNewValueFrom(PropertyChangeBase change)
     	{
     		m_newValue = ((PropertyChangeString) change).m_newValue;
     	}
     	
+	    @Override
     	public boolean isChanged()
     	{
     		return ! GwtUtil.equals(m_oldValue, m_newValue);
@@ -496,11 +512,13 @@ public class ModelChangeEventComplex extends ModelChangeEvent
 			return m_newValue;
 		}
     	
+	    @Override
     	protected void copyNewValueFrom(PropertyChangeBase change)
     	{
     		m_newValue = ((PropertyChangeObject) change).m_newValue;
     	}
     	
+	    @Override
     	public boolean isChanged()
     	{
     		return ! GwtUtil.equals(m_oldValue, m_newValue);

@@ -158,6 +158,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	/**
 	 * Removes all cells and child widgets from the panel. 
 	 */
+	@Override
 	public void clear()
 	{
 		while(! m_cellMap.isEmpty())
@@ -171,6 +172,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 * 
 	 * @return the number of child widgets
 	 */
+	@Override
 	public int getWidgetCount()
 	{
 		return getChildren().size();
@@ -232,6 +234,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 * 
 	 * @param w a widget
 	 */
+	@Override
 	public void add(Widget w)
 	{
 		addWidget(w, true);
@@ -349,6 +352,7 @@ public abstract class ExposedCellPanel extends CellPanel implements HasAlignment
 	 * @param w a child widget
 	 * @return false if <code>w</code> is not a child of this panel
 	 */
+	@Override
 	public boolean remove(Widget w)
 	{
 		return remove(w, true);

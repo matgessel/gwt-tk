@@ -181,6 +181,7 @@ public class Properties implements AssociativeArray
 		}
 	}-*/;
 	
+	@Override
 	public native String toString() /*-{
 		var result = "{";
 		var i = 0;

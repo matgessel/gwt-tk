@@ -56,6 +56,7 @@ public class Icon extends Image
 	 * 
 	 * @return the width in CSS measurements
 	 */
+	@Override
 	public int getWidth()
 	{
 		return DomUtil.getIntAttribute(this, "width");
@@ -66,6 +67,7 @@ public class Icon extends Image
 	 * 
 	 * @return the height in CSS measurements
 	 */
+	@Override
 	public int getHeight()
 	{
 		return DomUtil.getIntAttribute(this, "height");

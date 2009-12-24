@@ -44,6 +44,7 @@ public class GlassPanelControllerStandard extends ControllerAdaptor implements G
 		super(GlassPanelController.class);
 	}
 	
+	@Override
 	public void plugIn(Widget widget)
 	{
 		m_widget = widget;
@@ -54,6 +55,7 @@ public class GlassPanelControllerStandard extends ControllerAdaptor implements G
 		m_windowResizeRegistration = Window.addResizeHandler(this);
 	}
 	
+	@Override
 	public void unplug(Widget widget)
 	{
 		m_windowResizeRegistration.removeHandler();

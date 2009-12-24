@@ -128,6 +128,7 @@ public class DropDownPanel extends CComplexPanel
 	 * 
 	 * @param w the widget to be added
 	 */
+	@Override
 	public void add(Widget w)
 	{
 		super.add(w, m_contentDiv);
@@ -179,6 +180,7 @@ public class DropDownPanel extends CComplexPanel
 		}
 	}
 	
+	@Override
 	public boolean remove(Widget w)
 	{
 		if (w.getParent() != this)
@@ -279,6 +281,7 @@ public class DropDownPanel extends CComplexPanel
 			m_dd = dd;
 		}
 		
+		@Override
 		protected boolean doBrowserEvent(Widget widget, Event event)
 		{
 			if (m_dd.isInteractive())

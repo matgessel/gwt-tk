@@ -29,6 +29,7 @@ public class ListUpdateControllerTC extends GWTTestCase
 	private Object m_4;
 	private Object[] m_array;
 	
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.sb.SbTC";

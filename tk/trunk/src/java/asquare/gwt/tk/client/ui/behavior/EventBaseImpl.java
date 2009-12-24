@@ -116,6 +116,7 @@ public class EventBaseImpl extends EventObject implements EventBase
 		return m_killPreviewEvent;
 	}
 	
+	@Override
 	public String toString()
 	{
 		return getPrettyName() + '[' + dumpProperties() + ']';

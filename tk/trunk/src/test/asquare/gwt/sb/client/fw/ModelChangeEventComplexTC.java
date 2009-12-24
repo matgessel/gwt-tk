@@ -73,6 +73,7 @@ public class ModelChangeEventComplexTC extends TestCase
             super(Eat.class);
         }
         
+	    @Override
         public boolean addChange(ChangeBase change)
         {
             return true;
@@ -88,6 +89,7 @@ public class ModelChangeEventComplexTC extends TestCase
 			super(DontEat.class);
 		}
 		
+	    @Override
 		public boolean addChange(ChangeBase change)
 		{
 			return false;

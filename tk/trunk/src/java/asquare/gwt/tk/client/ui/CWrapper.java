@@ -80,6 +80,7 @@ public class CWrapper extends CComposite implements ControllerSupport
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	protected final void initWidget(Widget widget) throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();

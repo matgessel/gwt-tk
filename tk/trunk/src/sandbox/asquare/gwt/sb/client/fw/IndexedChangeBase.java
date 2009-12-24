@@ -28,6 +28,7 @@ public abstract class IndexedChangeBase extends ChangeBase
 		return m_range.getEndIndex();
 	}
 	
+    @Override
 	public abstract boolean addChange(ChangeBase change);
 	
 	protected boolean addIndexedChange(IndexedChangeBase change)
@@ -45,11 +46,13 @@ public abstract class IndexedChangeBase extends ChangeBase
 		return m_range.equals(change.m_range);
 	}
 	
+    @Override
     public int hashCode()
     {
         return super.hashCode() * 31 + m_range.hashCode();
     }
     
+    @Override
     public boolean equals(Object obj)
     {
     	return obj == this || obj instanceof IndexedChangeBase && equals((IndexedChangeBase) obj);
@@ -60,6 +63,7 @@ public abstract class IndexedChangeBase extends ChangeBase
     	return super.equals(change) && m_range.equals(change.m_range);
     }
     
+    @Override
     public String toString()
     {
     	return super.toString() + m_range;

@@ -77,11 +77,13 @@ public class ListSelectionModelChangeSupport extends ModelChangeSupportComplex
 		return m_event;
 	}
 	
+    @Override
 	public boolean isChanged()
 	{
 		return m_event != null && m_event.hasChanges();
 	}
 	
+    @Override
 	public void resetChanges()
 	{
 		m_event = null;
@@ -125,6 +127,7 @@ public class ListSelectionModelChangeSupport extends ModelChangeSupportComplex
 		getEvent0().selectionRemoved(new IntRange(startIndex, length));
 	}
 
+    @Override
 	public void update()
 	{
 		if (isChanged())

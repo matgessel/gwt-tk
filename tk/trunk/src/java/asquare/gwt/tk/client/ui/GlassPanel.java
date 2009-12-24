@@ -146,6 +146,7 @@ public class GlassPanel extends CWindow
 			super(GlassPanelBodyStyleController.class);
 		}
 		
+		@Override
 		public void plugIn(Widget widget)
 		{
 			String bodyStyle = ((GlassPanel) widget).getBodyStyleName();
@@ -155,6 +156,7 @@ public class GlassPanel extends CWindow
 			}
 		}
 		
+		@Override
 		public void unplug(Widget widget)
 		{
 			String bodyStyle = ((GlassPanel) widget).getBodyStyleName();

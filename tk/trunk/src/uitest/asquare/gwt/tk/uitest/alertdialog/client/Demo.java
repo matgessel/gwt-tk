@@ -125,6 +125,7 @@ public class Demo implements EntryPoint
 					m_dialog.setSize("400px", "300px");
 					m_dialog.addController(new ControllerAdaptor(Controller.class, Event.ONMOUSEDOWN)
 					{
+					    @Override
 						public void onBrowserEvent(Widget widget, Event event)
 						{
 							int x = DomUtil.eventGetAbsoluteX(event) - DOM.getAbsoluteLeft(widget.getElement());

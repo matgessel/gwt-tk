@@ -118,6 +118,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		m_contentProperties.remove(propertyName);
 	}
 	
+    @Override
 	protected void initImpl()
 	{
 		m_model.addListener(this);
@@ -133,6 +134,7 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		}
 	}
 	
+    @Override
 	public void disposeImpl()
 	{
 		m_model.removeListener(this);

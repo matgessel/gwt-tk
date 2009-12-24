@@ -118,6 +118,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#sinkEvents(int)
 	 */
+	@Override
 	public void sinkEvents(int eventBits)
 	{
 		m_controllerSupport.sinkEvents(eventBits);
@@ -127,6 +128,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#unsinkEvents(int)
 	 */
+	@Override
 	public void unsinkEvents(int eventBits)
 	{
 		m_controllerSupport.unsinkEvents(eventBits);
@@ -136,6 +138,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
 	 */
+	@Override
 	protected void onAttach()
 	{
 		if (isAttached())
@@ -148,6 +151,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onDetach()
 	 */
+	@Override
 	protected void onDetach()
 	{
 		if(! isAttached())
@@ -167,6 +171,7 @@ public class CWidget extends Widget implements ControllerSupport
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.EventListener#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		/*

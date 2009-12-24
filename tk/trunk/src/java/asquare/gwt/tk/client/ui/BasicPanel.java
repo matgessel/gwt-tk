@@ -143,6 +143,7 @@ public class BasicPanel extends CComplexPanel implements IndexedPanel
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.IndexedPanel#getWidget(int)
 	 */
+	@Override
 	public Widget getWidget(int index)
 	{
 		return getChildren().get(index);
@@ -152,6 +153,7 @@ public class BasicPanel extends CComplexPanel implements IndexedPanel
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.IndexedPanel#getWidgetIndex(com.google.gwt.user.client.ui.Widget)
 	 */
+	@Override
 	public int getWidgetIndex(Widget child)
 	{
 		return getChildren().indexOf(child);
@@ -161,6 +163,7 @@ public class BasicPanel extends CComplexPanel implements IndexedPanel
 	 * Adds a widget to this panel. If a display style has been specified it will
 	 * be applied to the child.
 	 */
+	@Override
 	public void add(Widget w)
 	{
 		insert(w, getWidgetCount());
@@ -190,6 +193,7 @@ public class BasicPanel extends CComplexPanel implements IndexedPanel
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.IndexedPanel#remove(int)
 	 */
+	@Override
 	public boolean remove(int index)
 	{
 		if (index < 0 || index >= getWidgetCount())
@@ -201,6 +205,7 @@ public class BasicPanel extends CComplexPanel implements IndexedPanel
 	/**
 	 * Get the number of widgets in this panel. 
 	 */
+	@Override
 	public int getWidgetCount()
 	{
 		return getChildren().size();

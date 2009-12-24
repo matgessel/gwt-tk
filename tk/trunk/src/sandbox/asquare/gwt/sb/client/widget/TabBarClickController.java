@@ -34,6 +34,7 @@ public class TabBarClickController extends ControllerAdaptor
 		m_selectionModel = (ListSelectionModelSingle) model.getSelectionModel();
 	}
 	
+	@Override
 	public void onBrowserEvent(Widget widget, Event event)
 	{
 		CellId cellId = ((ListView) widget).getCellId(DOM.eventGetTarget(event));

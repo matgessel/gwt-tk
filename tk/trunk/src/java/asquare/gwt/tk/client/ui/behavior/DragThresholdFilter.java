@@ -59,6 +59,7 @@ public class DragThresholdFilter extends DragGestureWrapper
 		return Math.abs(deltaX) >= m_threshold || Math.abs(deltaY) >= m_threshold;
 	}
 	
+	@Override
 	public void start(MouseEvent e)
 	{
 		if (m_threshold == 0)
@@ -72,6 +73,7 @@ public class DragThresholdFilter extends DragGestureWrapper
 		}
 	}
 	
+	@Override
 	public void step(DragEvent e)
 	{
 		if (! m_started && equalsThreshold(e.getCumulativeX(), e.getCumulativeY()))
@@ -86,6 +88,7 @@ public class DragThresholdFilter extends DragGestureWrapper
 		}
 	}
 	
+	@Override
 	public void finish()
 	{
 		if (m_started)

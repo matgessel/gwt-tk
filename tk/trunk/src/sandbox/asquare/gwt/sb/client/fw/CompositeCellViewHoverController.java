@@ -33,6 +33,7 @@ public class CompositeCellViewHoverController extends HoverControllerBase
 		return m_model;
 	}
 
+    @Override
 	public void plugIn(Widget widget)
 	{
 		if (! (widget instanceof CompositeCellView))
@@ -41,11 +42,13 @@ public class CompositeCellViewHoverController extends HoverControllerBase
 		super.plugIn(widget);
 	}
 	
+    @Override
 	protected CellId getCellId(Widget widget, Element element)
 	{
 		return ((CompositeCellView) widget).getCellId(element);
 	}
 	
+    @Override
 	protected void onHoverChanged(Widget widget, CellId cellId)
 	{
 		m_model.setHoverCell(cellId);

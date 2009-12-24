@@ -314,6 +314,7 @@ public class DebugConsole extends DialogBox
 		textNode.appendData(text);
 	}-*/;
 	
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		super.onBrowserEvent(event);
@@ -329,6 +330,7 @@ public class DebugConsole extends DialogBox
 	 * Overrides {@link PopupPanel#show() popup's} implementation to prevent event filtering ala
 	 * {@link com.google.gwt.user.client.EventPreview EventPreview}
 	 */
+	@Override
 	public void show()
 	{
 		if (m_enabled && ! isAttached())
@@ -344,6 +346,7 @@ public class DebugConsole extends DialogBox
 	 * Overrides popup's implementation to prevent event filtering ala
 	 * {@link com.google.gwt.user.client.EventPreview EventPreview}
 	 */
+	@Override
 	public void hide()
 	{
 		if (isAttached())

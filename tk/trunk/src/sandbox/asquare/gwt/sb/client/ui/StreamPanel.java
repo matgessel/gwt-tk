@@ -186,6 +186,7 @@ public class StreamPanel extends ComplexPanel
 	 * @throws UnsupportedOperationException if called
 	 * @deprecated not supported
 	 */
+    @Override
 	public boolean remove(Widget w)
 	{
 		throw new UnsupportedOperationException();

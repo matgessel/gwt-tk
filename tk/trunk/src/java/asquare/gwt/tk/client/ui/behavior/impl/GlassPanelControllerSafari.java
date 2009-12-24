@@ -19,6 +19,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 public class GlassPanelControllerSafari extends GlassPanelControllerStandard
 {
+	@Override
 	public String calculateHeight()
 	{
 		if (canScrollY())
@@ -35,6 +36,7 @@ public class GlassPanelControllerSafari extends GlassPanelControllerStandard
 		}
 	}
 	
+	@Override
 	protected void updateHeight()
 	{
 		getWidget().setHeight(calculateHeight());

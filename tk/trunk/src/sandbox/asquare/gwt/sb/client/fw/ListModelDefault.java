@@ -287,6 +287,7 @@ public class ListModelDefault<E> extends ListModelBase<E> implements MutableList
 			m_value = value;
 		}
 		
+	    @Override
 		public String toString()
 		{
 			return String.valueOf(m_value);

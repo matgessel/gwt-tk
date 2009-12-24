@@ -19,6 +19,7 @@ import asquare.gwt.debug.client.BrowserInfo;
 
 public class BrowserInfoIE8 extends BrowserInfo
 {
+	@Override
 	public String getUserAgent()
 	{
 		return "ie8";

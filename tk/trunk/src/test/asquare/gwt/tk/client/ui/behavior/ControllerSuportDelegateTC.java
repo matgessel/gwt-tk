@@ -21,6 +21,7 @@ public class ControllerSuportDelegateTC extends GWTTestCase
 	private List<ControllerStub> m_controllers2;
 	private List<ControllerStub> m_controllers12;
 	
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();
@@ -143,11 +144,6 @@ public class ControllerSuportDelegateTC extends GWTTestCase
 	
 	private static class ControllerStub extends ControllerAdaptor
 	{
-		public ControllerStub()
-		{
-			this(0);
-		}
-		
 		public ControllerStub(int eventBits)
 		{
 			super(ControllerStub.class, eventBits);
@@ -162,16 +158,19 @@ public class ControllerSuportDelegateTC extends GWTTestCase
 	        sinkEvents(eventBits);
 	    }
 	    
-	    protected void onAttach()
+	    @Override
+		protected void onAttach()
 	    {
 	    	super.onAttach();
 	    }
 	    
+	    @Override
 	    public void sinkEvents(int eventBitsToAdd)
 	    {
 	    	super.sinkEvents(eventBitsToAdd);
 	    }
 	    
+	    @Override
 	    public String toString()
 	    {
 	        return DebugUtil.prettyPrintEventMask(DOM.getEventsSunk(getElement()));

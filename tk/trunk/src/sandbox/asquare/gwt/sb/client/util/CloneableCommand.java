@@ -15,9 +15,8 @@
  */
 package asquare.gwt.sb.client.util;
 
-import com.google.gwt.user.client.Command;
-
-public interface CloneableCommand extends Command
+@Deprecated
+public interface CloneableCommand<T> extends ObjectCommand<T>
 {
-	CloneableCommand cloneCommand();
+	CloneableCommand<T> cloneCommand();
 }

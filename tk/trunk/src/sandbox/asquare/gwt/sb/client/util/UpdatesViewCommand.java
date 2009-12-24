@@ -15,8 +15,6 @@
  */
 package asquare.gwt.sb.client.util;
 
-import com.google.gwt.user.client.Command;
-
-public interface UpdatesViewCommand extends Command
+public interface UpdatesViewCommand
 {
 }

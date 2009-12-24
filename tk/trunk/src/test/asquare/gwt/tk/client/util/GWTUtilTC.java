@@ -30,6 +30,7 @@ public class GWTUtilTC extends GWTTestCase
 	private List<Integer> m_list;
 	private Object[] m_dObject;
 	
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

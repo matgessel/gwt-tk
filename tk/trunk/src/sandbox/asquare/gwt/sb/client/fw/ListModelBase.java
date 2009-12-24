@@ -179,11 +179,13 @@ public abstract class ListModelBase<E> implements ListModel<E>, SourcesModelChan
 			((ListModelEvent) getEvent()).addItemPropertyChange(name, index, count);
 		}
 		
+	    @Override
 		protected ModelChangeEventComplex createChangeEvent(SourcesModelChangeEventComplex source)
 		{
 			return new ListModelEvent(source);
 		}
 		
+	    @Override
 		protected void notifyListener(EventListener listener, Object source, ModelChangeEventComplex event)
 		{
 			((ListModelListener) listener).modelChanged((ListModelEvent) event);

@@ -19,6 +19,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 public class GlassPanelControllerIE6ImplQuirks extends GlassPanelControllerStandard
 {
+	@Override
 	public String calculateWidth()
 	{
 		if (canScrollX())
@@ -31,6 +32,7 @@ public class GlassPanelControllerIE6ImplQuirks extends GlassPanelControllerStand
 		}
 	}
 	
+	@Override
 	protected void updateWidth()
 	{
 		getWidget().setWidth(calculateWidth());

@@ -15,7 +15,6 @@
  */
 package asquare.gwt.sb.client.util;
 
-import asquare.gwt.sb.client.util.CloneableCommand;
 import asquare.gwt.sb.client.util.UndoableCommand;
 
 public class UndoableCommandStub extends CommandStub implements UndoableCommand
@@ -28,6 +27,7 @@ public class UndoableCommandStub extends CommandStub implements UndoableCommand
 		super(id);
 	}
 	
+    @Override
 	public void reset()
 	{
 		super.reset();
@@ -50,7 +50,7 @@ public class UndoableCommandStub extends CommandStub implements UndoableCommand
 		m_redo = true;
 	}
 	
-	public CloneableCommand cloneCommand()
+	public UndoableCommand createClone()
 	{
 		return new UndoableCommandStub(getId());
 	}

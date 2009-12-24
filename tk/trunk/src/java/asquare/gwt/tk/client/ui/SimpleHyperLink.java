@@ -73,6 +73,7 @@ public class SimpleHyperLink extends Widget implements HasText, HasHTML, HasClic
 		}
 	}
 	
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		if (DOM.eventGetType(event) == Event.ONCLICK)

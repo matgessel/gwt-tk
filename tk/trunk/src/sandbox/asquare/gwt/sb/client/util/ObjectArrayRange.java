@@ -31,6 +31,7 @@ public class ObjectArrayRange extends Range
 		m_data = data;
 	}
 	
+	@Override
 	public int getLength()
 	{
 		return m_data.length;
@@ -74,6 +75,7 @@ public class ObjectArrayRange extends Range
 		return result;
 	}
 	
+	@Override
 	protected Range subRangeImpl(int startIndex, int length)
 	{
 		Object[] resultData = new Object[length];
@@ -81,6 +83,7 @@ public class ObjectArrayRange extends Range
 		return new ObjectArrayRange(startIndex, resultData);
 	}
 	
+	@Override
 	public void add(Range range)
 	{
 		add((ObjectArrayRange) range);
@@ -110,6 +113,7 @@ public class ObjectArrayRange extends Range
 		GwtUtil.arrayCopy(data, 0, m_data, startIndex - newStartIndex, data.length);
 	}
 	
+	@Override
 	protected void subtractImpl(int startIndex, int length)
 	{
 		int oldStartIndex = getStartIndex();
@@ -150,6 +154,7 @@ public class ObjectArrayRange extends Range
 		return result;
 	}
 	
+	@Override
 	public Range duplicate()
 	{
 		Object[] data = new Object[m_data.length];

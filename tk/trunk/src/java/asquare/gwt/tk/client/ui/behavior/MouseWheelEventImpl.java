@@ -53,6 +53,7 @@ public class MouseWheelEventImpl extends MouseEventImpl implements MouseWheelEve
 	    return getDomEvent().getMouseWheelVelocityY();
 	}
 
+	@Override
     protected String dumpProperties()
     {
         return "velocityY=" + getMouseWheelVelocityY() + ',' + super.dumpProperties();
@@ -63,26 +64,34 @@ public class MouseWheelEventImpl extends MouseEventImpl implements MouseWheelEve
      * interface and should never be called.
      */
     @Deprecated
+	@Override
     public void preventDefault() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public void stopPropagation() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public boolean isAltDown() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public boolean isControlDown() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public boolean isMetaDown() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public boolean isShiftDown() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public Element getFrom() { throw new UnsupportedOperationException(); }
 
     @Deprecated
+	@Override
     public Element getTo() { throw new UnsupportedOperationException(); }
 }

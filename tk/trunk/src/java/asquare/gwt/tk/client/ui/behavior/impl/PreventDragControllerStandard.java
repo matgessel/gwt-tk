@@ -27,6 +27,7 @@ public class PreventDragControllerStandard extends PreventDragController
 		super(Event.ONMOUSEDOWN);
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
         // prevents text selection and image dragging in Mozilla, Safari & Opera

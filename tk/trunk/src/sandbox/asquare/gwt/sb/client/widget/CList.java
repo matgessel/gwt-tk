@@ -142,6 +142,7 @@ public class CList extends CComponent
 		}
 	}
 	
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		// NO SUPER

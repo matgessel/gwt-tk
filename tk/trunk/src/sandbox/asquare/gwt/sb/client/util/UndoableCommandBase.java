@@ -29,10 +29,9 @@ public abstract class UndoableCommandBase implements UndoableCommand
 		return m_uiString;
 	}
 	
+	@Override
 	public String toString()
 	{
 		return getUIString();
 	}
-	
-	public abstract CloneableCommand cloneCommand();
 }

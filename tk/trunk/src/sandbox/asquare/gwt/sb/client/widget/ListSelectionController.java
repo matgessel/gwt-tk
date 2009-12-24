@@ -28,6 +28,7 @@ public class ListSelectionController extends ListSelectionControllerBase
 		m_view = view;
 	}
 	
+	@Override
 	protected int getIndex(EventBase e)
 	{
 		IndexedCellId cellId = ((IndexedCellId) m_view.getCellId(e.getTarget()));

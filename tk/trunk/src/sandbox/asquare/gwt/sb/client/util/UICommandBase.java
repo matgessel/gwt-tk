@@ -38,6 +38,7 @@ public abstract class UICommandBase implements UICommand
 		m_uiString = uiString;
 	}
 	
+	@Override
 	public String toString()
 	{
 		return getUIString();

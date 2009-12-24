@@ -110,6 +110,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#sinkEvents(int)
 	 */
+	@Override
 	public void sinkEvents(int eventBits)
 	{
 		m_controllerSupport.sinkEvents(eventBits);
@@ -119,6 +120,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.UIObject#unsinkEvents(int)
 	 */
+	@Override
 	public void unsinkEvents(int eventBits)
 	{
 		m_controllerSupport.unsinkEvents(eventBits);
@@ -128,6 +130,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Panel#onAttach()
 	 */
+	@Override
 	protected void onAttach()
 	{
 		if (isAttached())
@@ -141,6 +144,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Panel#onDetach()
 	 */
+	@Override
 	protected void onDetach()
 	{
 		if(! isAttached())
@@ -160,6 +164,7 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 	 * (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onBrowserEvent(com.google.gwt.user.client.Event)
 	 */
+	@Override
 	public void onBrowserEvent(Event event)
 	{
 		/*
@@ -202,11 +207,13 @@ public class CPopupPanel extends PopupPanel implements ControllerSupport, Positi
 			super(PopupPanelController.class);
 		}
 		
+		@Override
 		public void plugIn(Widget widget)
 		{
 			// NOOP
 		}
 		
+		@Override
 		public void unplug(Widget widget)
 		{
 			// NOOP

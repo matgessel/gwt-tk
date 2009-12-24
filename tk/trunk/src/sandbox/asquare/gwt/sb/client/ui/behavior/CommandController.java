@@ -31,6 +31,7 @@ public class CommandController extends ControllerAdaptor
         m_command = command;
     }
     
+	@Override
     public void onBrowserEvent(Widget widget, Event event)
     {
         m_command.execute();

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.DeferredCommand;
 
 public class AlertDialogTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

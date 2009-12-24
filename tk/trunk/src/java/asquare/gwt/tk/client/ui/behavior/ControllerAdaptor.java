@@ -94,6 +94,7 @@ public abstract class ControllerAdaptor extends PluggableEventHandlerAdaptor imp
 		return true;
 	}
 	
+	@Override
 	public String toString()
 	{
 		return "[id=" + m_id + ",eventBits=" + getEventBits() + ']';

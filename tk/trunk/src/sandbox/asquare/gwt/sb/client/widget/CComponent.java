@@ -111,6 +111,7 @@ public class CComponent extends CComposite
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.CComposite#setControllerDisablable(java.lang.Class, boolean)
 	 */
+	@Override
 	public void setControllerDisablable(Class<? extends Controller> id, boolean disablable)
 	{
 		super.setControllerDisablable(id, disablable);
@@ -121,6 +122,7 @@ public class CComponent extends CComposite
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.CComposite#isEnabled()
 	 */
+	@Override
 	public boolean isEnabled()
 	{
 		return super.isEnabled();
@@ -131,11 +133,13 @@ public class CComponent extends CComposite
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.CComposite#setEnabled(boolean)
 	 */
+	@Override
 	public void setEnabled(boolean enabled)
 	{
 		super.setEnabled(enabled);
 	}
 	
+	@Override
 	protected void onAttach()
 	{
 		if (isAttached())
@@ -152,6 +156,7 @@ public class CComponent extends CComposite
 	 * The idea here is to ensure the update controller gets automatically
 	 * disposed when the view is disposed.
 	 */
+	@Override
 	protected void onDetach()
 	{
 		if(! isAttached())

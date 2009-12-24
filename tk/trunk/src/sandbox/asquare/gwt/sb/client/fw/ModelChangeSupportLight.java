@@ -24,6 +24,7 @@ public abstract class ModelChangeSupportLight extends ModelChangeSupportBase
 		super(source);
 	}
 	
+    @Override
 	protected void notifyListeners(EventListener[] listeners)
 	{
 		for (int i = 0; i < listeners.length; i++)

@@ -53,16 +53,19 @@ public class IndexedCellIdImpl extends CellIdImpl implements IndexedCellId
 		return this;
 	}
 	
+    @Override
 	public int hashCode()
 	{
 		return m_index;
 	}
 	
+    @Override
 	public boolean equals(Object obj)
 	{
 		return obj instanceof IndexedCellId && ((IndexedCellId) obj).getIndex() == m_index;
 	}
 	
+    @Override
 	public String toString()
 	{
 		return "[index=" + m_index + "]";

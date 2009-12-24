@@ -38,6 +38,7 @@ public class CommandStub implements Command
 		m_executed = true;
 	}
 
+    @Override
 	public String toString()
 	{
 		return m_id;

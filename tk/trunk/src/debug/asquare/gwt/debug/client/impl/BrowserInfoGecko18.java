@@ -19,6 +19,7 @@ import asquare.gwt.debug.client.BrowserInfo;
 
 public class BrowserInfoGecko18 extends BrowserInfo
 {
+	@Override
 	public String getUserAgent()
 	{
 		return "gecko1_8";

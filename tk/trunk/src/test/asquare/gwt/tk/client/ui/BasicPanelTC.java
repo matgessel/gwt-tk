@@ -26,6 +26,7 @@ public class BasicPanelTC extends GWTTestCase
 	private BasicPanel m_panel;
 	private Widget m_a, m_b, m_c;
 	
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

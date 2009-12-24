@@ -35,6 +35,7 @@ public class PreventDefaultController extends ControllerAdaptor
         m_eventBits = eventBits;
     }
     
+	@Override
     public int getEventBits()
     {
         return m_eventBits;
@@ -47,11 +48,13 @@ public class PreventDefaultController extends ControllerAdaptor
      * 
      * @param eventBits
      */
+	@Override
     public void setEventBits(int eventBits)
     {
         m_eventBits = eventBits;
     }
     
+	@Override
     public void onBrowserEvent(Widget widget, Event event)
     {
         DOM.eventPreventDefault(event);

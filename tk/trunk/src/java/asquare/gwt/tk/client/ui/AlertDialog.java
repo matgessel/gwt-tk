@@ -181,6 +181,7 @@ public class AlertDialog extends ModalDialog
 		return dialog;
 	}
 	
+	@Override
 	protected List<Controller> createControllers()
 	{
 		List<Controller> result = super.createControllers();
@@ -269,6 +270,7 @@ public class AlertDialog extends ModalDialog
 	 * @throws UnsupportedOperationException
 	 * @deprecated
 	 */
+	@Override
 	public void setCaption(String text, boolean asHtml)
 	{
 		throw new UnsupportedOperationException();
@@ -280,6 +282,7 @@ public class AlertDialog extends ModalDialog
 	 * @throws UnsupportedOperationException
 	 * @deprecated
 	 */
+	@Override
 	public void setCaption(Widget w)
 	{
 		throw new UnsupportedOperationException();
@@ -526,6 +529,7 @@ public class AlertDialog extends ModalDialog
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.PopupPanel#show()
 	 */
+	@Override
 	public void show()
 	{
 		show(null);
@@ -588,6 +592,7 @@ public class AlertDialog extends ModalDialog
 			super(HotKeyController.class, Event.ONKEYDOWN);
 		}
 		
+		@Override
 		protected boolean doBrowserEvent(Widget widget, Event event)
 		{
 			final AlertDialog dialog = (AlertDialog) widget;
@@ -611,6 +616,7 @@ public class AlertDialog extends ModalDialog
 			super(ArrowKeyFocusController.class, Event.ONKEYDOWN);
 		}
 		
+		@Override
 		protected boolean doBrowserEvent(Widget widget, Event event)
 		{
 			boolean result = true;

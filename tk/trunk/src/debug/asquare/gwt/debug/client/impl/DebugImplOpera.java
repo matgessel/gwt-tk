@@ -17,6 +17,7 @@ package asquare.gwt.debug.client.impl;
 
 public class DebugImplOpera extends DebugImpl
 {
+	@Override
 	public native void printToBrowserConsole(String message) /*-{
 		$wnd.opera.postError(message);
 	}-*/;

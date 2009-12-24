@@ -27,11 +27,13 @@ public class PreventDragControllerIE6 extends PreventDragController
 		super(Event.ONMOUSEDOWN | Event.ONMOUSEUP);
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
         onMouseDown0();
 	}
 	
+	@Override
 	public void onMouseUp(MouseEvent e)
 	{
 		onMouseUp0();

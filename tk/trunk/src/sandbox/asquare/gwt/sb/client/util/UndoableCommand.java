@@ -15,11 +15,9 @@
  */
 package asquare.gwt.sb.client.util;
 
-public interface UndoableCommand extends UICommand, CloneableCommand
+public interface UndoableCommand extends UICommand, HasCloneSupport
 {
 	void undo();
 	
 	void redo();
-	
-	CloneableCommand cloneCommand();
 }

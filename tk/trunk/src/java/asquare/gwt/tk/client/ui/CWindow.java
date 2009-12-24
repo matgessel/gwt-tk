@@ -81,6 +81,7 @@ public class CWindow extends CComposite implements Positionable
 	/*
 	 * Override to return PopupImpl inner DIV on Mac. 
 	 */
+	@Override
 	protected Element getStyleElement()
 	{
 		return m_window.getStyleElement();
@@ -136,6 +137,7 @@ public class CWindow extends CComposite implements Positionable
 		setTop(top);
 	}
 	
+	@Override
 	public void setWidth(String width)
 	{
 		if (width.indexOf("%") > 0)
@@ -150,6 +152,7 @@ public class CWindow extends CComposite implements Positionable
 		}
 	}
 	
+	@Override
 	public void setHeight(String height)
 	{
 		if (height.indexOf("%") > 0)
@@ -174,11 +177,13 @@ public class CWindow extends CComposite implements Positionable
 		DomUtil.setPixelStyleAttribute(this, "zIndex", zIndex);
 	}
 	
+	@Override
 	public String getTitle()
 	{
 		return DOM.getElementProperty(getContainerElement(), "title");
 	}
 	
+	@Override
 	public void setTitle(String title)
 	{
 		if (title == null || title.length() == 0)
@@ -230,11 +235,13 @@ public class CWindow extends CComposite implements Positionable
 		m_localRoot = null;
 	}
 	
+	@Override
 	public void setWidget(Widget widget)
 	{
 		m_window.setWidget(widget);
 	}
 	
+	@Override
 	protected void onDetach()
 	{
 		if(! isAttached())
@@ -286,16 +293,19 @@ public class CWindow extends CComposite implements Positionable
 			m_popupImpl = popupImpl;
 		}
 		
+		@Override
 		protected Element getContainerElement()
 		{
 			return m_popupImpl.getContainerElement(getElement());
 		}
 		
+		@Override
 		protected Element getStyleElement()
 		{
 			return m_popupImpl.getContainerElement(getElement());
 		}
 
+		@Override
 		protected void onAttach()
 		{
 			if (isAttached())
@@ -305,6 +315,7 @@ public class CWindow extends CComposite implements Positionable
 			m_popupImpl.onShow(getElement());
 		}
 		
+		@Override
 		protected void onDetach()
 		{
 			if(! isAttached())

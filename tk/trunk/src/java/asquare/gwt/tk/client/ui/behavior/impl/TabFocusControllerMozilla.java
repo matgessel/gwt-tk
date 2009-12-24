@@ -19,6 +19,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 public class TabFocusControllerMozilla extends TabFocusControllerStandard
 {
+	@Override
 	public int getEventBits()
 	{
 		/*

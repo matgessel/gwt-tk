@@ -20,6 +20,7 @@ public class FocusModelHandlerStub extends ModelListenerStubBase implements Focu
 		init();
 	}
 	
+    @Override
 	public void init()
 	{
 		super.init();

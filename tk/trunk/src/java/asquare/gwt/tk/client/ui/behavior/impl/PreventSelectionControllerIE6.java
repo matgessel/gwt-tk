@@ -20,11 +20,13 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class PreventSelectionControllerIE6 extends PreventSelectionControllerStandard
 {
+	@Override
 	public void plugIn(Widget widget)
 	{
 		installHook(widget.getElement());
 	}
 	
+	@Override
 	public void unplug(Widget widget)
 	{
 		uninstallHook(widget.getElement());

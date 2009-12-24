@@ -244,6 +244,7 @@ public abstract class Range
 		return subRange(resultStartIndex, resultTerminus - resultStartIndex);
 	}
 	
+	@Override
 	public boolean equals(Object obj)
 	{
 		return obj == this || obj instanceof Range && equals((Range) obj);
@@ -259,6 +260,7 @@ public abstract class Range
 		return equals(m_startIndex, getLength(), startIndex, length);
 	}
 	
+	@Override
 	public int hashCode()
 	{
 		return m_startIndex * 31 + getLength();
@@ -266,6 +268,7 @@ public abstract class Range
 	
 	public abstract Range duplicate();
 	
+	@Override
 	public String toString()
 	{
 		return "[" + m_startIndex + '-' + getEndIndex() + ']';

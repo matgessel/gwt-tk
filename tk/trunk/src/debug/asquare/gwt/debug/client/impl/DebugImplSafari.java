@@ -17,6 +17,7 @@ package asquare.gwt.debug.client.impl;
 
 public class DebugImplSafari extends DebugImpl
 {
+	@Override
 	public native void printToBrowserConsole(String message) /*-{
 		if($wnd.console)
 		{

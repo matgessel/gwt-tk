@@ -40,6 +40,7 @@ public class EventPreviewDragController extends EventController
 		addHandler(ControlSurfaceController.getInstance());
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
 		m_preview.start(getPluggedInWidget());
@@ -52,24 +53,19 @@ public class EventPreviewDragController extends EventController
 			super(MouseEvent.MOUSE_UP);
 		}
 		
+		@Override
 		public int getEventBits()
 		{
 			return super.getEventBits() | EventPreviewDragController.this.getEventBits();
 		}
 		
-		/**
-		 * @deprecated unsupported
-		 */
-		public void addHandler(PluggableEventHandler handler)
-		{
-			throw new UnsupportedOperationException();
-		}
-		
+		@Override
 		public void onMouseUp(MouseEvent e)
 		{
 			stop();
 		}
 		
+		@Override
 		protected void processEvent(EventBase event)
 		{
 			try

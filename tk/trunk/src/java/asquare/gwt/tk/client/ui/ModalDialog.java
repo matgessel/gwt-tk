@@ -134,6 +134,7 @@ public class ModalDialog extends CPopupPanel
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.CPopupPanel#createControllers()
 	 */
+	@Override
 	protected List<Controller> createControllers()
 	{
 		List<Controller> result = new ArrayList<Controller>();
@@ -273,6 +274,7 @@ public class ModalDialog extends CPopupPanel
 	 * 
 	 * @param w a widget
 	 */
+	@Override
 	public void add(Widget w)
 	{
 		// pre: content row is created and is last row
@@ -289,6 +291,7 @@ public class ModalDialog extends CPopupPanel
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	public void setWidget(Widget w)
 	{
 		throw new UnsupportedOperationException();
@@ -301,6 +304,7 @@ public class ModalDialog extends CPopupPanel
 	 * @param w the widget to remove
 	 * @throws IllegalArgumentException if <code>w</code> is in the caption. 
 	 */
+	@Override
 	public boolean remove(Widget w)
 	{
 		if (m_caption != null && w == m_panel.getWidgetAt(0, 0))
@@ -416,6 +420,7 @@ public class ModalDialog extends CPopupPanel
 	 * Shows the glasspanel and dialog then focuses the widget selected in 
 	 * the focus model.
 	 */
+	@Override
 	public void show()
 	{
 		show(null);
@@ -445,6 +450,7 @@ public class ModalDialog extends CPopupPanel
 	 * 
 	 * @see com.google.gwt.user.client.ui.PopupPanel#hide()
 	 */
+	@Override
 	public void hide()
 	{
 		super.hide();
@@ -456,6 +462,7 @@ public class ModalDialog extends CPopupPanel
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
 	 */
+	@Override
 	protected void onAttach()
 	{
 		if (isAttached())
@@ -471,6 +478,7 @@ public class ModalDialog extends CPopupPanel
 	 *  (non-Javadoc)
 	 * @see com.google.gwt.user.client.ui.Widget#onDetach()
 	 */
+	@Override
 	protected void onDetach()
 	{
 		if(! isAttached())
@@ -505,11 +513,13 @@ public class ModalDialog extends CPopupPanel
 			setStyleName(STYLENAME_CAPTION);
 		}
 		
+		@Override
 		protected void onAttach()
 		{
 			super.onAttach();
 		}
 		
+		@Override
 		protected void onDetach()
 		{
 			super.onDetach();
@@ -530,6 +540,7 @@ public class ModalDialog extends CPopupPanel
 			super(InitializeFocusController.class);
 		}
 		
+		@Override
 		public void plugIn(Widget widget)
 		{
 			final ModalDialog dialog = (ModalDialog) widget;
@@ -563,6 +574,7 @@ public class ModalDialog extends CPopupPanel
 			super(FocusOnCloseController.class);
 		}
 		
+		@Override
 		public void unplug(Widget widget)
 		{
 			Focusable focusOnCloseWidget = ((ModalDialog) widget).getFocusOnCloseWidget();
@@ -609,6 +621,7 @@ public class ModalDialog extends CPopupPanel
 			m_viewportHeight = height;
 		}
 		
+		@Override
 		public void plugIn(Widget widget)
 		{
 			afterAttach((ModalDialog) widget);
@@ -766,6 +779,7 @@ public class ModalDialog extends CPopupPanel
 	
 	public static class PositionDialogControllerIE6 extends PositionDialogController
 	{
+		@Override
 		protected int updateContentWidth(ModalDialog dialog, int contentWidth)
 		{
 			int dialogWidth = dialog.getOffsetWidth();

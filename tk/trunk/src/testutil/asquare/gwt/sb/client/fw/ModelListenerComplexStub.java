@@ -33,6 +33,7 @@ public class ModelListenerComplexStub extends ModelListenerStub implements Model
 		return m_changes;
 	}
 	
+    @Override
 	public void init()
 	{
 		super.init();

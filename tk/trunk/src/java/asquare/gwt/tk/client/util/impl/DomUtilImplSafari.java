@@ -17,10 +17,12 @@ package asquare.gwt.tk.client.util.impl;
 
 public class DomUtilImplSafari extends DomUtilImpl
 {
+	@Override
 	public native int getViewportWidth() /*-{
 		return $wnd.innerWidth;
 	}-*/;
 	
+	@Override
 	public native int getViewportHeight() /*-{
 		return $wnd.innerHeight;
 	}-*/;

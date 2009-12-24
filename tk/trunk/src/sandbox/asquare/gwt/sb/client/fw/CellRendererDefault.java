@@ -416,6 +416,7 @@ public class CellRendererDefault implements CellRendererString
 			return -1;
 		}
 		
+	    @Override
 		public String toString()
 		{
 			String result = "[";

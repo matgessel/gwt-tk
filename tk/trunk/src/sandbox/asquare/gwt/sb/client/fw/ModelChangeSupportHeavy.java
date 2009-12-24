@@ -24,6 +24,7 @@ public class ModelChangeSupportHeavy extends ModelChangeSupportBase
 		super(source);
 	}
 	
+    @Override
 	protected void notifyListeners(EventListener[] listeners)
 	{
 		Object source = getSource();

@@ -17,7 +17,6 @@ package asquare.gwt.sb.client.util;
 
 import com.google.gwt.user.client.Command;
 
-public interface UICommand extends Command
+public interface UICommand extends Command, HasUiString
 {
-	String getUIString();
 }

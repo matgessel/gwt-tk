@@ -32,6 +32,7 @@ public class ModelChangeEvent
 		return m_source;
 	}
 	
+    @Override
 	public String toString()
 	{
 		return getClass().getName() + "[source=" + m_source + ']';

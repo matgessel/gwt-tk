@@ -25,6 +25,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 
 public class JsUtilTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

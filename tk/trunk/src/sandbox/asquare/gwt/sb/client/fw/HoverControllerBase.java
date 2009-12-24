@@ -46,6 +46,7 @@ public abstract class HoverControllerBase extends EventController
 	 */
 	protected abstract void onHoverChanged(Widget widget, CellId cellId);
 
+    @Override
 	public void onMouseOver(MouseEvent e)
 	{
 		Widget source = e.getSourceWidget();
@@ -65,6 +66,7 @@ public abstract class HoverControllerBase extends EventController
 		}
 	}
 	
+    @Override
 	public void onMouseOut(MouseEvent e)
 	{
 		Widget source = e.getSourceWidget();

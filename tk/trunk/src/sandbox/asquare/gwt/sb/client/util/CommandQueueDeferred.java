@@ -25,6 +25,7 @@ public class CommandQueueDeferred extends CommandQueueBase
 {
 	private boolean m_runScheduled = false;
 	
+	@Override
 	public void add(Command command)
 	{
 		if (addImpl(command))
@@ -33,6 +34,7 @@ public class CommandQueueDeferred extends CommandQueueBase
 		}
 	}
 	
+	@Override
 	protected void scheduleRunIteration()
 	{
 		run();

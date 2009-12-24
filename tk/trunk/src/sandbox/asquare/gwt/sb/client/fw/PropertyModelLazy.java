@@ -120,6 +120,7 @@ public class PropertyModelLazy implements ExplicitUpdateModel, SourcesModelChang
 		m_changeSupport.update();
 	}
 	
+    @Override
 	public String toString()
 	{
 		return m_impl.toString();

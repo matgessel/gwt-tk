@@ -39,6 +39,7 @@ public class ListWidgetBasic extends ListWidget
 		m_itemElementType = itemElement;
 	}
 	
+    @Override
 	public Element getCellRootElement(Element eventTarget)
 	{
 		Element e = getElement();
@@ -53,6 +54,7 @@ public class ListWidgetBasic extends ListWidget
 		return null;
 	}
 	
+    @Override
 	public int getIndexOf(Element eventTarget)
 	{
 		Element e = getElement();
@@ -66,11 +68,13 @@ public class ListWidgetBasic extends ListWidget
 		return -1;
 	}
 	
+    @Override
 	public Element getCellElement(int index)
 	{
 		return DOM.getChild(getElement(), index);
 	}
 	
+    @Override
 	public Element insertCellStructure(int index)
 	{
 		Element child = DOM.createElement(m_itemElementType);
@@ -78,17 +82,20 @@ public class ListWidgetBasic extends ListWidget
 		return child;
 	}
 	
+    @Override
 	public void remove(int index)
 	{
 		Element child = DOM.getChild(getElement(), index);
 		DOM.removeChild(getElement(), child);
 	}
 	
+    @Override
 	public void clear()
 	{
 		DomUtil.clean(getElement());
 	}
 	
+    @Override
 	public int getSize()
 	{
 		return DOM.getChildCount(getElement());

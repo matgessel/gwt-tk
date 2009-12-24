@@ -19,6 +19,7 @@ import asquare.gwt.debug.client.BrowserInfo;
 
 public class BrowserInfoOpera extends BrowserInfo
 {
+	@Override
 	public String getUserAgent()
 	{
 		return "opera";

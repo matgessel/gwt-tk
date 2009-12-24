@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class SerializableTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.tk.EmulationTC";

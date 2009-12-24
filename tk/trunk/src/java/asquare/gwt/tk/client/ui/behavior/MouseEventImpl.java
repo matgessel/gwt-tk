@@ -141,6 +141,7 @@ public class MouseEventImpl extends InputEventImpl implements MouseEvent
 		return m_absoluteY;
 	}
 
+	@Override
 	protected String dumpProperties()
 	{
 		return "client(" + m_clientX + ',' + m_clientY + "),widget(" + m_widgetX + ',' + m_widgetY + ")," + super.dumpProperties();

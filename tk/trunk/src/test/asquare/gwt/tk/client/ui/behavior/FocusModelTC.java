@@ -29,6 +29,7 @@ public class FocusModelTC extends GWTTestCase
 	private Button m_a, m_b, m_c, m_d, m_e;
 	private FocusModelHandlerStub m_l1;
 	
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

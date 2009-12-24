@@ -30,6 +30,7 @@ public class RowPanelTC extends GWTTestCase
 	private Element m_tbody;
 	private Widget m_a, m_b, m_c, m_d, m_e;
 	
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

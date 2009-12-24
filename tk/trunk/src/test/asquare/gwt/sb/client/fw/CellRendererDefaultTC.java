@@ -20,6 +20,7 @@ import com.google.gwt.user.client.*;
 
 public class CellRendererDefaultTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.sb.SbTC";

@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Label;
 
 public class DomUtilTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

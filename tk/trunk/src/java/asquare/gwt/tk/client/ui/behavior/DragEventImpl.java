@@ -64,11 +64,13 @@ public class DragEventImpl extends MouseEventImpl implements DragEvent
 		return m_cumulativeY;
 	}
 	
+	@Override
 	protected String getPrettyName()
 	{
 		return "MouseDrag";
 	}
 	
+	@Override
 	protected String dumpProperties()
 	{
 		return "delta(" + m_deltaX + ',' + m_deltaY + "),cumulative(" + m_cumulativeX + ',' + m_cumulativeY + ")," + super.dumpProperties();

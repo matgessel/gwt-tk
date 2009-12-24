@@ -56,6 +56,7 @@ public class MouseMoveFilter extends EventController
 		m_moveStrategy = impl;
 	}
 	
+	@Override
 	public void processMouseMove(MouseEvent e)
 	{
 		// NO SUPER
@@ -67,6 +68,7 @@ public class MouseMoveFilter extends EventController
 		super.processMouseMove(e);
 	}
 	
+	@Override
     public void processMouseUp(MouseEvent e)
     {
         getMoveStrategy().finish();
@@ -82,11 +84,13 @@ public class MouseMoveFilter extends EventController
 	
 	public static class MoveStrategyImmediate extends MoveStrategy
 	{
+		@Override
 		protected void step(MouseMoveFilter handler, MouseEvent e)
 		{
 			handler.superProcessMouseMove(e);
 		}
 		
+		@Override
 		protected void finish()
 		{
 		}
@@ -99,6 +103,7 @@ public class MouseMoveFilter extends EventController
 		 */
 		private StepTimer m_timer = null;
 		
+		@Override
 		protected void step(MouseMoveFilter handler, MouseEvent moveEvent)
 		{
 			if (m_timer != null)
@@ -112,6 +117,7 @@ public class MouseMoveFilter extends EventController
 			}
 		}
 		
+		@Override
 		protected void finish()
 		{
 			if (m_timer != null)
@@ -138,6 +144,7 @@ public class MouseMoveFilter extends EventController
 				m_moveEvent = e;
 			}
 			
+			@Override
 			public void run()
 			{
 				m_timer = null;
@@ -162,11 +169,13 @@ public class MouseMoveFilter extends EventController
 			}
 		}
 		
+		@Override
 		protected void step(MouseMoveFilter handler, MouseEvent moveEvent)
 		{
 			m_strategy.step(handler, moveEvent);
 		}
 		
+		@Override
 		protected void finish()
 		{
 			m_strategy.finish();

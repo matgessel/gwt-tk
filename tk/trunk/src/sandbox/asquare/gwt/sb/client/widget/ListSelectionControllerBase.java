@@ -56,6 +56,7 @@ public abstract class ListSelectionControllerBase extends EventController
 			super(MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_UP);
 		}
 		
+		@Override
 		public void onMouseDown(MouseEvent e)
 		{
 	        m_anchorIndex = getIndex(e);
@@ -78,6 +79,7 @@ public abstract class ListSelectionControllerBase extends EventController
 	        }
 		}
 		
+		@Override
 		public void onMouseOver(MouseEvent e)
 		{
 	        if (m_anchorIndex != -1)
@@ -91,6 +93,7 @@ public abstract class ListSelectionControllerBase extends EventController
 	        }
 		}
 		
+		@Override
 		public void onMouseUp(MouseEvent e)
 		{
 			m_strategy = null;

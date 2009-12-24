@@ -56,6 +56,7 @@ public class PreventBubbleController extends ControllerAdaptor
 		return getInstance(Event.MOUSEEVENTS);
 	}
 	
+	@Override
 	public int getEventBits()
 	{
 		return m_eventBits;
@@ -68,11 +69,13 @@ public class PreventBubbleController extends ControllerAdaptor
 	 * 
 	 * @param eventBits
 	 */
+	@Override
 	public void setEventBits(int eventBits)
 	{
 		m_eventBits = eventBits;
 	}
 	
+	@Override
 	public void onBrowserEvent(Widget widget, Event event)
 	{
 		DOM.eventCancelBubble(event, true);

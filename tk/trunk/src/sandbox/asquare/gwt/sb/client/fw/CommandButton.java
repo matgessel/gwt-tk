@@ -51,6 +51,7 @@ public class CommandButton extends Button
 		}
 	}
 	
+    @Override
 	public void onBrowserEvent(Event event)
 	{
 		super.onBrowserEvent(event);

@@ -41,12 +41,14 @@ public class DragController extends EventController
 		addHandler(ControlSurfaceController.getInstance());
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
 		m_mouseDown = true;
 		DOM.setCapture(getPluggedInWidget().getElement());
 	}
 	
+	@Override
 	public void onMouseUp(MouseEvent e)
 	{
 		if (m_mouseDown)

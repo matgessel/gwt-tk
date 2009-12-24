@@ -25,6 +25,7 @@ public class IntRange extends Range
 		setLength(length);
 	}
 	
+	@Override
 	public int getLength()
 	{
 		return m_length;
@@ -38,11 +39,13 @@ public class IntRange extends Range
 		m_length = length;
 	}
 	
+	@Override
 	protected Range subRangeImpl(int startIndex, int length)
 	{
 		return new IntRange(startIndex, length);
 	}
 
+	@Override
 	public void add(Range range)
 	{
 		add(range.getStartIndex(), range.getLength());
@@ -68,6 +71,7 @@ public class IntRange extends Range
 		m_length = Math.max(oldStartIndex + m_length, startIndex + length) - newStartIndex;
 	}
 	
+	@Override
 	protected void subtractImpl(int startIndex, int length)
 	{
 		int oldStartIndex = getStartIndex();
@@ -90,6 +94,7 @@ public class IntRange extends Range
 		}
 	}
 	
+	@Override
 	public Range duplicate()
 	{
 		return new IntRange(getStartIndex(), m_length);

@@ -17,10 +17,12 @@ package asquare.gwt.tk.client.util.impl;
 
 public class DomUtilImplOpera extends DomUtilImpl
 {
+	@Override
 	public native int getViewportWidth() /*-{
 		return $doc.body.clientWidth;
 	}-*/;
 
+	@Override
 	public native int getViewportHeight() /*-{
 		return $doc.body.clientHeight;
 	}-*/;

@@ -75,11 +75,13 @@ public class Demo implements EntryPoint
 			DOM.setStyleAttribute(getElement(), "borderLeft", "solid black 10px");
 		}
 		
+	    @Override
 		public void add(Widget child)
 		{
 			super.add(child, getElement());
 		}
 		
+	    @Override
 		protected void onAttach()
 		{
 			m_traceDelegate.onAttach0();
@@ -87,6 +89,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.onAttach1();
 		}
 		
+	    @Override
 		protected void onDetach()
 		{
 			m_traceDelegate.onDetach0();
@@ -94,6 +97,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.onDetach1();
 		}
 		
+	    @Override
 		protected void doAttachChildren()
 		{
 			m_traceDelegate.doAttachChildren0();
@@ -101,6 +105,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.doAttachChildren1();
 		}
 		
+	    @Override
 		protected void doDetachChildren()
 		{
 			m_traceDelegate.doDetachChildren0();
@@ -108,6 +113,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.doDetachChildren1();
 		}
 		
+	    @Override
 		protected void onLoad()
 		{
 			m_traceDelegate.onLoad0();
@@ -115,6 +121,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.onLoad1();
 		}
 		
+	    @Override
 		protected void onUnload()
 		{
 			m_traceDelegate.onUnload0();
@@ -136,6 +143,7 @@ public class Demo implements EntryPoint
 			DOM.setStyleAttribute(getElement(), "borderLeft", "solid black 10px");
 		}
 		
+	    @Override
 		protected void onAttach()
 		{
 			m_traceDelegate.onAttach0();
@@ -143,6 +151,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.onAttach1();
 		}
 		
+	    @Override
 		protected void onDetach()
 		{
 			m_traceDelegate.onDetach0();
@@ -150,6 +159,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.onDetach1();
 		}
 		
+	    @Override
 		protected void doAttachChildren()
 		{
 			m_traceDelegate.doAttachChildren0();
@@ -157,6 +167,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.doAttachChildren1();
 		}
 		
+	    @Override
 		protected void doDetachChildren()
 		{
 			m_traceDelegate.doDetachChildren0();
@@ -164,6 +175,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.doDetachChildren1();
 		}
 		
+	    @Override
 		protected void onLoad()
 		{
 			m_traceDelegate.onLoad0();
@@ -171,6 +183,7 @@ public class Demo implements EntryPoint
 			m_traceDelegate.onLoad1();
 		}
 		
+	    @Override
 		protected void onUnload()
 		{
 			m_traceDelegate.onUnload0();

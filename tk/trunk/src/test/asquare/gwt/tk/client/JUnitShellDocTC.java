@@ -28,6 +28,7 @@ public class JUnitShellDocTC extends GWTTestCase
 //		System.setProperty("gwt.args", "-help");
 	}
 	
+    @Override
 	public String getModuleName()
 	{
 		return Tests.getModuleName();

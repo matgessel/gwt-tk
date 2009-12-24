@@ -163,6 +163,7 @@ public class TypedList
 		return result;
 	}
 	
+	@Override
 	public String toString()
 	{
 		StringBuffer sb = new StringBuffer();

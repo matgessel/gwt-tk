@@ -20,6 +20,7 @@ package asquare.gwt.sb.client.util;
  */
 public class CommandQueueDeferredStepped extends CommandQueueDeferred
 {
+	@Override
 	protected void scheduleRunIteration()
 	{
 		deferRun();

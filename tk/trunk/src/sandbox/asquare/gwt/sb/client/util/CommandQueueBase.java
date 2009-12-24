@@ -127,10 +127,10 @@ public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 		
 		boolean result = true;
 		
-		Object[] listeners = m_listeners.toArray();
+		CommandQueueListener[] listeners = m_listeners.toArray(new CommandQueueListener[m_listeners.size()]);
 		for (int i = 0; i < listeners.length; i++)
 		{
-			result &= ((CommandQueueListener) listeners[i]).beforeCommandAdded(this, command);
+			result &= listeners[i].beforeCommandAdded(this, command);
 		}
 		return result;
 	}
@@ -140,10 +140,10 @@ public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 		if (m_listeners.size() == 0)
 			return;
 		
-		Object[] listeners = m_listeners.toArray();
+		CommandQueueListener[] listeners = m_listeners.toArray(new CommandQueueListener[m_listeners.size()]);
 		for (int i = 0; i < listeners.length; i++)
 		{
-			((CommandQueueListener) listeners[i]).afterCommandAdded(this, command);
+			listeners[i].afterCommandAdded(this, command);
 		}
 	}
 	
@@ -154,10 +154,10 @@ public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 		
 		boolean result = true;
 		
-		Object[] listeners = m_listeners.toArray();
+		CommandQueueListener[] listeners = m_listeners.toArray(new CommandQueueListener[m_listeners.size()]);
 		for (int i = 0; i < listeners.length; i++)
 		{
-			result |= ((CommandQueueListener) listeners[i]).beforeCommandExecuted(this, command);
+			result |= listeners[i].beforeCommandExecuted(this, command);
 		}
 		return result;
 	}
@@ -167,13 +167,14 @@ public abstract class CommandQueueBase implements SourcesCommandQueueEvents
 		if (m_listeners.size() == 0)
 			return;
 		
-		Object[] listeners = m_listeners.toArray();
+		CommandQueueListener[] listeners = m_listeners.toArray(new CommandQueueListener[m_listeners.size()]);
 		for (int i = 0; i < listeners.length; i++)
 		{
-			((CommandQueueListener) listeners[i]).afterCommandExecuted(this, command);
+			listeners[i].afterCommandExecuted(this, command);
 		}
 	}
 	
+	@Override
 	public String toString()
 	{
 		return "CommandQueueBase" + m_queue.toString();

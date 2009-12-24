@@ -32,6 +32,7 @@ public class BasicToolTipController extends ControllerAdaptor
 		m_toolTip = toolTip;
 	}
 	
+    @Override
 	public void onBrowserEvent(Widget widget, Event event)
 	{
 		switch (DOM.eventGetType(event))

@@ -72,6 +72,7 @@ public class EventController extends EventControllerBase implements Controller
 		processEvent(convertEvent(widget, event, false));
 	}
 	
+	@Override
 	public String toString()
 	{
 		return "[id=" + String.valueOf(getId()) + ']';

@@ -25,6 +25,7 @@ import com.google.gwt.user.client.DOM;
 
 public class DebugTC extends GWTTestCase
 {
+    @Override
 	public String getModuleName()
 	{
 		return "asquare.gwt.debug.Debug";

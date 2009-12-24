@@ -17,9 +17,12 @@ package asquare.gwt.sb.client.fw;
 
 public abstract class CellIdImpl implements CellId
 {
+    @Override
 	public abstract boolean equals(Object obj);
 	
+    @Override
 	public abstract int hashCode();
 	
+    @Override
 	public abstract String toString();
 }

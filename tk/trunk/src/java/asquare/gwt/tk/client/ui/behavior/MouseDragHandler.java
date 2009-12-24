@@ -57,6 +57,7 @@ public class MouseDragHandler extends EventController
 		m_dragGesture = dragGesture;
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
 		e.stopPropagation();
@@ -75,6 +76,7 @@ public class MouseDragHandler extends EventController
 		}
 	}
 	
+	@Override
 	public void onMouseMove(MouseEvent e)
 	{
 		if (m_mouseDown != null)
@@ -90,6 +92,7 @@ public class MouseDragHandler extends EventController
 		}
 	}
 	
+	@Override
 	public void onMouseUp(MouseEvent e)
 	{
 		// it is possible to get a mouse up without a mouse down

@@ -53,6 +53,7 @@ public class DragStyleController extends EventController
 		m_styleName = styleName;
 	}
 	
+	@Override
 	public void onMouseDown(MouseEvent e)
 	{
 		if (m_styleName != null && m_styleName.length() > 0)
@@ -65,6 +66,7 @@ public class DragStyleController extends EventController
 		}
 	}
 	
+	@Override
 	public void onMouseUp(MouseEvent e)
 	{
 		if (m_styleName != null && m_styleName.length() > 0)

@@ -66,6 +66,7 @@ public class ControlSurfaceController extends EventController
 	 * @deprecated not supported
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	public void addHandler(EventHandler handler)
 	{
 		throw new UnsupportedOperationException();

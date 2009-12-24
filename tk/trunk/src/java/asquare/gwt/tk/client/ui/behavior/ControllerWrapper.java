@@ -43,6 +43,7 @@ public class ControllerWrapper extends ControllerAdaptor implements Controller
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.Controller#plugIn(com.google.gwt.user.client.ui.Widget)
 	 */
+	@Override
 	public void plugIn(Widget widget)
 	{
 		m_controller.plugIn(widget);
@@ -52,6 +53,7 @@ public class ControllerWrapper extends ControllerAdaptor implements Controller
 	 *  (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.Controller#unplug(com.google.gwt.user.client.ui.Widget)
 	 */
+	@Override
 	public void unplug(Widget widget)
 	{
 		m_controller.unplug(widget);
@@ -61,6 +63,7 @@ public class ControllerWrapper extends ControllerAdaptor implements Controller
 	 * (non-Javadoc)
 	 * @see asquare.gwt.tk.client.ui.behavior.EventDelegateAdaptor#onBrowserEvent(com.google.gwt.user.client.ui.Widget, com.google.gwt.user.client.Event)
 	 */
+	@Override
 	public void onBrowserEvent(Widget widget, Event event)
 	{
 		if ((m_controller.getEventBits() & DOM.eventGetType(event)) != 0)
@@ -75,6 +78,7 @@ public class ControllerWrapper extends ControllerAdaptor implements Controller
 	 * @deprecated
 	 * @throws UnsupportedOperationException
 	 */
+	@Override
 	protected final boolean doBrowserEvent(Widget widget, Event event) throws UnsupportedOperationException
 	{
 		throw new UnsupportedOperationException();

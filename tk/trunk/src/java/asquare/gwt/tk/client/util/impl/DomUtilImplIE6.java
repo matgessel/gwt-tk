@@ -20,6 +20,7 @@ import com.google.gwt.dom.client.Node;
 
 public class DomUtilImplIE6 extends DomUtilImpl
 {
+	@Override
 	public void clean(Element element)
 	{
 		String elementName = element.getNodeName();

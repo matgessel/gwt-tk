@@ -19,6 +19,7 @@ import asquare.gwt.tk.client.util.DomUtil;
 
 public class GlassPanelControllerIE6ImplStrict extends GlassPanelControllerIE6ImplQuirks
 {
+	@Override
 	public String calculateHeight()
 	{
 		if (canScrollY())
@@ -35,6 +36,7 @@ public class GlassPanelControllerIE6ImplStrict extends GlassPanelControllerIE6Im
 		}
 	}
 	
+	@Override
 	protected void updateHeight()
 	{
 		getWidget().setHeight(calculateHeight());

@@ -75,6 +75,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		return m_handlers != null && m_handlers.size() > 0;
 	}
 	
+    @Override
 	public int getEventBits()
 	{
 		int result = super.getEventBits();
@@ -550,6 +551,7 @@ public class EventControllerBase extends EventInterestAdaptor implements EventHa
 		// -1 means cache is invalid
 		private int m_eventBitsCache = 0;
 		
+	    @Override
 		public boolean add(EventHandler handler)
 		{
 			boolean result = super.add(handler);
