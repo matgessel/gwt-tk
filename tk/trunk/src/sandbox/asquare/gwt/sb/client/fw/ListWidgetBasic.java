@@ -15,6 +15,9 @@
  */
 package asquare.gwt.sb.client.fw;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import asquare.gwt.tk.client.util.DomUtil;
 
 import com.google.gwt.user.client.DOM;
@@ -25,6 +28,12 @@ public class ListWidgetBasic extends ListWidget
 {
 	public static final String DEFAULT_ELEMENT_LIST = "div";
 	public static final String DEFAULT_ELEMENT_ITEM = "div";
+	
+	/**
+	 * Cache cell elements because DOM lookup is too slow (performs a linear
+	 * search).
+	 */
+	private final List<Element> m_elements = new ArrayList<Element>();
 	
 	private final String m_itemElementType;
 	
@@ -42,13 +51,11 @@ public class ListWidgetBasic extends ListWidget
     @Override
 	public Element getCellRootElement(Element eventTarget)
 	{
-		Element e = getElement();
-		for (int i = 0, size = DOM.getChildCount(e); i < size; i++)
+		for (int i = 0, size = m_elements.size(); i < size; i++)
 		{
-			Element candidate = DOM.getChild(e, i);
-			if (DOM.isOrHasChild(candidate, eventTarget))
+			if (DOM.isOrHasChild(m_elements.get(i), eventTarget))
 			{
-				return candidate;
+				return m_elements.get(i);
 			}
 		}
 		return null;
@@ -57,10 +64,9 @@ public class ListWidgetBasic extends ListWidget
     @Override
 	public int getIndexOf(Element eventTarget)
 	{
-		Element e = getElement();
-		for (int i = 0, size = DOM.getChildCount(e); i < size; i++)
+		for (int i = 0, size = m_elements.size(); i < size; i++)
 		{
-			if (DOM.isOrHasChild(DOM.getChild(e, i), eventTarget))
+			if (DOM.isOrHasChild(m_elements.get(i), eventTarget))
 			{
 				return i;
 			}
@@ -71,7 +77,7 @@ public class ListWidgetBasic extends ListWidget
     @Override
 	public Element getCellElement(int index)
 	{
-		return DOM.getChild(getElement(), index);
+    	return m_elements.get(index);
 	}
 	
     @Override
@@ -79,26 +85,29 @@ public class ListWidgetBasic extends ListWidget
 	{
 		Element child = DOM.createElement(m_itemElementType);
 		DOM.insertChild(getElement(), child, index);
+		m_elements.add(index, child);
 		return child;
 	}
 	
     @Override
 	public void remove(int index)
 	{
-		Element child = DOM.getChild(getElement(), index);
+		Element child = m_elements.remove(index);
 		DOM.removeChild(getElement(), child);
+		m_elements.remove(index);
 	}
 	
     @Override
 	public void clear()
 	{
 		DomUtil.clean(getElement());
+		m_elements.clear();
 	}
 	
     @Override
 	public int getSize()
 	{
-		return DOM.getChildCount(getElement());
+		return m_elements.size();
 	}
 
 	private static class WidgetImpl extends Widget
