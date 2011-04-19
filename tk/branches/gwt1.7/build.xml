@@ -207,9 +207,10 @@
 			<copy todir="build/test/jars" flatten="true">
 				<fileset dir="build" includes="**/*.jar" excludes="**/*debugstub*"/>
 			</copy>
-			<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
+			<junit printsummary="true" fork="true" forkmode="perTest" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
 	            <sysproperty key="gwt.args" value="-port 8889 -out test" />
 	  	        <jvmarg value="-client"/>
+	  	        <jvmarg value="-d32"/>
 	  	        <jvmarg line="${junit.platform.args}"/>
 				<classpath>
 					<pathelement location="build/test/classes"/>
