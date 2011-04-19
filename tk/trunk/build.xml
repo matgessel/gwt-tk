@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- 
- Copyright 2006 Mat Gessel <mat.gessel@gmail.com>
+ Copyright 2011 Mat Gessel <mat.gessel@gmail.com>
  
  Licensed under the Apache License, Version 2.0 (the "License"); you may not
  use this file except in compliance with the License. You may obtain a copy of
@@ -26,7 +26,7 @@
 	</condition>
 	<property name="gwt.platform" value="linux"/><!-- assume linux if not mac or win -->
 	
-	<property name="dev.jar.name" value="gwt-dev-${gwt.platform}.jar"/>
+	<property name="dev.jar.name" value="gwt-dev.jar"/>
 	
 	<condition property="junit.platform.args" value="-XstartOnFirstThread -Djavax.xml.parsers.DocumentBuilderFactory=com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl">
 		<equals arg1="${gwt.platform}" arg2="mac"/>
@@ -207,7 +207,7 @@
 			<copy todir="build/test/jars" flatten="true">
 				<fileset dir="build" includes="**/*.jar" excludes="**/*debugstub*"/>
 			</copy>
-			<junit printsummary="true" fork="true" forkmode="once" haltonfailure="true" maxmemory="256M" dir="build" showoutput="false" tempdir="build/test">
+			<junit printsummary="true" fork="true" forkmode="perTest" haltonfailure="true" maxmemory="256M" dir="build" showoutput="true" tempdir="build/test">
 	            <sysproperty key="gwt.args" value="-port 8889 -out test" />
 	  	        <jvmarg value="-client"/>
 	  	        <jvmarg line="${junit.platform.args}"/>
