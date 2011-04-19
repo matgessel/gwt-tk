@@ -1,0 +1,69 @@
+
+#main {
+  border: 8px solid #C3D9FF;
+  background-color: #E8EEF7;
+}
+
+#dropDown-left .tk-DropDownPanel {
+  border: solid 4px  rgb(195, 217, 255);
+}
+
+#dropDown-left .tk-DropDownPanelHeader {
+  text-align: left;
+  background-position: left;
+  background-repeat: no-repeat;
+  padding: 0px;
+  padding-left: 16px;
+  padding-right: 8px;
+  white-space: nowrap;
+}
+
+#dropDown-left .tk-DropDownPanel-open .tk-DropDownPanelHeader {
+  background-image: url(opentriangle.gif);
+  border-bottom: solid 4px  rgb(195, 217, 255);
+}
+
+#dropDown-left .tk-DropDownPanel-closed .tk-DropDownPanelHeader {
+  background-image: url(triangle.gif);
+}
+
+#dropDown-1 {
+  margin-bottom: 8px;
+}
+
+#dropDown-3 {
+  background: white;
+}
+
+#dropDown-3 .tk-DropDownPanelContent {
+  background: none;
+}
+
+#dropDown-3 .tk-DropDownPanelHeader  {
+  float: left;
+}
+
+#dropDown-4.tk-DropDownPanel-closed {
+  display: none;
+}
+
+#debug-doc {
+  background: white;
+}
+
+#debug-doc, #debug-controls, #debug-widgets  {
+  margin: 4px;
+  padding: 8px;
+}
+
+#debug-controls, #debug-widgets  {
+  border: solid 1px #87B3FF;
+}
+
+#debug-controls {
+  line-height: 200%;
+}
+
+#debug-checkBoxes {
+  line-height: normal;
+}

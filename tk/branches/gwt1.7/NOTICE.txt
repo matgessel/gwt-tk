@@ -1,0 +1,8 @@
+GWT Tk
+Copyright 2008 Mat Gessel <mat.gessel@gmail.com>
+
+Google Widget Toolkit
+Apache License Version 2.0
+http://code.google.com/webtoolkit/
+ * modified source code
+ * ant-gwt.jar (used for build only)

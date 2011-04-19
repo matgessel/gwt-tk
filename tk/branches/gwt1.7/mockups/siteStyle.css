@@ -1,0 +1,63 @@
+BODY, TD	{
+	color: black;
+	font-family: futura, arial, sans-serif;
+}
+
+BODY	{
+	background-color: white;
+	margin: 1em;
+}
+		
+H1	{
+	font-size: 24pt;
+	font-weight: bold;
+	margin-bottom: 0;
+}
+H2	{
+	font-size: 18pt;
+	font-weight: bold;
+	margin-bottom: 0;
+}
+H3	{
+	font-size: 14pt;
+	font-weight: bold;
+	margin-bottom: 0.375em;
+}
+H4	{
+	font-size: 12pt;
+	font-weight: bold;
+	margin-bottom: 0.375em;
+}
+		
+.subhead	{
+	margin-top: 0;
+	font-family: garamond, times, serif;
+}
+
+.dc	{						/*drop-cap*/
+	font-family: garamond, times, serif;
+	font-size: 200%;
+	font-weight: bold;
+	/*float: left;*/
+}
+		
+A IMG	{color: white}			/*hide the border in NS 4.x*/
+
+A IMG	{border-style: none}	/*does not work in NS*/
+
+A:link, A:visited, A:active	{color:black}
+
+A.external {
+	background: url(images/external.png) center right no-repeat;
+	padding-right: 13px;
+}
+
+.credit	{
+	font-size: 65%;
+	font-weight: lighter;
+	font-family: helvetica, arial, sans-serif;
+	text-align: center;
+}
+.menu	{
+	font-family: helvetica, arial, sans-serif;
+}
