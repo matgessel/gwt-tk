@@ -94,7 +94,6 @@ public class ListWidgetBasic extends ListWidget
 	{
 		Element child = m_elements.remove(index);
 		DOM.removeChild(getElement(), child);
-		m_elements.remove(index);
 	}
 	
     @Override
