@@ -140,7 +140,8 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		m_model.removeListener(this);
 	}
 	
-	public void modelChanged(ListModelEvent event)
+	@Override
+    public void modelChanged(ListModelEvent event)
 	{
 		IntRangeCollection renderStyleItems = new IntRangeCollection();
 		IntRangeCollection renderContentItems = new IntRangeCollection();
@@ -170,10 +171,10 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		if (insertedItems.getSize() > 0)
 		{
 			// update all following items (for even/odd/first/last properties)
-			int min = insertedItems.getMinValue();
-			if (min < m_model.getSize())
+			int max = insertedItems.getMaxValue();
+            if (max < m_model.getSize())
 			{
-				renderStyleItems.add(new IntRange(min, m_model.getSize() - min));
+				renderStyleItems.add(new IntRange(max, m_model.getSize() - max));
 			}
 		}
 		
@@ -248,11 +249,18 @@ public class ListUpdateController extends UpdateControllerBase implements ListMo
 		else if (listChange instanceof ListChangeItemRemoval)
 		{
 			ListChangeItemRemoval itemRemoval = (ListChangeItemRemoval) listChange;
-			IndexedCellId cellId = new IndexedCellIdImpl();
-			for (int first = itemRemoval.getIndex(), index = first + itemRemoval.getCount() - 1; index >= first; index--)
+			if (itemRemoval.getCount() == m_view.getSize())
 			{
-				cellId.setIndex(index);
-				m_view.remove(cellId);
+			    m_view.clear();
+			}
+			else
+			{
+	            IndexedCellId cellId = new IndexedCellIdImpl();
+	            for (int first = itemRemoval.getIndex(), index = first + itemRemoval.getCount() - 1; index >= first; index--)
+	            {
+	                cellId.setIndex(index);
+	                m_view.remove(cellId);
+	            }
 			}
 		}
 		else if (listChange instanceof ListItemPropertyChange)
