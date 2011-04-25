@@ -20,6 +20,7 @@ import java.util.List;
 
 import asquare.gwt.tk.client.util.DomUtil;
 
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
@@ -99,7 +100,17 @@ public class ListWidgetBasic extends ListWidget
     @Override
 	public void clear()
 	{
-		DomUtil.clean(getElement());
+		/**
+		 * TODO: figure out why clean() sometimes blows up in IE 6/8 (with DIV
+		 * cell elements).
+		 */
+//		DomUtil.clean(getElement());
+		Node firstChild;
+		Element element = getElement();
+		while((firstChild = element.getFirstChild()) != null)
+		{
+			element.removeChild(firstChild);
+		}
 		m_elements.clear();
 	}
 	
